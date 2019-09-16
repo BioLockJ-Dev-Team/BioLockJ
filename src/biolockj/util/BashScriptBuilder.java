@@ -246,6 +246,7 @@ public class BashScriptBuilder {
 			lines.add( TEMP_DIR + "=\"" + module.getTempDir().getAbsolutePath() + "\"" );
 		lines.add( "" );
 		lines.add( "touch \"" + scriptPath + "_" + Constants.SCRIPT_STARTED  + "\"" + RETURN );
+		lines.add( "cd " + module.getScriptDir().getAbsolutePath() + RETURN );
 		lines.addAll( loadModules( module ) );
 
 		final List<String> workerFunctions = module.getWorkerScriptFunctions();
