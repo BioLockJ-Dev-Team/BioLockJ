@@ -12,9 +12,14 @@
 package biolockj.util;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FilenameUtils;
 import biolockj.*;
 import biolockj.exception.*;
 import biolockj.module.BioModule;
@@ -43,14 +48,14 @@ public class ValidationUtil {
 
 	private static class FileSummary {
 
-		public FileSummary( final File inFile ) {
+		public FileSummary( final File inFile, final File outputDir ) {
 			this.file = inFile;
-			this.name = this.file.getName();
+			this.name = outputDir.toURI().relativize( this.file.toURI() ).toString();
 			this.size = this.file.length();
 		}
 
 		public FileSummary( final String fileName ) {
-			this.name = fileName;
+			this.name = FilenameUtils.separatorsToSystem( fileName );
 		}
 
 		public int compareToExpected( final FileSummary other, final Collection<String> comparisons,
@@ -228,13 +233,16 @@ public class ValidationUtil {
 				final BufferedWriter writer = new BufferedWriter( new FileWriter( getOutputFile( module ) ) );
 				writeRow( writer, getReportSet( module ) );
 
-				final File[] outputs = module.getOutputDir().listFiles();
-				Arrays.sort( outputs );
-				Log.debug( ValidationUtil.class, "Found [" + outputs.length + "] files in output dir of module [" +
+				final ArrayList<File> outputs = new ArrayList<>();
+				Files.walk( Paths.get( module.getOutputDir().toURI() ) )
+								.filter( Files::isRegularFile )
+								.sorted()
+								.forEach( p -> outputs.add( p.toFile() ) );
+				Log.debug( ValidationUtil.class, "Found [" + outputs.size() + "] files in output dir of module [" +
 					module.getModuleDir().getName() + "]." );
 				int passingFiles = 0;
 				for( final File f: outputs ) {
-					final FileSummary fs = new FileSummary( f );
+					final FileSummary fs = new FileSummary( f, module.getOutputDir() );
 					if( getReportSet( module ).contains( MD5 ) ||
 						hasExp( module ) && getCompareSet( module ).contains( MD5 ) ) fs.calcMd5();
 					if( hasExp( module ) ) {
@@ -257,9 +265,9 @@ public class ValidationUtil {
 						Log.warn( ValidationUtil.class, prevOutput.get( oldFileName ).toString() );
 					if( canHaltPipeline( module ) ) throw new ValidationException( module );
 				}
-				if( hasExp( module ) && canHaltPipeline( module ) && passingFiles < outputs.length ) {
+				if( hasExp( module ) && canHaltPipeline( module ) && passingFiles < outputs.size() ) {
 					Log.warn( ValidationUtil.class, "passingFiles: " + passingFiles );
-					Log.warn( ValidationUtil.class, "outputs to validate: " + outputs.length );
+					Log.warn( ValidationUtil.class, "outputs to validate: " + outputs.size() );
 					if( canHaltPipeline( module ) ) throw new ValidationException( module );
 				}
 			} else Log.debug( ValidationUtil.class, "Validation is turned off for module: " +
