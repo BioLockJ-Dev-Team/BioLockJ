@@ -28,13 +28,14 @@ set_arg_names(){
 	EXT_MODS_ARG="external-modules"
 	BLJ_ARG="blj"
 	BLJ_SUP_ARG="blj_sup"
+	WAIT_ARG="wait-for-start"
 }
 
 init_defaults(){
 	# Order does not matter for $longArgName or $takeShortArg, but it is easier to read if they match
 	# Order MATTERS for $shortArgName and $parameters ---they must match whatever order is in $longArgName.
-	longArgName=( $GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $EXT_MODS_ARG $BLJ_ARG $BLJ_SUP_ARG )
-	takeShortArg=($GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG help version)
+	longArgName=( $GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $WAIT_ARG $EXT_MODS_ARG $BLJ_ARG $BLJ_SUP_ARG )
+	takeShortArg=($GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $WAIT_ARG help version)
 	shortArgName=()
 	parameters=()
 	mustTakeValue=($PASSWORD_ARG $CONFIG_ARG $EXT_MODS_ARG)
@@ -131,7 +132,10 @@ assign_main_arg(){
 	if ifArgUsed $RESTART_ARG ; then
 		restartDir=$mainArg
 		[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo "Using $restartDir as the pipeline to restart."
-		ifArgUsed $CONFIG_ARG && configFile=configoverride && echo "Updating pipeline with config file $configFile."
+		if ifArgUsed $CONFIG_ARG ; then
+			configFile=$(get_arg_value $CONFIG_ARG)
+			echo "Updating pipeline with config file $configFile."
+		fi
 	else
 		configFile=$mainArg
 		[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo "Using $configFile as the config file."
@@ -239,6 +243,7 @@ display_help() {
     addSpace "$AWS_ARG"      "Run on aws"
     addSpace "$GUI_ARG"      "Start the BioLockJ GUI"
     addSpace "$FG_ARG"       "Run the java process in the foreground without nohup"
+    addSpace "$WAIT_ARG"     "Do not release terminal until pipeline completes check-dependencies step."
     addSpace "$EXT_MODS_ARG <dir>" "Directory with compiled java code giving additional modules"
     addSpace "$BLJ_ARG"      "Map \$BLJ folder into the docker container;"
     continueDescriptoin      "this replaces BioLockJ packaged in a docker container with the local copy."

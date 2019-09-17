@@ -43,7 +43,7 @@ public class FatalExceptionHandler {
 		System.out.println( ERROR_MSG + ex.getMessage() );
 		if( Log.getFile() != null && Log.getFile().isFile() ) {
 			setErrorLog( Log.getFile() );
-			setFailedStatus();
+			setFailedStatus(ex);
 			SummaryUtil.addSummaryFooterForFailedPipeline();
 		} else setErrorLog( createErrorLog() );
 
@@ -152,10 +152,18 @@ public class FatalExceptionHandler {
 		errorLog = file;
 	}
 
-	private static void setFailedStatus() {
+	private static void setFailedStatus(Exception fetalEx) {
 		try {
-			if( Config.getPipelineDir() != null )
-				BioLockJUtil.createFile( Config.pipelinePath() + File.separator + Constants.BLJ_FAILED );
+			if( Config.getPipelineDir() != null ) {
+				String failFlagPath = Config.pipelinePath() + File.separator + Constants.BLJ_FAILED;
+				BioLockJUtil.createFile( failFlagPath );
+				if( fetalEx != null ) {
+					final FileWriter writer = new FileWriter( new File( failFlagPath ) );
+					writer.write( ERROR_TYPE + fetalEx.getClass().getSimpleName() + System.lineSeparator() );
+					writer.write( ERROR_MSG + fetalEx.getMessage() );
+					writer.close();
+				}
+			}
 		} catch( final Exception ex ) {
 			Log.error( FatalExceptionHandler.class,
 				"Pipeline root directory not found - unable save Pipeline Status File: " + Constants.BLJ_FAILED +
@@ -165,6 +173,6 @@ public class FatalExceptionHandler {
 
 	private static File errorLog = null;
 	private static final String FATAL_ERROR_FILE_PREFIX = "BioLockJ_FATAL_ERROR_";
-	public static final String ERROR_TYPE = "ERROR TYPE: ";
-	public static final String ERROR_MSG = "ERROR MESSAGE: ";
+	public static final String ERROR_TYPE = "ERROR TYPE:    ";
+	public static final String ERROR_MSG =  "ERROR MESSAGE: ";
 }

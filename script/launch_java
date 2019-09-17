@@ -90,25 +90,89 @@ after_java_start(){
 
 confirm_java_started(){
 	[ $? != 0 ] && exit_with_message "Error [ biolockj ]:  Unable to run ${BLJ_JAR}"
-	printf "Initializing BioLockJ."
+	printf "Initializing BioLockJ"
 	i=0
-	while [ $i -lt 15 ] && [ "${initDir}" == "${pipeDir}" ] && [ ${initJava} -eq ${numJava} ]; do
-		sleep 3 && i=$((i+1)) && printf "." && pipeDir="$(most_recent_pipeline)" && numJava=$(ps | grep -c java)
+	maxtime=15
+	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG && [ "${initDir}" == "${pipeDir}" ] && [ ${initJava} -eq ${numJava} ]; do
+		printf "."
+		sleep 1
+		i=$((i+1))
+		pipeDir="$(most_recent_pipeline)"
+		numJava=$(ps | grep -c java)
+		if [ $i -eq 10 ]; then
+			printf "waiting for java to start"
+		fi
+		if [ $i -eq $maxtime ]; then
+			if ifArgUsed $WAIT_ARG ; then
+				echo "The normal timeout has been disabled."
+			else
+				echo "Reached max wait time: $maxtime seconds."
+			fi
+		fi
 	done
-	sleep 1 && echo "." && pipeDir="$(most_recent_pipeline)"
+	sleep 1
+	echo "."
+	pipeDir="$(most_recent_pipeline)" # could lag slightly after java start
 }
 
 print_info(){
-	if [ ${#restart} -gt 0 ] && [ ${numJava} -gt ${initJava} ]; then 
+	if ifArgUsed $RESTART_ARG && [ ${numJava} -gt ${initJava} ]; then 
 		echo "Restarting pipeline:  ${pipeDir}"
-	elif [ ${#restart} -eq 0 ] && [ "${initDir}" != "${pipeDir}" ] || [ ${numJava} -gt ${initJava} ]; then 
-		echo "Starting pipeline:  ${pipeDir}"
-	elif [ ${#restart} -eq 0 ] && [ ${#runGui} -eq 0 ]; then
+		print_action_options
+		print_status
+	elif [ "${initDir}" != "${pipeDir}" ] ; then 
+		echo "Building pipeline:  ${pipeDir}"
+		print_action_options
+		print_status
+	elif ! ifArgUsed $RESTART_ARG && ! ifArgUsed $GUI_ARG; then
 		echo "Pipeline may have failed to launch - check $BLJ_PROJ for new pipeline"
+		print_action_options
 	fi
+}
+
+
+print_action_options(){
 	echo "blj_go       -> Move to pipeline output directory"
 	echo "blj_log      -> Tail pipeline log (accepts tail runtime parameters)"
 	echo "blj_summary  -> View module execution summary"
+}
+
+print_status(){
+	printf "Fetching pipeline status "
+	i=0
+	while [ $i -lt 5 ] || ifArgUsed $WAIT_ARG ; do
+		if [ -f ${pipeDir}/biolockjFailed ]; then 
+			echo ""; echo ""
+			echo "BioLockJ has stopped."
+			echo ""
+			cat ${pipeDir}/biolockjFailed
+			echo ""; echo ""
+			exit
+		elif [ -f ${pipeDir}/biolockjComplete ]; then
+			echo ""; echo ""
+			echo "Pipeline is complete."
+			exit
+		elif ! ifArgUsed $RESTART_ARG && [ -f ${pipeDir}/00_*/biolockj* ]; then
+			echo ""; echo ""
+			echo "Pipeline is running."
+			exit
+		elif ifArgUsed $RESTART_ARG && [ $i -gt 3 ] && [ -f ${pipeDir}/*/biolockjStarted ]; then #TODO need better indicator
+			completeMods=(${pipeDir}/*/biolockjComplete)
+			numComplete=${#completeMods[@]}
+			echo ""; echo ""
+			echo "Pipeline is running, with $numComplete modules completed."
+			exit
+		elif [ $i -eq 1 ]; then
+			ifArgUsed $WAIT_ARG && printf "(no timeout) "
+		elif [ $i -gt 1 ]; then
+			printf "."
+		fi
+		sleep 1
+		i=$((i+1))
+	done
+	echo ""
+	echo "Could not verify that the pipeline is running."
+	echo "It may still be checking dependencies."
 }
 
 main $@
