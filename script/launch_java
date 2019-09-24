@@ -95,7 +95,6 @@ confirm_java_started(){
 	maxtime=15
 	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG && [ "${initDir}" == "${pipeDir}" ] && [ ${initJava} -eq ${numJava} ]; do
 		printf "."
-		sleep 1
 		i=$((i+1))
 		pipeDir="$(most_recent_pipeline)"
 		numJava=$(ps | grep -c java)
@@ -109,6 +108,7 @@ confirm_java_started(){
 				echo "Reached max wait time: $maxtime seconds."
 			fi
 		fi
+		sleep 1
 	done
 	sleep 1
 	echo "."
@@ -140,7 +140,9 @@ print_action_options(){
 print_status(){
 	printf "Fetching pipeline status "
 	i=0
-	while [ $i -lt 5 ] || ifArgUsed $WAIT_ARG ; do
+	maxtime=5
+	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG ; do
+		i=$((i+1))
 		if [ -f ${pipeDir}/biolockjFailed ]; then 
 			echo ""; echo ""
 			echo "BioLockJ has stopped."
@@ -152,23 +154,27 @@ print_status(){
 			echo ""; echo ""
 			echo "Pipeline is complete."
 			exit
-		elif ! ifArgUsed $RESTART_ARG && [ -f ${pipeDir}/00_*/biolockj* ]; then
+		elif ! ifArgUsed $RESTART_ARG && [ -f ${pipeDir}/00_*/biolockjStarted ] || [ -f ${pipeDir}/00_*/biolockjComplete ]; then
 			echo ""; echo ""
 			echo "Pipeline is running."
 			exit
-		elif ifArgUsed $RESTART_ARG && [ $i -gt 3 ] && [ -f ${pipeDir}/*/biolockjStarted ]; then #TODO need better indicator
-			completeMods=(${pipeDir}/*/biolockjComplete)
-			numComplete=${#completeMods[@]}
-			echo ""; echo ""
-			echo "Pipeline is running, with $numComplete modules completed."
-			exit
-		elif [ $i -eq 1 ]; then
-			ifArgUsed $WAIT_ARG && printf "(no timeout) "
+#		# TODO need better indicator for restart case
+#		elif ifArgUsed $RESTART_ARG && [ $i -gt 3 ] && [ -f ${pipeDir}/*/biolockjStarted ]; then 
+#			completeMods=(${pipeDir}/*/biolockjComplete)
+#			numComplete=${#completeMods[@]}
+#			echo ""; echo ""
+#			echo "Pipeline is running, with $numComplete modules completed."
+#			exit
+		elif [ $i -eq $maxtime ]; then
+			if ifArgUsed $WAIT_ARG ; then
+				printf "(no timeout) "
+			else
+				printf "Reached max wait time: $maxtime seconds. "
+			fi
 		elif [ $i -gt 1 ]; then
 			printf "."
 		fi
 		sleep 1
-		i=$((i+1))
 	done
 	echo ""
 	echo "Could not verify that the pipeline is running."
