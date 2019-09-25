@@ -18,7 +18,7 @@
 ###############################################################################
 
 main(){
-	printf "\n ---------> Execute CMD [  launch_docker $(echo ${@})  ]\n"
+	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && printf "\n ---------> Execute CMD [  launch_docker $(echo ${@})  ]\n"
 	
 	take_standard_biolockj_args "$@"
 	

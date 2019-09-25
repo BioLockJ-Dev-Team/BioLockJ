@@ -8,7 +8,7 @@
 
 main(){
 	
-	printf "\n ---------> Execute CMD [  launch_java $(echo ${@})  ]\n"
+	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && printf "\n ---------> Execute CMD [  launch_java $(echo ${@})  ]\n"
 	
 	take_standard_biolockj_args "$@"
 	assign_main_arg
@@ -17,10 +17,10 @@ main(){
 	check_basic_args
 
 	CMD=$(assemble_java_cmd)
-	echo -e "Starting BioLockJ:  $CMD"    #<-- for the user to see cmd
+	ifArgUsed $FG_ARG && echo -e "Starting BioLockJ:  $CMD"  #<-- for the user to see cmd
 	
 	before_java_start
-	continue_after_command $CMD           #<-- for the developer and test suite to see cmd
+	continue_after_command $CMD          #<-- for the developer and test suite to see cmd
 	after_java_start
 }
 

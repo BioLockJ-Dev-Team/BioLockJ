@@ -37,7 +37,7 @@ containsElement "--version" "$@" || containsElement "-v" "$@" && display_version
 # Make sure there is at least one argument
 [ $# -eq 0 ] && exit_with_message "biolockj requires at least one argument."
 
-printf "\n ---------> Execute CMD [  biolockj $(echo ${@})  ]\n"
+[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && printf "\n ---------> Execute CMD [  biolockj $(echo ${@})  ]\n"
 
 take_standard_biolockj_args "$@"
 

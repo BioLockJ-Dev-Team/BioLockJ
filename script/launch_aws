@@ -4,7 +4,7 @@
 ##############################################################
 
 main(){
-	printf "\n ---------> Execute CMD [  launch_aws $(echo ${@})  ]\n"
+	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && printf "\n ---------> Execute CMD [  launch_aws $(echo ${@})  ]\n"
 	
 	take_standard_biolockj_args "$@"
 	assign_main_arg
