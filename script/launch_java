@@ -15,6 +15,7 @@ main(){
 	
 	check_env_vars
 	check_basic_args
+	ifArgUsed $RESTART_ARG && clean_for_restart
 
 	CMD=$(assemble_java_cmd)
 	ifArgUsed $FG_ARG && echo -e "Starting BioLockJ:  $CMD"  #<-- for the user to see cmd
@@ -44,6 +45,12 @@ check_basic_args(){
 		ifArgUsed $CONFIG_ARG && [ ! -f "${configFile}" ] && exit_with_message "Error [ launch_java ]: Config file [ $configFile ] not found on filesystem."
 	else
 		[ ! -f "${configFile}" ] && exit_with_message "Error [ launch_java ]: Config file [ $configFile ] not found on filesystem."
+	fi
+}
+
+clean_for_restart(){
+	if [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ] ; then
+		${BLJ}/script/blj_reset $restartDir
 	fi
 }
 

@@ -29,6 +29,8 @@ main(){
 	scan_script_and_env_args
 	! ifArgUsed $GUI_ARG && ! in_docker_env && verify_inputs
 	
+	ifArgUsed $RESTART_ARG && clean_for_restart
+	
 	GUI_PORT=8080
 	CMD="docker run --rm -e \"BLJ_OPTIONS=$(blj_options)\" $(get_volumes) $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
 	printf "\n---------> Execute CMD [  ${CMD}  ] \n\n"
@@ -61,6 +63,12 @@ scan_script_and_env_args() {
 		inputDir="$(get_property $config input.dirPaths)"
 		metaPath="$(get_property $config metadata.filePath)" && [ ${#metaPath} -gt 0 ] && metaPath="$(dirname $metaPath)"
 		primerPath="$(get_property $config trimPrimers.filePath)" && [ ${#primerPath} -gt 0 ] && primerPath="$(dirname $primerPath)"
+	fi
+}
+
+clean_for_restart(){
+	if [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ] ; then
+		${BLJ}/script/blj_reset $restartDir
 	fi
 }
 
