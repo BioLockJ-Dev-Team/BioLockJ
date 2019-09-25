@@ -220,8 +220,7 @@ public class BioLockJ {
 		if( ValidationUtil.getValidationDir().exists() ) ValidationUtil.getValidationDir().delete();
 		if( NextflowUtil.getMainNf().isFile() ) NextflowUtil.getMainNf().delete();
 
-		final File f = new File( Config.pipelinePath() + File.separator + Constants.BLJ_FAILED );
-		if( f.isFile() ) f.delete();
+		BioLockJUtil.markStatus( Constants.BLJ_STARTED );
 	}
 
 	private static void pipelineShutDown() {
@@ -273,7 +272,7 @@ public class BioLockJ {
 		if( RuntimeParamUtil.doChangePassword() ) {
 			Log.info( BioLockJ.class, "Save encrypted password to: " + Config.getConfigFilePath() );
 			Email.encryptAndStoreEmailPassword();
-			BioLockJUtil.createFile( Config.pipelinePath() + File.separator + Constants.BLJ_COMPLETE );
+			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
 			return;
 		}
 
@@ -293,7 +292,7 @@ public class BioLockJ {
 				else throw new Exception( "Pipeline completed successfully, EFS data failed to transfer to S3!" );
 			}
 
-			BioLockJUtil.createFile( Config.pipelinePath() + File.separator + Constants.BLJ_COMPLETE );
+			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
 			if( Config.getBoolean( null, Constants.RM_TEMP_FILES ) ) removeTempFiles();
 		}
 	}

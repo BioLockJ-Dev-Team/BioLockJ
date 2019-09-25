@@ -12,8 +12,10 @@
 package biolockj.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import biolockj.*;
+import biolockj.exception.BioLockJStatusException;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigNotFoundException;
 import biolockj.module.BioModule;
@@ -293,8 +295,9 @@ public class ModuleUtil {
 	 * @return TRUE if module started execution but is not complete
 	 */
 	public static boolean isIncomplete( final BioModule module ) {
-		final File f = new File( module.getModuleDir().getAbsolutePath() + File.separator + Constants.BLJ_STARTED );
-		return f.isFile();
+		final File s = new File( module.getModuleDir().getAbsolutePath() + File.separator + Constants.BLJ_STARTED );
+		final File f = new File( module.getModuleDir().getAbsolutePath() + File.separator + Constants.BLJ_FAILED );
+		return s.isFile() || f.isFile();
 	}
 
 	/**
@@ -319,13 +322,12 @@ public class ModuleUtil {
 	 * has completed successfully. Also clean up by removing file {@value biolockj.Constants#BLJ_STARTED}.
 	 *
 	 * @param module BioModule
+	 * @throws IOException 
+	 * @throws BioLockJStatusException 
 	 * @throws Exception if unable to create {@value biolockj.Constants#BLJ_COMPLETE} file
 	 */
-	public static void markComplete( final BioModule module ) throws Exception {
-		BioLockJUtil.createFile( module.getModuleDir().getAbsolutePath() + File.separator + Constants.BLJ_COMPLETE );
-		final File startFile =
-			new File( module.getModuleDir().getAbsolutePath() + File.separator + Constants.BLJ_STARTED );
-		startFile.delete();
+	public static void markComplete( final BioModule module ) throws BioLockJStatusException, IOException{
+		BioLockJUtil.markStatus( module, Constants.BLJ_COMPLETE );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 		Log.info( ModuleUtil.class,
 			"FINISHED [ " + ModuleUtil.displayID( module ) + " ] " + module.getClass().getName() );
@@ -338,10 +340,12 @@ public class ModuleUtil {
 	 * check later if it ran during this pipeline execution (as opposed to a previous failed run).
 	 *
 	 * @param module module
+	 * @throws IOException 
+	 * @throws BioLockJStatusException 
 	 * @throws Exception if unable to create {@value biolockj.Constants#BLJ_STARTED} file
 	 */
-	public static void markStarted( final BioModule module ) throws Exception {
-		BioLockJUtil.createFile( module.getModuleDir().getAbsolutePath() + File.separator + Constants.BLJ_STARTED );
+	public static void markStarted( final BioModule module ) throws BioLockJStatusException, IOException{
+		BioLockJUtil.markStatus( module, Constants.BLJ_STARTED );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 		Log.info( ModuleUtil.class,
 			"STARTING [ " + ModuleUtil.displayID( module ) + " ] " + module.getClass().getName() );

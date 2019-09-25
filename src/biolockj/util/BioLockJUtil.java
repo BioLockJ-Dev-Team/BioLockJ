@@ -22,6 +22,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import biolockj.*;
 import biolockj.exception.*;
+import biolockj.module.BioModule;
 import biolockj.module.report.r.R_CalculateStats;
 
 /**
@@ -79,23 +80,42 @@ public class BioLockJUtil {
 		return Config.getBoolean( null, Constants.PIPELINE_COPY_FILES ) || hasMixedInputs;
 	}
 
+	public static void clearStatus(String dirPath) {
+		String [] allFlags = {Constants.BLJ_STARTED, Constants.BLJ_FAILED, Constants.BLJ_COMPLETE};
+		for (String flag : allFlags) {
+			File ff = new File(dirPath + File.separator + flag);
+			if ( ff.exists() ) ff.delete();
+		}
+	}
+	
 	/**
 	 * Used to save status files for modules and the pipeline.
 	 * 
 	 * @param path Target dir path
 	 * @return File Created file
+	 * @throws BioLockJStatusException 
+	 * @throws IOException 
 	 * @throws Exception if errors occur attempting to save the file
 	 */
-	public static File createFile( final String path ) throws Exception {
+	public static File createFile( final String path ) throws BioLockJStatusException, IOException {
 		final File f = new File( path );
 		final FileWriter writer = new FileWriter( f );
 		writer.close();
-		if( !f.isFile() ) throw new Exception( "Unable to create status file: " + f.getAbsolutePath() );
+		if( !f.isFile() ) throw new BioLockJStatusException( "Unable to create status file: " + f.getAbsolutePath() );
 		return f;
 	}
-
 	
-
+	public static File markStatus( final BioModule module, final String statusFlag) throws BioLockJStatusException, IOException {
+		return( markStatus(module.getModuleDir().getAbsolutePath(), statusFlag) );
+	}
+	public static File markStatus( final String statusFlag) throws BioLockJStatusException, IOException {
+		return( markStatus(Config.pipelinePath(), statusFlag) );
+	}
+	public static File markStatus( final String dirPath, final String statusFlag) throws BioLockJStatusException, IOException {
+		clearStatus(dirPath);
+		return( createFile( dirPath + File.separator + statusFlag ) );
+	}
+	
 	/**
 	 * Return the file extension - but ignore {@value biolockj.Constants#GZIP_EXT}.
 	 * 

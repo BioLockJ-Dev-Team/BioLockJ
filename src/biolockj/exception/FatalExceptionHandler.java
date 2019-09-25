@@ -155,10 +155,9 @@ public class FatalExceptionHandler {
 	private static void setFailedStatus(Exception fetalEx) {
 		try {
 			if( Config.getPipelineDir() != null ) {
-				String failFlagPath = Config.pipelinePath() + File.separator + Constants.BLJ_FAILED;
-				BioLockJUtil.createFile( failFlagPath );
+				File failFlagPath = BioLockJUtil.markStatus( Constants.BLJ_FAILED );
 				if( fetalEx != null ) {
-					final FileWriter writer = new FileWriter( new File( failFlagPath ) );
+					final FileWriter writer = new FileWriter( failFlagPath );
 					writer.write( ERROR_TYPE + fetalEx.getClass().getSimpleName() + System.lineSeparator() );
 					writer.write( ERROR_MSG + fetalEx.getMessage() );
 					writer.close();

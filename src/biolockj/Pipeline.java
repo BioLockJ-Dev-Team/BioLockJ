@@ -129,6 +129,7 @@ public class Pipeline {
 	 * @throws Exception if any fatal error occurs during execution
 	 */
 	public static void runPipeline() throws Exception {
+		BioLockJUtil.markStatus( Constants.BLJ_STARTED );
 		try {
 			executeModules();
 			SummaryUtil.reportSuccess( null );
