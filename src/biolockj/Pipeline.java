@@ -135,6 +135,7 @@ public class Pipeline {
 			SummaryUtil.reportSuccess( null );
 		} catch( final Exception ex ) {
 			try {
+				BioLockJUtil.markStatus( currentModule, Constants.BLJ_FAILED );
 				Log.error( Pipeline.class, "Pipeline failed! " + ex.getMessage(), ex );
 				pipelineException = ex;
 				SummaryUtil.reportFailure( ex );
