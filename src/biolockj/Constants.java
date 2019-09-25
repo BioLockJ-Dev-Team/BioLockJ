@@ -750,7 +750,7 @@ public class Constants {
 	/**
 	 * BioLockJ main() runtime arg used to print version info: {@value #VERSION}
 	 */
-	public static final String VERSION = "version";
+	public static final String VERSION = "-version";
 	
 	/**
 	 * String used by sheepdog_testing_suite to assert that validation is enabled: {@value #VALIDATION_ENABLED}.

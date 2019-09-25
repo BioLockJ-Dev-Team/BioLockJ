@@ -583,19 +583,22 @@ public class BioLockJUtil {
 
 	/**
 	 * Print basic version or help info if requested.<br>
-	 * Cally by 1st line BioLockJ.java main() method
+	 * Called by 1st line BioLockJ.java main() method
 	 * 
 	 * @param args BioLockJ.java main() runtime args
 	 */
-	public static void showInfo( final String[] args ) {
-		for( final String arg: args ) {
-			String argX = arg;
-			while( argX.startsWith( "-" ) )
-				argX = argX.replaceAll( "^-", "" ).toLowerCase();
-			if( argX.equals( Constants.VERSION ) ) System.out.println( "BioLockJ " + BioLockJUtil.getVersion( true ) );
-			else if( argX.equals( Constants.HELP ) ) BioLockJUtil.printHelp();
-			else continue;
-			System.exit( 0 );
+	public static void showInfo( String[] args )
+	{
+		for (String arg : args) {
+			String lowerArg = arg.replaceAll( "^--", "-" ).toLowerCase();
+			if (lowerArg.equals( Constants.VERSION ) ) {
+				System.out.println("BioLockJ " + BioLockJUtil.getVersion( true ) );
+				System.exit( 0 );
+			}
+			if (lowerArg.equals( Constants.HELP ) ) {
+				BioLockJUtil.printHelp();
+				System.exit( 0 );
+			}
 		}
 	}
 
@@ -685,7 +688,7 @@ public class BioLockJUtil {
 			"print this help menu" + RETURN + Constants.VERSION + Constants.TAB_DELIM + "print version number" );
 		RuntimeParamUtil.printArgsDescriptions();
 		System.err.println( RETURN + "Users: please use the biolockj command." );
-		System.err.println( "See: \"biolockj --" + Constants.HELP + "\" " );
+		System.err.println( "See: \"biolockj --help\" " );
 	}
 
 	private static void setPipelineInputFileTypes() {
