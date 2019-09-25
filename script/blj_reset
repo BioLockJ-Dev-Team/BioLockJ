@@ -38,7 +38,7 @@ set_reset_module(){
 		lastCompleted=$(determine_last_complete_mod)
 		echo "Determined that module number $lastCompleted was the last module to complete."
 	fi
-	echo "Setting status of modules after $(basename $lastComplete)  to --> \"biolockjFailed\"" 
+	echo "Setting status of modules after $(basename $lastCompleted)  to --> \"biolockjFailed\"" 
 }
 
 determine_last_complete_mod(){
@@ -84,7 +84,8 @@ reset_modules(){
 }
 
 reset_pipeline_root(){
-	for statusFlag in (biolockjComplete biolockjStarted biolockjFailed); do
+	local possibleStatus=(biolockjComplete biolockjStarted biolockjFailed)
+	for statusFlag in ${possibleStatus[@]} ; do
 		local flag="$pipeDir/$statusFlag"
 		[ -f "$flag" ] && rm "$flag" && echo "Deleted $flag"
 	done
