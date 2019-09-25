@@ -3,31 +3,91 @@
 ##  This script manually resets current module and pipeline status.          ##
 ##  All modules numbered higher than the current module will also be reset.  ##
 ###############################################################################
+main(){
+	echo "Starting [ blj_reset ]"
+	
+	if [ ${#1} -gt 0 ]; then myDir="${1}"; else myDir="$PWD"; fi
+	
+	set_pipeline_dir
+	set_reset_module
+	
+	reset_modules
+	reset_pipeline_root
+	
+	echo "Reset complete."
+}
+
 . ${BLJ_SCRIPT}/blj_functions
 
-if [ ${#1} -gt 0 ]; then myDir="${1}"; else myDir="$PWD"; fi
-echo "Starting [ blj_reset ] to reset status of modules after/including $myDir to --> \"biolockjStarted\""
-
-if $(is_pipeline_dir "$myDir"); then
-	pipeDir="$myDir" && myNum=-1
-else
-	pipeDir=$(dirname "$myDir") && aDir=$(basename "$myDir") && myNum=$((10#${aDir%%_*}-1))
-fi
-
-if ! $(is_pipeline_dir "$pipeDir"); then
-	exit_script "Error [ blj_reset ] target dir is not a pipeline or module root directory --> $myDir"
-fi
-
-[ -f "$pipeDir/biolockjComplete" ] && rm "$pipeDir/biolockjComplete" && echo "Deleted $pipeDir/biolockjComplete"
-
-found=false
-for modDir in $pipeDir/*; do
-	if ! $(is_empty "$modDir") && $(is_module_dir "$modDir"); then
-		dirName=$(basename "$modDir")
-		[ $((10#${dirName%%_*})) -gt $myNum ] && [ -f "$modDir/biolockjComplete" ] && found=true && \
-			rm "$modDir/biolockjComplete" && echo "Deleted $modDir/biolockjComplete" && \
-			[ ! -f "$modDir/biolockjStarted" ] && touch "$modDir/biolockjStarted" && echo "Created $modDir/biolockjStarted"
+set_pipeline_dir(){
+	if $(is_pipeline_dir "$myDir"); then
+		pipeDir="$myDir"
+	elif $(is_pipeline_dir $(dirname "$myDir") ); then
+		pipeDir=$(dirname "$myDir")
+	else
+		exit_script "Error [ blj_reset ] target dir is not a pipeline or module root directory --> $myDir"
 	fi
-done
+	echo "Reseting pipeline: $pipeDir" 
+}
 
-[ $found == false ] && echo "All pipeline directories after/including $myDir already incomplete - no changes made"
+set_reset_module(){
+	if $(is_module_dir "$myDir"); then
+		lastCompleted=$(($(get_module_number "$myDir")-1))
+		echo "Reseting module $(basename $myDir) and all following modules based on user input."
+	else
+		lastCompleted=$(determine_last_complete_mod)
+		echo "Determined that module number $lastCompleted was the last module to complete."
+	fi
+	echo "Setting status of modules after $(basename $lastComplete)  to --> \"biolockjFailed\"" 
+}
+
+determine_last_complete_mod(){
+	local lastCompleted=-1
+	local firstIncomplete=1000
+	for modDir in $pipeDir/*; do
+		if ! $(is_empty "$modDir") && $(is_module_dir "$modDir") ; then
+			dirName=$(basename "$modDir")
+			currentNum=$(get_module_number $dirName)
+			if [ $currentNum -gt $lastCompleted ] && [ -f "$modDir/biolockjComplete" ]; then
+				lastCompleted=$currentNum
+			fi
+			if [ $currentNum -lt $firstIncomplete ] && [ ! -f "$modDir/biolockjComplete" ]; then
+				firstIncomplete=$currentNum
+			fi
+		fi
+	done
+	if [ ! $lastCompleted -lt $firstIncomplete ]; then
+		exit_with_message "Could not determined last completed module."
+	fi
+	echo $lastCompleted
+}
+
+# param 1 - module directory basename
+get_module_number(){
+	echo $((10#${1%%_*}))
+}
+
+reset_modules(){
+	for modDir in $pipeDir/*; do
+		if ! $(is_empty "$modDir"); then
+			dirName=$(basename "$modDir")
+			if $(is_module_dir "$modDir") && [ $(get_module_number $dirName) -gt $lastCompleted ]; then
+				touch "$modDir/biolockjFailed" && echo "Created $modDir/biolockjFailed"
+				if [ -f "$modDir/biolockjComplete" ]; then 
+					rm "$modDir/biolockjComplete" && echo "Deleted $modDir/biolockjComplete"
+				elif [ -f "$modDir/biolockjStarted" ]; then
+					rm "$modDir/biolockjStarted" && echo "Deleted $modDir/biolockjStarted"
+				fi
+			fi
+		fi
+	done
+}
+
+reset_pipeline_root(){
+	for statusFlag in (biolockjComplete biolockjStarted biolockjFailed); do
+		local flag="$pipeDir/$statusFlag"
+		[ -f "$flag" ] && rm "$flag" && echo "Deleted $flag"
+	done
+}
+
+main $@
