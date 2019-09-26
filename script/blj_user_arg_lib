@@ -15,6 +15,7 @@ take_standard_biolockj_args(){
 	split_main_arg_from_options "$@"
 	[ ${#options[@]} -gt 0 ] && parse_options "${options[@]}"
 	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && display_arg_vals
+	export_env_vars
 }
 
 set_arg_names(){
@@ -27,6 +28,7 @@ set_arg_names(){
 	FG_ARG="foreground"
 	EXT_MODS_ARG="external-modules"
 	BLJ_ARG="blj"
+	PROJ_ARG="blj_proj"
 	BLJ_SUP_ARG="blj_sup"
 	WAIT_ARG="wait-for-start"
 }
@@ -34,11 +36,11 @@ set_arg_names(){
 init_defaults(){
 	# Order does not matter for $longArgName or $takeShortArg, but it is easier to read if they match
 	# Order MATTERS for $shortArgName and $parameters ---they must match whatever order is in $longArgName.
-	longArgName=( $GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $WAIT_ARG $EXT_MODS_ARG $BLJ_ARG $BLJ_SUP_ARG )
+	longArgName=( $GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $WAIT_ARG $PROJ_ARG $EXT_MODS_ARG $BLJ_ARG $BLJ_SUP_ARG )
 	takeShortArg=($GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $WAIT_ARG help version)
 	shortArgName=()
 	parameters=()
-	mustTakeValue=($PASSWORD_ARG $CONFIG_ARG $EXT_MODS_ARG)
+	mustTakeValue=($PASSWORD_ARG $CONFIG_ARG $EXT_MODS_ARG $PROJ_ARG)
 	canTakeValue=(${mustTakeValue[@]} $BLJ_SUP_ARG)
 	for i in ${!longArgName[@]}; do
 		longName=${longArgName[ $i ]}
@@ -152,6 +154,10 @@ display_arg_vals(){
 	done 
 }
 
+export_env_vars(){
+	ifArgUsed $PROJ_ARG && export BLJ_PROJ=$(get_arg_value $PROJ_ARG)
+}
+
 
 
 ### These functions are used by the main scripts to querry user args
@@ -247,6 +253,8 @@ display_help() {
     addSpace "$EXT_MODS_ARG <dir>" "Directory with compiled java code giving additional modules"
     addSpace "$BLJ_ARG"      "Map \$BLJ folder into the docker container;"
     continueDescriptoin      "this replaces BioLockJ packaged in a docker container with the local copy."
+    addSpace "$PROJ_ARG <dir>" "Directory that contains BioLockJ pipelines. If not supplied, "
+    continueDescriptoin "biolockj will use the value of environment variable \"BLJ_PROJ\"."
     addSpace "$BLJ_SUP_ARG <dir>" "Map <dir> folder into the docker container as /app/blj_support,"
     continueDescriptoin      "if <dir> is not given, variable \$BLJ_SUP is used"
     echo ""
