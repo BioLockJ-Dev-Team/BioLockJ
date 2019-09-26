@@ -34,7 +34,7 @@ check_env_vars(){
 	[ ${#BLJ_PROJ} -eq 0 ] && exit_with_message "Error [ launch_java ]: Required env variable BLJ_PROJ is not defined. $pls_use_install"
 	[ ! -d "${BLJ_PROJ}" ] && exit_with_message "Error [ launch_java ]: Required env variable BLJ_PROJ [\"${BLJ_PROJ}\"] must be a directory on the filesystem. $pls_use_install"
 	[ ${#BLJ} -eq 0 ] && exit_with_message "Error [ launch_java ]: Required env variable BLJ is not defined. $pls_use_install"
-	[ ! -d "${BLJ}" ] && exit_with_message "Error [ launch_java ]: Required env variable BLJ [\"${BLJ_PROJ}\"] must be a directory on the filesystem. $pls_use_install"
+	[ ! -d "${BLJ}" ] && exit_with_message "Error [ launch_java ]: Required env variable BLJ [\"${BLJ}\"] must be a directory on the filesystem. $pls_use_install"
 	BLJ_JAR=${BLJ}/dist/BioLockJ.jar
 	[ ! -f "${BLJ_JAR}" ] && exit_script "Error [ launch_java ]: BioLockJ Jar file \"${BLJ_JAR}\" not found."
 }
@@ -49,9 +49,13 @@ check_basic_args(){
 }
 
 clean_for_restart(){
-	if [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ] ; then
+	if pipeline_has_status_flag ; then
 		${BLJ}/script/blj_reset $restartDir
 	fi
+}
+
+pipeline_has_status_flag(){
+	ifDefined $restartDir && [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ]
 }
 
 assemble_java_cmd(){
@@ -100,7 +104,9 @@ confirm_java_started(){
 	printf "Initializing BioLockJ"
 	i=0
 	maxtime=15
-	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG && [ "${initDir}" == "${pipeDir}" ] && [ ${initJava} -eq ${numJava} ]; do
+	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG \
+		&& [ "${initDir}" == "${pipeDir}" ] && [ ${initJava} -eq ${numJava} ] \
+		&& ! pipeline_has_status_flag ; do
 		printf "."
 		i=$((i+1))
 		pipeDir="$(most_recent_pipeline)"
