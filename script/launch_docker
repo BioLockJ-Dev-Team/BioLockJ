@@ -32,7 +32,7 @@ main(){
 	ifArgUsed $RESTART_ARG && clean_for_restart
 	
 	GUI_PORT=8080
-	CMD="docker run --rm -e \"BLJ_OPTIONS=$(blj_options)\" $(get_volumes) $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
+	CMD="docker run $(flags_for_run) -e \"BLJ_OPTIONS=$(blj_options)\" $(get_volumes) $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
 	printf "\n---------> Execute CMD [  ${CMD}  ] \n\n"
 	build_clone_script "${CMD}"
 	
@@ -96,6 +96,13 @@ verify_file() {
 	[ ! -f "${1}" ] && exit_script "Error [ launch_docker.verify_file ]: Parameter \"${1}\" not found"
 }
 
+flags_for_run(){
+	if ifArgUsed $FG_ARG ; then
+		echo "--rm"
+	else
+		echo "--rm -d"
+	fi
+}
 # Populate docker run env variable $BLJ_OPTIONS 
 # Always include vars to map Host paths: Config, $BLJ_PROJ, and $HOME.
 # In AWS mode, add a indicator, otherwise include the Host path for pipeline input. 
