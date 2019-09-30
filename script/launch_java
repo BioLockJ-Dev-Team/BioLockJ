@@ -167,17 +167,10 @@ print_status(){
 			echo ""; echo ""
 			echo "Pipeline is complete."
 			exit
-		elif ! ifArgUsed $RESTART_ARG && [ -f ${pipeDir}/00_*/biolockjStarted ] || [ -f ${pipeDir}/00_*/biolockjComplete ]; then
+		elif [ -f ${pipeDir}/biolockjStarted ]; then
 			echo ""; echo ""
 			echo "Pipeline is running."
 			exit
-#		# TODO need better indicator for restart case
-#		elif ifArgUsed $RESTART_ARG && [ $i -gt 3 ] && [ -f ${pipeDir}/*/biolockjStarted ]; then 
-#			completeMods=(${pipeDir}/*/biolockjComplete)
-#			numComplete=${#completeMods[@]}
-#			echo ""; echo ""
-#			echo "Pipeline is running, with $numComplete modules completed."
-#			exit
 		elif [ $i -eq $maxtime ]; then
 			if ifArgUsed $WAIT_ARG ; then
 				printf "(no timeout) "
