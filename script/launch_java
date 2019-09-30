@@ -15,7 +15,7 @@ main(){
 	
 	check_env_vars
 	check_basic_args
-	ifArgUsed $RESTART_ARG && clean_for_restart
+	ifArgUsed $RESTART_ARG && pipeline_has_status_flag && ${BLJ}/script/blj_reset $restartDir
 
 	CMD=$(assemble_java_cmd)
 	ifArgUsed $FG_ARG && echo -e "Starting BioLockJ:  $CMD"  #<-- for the user to see cmd
@@ -46,16 +46,6 @@ check_basic_args(){
 	else
 		[ ! -f "${configFile}" ] && exit_with_message "Error [ launch_java ]: Config file [ $configFile ] not found on filesystem."
 	fi
-}
-
-clean_for_restart(){
-	if pipeline_has_status_flag ; then
-		${BLJ}/script/blj_reset $restartDir
-	fi
-}
-
-pipeline_has_status_flag(){
-	ifDefined $restartDir && [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ]
 }
 
 assemble_java_cmd(){
@@ -129,62 +119,19 @@ confirm_java_started(){
 }
 
 print_info(){
-	if ifArgUsed $RESTART_ARG && [ ${numJava} -gt ${initJava} ]; then 
+	if ifArgUsed $RESTART_ARG && pipeline_has_status_flag; then 
 		echo "Restarting pipeline:  ${pipeDir}"
 		print_action_options
-		print_status
+		print_pipeline_status_and_exit ${pipeDir} 5
 	elif [ "${initDir}" != "${pipeDir}" ] ; then 
 		echo "Building pipeline:  ${pipeDir}"
 		print_action_options
-		print_status
+		print_pipeline_status_and_exit ${pipeDir} 5
 	elif ! ifArgUsed $RESTART_ARG && ! ifArgUsed $GUI_ARG; then
 		echo "Pipeline may have failed to launch - check $BLJ_PROJ for new pipeline"
 		print_action_options
 	fi
 }
 
-
-print_action_options(){
-	echo "blj_go       -> Move to pipeline output directory"
-	echo "blj_log      -> Tail pipeline log (accepts tail runtime parameters)"
-	echo "blj_summary  -> View module execution summary"
-}
-
-print_status(){
-	printf "Fetching pipeline status "
-	i=0
-	maxtime=5
-	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG ; do
-		i=$((i+1))
-		if [ -f ${pipeDir}/biolockjFailed ]; then 
-			echo ""; echo ""
-			echo "BioLockJ has stopped."
-			echo ""
-			cat ${pipeDir}/biolockjFailed
-			echo ""; echo ""
-			exit
-		elif [ -f ${pipeDir}/biolockjComplete ]; then
-			echo ""; echo ""
-			echo "Pipeline is complete."
-			exit
-		elif [ -f ${pipeDir}/biolockjStarted ]; then
-			echo ""; echo ""
-			echo "Pipeline is running."
-			exit
-		elif [ $i -eq $maxtime ]; then
-			if ifArgUsed $WAIT_ARG ; then
-				printf "(no timeout) "
-			else
-				printf "Reached max wait time: $maxtime seconds. "
-			fi
-		elif [ $i -gt 1 ]; then
-			printf "."
-		fi
-		sleep 1
-	done
-	echo ""
-	echo "Could not verify that the pipeline is running."
-	echo "It may still be checking dependencies."
-}
 
 main $@

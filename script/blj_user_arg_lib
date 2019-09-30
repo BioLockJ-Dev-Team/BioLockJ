@@ -203,6 +203,55 @@ index_of(){
 
 ### These functions are used to give info to the user
 
+# Tell the use how to examine the pipeline they just launched
+print_action_options(){
+	echo "blj_go       -> Move to pipeline output directory"
+	echo "blj_log      -> Tail pipeline log (accepts tail runtime parameters)"
+	echo "blj_summary  -> View module execution summary"
+}
+
+# Tell the user if/when the pipeline has finished checking dependencies.
+# param 1 - The pipeline root directory
+# param 2 - number of seconds to wait before timing out
+print_pipeline_status_and_exit(){
+	local pipeRootDir=$1
+	echo "checking status of pipeline: $pipeRootDir"
+	printf "Fetching pipeline status "
+	i=0
+	maxtime=$2
+	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG ; do
+		i=$((i+1))
+		if [ -f ${pipeRootDir}/biolockjFailed ]; then 
+			echo ""; echo ""
+			echo "BioLockJ has stopped."
+			echo ""
+			cat ${pipeRootDir}/biolockjFailed
+			echo ""; echo ""
+			exit
+		elif [ -f ${pipeRootDir}/biolockjComplete ]; then
+			echo ""; echo ""
+			echo "Pipeline is complete."
+			exit
+		elif [ -f ${pipeRootDir}/biolockjStarted ]; then
+			echo ""; echo ""
+			echo "Pipeline is running."
+			exit
+		elif [ $i -eq $maxtime ]; then
+			if ifArgUsed $WAIT_ARG ; then
+				printf "(no timeout) "
+			else
+				printf "Reached max wait time: $maxtime seconds. "
+			fi
+		elif [ $i -gt 1 ]; then
+			printf "."
+		fi
+		sleep 1
+	done
+	echo ""
+	echo "Could not verify that the pipeline is running."
+	echo "It may still be checking dependencies."
+}
+
 # Display BioLockJ release version
 display_version() {
 	[ -f "${BLJ}/.version" ] && cat "${BLJ}/.version" && return
