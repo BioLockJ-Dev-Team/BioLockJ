@@ -15,7 +15,7 @@ main(){
 	
 	check_env_vars
 	check_basic_args
-	ifArgUsed $RESTART_ARG && pipeline_has_status_flag && ${BLJ}/script/blj_reset $restartDir
+	restartDir_has_status_flag && ${BLJ}/script/blj_reset $restartDir
 
 	CMD=$(assemble_java_cmd)
 	ifArgUsed $FG_ARG && echo -e "Starting BioLockJ:  $CMD"  #<-- for the user to see cmd
@@ -96,7 +96,7 @@ confirm_java_started(){
 	maxtime=15
 	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG \
 		&& [ "${initDir}" == "${pipeDir}" ] && [ ${initJava} -eq ${numJava} ] \
-		&& ! pipeline_has_status_flag ; do
+		&& ! restartDir_has_status_flag ; do
 		printf "."
 		i=$((i+1))
 		pipeDir="$(most_recent_pipeline)"
@@ -119,7 +119,7 @@ confirm_java_started(){
 }
 
 print_info(){
-	if ifArgUsed $RESTART_ARG && pipeline_has_status_flag; then 
+	if restartDir_has_status_flag; then 
 		echo "Restarting pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 5
@@ -127,7 +127,7 @@ print_info(){
 		echo "Building pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 5
-	elif ! ifArgUsed $RESTART_ARG && ! ifArgUsed $GUI_ARG; then
+	else
 		echo "Pipeline may have failed to launch - check $BLJ_PROJ for new pipeline"
 		print_action_options
 	fi

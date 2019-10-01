@@ -155,7 +155,12 @@ display_arg_vals(){
 }
 
 export_env_vars(){
-	ifArgUsed $PROJ_ARG && export BLJ_PROJ=$(get_arg_value $PROJ_ARG)
+	ifArgUsed $PROJ_ARG && BLJ_PROJ=$(get_arg_value $PROJ_ARG)
+	if [ "${BLJ_PROJ: -1}" == "/" ]; then
+		len=$((${#BLJ_PROJ}-1))
+		BLJ_PROJ="${BLJ_PROJ:0:len}"
+	fi
+	export BLJ_PROJ
 }
 
 
@@ -215,10 +220,9 @@ print_action_options(){
 # param 2 - number of seconds to wait before timing out
 print_pipeline_status_and_exit(){
 	local pipeRootDir=$1
-	echo "checking status of pipeline: $pipeRootDir"
 	printf "Fetching pipeline status "
-	i=0
-	maxtime=$2
+	local i=0
+	local maxtime=$2
 	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG ; do
 		i=$((i+1))
 		if [ -f ${pipeRootDir}/biolockjFailed ]; then 

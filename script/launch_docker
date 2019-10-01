@@ -29,16 +29,17 @@ main(){
 	scan_script_and_env_args
 	! ifArgUsed $GUI_ARG && ! in_docker_env && verify_inputs
 	
-	ifArgUsed $RESTART_ARG && pipeline_has_status_flag && ${BLJ}/script/blj_reset $restartDir
+	restartDir_has_status_flag && ${BLJ}/script/blj_reset $restartDir
 
 	GUI_PORT=8080
 	CMD="docker run $(flags_for_run) -e \"BLJ_OPTIONS=$(blj_options)\" $(get_volumes) $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
 	
-	initDir="$(most_recent_pipeline)"
-	pipeDir="${initDir}"
+	before_docker_start
 	
 	containerId=$(continue_after_command $CMD)
-	echo "Docker container id: $containerId"
+	# We capture the output of continue_after_command, so we have to pass along the test scenario
+	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo $containerId && exit
+	
 	build_clone_script "${CMD}"
 	
 	if ifArgUsed $GUI_ARG ; then
@@ -114,12 +115,12 @@ blj_options() {
 		options="${BLJ_OPTIONS}"
 	else # on host machine
 		# -i is required if not launching the WebApp GUI 
-		options="-u ${HOME} -b $(blj_proj) -h $(hostname) -i ${inputDir}"
+		options="-u ${HOME} -b ${BLJ_PROJ} -h $(hostname) -i ${inputDir}"
 		ifArgUsed $BLJ_ARG && options="${options} -blj ${BLJ}"
 		ifArgUsed $BLJ_SUP_ARG && options="${options} -blj_sup ${blj_sup}"
 		ifArgUsed $GUI_ARG && echo "${options}" && return
 	fi	
-	ifDefined $restartDir && options="${options} -r ${BLJ_PROJ}/${restartDir#$(blj_proj)/}"
+	ifDefined $restartDir && options="${options} -r $restartDir"
 	ifArgUsed $PASSWORD_ARG && options="${options} -p $newPass"
 	ifDefined $metaPath && options="${options} -m $metaPath"
 	ifDefined $primerPath && options="${options} -t $primerPath"
@@ -136,7 +137,7 @@ get_volumes() {
 	if ifArgUsed $AWS_ARG ; then
 		vols="${vols} -v ${EFS}:${EFS}:delegated"
 	else
-		vols="${vols} -v $(blj_proj):${EFS_PROJ}:delegated"
+		vols="${vols} -v ${BLJ_PROJ}:${EFS_PROJ}:delegated"
 		if ifArgUsed $GUI_ARG; then 
 			vols="${vols} -v ${BLJ}/resources/config/gui:${BLJ_CONFIG}:delegated"
 			[ -f "$(which aws)" ] && [ -d "$(dirname $(which aws))" ] && vols="${vols} -v $(dirname $(which aws)):${APP_BIN}"
@@ -159,26 +160,6 @@ get_docker_img() {
 
 cmd_for_gui(){
 	ifArgUsed $GUI_ARG && echo "npm start"
-}
-
-# If this script called by biolockj_controller Docker container in GUI mode, 
-# set BLJ_PROJ based on the $BLJ_OPTIONS env var, 
-# otherwise return $BLJ_PROJ if called from a host machine.  If dir ends with "/" trim it off
-blj_proj() {
-	if in_docker_env ; then
-	#if [ -f "/.dockerenv" ] && $(var_exists BLJ_OPTIONS); then
-		#TODO - if you run the gui, and launch a docker pipeline, how will you get the BLJ_PROJ value to map in
-		# TODO - make blj_proj an arg that takes a directory, $BLJ_PROJ variable is the default
-		bljProj=$(named_arg "${BLJ_OPTIONS}" -b) 
-	else
-		bljProj="${BLJ_PROJ}"
-	fi
-	if [ "${bljProj: -1}" == "/" ]; then
-		len=$((${#bljProj}-1))
-		bljProj="${bljProj:0:len}"
-	fi
-	! ifDefined $bljProj && exit_script "Error [ launch_docker.blj_proj ]: Required env variable BLJ_PROJ undefined"
-	echo "${bljProj}"
 }
 
 # Build a script that can be used to launch an interactive clone of the docker container
@@ -216,6 +197,12 @@ startBrowser() {
 	fi
 }
 
+before_docker_start(){
+	initDir="$(most_recent_pipeline)"
+	pipeDir="${initDir}"
+	verifiedDockerLaunch="false"
+}
+
 confirm_biolockj_start(){
 	printf "Initializing BioLockJ"
 	i=0
@@ -223,7 +210,7 @@ confirm_biolockj_start(){
 	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG \
 		&& [ "${initDir}" == "${pipeDir}" ] \
 		&& is_container_running \
-		&& ! pipeline_has_status_flag ; do
+		&& ! restartDir_has_status_flag ; do
 		printf "."
 		i=$((i+1))
 		pipeDir="$(most_recent_pipeline)"
@@ -246,12 +233,28 @@ confirm_biolockj_start(){
 }
 
 is_container_running(){
-	containerRunning=$(docker inspect -f '{{.State.Running}}' $containerId) || containerRunning="false"  2>1 >/dev/null
-	[ ${containerRunning} == "true" ]
+	numWords=$(echo $containerId | wc -w )
+	if [ $numWords -eq 1 ]; then
+		containerRunning=$(docker inspect -f '{{.State.Running}}' $containerId 2>/dev/null)
+	else
+		echo $containerId
+		exit_with_message "Did not retreive a valid container id from the docker program."
+	fi
+	if [ ${#containerRunning} -eq 0 ] || [ $(echo $containerRunning | wc -w ) -gt 1 ]; then
+		containerRunning="false"  
+	fi
+	[ ${containerRunning} == "true" ] && verifiedDockerLaunch="true"
+	[ ${containerRunning} == "true" ] 
 }
 
 print_info(){
-	if ifArgUsed $RESTART_ARG && pipeline_has_status_flag; then 
+	if ! is_container_running && ! restartDir_has_status_flag && [ "${initDir}" == "${pipeDir}" ] ; then
+		if [ $verifiedDockerLaunch == "true" ]; then
+			echo "Docker started; but the pipeline did not."
+		else
+			echo "Failed to start docker container."
+		fi
+	elif restartDir_has_status_flag; then 
 		echo "Restarting pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 15
@@ -259,7 +262,7 @@ print_info(){
 		echo "Building pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 15
-	elif ! ifArgUsed $RESTART_ARG && ! ifArgUsed $GUI_ARG; then
+	else
 		echo "Pipeline may have failed to launch - check $BLJ_PROJ for new pipeline"
 		print_action_options
 	fi

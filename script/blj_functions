@@ -128,7 +128,7 @@ most_recent_pipeline() {
 	reset_IFS
 }
 
-pipeline_has_status_flag(){
+restartDir_has_status_flag(){
 	ifDefined $restartDir && [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ]
 }
 
@@ -186,7 +186,7 @@ exit_script() {
 # If the variable BIOLOCKJ_TEST_MODE exists, the command is shown, not run and the program exits.
 # Otherwise the command is run, calling the next script
 exit_after_command(){
-	CMD="$@"
+	local CMD="$@"
 	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo "${BIOLOCKJ_TEST_MODE}$CMD" && exit
 	eval $CMD
 	exit
@@ -195,7 +195,7 @@ exit_after_command(){
 # If the variable BIOLOCKJ_TEST_MODE exists, the command is shown, not run and the program exits.
 # Otherwise the command is run
 continue_after_command(){
-	CMD="$@"
+	local CMD="$@"
 	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo "${BIOLOCKJ_TEST_MODE}$CMD" && exit
 	eval $CMD
 }
