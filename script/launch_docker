@@ -33,24 +33,23 @@ main(){
 
 	GUI_PORT=8080
 	CMD="docker run $(flags_for_run) -e \"BLJ_OPTIONS=$(blj_options)\" $(get_volumes) $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
+		
+	build_clone_script "${CMD}"
 	
 	before_docker_start
 	
-	containerId=$(continue_after_command $CMD)
-	# We capture the output of continue_after_command, so we have to pass along the test scenario
-	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo $containerId && exit
-	
-	build_clone_script "${CMD}"
-	
-	if ifArgUsed $GUI_ARG ; then
-		startBrowser # if the gui has its own docker container, this CMD would be defined there
-	elif ifArgUsed $FG_ARG ; then
-		pipeDir="$(most_recent_pipeline)"
-		print_info
+	if ifArgUsed $FG_ARG ; then
+		echo " ---------> Docker CMD [  $CMD  ]"
+		continue_after_command $CMD
 	else
+		containerId=$(continue_after_command $CMD)
+		# We capture the output of continue_after_command, so we have to pass along the test scenario
+		[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo $containerId && exit
 		confirm_biolockj_start
 		print_info
 	fi
+	
+	ifArgUsed $GUI_ARG && startBrowser # if the gui has its own docker container, this CMD would be defined there
 }
 
 . ${BLJ_SCRIPT}/docker_functions
