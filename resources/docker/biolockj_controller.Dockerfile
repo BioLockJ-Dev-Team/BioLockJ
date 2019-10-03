@@ -1,5 +1,18 @@
 # Deployment path: $DOCKER_DIR/biolockj_controller.Dockerfile
 
+# From git repo root:
+# docker build -t test/biolockj_controller . -f resources/docker/biolockj_controller.Dockerfile 
+ARG DOCKER_HUB_USER=biolockj
+FROM java:8 AS builder
+
+COPY . /blj
+RUN ls /blj
+ENV ANT_DIST=apache-ant-1.9.14
+RUN wget http://apache.mirrors.lucidnetworks.net//ant/binaries/$ANT_DIST-bin.tar.bz2
+RUN tar xfj $ANT_DIST-bin.tar.bz2
+RUN $ANT_DIST/bin/ant -buildfile blj/resources/build.xml build-jar
+
+
 FROM biolockj/blj_basic_py2
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -17,20 +30,19 @@ ENV NF_URL="https://github.com/nextflow-io/nextflow/releases/download/v19.04.0/n
 RUN cd $BIN && wget -qO- $NF_URL | bash
 
 #3.) Install Docker Client
-ARG DOCKER_CLIENT
+ARG DOCKER_CLIENT=docker-18.09.2
 ENV DOCK_URL="https://download.docker.com/linux/static/stable/x86_64/${DOCKER_CLIENT}.tgz"
 RUN cd $BIN && \
 	wget -qO- $DOCK_URL  | bsdtar -xzf- && \
 	mv docker tempDocker && mv tempDocker/* . && rm -rf tempDocker
 
 #4.) Install BioLockJ
-ARG BLJ_DATE
-ARG VER
-ENV BLJ_URL="https://github.com/msioda/BioLockJ/releases/download/${VER}/biolockj_${VER}.tgz"
-RUN echo "${BLJ_DATE}" && cd "${BLJ}" && \
-	wget -qO- $BLJ_URL | bsdtar -xzf- && \
-	rm -rf ${BLJ}/[bil]* && rm -rf ${BLJ}/resources/[bdil]* && \
-	cd "${BLJ}/web_app" && npm install --only=production
+COPY --from=builder /blj/dist/BioLockJ.jar $BLJ/dist/BioLockJ.jar
+COPY --from=builder /blj/script $BLJ/script
+COPY --from=builder /blj/resources $BLJ/resources
+COPY --from=builder /blj/.version /blj/install $BLJ/
+
+RUN $BLJ/install
 
 #5.) Cleanup
 RUN	apt-get clean && \

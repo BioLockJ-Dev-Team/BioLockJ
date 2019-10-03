@@ -125,7 +125,6 @@ get_cmd() {
 	if [ "${1}" == "build" ]; then
 		bjm="${1} --build-arg BLJ_DATE=$(date +%s) --build-arg VER=$(biolockj -v)"
 		cmd="${1}" && target="${target} $(docker_dir) -f $(docker_dir)/${2}.Dockerfile" 
-		[ "${2}" == "biolockj_controller" ] && cmd="${bjm} --build-arg DOCKER_CLIENT=$DOCKER_VER"
 		[ "${2}" == "java_module" ] && cmd="${bjm}"
 		cmd="${cmd} -t"
 	fi
