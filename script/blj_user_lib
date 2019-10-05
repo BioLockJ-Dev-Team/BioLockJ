@@ -5,7 +5,7 @@
 ##                                                               ##
 ###################################################################
 
-#. $BLJ/script/blj_functions # this will be needed when this lib is called outside of blj_functions
+. $BLJ/script/blj_functions 
 
 # This script navigates the $USER to their most recent pipeline and lists the current directory
 blj_go() {

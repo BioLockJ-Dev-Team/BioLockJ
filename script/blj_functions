@@ -224,6 +224,3 @@ show_IFS() {
 
 IFS_CACHE="$IFS" && alias showIFS="show_IFS" && alias resetIFS="reset_IFS"
 SPACER="================================================================================"
-
-# TODO - source the user functions in a more appropriate place.
-. ${BLJ_SCRIPT}/blj_user_lib

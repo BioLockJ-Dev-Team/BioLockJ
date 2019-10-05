@@ -10,6 +10,7 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 export BSH_PROF=~/.bash_profile
 export BLJ=/mnt/efs
 export BLJ_SCRIPT="${BLJ}/script"
+. ${BLJ}/script/blj_user_lib
 
 alias ls="ls -lFh"
 alias rd="rm -rf"
