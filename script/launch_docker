@@ -43,6 +43,7 @@ main(){
 		continue_after_command $CMD
 	else
 		containerId=$(continue_after_command $CMD)
+		echo "Docker container id: $containerId"
 		# We capture the output of continue_after_command, so we have to pass along the test scenario
 		[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo $containerId && exit
 		confirm_biolockj_start
