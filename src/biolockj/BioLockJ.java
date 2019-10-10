@@ -298,11 +298,15 @@ public class BioLockJ {
 	}
 
 	private static void setPipelineSecurity() {
-		try {
-			Processor.setFilePermissions( Config.pipelinePath(), Config.getString( null, Constants.PIPELINE_PRIVS ) );
-		} catch( final Exception ex ) {
-			System.out.println( "Unable to set pipeline filesystem privileges" );
-			ex.printStackTrace();
+		String desiredPrivs = Config.getString( null, Constants.PIPELINE_PRIVS );
+		String pipelineRoot = Config.pipelinePath();
+		if( desiredPrivs != null && !desiredPrivs.isEmpty() && pipelineRoot != null && !pipelineRoot.isEmpty() ) {
+			try {
+				Processor.setFilePermissions( pipelineRoot, desiredPrivs );
+			} catch( final Exception ex ) {
+				System.out.println( "BioLockJ was unable to set pipeline filesystem privileges." );
+				ex.printStackTrace();
+			}
 		}
 	}
 
