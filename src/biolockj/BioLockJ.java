@@ -86,7 +86,7 @@ public class BioLockJ {
 	 */
 	public static void main( final String[] args ) {
 		BioLockJUtil.showInfo( args );
-		System.out.println( "Starting BioLockj..." + Constants.APP_START_TIME );
+		System.out.println( "Starting BioLockj...");
 		try {
 			initBioLockJ( args );
 			runPipeline();
