@@ -21,7 +21,7 @@ public class ConfigNotFoundException extends ConfigException {
 	 * @param property {@link biolockj.Config} property name
 	 */
 	public ConfigNotFoundException( final String property ) {
-		super( property );
+		super( "The property [" + property + "] is required, but is not defined.");
 	}
 
 	/**
