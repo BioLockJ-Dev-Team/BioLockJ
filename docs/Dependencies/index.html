@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Dependencies - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Dependencies";
+    var mkdocs_page_input_path = "Dependencies.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="Dependencies.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">Dependencies</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#version-dependencies">Version Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Dependencies</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>BioLockJ requires <a href="https://www.java.com" title="Java Homepage">Java 1.8+</a> and a <a href="https://en.wikipedia.org/wiki/Unix-like">Unix-like</a> operating system  such as <a href="https://en.wikipedia.org/wiki/Darwin_(operating_system)">Darwin/macOS</a>.</p>
+<ul>
+<li>Dependencies are required by modules listed in the <strong>BioModule Function</strong> column.</li>
+<li>Users <strong>DO NOT NEED TO INSTALL</strong> dependencies if not interested in the listed modules.</li>
+<li>For example, if you intend to classify 16S samples with RDP and WGS samples with Kraken, do not install:<br/>
+    Bowtie2, GNU Awk, GNU Gzip, MetaPhlAn2, Python, QIIME 1, or Vsearch.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">#</th>
+<th align="center">Program</th>
+<th align="center">Version</th>
+<th align="left">BioModule Function</th>
+<th align="center">Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">1</td>
+<td align="center">Bowtie2</td>
+<td align="center">2.3.2</td>
+<td align="left"><a href="../wiki/module.classifier.wgs#Metaphlan2Classifier">Metaphlan2Classifier</a>: Build reference indexes</td>
+<td align="center"><a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#obtaining-bowtie-2" title="Bowtie2 Releases">download</a></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">GNU Awk</td>
+<td align="center">4.0.2</td>
+<td align="left"><a href="../wiki/module.seq#AwkFastaConverter">AwkFastaConverter</a>: Convert Fastq to Fasta <br/> <a href="../wiki/module.implicit.qiime#BuildQiimeMapping">BuildQiimeMapping</a>: Format metadata as QIIME mapping<br/> <a href="../wiki/module.classifier.r16s#QiimeClosedRefClassifier">QiimeClosedRefClassifier</a>: Build batch mapping files</td>
+<td align="center"><a href="https://www.gnu.org/software/gawk" title="Gawk Homepage">download</a></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">GNU Gzip</td>
+<td align="center">1.5</td>
+<td align="left"><a href="../wiki/module.seq#AwkFastaConverter">AwkFastaConverter</a>: Decompress .gz files <br/> <a href="../wiki/module.seq#Gunzipper">Gunzipper</a>: Decompress .gz files</td>
+<td align="center"><a href="https://www.gnu.org/software/gzip/" title="Gzip Homepage">download</a></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">Kraken</td>
+<td align="center">0.10.5-beta</td>
+<td align="left"><a href="../wiki/module.classifier.wgs#KrakenClassifier">KrakenClassifier</a>: Report WGS taxonomic summary</td>
+<td align="center"><a href="https://ccb.jhu.edu/software/kraken" title="Kraken Homepage">download</a></td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">MetaPhlAn2</td>
+<td align="center">2.0</td>
+<td align="left"><a href="../wiki/module.classifier.wgs#Metaphlan2Classifier">Metaphlan2Classifier</a>: Report WGS taxonomic summary (WGS)</td>
+<td align="center"><a href="http://huttenhower.sph.harvard.edu/metaphlan2" title="MetaPhlAn2 Homepage">download</a></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">Python</td>
+<td align="center">2.7.12</td>
+<td align="left"><a href="../wiki/module.implicit.qiime#BuildQiimeMapping">BuildQiimeMapping</a>: Run validate_mapping_file.py<br/> <a href="../wiki/module.implicit.qiime#MergeQiimeOtuTables">MergeQiimeOtuTables</a>: Run merge_otu_tables.py<br/> <a href="../wiki/module.classifier.r16s#QiimeClosedRefClassifier">QiimeClosedRefClassifier</a>: Run pick_closed_reference_otus.py<br/> <a href="../wiki/module.classifier.r16s#QiimeDeNovoClassifier">QiimeDeNovoClassifier</a>: Run pick_de_novo_otus.py<br/> <a href="../wiki/module.classifier.r16s#QiimeOpenRefClassifier">QiimeOpenRefClassifier</a>: Run pick_open_reference_otus.py<br/> <a href="../wiki/module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>: Run add_alpha_to_mapping_file.py, add_qiime_labels.py, alpha_diversity.py, filter_otus_from_otu_table.py, print_qiime_config.py, and summarize_taxa.py<br/> <a href="../wiki/module.classifier.wgs#Metaphlan2Classifier">Metaphlan2Classifier</a>: Run metaphlan2.py</td>
+<td align="center"><a href="https://www.python.org" title="Python Homepage">download</a></td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">PEAR</td>
+<td align="center">0.9.8</td>
+<td align="left"><strong>Paired-End reAd merger</strong><br/> <a href="../wiki/module.seq#PearMergeReads">PearMergeReads</a> Merge paired Fastq files since some classifiers (<a href="http://rdp.cme.msu.edu/classifier/classifier.jsp">RDP</a> &amp; <a href="http://qiime.org">QIIME</a>) will not accept paired reads.</td>
+<td align="center"><a href="https://sco.h-its.org/exelixis/web/software/pear" title="PEAR Releases">download</a></td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">QIIME 1</td>
+<td align="center">1.9.1</td>
+<td align="left"><strong>Quantitative Insights Into Microbial Ecology</strong><br/> <a href="../wiki/module.implicit.qiime#BuildQiimeMapping">BuildQiimeMapping</a>: Validate QIIME mapping<br/> <a href="../wiki/module.implicit.qiime#MergeQiimeOtuTables">MergeQiimeOtuTables</a>: Merge otu_table.biom files<br/> <a href="../wiki/module.classifier.r16s#QiimeClosedRefClassifier">QiimeClosedRefClassifier</a>: Pick OTUs by reference<br/> <a href="../wiki/module.classifier.r16s#QiimeDeNovoClassifier">QiimeDeNovoClassifier</a>: Pick OTUs by clustering <br/> <a href="../wiki/module.classifier.r16s#QiimeOpenRefClassifier">QiimeOpenRefClassifier</a>: Pick OTUs by reference and clustering<br/> <a href="../wiki/module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>: Report 16S taxonomic summary</td>
+<td align="center"><a href="http://qiime.org" title="QIIME Homepage">download</a></td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">R</td>
+<td align="center">3.5.0</td>
+<td align="left"><a href="../wiki/module.report.r#R_CalculateStats">R_CalculateStats</a>: Statistical modeling<br/> <a href="../wiki/module.report.r#R_PlotPvalHistograms">R_PlotPvalHistograms</a>: Plot p-value histograms for each reportable metadata field<br/> <a href="../wiki/module.report.r#R_PlotOtus">R_PlotOtus</a>: Build OTU-metadata boxplots and scatterplots<br/> <a href="../wiki/module.report.r#R_PlotMds">R_PlotMds</a>: Plot by top MDS axis <br/> <a href="../wiki/module.report.r#R_PlotEffectSize">R_PlotEffectSize</a>: Build barplot of effect magnetude by OTU/taxa</td>
+<td align="center"><a href="https://cran.r-project.org" title="Comprehensive R Archive Network">download</a></td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">R-coin</td>
+<td align="center">1.2</td>
+<td align="left"><strong>COnditional Inference procedures in a permutatioN test framework</strong><br/> <a href="../wiki/module.report.r#R_CalculateStats">R_CalculateStats</a>: Compute exact Wilcox_test  p-values</td>
+<td align="center"><a href="https://cran.r-project.org/web/packages/coin/index.html" title="CRAN coin Pacakge Page">download</a></td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center">R-ggpubr</td>
+<td align="center">0.1.8</td>
+<td align="left"><a href="../wiki/module.report.r#R_PlotPvalHistograms">R_PlotPvalHistograms</a>: Set color palette <br/> <a href="../wiki/module.report.r#R_PlotMds">R_PlotMds</a>: Set color palette <br/> <a href="../wiki/module.report.r#R_PlotEffectSize">R_PlotEffectSize</a>: Set color palette</td>
+<td align="center"><a href="https://cran.r-project.org/web/packages/ggpubr/index.html" title="CRAN ggpubr 'ggplot2' Based Publication Ready Plots">download</a></td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="center">R-Kendall</td>
+<td align="center">2.2</td>
+<td align="left"><a href="../wiki/module.report.r#R_CalculateStats">R_CalculateStats</a>: Compute rank correlation p-values for continuous data types</td>
+<td align="center"><a href="https://cran.r-project.org/web/packages/Kendall/index.html" title="CRAN Kendall Package Page">download</a></td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="center">R-properties</td>
+<td align="center">0.0-9</td>
+<td align="left"><a href="../wiki/module.report.r#R_Module">R_Module</a>: Reads in the MASTER [[Configuration]] properties file from the pipeline root directory</td>
+<td align="center"><a href="https://cran.r-project.org/web/packages/properties/index.html" title="CRAN properties Package Page">download</a></td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="center">R-stringr</td>
+<td align="center">1.2.0</td>
+<td align="left"><a href="../wiki/module.report.r#R_Module">R_Module</a>: For string manipulation for handling [[Configuration]] properties</td>
+<td align="center"><a href="https://stringr.tidyverse.org/#installation" title="stringr Pacakge Page">download</a></td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="center">R-vegan</td>
+<td align="center">2.5-2</td>
+<td align="left"><a href="../wiki/module.report.r#R_PlotMds">R_PlotMds</a>:  Ordination methods, diversity analysis and other functions for ecologists.</td>
+<td align="center"><a href="https://cran.r-project.org/web/packages/vegan/index.html" title="CRAN vegan Package Page">download</a></td>
+</tr>
+<tr>
+<td align="center">16</td>
+<td align="center">RDP</td>
+<td align="center">2.12</td>
+<td align="left"><strong>Ribosomal Database Project</strong><br/> <a href="../wiki/module.classifier.r16s#RdpClassifier">RdpClassifier</a>: Report 16S taxonomic summary</td>
+<td align="center"><a href="https://sourceforge.net/projects/rdp-classifier/files/rdp-classifier/rdp_classifier_2.12.zip/download" title="RDP Source Forge">download</a></td>
+</tr>
+<tr>
+<td align="center">17</td>
+<td align="center">Vsearch</td>
+<td align="center">2.4.3</td>
+<td align="left"><a href="../wiki/module.classifier.r16s#QiimeDeNovoClassifier">QiimeDeNovoClassifier</a>: Chimera detection<br/> <a href="../wiki/module.classifier.r16s#QiimeOpenRefClassifier">QiimeOpenRefClassifier</a>: Chimera detection</td>
+<td align="center"><a href="https://github.com/torognes/vsearch#download-and-install" title="Vsearch GitHub">download</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="version-dependencies">Version Dependencies</h3>
+<ul>
+<li>The <strong>Version</strong> column contains the version tested during BioLockJ development, but other versions can often be substituted.  </li>
+<li>Major releases (such as Python 2 vs. Python 3) contain API changes that will not integrate with the current BioLockJ code.</li>
+<li>Application APIs often change over time, so not all versions are supported.  For example, Bowtie2 did not add the large index functionality until version 2.3.2. </li>
+</ul>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../FAQ/" title="FAQ">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../Building-Modules/" title="Building Modules"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Building-Modules/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../FAQ/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

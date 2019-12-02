@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Configuration - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Configuration";
+    var mkdocs_page_input_path = "Configuration.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="Configuration.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">Configuration</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#1-use-standardproperties-to-assign-universal-default-values">1. Use standard.properties to assign universal default values:</a></li>
+<li class="toctree-l2"><a href="#2-use-environmentproperties-to-assign-envionment-specific-defaults">2. Use environment.properties to assign envionment-specific defaults</a></li>
+<li class="toctree-l2"><a href="#3-create-a-new-configuration-file-for-each-pipeline-to-assign-project-specific-properties">3. Create a new configuration file for each pipeline to assign project-specific properties:</a></li>
+<li class="toctree-l2"><a href="#biomodule-execution-order">BioModule execution order</a></li>
+<li class="toctree-l2"><a href="#summary-of-properties">Summary of Properties</a></li>
+<ul>
+<li><a class="toctree-l3" href="#aws">aws</a></li>
+<li><a class="toctree-l3" href="#cluster">cluster</a></li>
+<li><a class="toctree-l3" href="#demultiplexer">demultiplexer</a></li>
+<li><a class="toctree-l3" href="#docker">docker</a></li>
+<li><a class="toctree-l3" href="#exe">exe</a></li>
+<li><a class="toctree-l3" href="#genmod">GenMod</a></li>
+<li><a class="toctree-l3" href="#humann2">humann2</a></li>
+<li><a class="toctree-l3" href="#input">input</a></li>
+<li><a class="toctree-l3" href="#kneaddata">kneaddata</a></li>
+<li><a class="toctree-l3" href="#kraken">kraken</a></li>
+<li><a class="toctree-l3" href="#kraken2">kraken2</a></li>
+<li><a class="toctree-l3" href="#mail">mail</a></li>
+<li><a class="toctree-l3" href="#metadata">metadata</a></li>
+<li><a class="toctree-l3" href="#metaphlan2">metaphlan2</a></li>
+<li><a class="toctree-l3" href="#multiplexer">multiplexer</a></li>
+<li><a class="toctree-l3" href="#pipeline">pipeline</a></li>
+<li><a class="toctree-l3" href="#qiime">qiime</a></li>
+<li><a class="toctree-l3" href="#r">r</a></li>
+<li><a class="toctree-l3" href="#r_calculatestats">r_CalculateStats</a></li>
+<li><a class="toctree-l3" href="#r_ploteffectsize">r_PlotEffectSize</a></li>
+<li><a class="toctree-l3" href="#r_plotmds">r_PlotMds</a></li>
+<li><a class="toctree-l3" href="#rarefyotucounts">rarefyOtuCounts</a></li>
+<li><a class="toctree-l3" href="#rarefyseqs">rarefySeqs</a></li>
+<li><a class="toctree-l3" href="#rdp">rdp</a></li>
+<li><a class="toctree-l3" href="#report">report</a></li>
+<li><a class="toctree-l3" href="#script">script</a></li>
+<li><a class="toctree-l3" href="#seqfilevalidator">seqFileValidator</a></li>
+<li><a class="toctree-l3" href="#trimprimers">trimPrimers</a></li>
+<li><a class="toctree-l3" href="#validation">validation</a></li>
+</ul>
+</ul>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Configuration</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>Configuration files contain all system properties, program inputs, cutoff values, external dependencies, and format specifications used during pipeline execution.<br/>
+BioLockJ takes a single configuration file as a runtime parameter.  Although all properties can be configured in one file, we recommend chaining default files through the pipeline.defaultProps option. This can often improve the portability, maintainability, and readability of the project-specific configuration files.  </p>
+<p>Our recommended approach is as follows:   </p>
+<h4 id="1-use-standardproperties-to-assign-universal-default-values">1. Use <a href="https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true">standard.properties</a> to assign universal default values:</h4>
+<ul>
+<li>Set <a href="#input">input</a>, <a href="#mail">mail</a>, <a href="#report">report</a>, &amp; <a href="#r">R</a> properties</li>
+<li>We recommend using the <a href="https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true">standard.properties</a> file packaged with BioLockJ under <a href="https://github.com/msioda/BioLockJ/tree/master/resources/config/default">resources/config/default/</a>.</li>
+</ul>
+<h4 id="2-use-environmentproperties-to-assign-envionment-specific-defaults">2. Use environment.properties to assign envionment-specific defaults</h4>
+<ul>
+<li>Set <a href="#cluster">cluster</a> &amp; <a href="#script">script</a> properties</li>
+<li>Set paths to key executables through <a href="#exe">exe</a> properties</li>
+<li>Set <em>pipeline.defaultProps</em> = <a href="https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true">standard.properties</a></li>
+<li>Override <a href="https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true">standard.properties</a> as needed</li>
+</ul>
+<h4 id="3-create-a-new-configuration-file-for-each-pipeline-to-assign-project-specific-properties">3. Create a new configuration file for each pipeline to assign project-specific properties:</h4>
+<ul>
+<li>Set the <a href="#BioModule-execution-order">BioModule execution order</a></li>
+<li>Set <em>pipeline.defaultProps</em> = environment.properties</li>
+<li>Override environment.properties and standard.properties as needed</li>
+<li>Example project configuration files can be found in <a href="https://github.com/msioda/BioLockJ/tree/master/resources/config/template">templates</a>.  </li>
+</ul>
+<p>A copy of each configuration file is stored in the pipeline root directory to serve as primary project documentation.  </p>
+<h2 id="biomodule-execution-order">BioModule execution order</h2>
+<p>To include a BioModule in your pipeline, add a <code>#BioModule</code> line to the top your configuration file, as shown in the examples found in <a href="https://github.com/msioda/BioLockJ/tree/master/resources/config/template">templates</a>.  Each line has the <code>#BioModule</code> keyword followed by the path to the jar file for that module.  For example:</p>
+<pre><code>#BioModule biolockj.module.seq.PearMergeReads
+#BioModule biolockj.module.classifier.wgs.Kraken2Classifier
+#BioModule biolockj.module.report.r.R_PlotMds
+</code></pre>
+<p>BioModules will be executed in the order they are listed in here.  A typical pipeline contians one <a href="module.classifier">classifier module</a>.  Any number of <a href="module.seq">sequence pre-processing</a> modules may come before the classifier module. Any number of <a href="module.report">report modules</a> may come after the classifier module.  In addition to the BioModules specified in the configuration file, BioLockJ may add <a href="module.implicit">implicit modules</a> that the are required by specified modules.  See <a href="Example-Pipeline">Example Pipeline</a>.</p>
+<h2 id="summary-of-properties">Summary of Properties</h2>
+<p>Properties are defined as name-value pairs. List-values are comma separated. Leading and trailing whitespace is removed so "propName=x,y" is equivalent to "propName = x, y".</p>
+<h4 id="aws">aws</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>aws.profile</em></td>
+<td align="left">String</td>
+</tr>
+<tr>
+<td align="left"><em>aws.ram</em></td>
+<td align="left">AWS memory applied through Nextflow.  example value: "8 GB"</td>
+</tr>
+<tr>
+<td align="left"><em>aws.stack</em></td>
+<td align="left">String</td>
+</tr>
+<tr>
+<td align="left"><em>aws.s3</em></td>
+<td align="left">String</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cluster">cluster</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>cluster.batchCommand</em></td>
+<td align="left">The command to submit jobs on the cluster</td>
+</tr>
+<tr>
+<td align="left"><em>cluster.host</em></td>
+<td align="left">Cluster host address</td>
+</tr>
+<tr>
+<td align="left"><em>cluster.jobHeader</em></td>
+<td align="left">Job script header to define # of nodes, # of cores, RAM, walltime, etc.</td>
+</tr>
+<tr>
+<td align="left"><em>cluster.modules</em></td>
+<td align="left">List of modules to load before execution.  Adds “module load” command to bash scripts</td>
+</tr>
+<tr>
+<td align="left"><em>cluster.prologue</em></td>
+<td align="left">Command(s) to run at the start of every script after loading cluster modules (if any)</td>
+</tr>
+<tr>
+<td align="left"><em>cluster.runJavaAsScript</em></td>
+<td align="left">Options: Y/N.  If Y, each <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModule.html">JavaModule</a> will instantiate a clone of the application in direct mode on a job node via a single worker script to avoid overworking the head node where BioLockJ is deployed</td>
+</tr>
+<tr>
+<td align="left"><em>cluster.validateParams</em></td>
+<td align="left">Options: Y/N.  If Y, validate <em>cluster.jobHeader</em> "ppn:" or "procs:" value matches <em>script.numThreads</em></td>
+</tr>
+</tbody>
+</table>
+<h4 id="demultiplexer"><a href="../wiki/module.implicit#Demultiplexer">demultiplexer</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>demultiplexer.barcodeCutoff</em></td>
+<td align="left">desc</td>
+</tr>
+<tr>
+<td align="left"><em>demultimplexer.barcodeRevComp</em></td>
+<td align="left">Options: Y/N. Use reverse compliment of <em>metadata.barcodeColumn</em> if <em>demultimplexer.strategy</em> = barcode_in_header or barcode_in_seq.</td>
+</tr>
+<tr>
+<td align="left"><em>demultimplexer.strategy</em></td>
+<td align="left">Options: barcode_in_header, barcode_in_seq, id_in_header, do_not_demux.<br/> Set the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/Demultiplexer.html">Demultiplexer</a> strategy.  If using barcodes, they must be provided in the <em>metadata.filePath</em> with in column name defined by <em>metadata.barcodeColumn</em>.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="docker">docker</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>docker.imgVersion</em></td>
+<td align="left">By default, docker will always use 'latest', but advanced users may specify a different tag.</td>
+</tr>
+<tr>
+<td align="left"><em>docker.user</em></td>
+<td align="left">Docker Hub user name with the BioLockJ containers. By default the "biolockj" user is used to pull the standard modules, but advanced users can deploy their own versions of these modules and add new modules in their own Docker Hub account.</td>
+</tr>
+<tr>
+<td align="left"><em>docker.saveContainerOnExit</em></td>
+<td align="left">Y/N. If Y,  property removed the default --rm flag on docker run command</td>
+</tr>
+</tbody>
+</table>
+<h4 id="exe">exe</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>exe.awk</em></td>
+<td align="left">Define executable awk command, if default "awk" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.docker</em></td>
+<td align="left">Define executable docker command, if default "docker" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.gzip</em></td>
+<td align="left">Define executable gzip command, if default "gzip" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.humann2</em></td>
+<td align="left">Define executable humann2 command, if default "humann2" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.humann2Params</em></td>
+<td align="left">Optional humann2 parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.humann2JoinTableParams</em></td>
+<td align="left">Optional parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.humann2RenormTableParams</em></td>
+<td align="left">Optional parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.java</em></td>
+<td align="left">Define executable java command, if default "java" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.javaParams</em></td>
+<td align="left">Optional parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.kneaddata</em></td>
+<td align="left">Define executable kneaddata command, if default "kneaddata" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.kneaddataParams</em></td>
+<td align="left">Optional kneaddata parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.kraken</em></td>
+<td align="left">Define executable kraken command, if default "kraken" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.krakenParams</em></td>
+<td align="left">Optional kraken parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.kraken2</em></td>
+<td align="left">Define executable kraken2 command, if default "kraken2" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.kraken2Params</em></td>
+<td align="left">Optional kraken2 parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.metaphlan2</em></td>
+<td align="left">Define executable metaphlan2 command, if default "metaphlan2" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.metaphlan2Params</em></td>
+<td align="left">Optional metaphlan2 parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.pear</em></td>
+<td align="left">Define executable pear command, if default "pear" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.pearParams</em></td>
+<td align="left">Optional pear parameters</td>
+</tr>
+<tr>
+<td align="left"><em>exe.python</em></td>
+<td align="left">Define executable python command, if default "python" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.Rscript</em></td>
+<td align="left">Define executable Rscript command, if default "Rscript" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.vsearch</em></td>
+<td align="left">Define executable vsearch command, if default "vsearch" is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>exe.vsearchParams</em></td>
+<td align="left">Optional vsearch parameters</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genmod"><a href="../wiki/module.DIY#GenMod">GenMod</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>genMod.launcher</em></td>
+<td align="left">Define executable language command if it is not included in your $PATH</td>
+</tr>
+<tr>
+<td align="left"><em>genMod.param</em></td>
+<td align="left">Any parameters that is needed for user's script</td>
+</tr>
+<tr>
+<td align="left"><em>genMod.scriptPath</em></td>
+<td align="left">Path where user script is stored</td>
+</tr>
+</tbody>
+</table>
+<h4 id="humann2"><a href="../wiki/module.classifier.wgs#humann2classifier">humann2</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>humann2.disableGeneFamilies</em></td>
+<td align="left">Options: Y/N.  If Y, disable HumanN2 Gene Family report</td>
+</tr>
+<tr>
+<td align="left"><em>humann2.disablePathAbundance</em></td>
+<td align="left">Options: Y/N.  If Y, disable HumanN2 Pathway Abundance report</td>
+</tr>
+<tr>
+<td align="left"><em>humann2.disablePathCoverage</em></td>
+<td align="left">Options: Y/N.  If Y, disable HumanN2 Pathway Coverage report</td>
+</tr>
+<tr>
+<td align="left"><em>humann2.keepUnintegrated</em></td>
+<td align="left">Options: Y/N.  If Y, keep UNINTEGRATED column in count tables (otherwise this column is dropped)</td>
+</tr>
+<tr>
+<td align="left"><em>humann2.keepUnmapped</em></td>
+<td align="left">Options: Y/N.  If Y, keep UNMAPPED column in count tables (otherwise this column is dropped)</td>
+</tr>
+<tr>
+<td align="left"><em>humann2.nuclDB</em></td>
+<td align="left">Directory property may contain multiple nucleotide database files</td>
+</tr>
+<tr>
+<td align="left"><em>humann2.protDB</em></td>
+<td align="left">Directory property may contain protein nucleotide database files</td>
+</tr>
+</tbody>
+</table>
+<h4 id="input">input</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>input.dirPaths</em></td>
+<td align="left">List of directories containing pipeline input files</td>
+</tr>
+<tr>
+<td align="left"><em>input.ignoreFiles</em></td>
+<td align="left">List of files to ignore if found in * input.dirPaths*</td>
+</tr>
+<tr>
+<td align="left"><em>input.requireCompletePairs</em></td>
+<td align="left">Options: Y/N.  Stop pipeline if any unpaired FW or RV read sequence file is found</td>
+</tr>
+<tr>
+<td align="left"><em>input.suffixFw</em></td>
+<td align="left">File name suffix to indicate a forward read</td>
+</tr>
+<tr>
+<td align="left"><em>input.suffixRv</em></td>
+<td align="left">File name suffix to indicate a reverse read</td>
+</tr>
+<tr>
+<td align="left"><em>input.trimPrefix</em></td>
+<td align="left">For files named by Sample ID, provide the prefix preceding the ID to trim when extracting Sample ID.  For multiplexed sequences, provide any characters in the sequence header preceding the ID. For fastq, this value could be “@” if the sample ID was added to the header immediately after the "@" symbol.</td>
+</tr>
+<tr>
+<td align="left"><em>input.trimSuffix</em></td>
+<td align="left">For files named by Sample ID, provide the suffix after the ID, often this is just the file extension.  Do not include read direction indicators listed in <em>input.suffixFw/input.suffixRv</em>. For multiplexed sequences, provide 1st character in the sequence header found after every embedded Sample ID.  If undefined, “_” is used as the default end-of-sample-ID delimiter.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="kneaddata"><a href="../wiki.module.seq#KneadData">kneaddata</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>kneaddata.dbs</em></td>
+<td align="left">Path to database for <a href="https://bitbucket.org/biobakery/kneaddata/wiki/Home">KneadData program</a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="kraken"><a href="../wiki/module.classifier.wgs#KrakenClassifier">kraken</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>kraken.db</em></td>
+<td align="left">Path to database for <a href="../wiki/module.classifier.wgs#KrakenClassifier">KRAKEN</a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="kraken2"><a href="../wiki/module.classifier.wgs#Kraken2Classifier">kraken2</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>kraken2.db</em></td>
+<td align="left">Path to database for <a href="../wiki/module.classifier.wgs#Kraken2Classifier">KRAKEN2</a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="mail"><a href="../wiki/module.report#Email">mail</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>mail.encryptedPassword</em></td>
+<td align="left">Encrypted password from email.from account.  If BioLockJ is passed a 2nd parameter (in addition to the config file), the 2nd parameter should be the clear-text password.  The password will be encrypted and stored in the prop file for future use.  <strong>WARNING: Base64 encryption is only a trivial roadblock for malicious users.  This functionality is intended merely to keep clear-text passwords out of the configuration files and should only be used with a disposable <em>email.from</em> account.</strong></td>
+</tr>
+<tr>
+<td align="left"><em>mail.from</em></td>
+<td align="left">Notification emails sent from this account, provided <em>email.encryptedPassword</em> is valid</td>
+</tr>
+<tr>
+<td align="left"><em>mail.smtp.auth</em></td>
+<td align="left">Options: Y/N. Set the SMTP authorization property</td>
+</tr>
+<tr>
+<td align="left"><em>mail.smtp.host</em></td>
+<td align="left">Email SMTP Host</td>
+</tr>
+<tr>
+<td align="left"><em>mail.smtp.port</em></td>
+<td align="left">Email SMTP Host</td>
+</tr>
+<tr>
+<td align="left"><em>mail.smtp.starttls.enable</em></td>
+<td align="left">Options: Y/N. Set the SMTP start TLS property</td>
+</tr>
+<tr>
+<td align="left"><em>mail.to</em></td>
+<td align="left">Comma-separated email recipients list</td>
+</tr>
+</tbody>
+</table>
+<h4 id="metadata">metadata</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>metadata.barcodeColumn</em></td>
+<td align="left">Metadata column name containing the barcode used for demultiplexing</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.columnDelim</em></td>
+<td align="left">Define column delimiter for <em>metadata.filePath</em> file, default = <em>tab</em></td>
+</tr>
+<tr>
+<td align="left"><em>metadata.commentChar</em></td>
+<td align="left">Define how comments are indicated in <em>metadata.filePath</em> file, default = ""</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.fileNameColumn</em></td>
+<td align="left">Column in metadata file giving file names used to identify each sample. Standard default: "InputFileName". Values should be simple names, not file paths, and unique to each sample. Using this column in the metadata overrides the use of input.trimPreifx and input.trimSuffix. For paired reads, give the forward read file and use input.suffixFw and input.suffixRv to link to the reverse file.</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.filePath</em></td>
+<td align="left">Metadata file path, must have unique column headers</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.nullValue</em></td>
+<td align="left">Define how null values are represented in metadata</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.required</em></td>
+<td align="left">Options: Y/N.  Require every sequence file has a corresponding row in metadata file</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.useEveryRow</em></td>
+<td align="left">Options: Y/N.  Requires every metadata row to have a corresponding sequence file</td>
+</tr>
+</tbody>
+</table>
+<h4 id="metaphlan2"><a href="module.classifier.wgs#Metaphlan2Classifier">metaphlan2</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>metaphlan2.db</em></td>
+<td align="left">Directory property containing alternate database. Must always be paired with <em>metaphlan2.mpa_pkl</em></td>
+</tr>
+<tr>
+<td align="left"><em>metaphlan2.mpa_pkl</em></td>
+<td align="left">File property containing path to the mpa_pkl file used to reference an alternate DB.  Must always be paired with <em>metaphlan2.db</em></td>
+</tr>
+</tbody>
+</table>
+<h4 id="multiplexer"><a href="../wiki/module.seq#multiplexer">multiplexer</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>multiplexer.gzip</em></td>
+<td align="left">Options: Y/N.  If Y, gzip the multiplexed output</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pipeline">pipeline</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>pipeline.copyInput</em></td>
+<td align="left">Options: Y/N.  If Y, copy <em>input.dirPaths</em> into a new directory under the project root directory</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.defaultDemultiplexer</em></td>
+<td align="left">Assign module to demultiplex datasets.  Default = <a href="../wiki/module.implicit#Demultiplexer">Demultiplexer</a></td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.defaultFastaConverter</em></td>
+<td align="left">Assign module to convert fastq sequence files into fasta format when required.  Default = <a href="../wiki/module.seq#AwkFastaConverter">AwkFastaConverter</a></td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.defaultSeqMerger</em></td>
+<td align="left">Assign module to merge paired reads when required.  Default = <a href="../wiki/module.seq#PearMergeReads">PearMergeReads</a></td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.defaultStatsModule</em></td>
+<td align="left">Java class name for default module used generate p-value and other stats</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.defaultProps</em></td>
+<td align="left">Path to a default BioLockJ configuration file containing default property values that are overridden if defined in the primary configuration file</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.deleteTempFiles</em></td>
+<td align="left">Options: Y/N.  If Y, delete module temp dirs after execution</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.disableAddImplicitModules</em></td>
+<td align="left">Options: Y/N.  If Y, implicit modules will not be added to the pipeline</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.disableAddPreReqModules</em></td>
+<td align="left">Options: Y/N.  If Y, prerequisite modules will not be added to the pipeline.</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.downloadDir</em></td>
+<td align="left">The pipeline summary includes an scp command for the user to download the pipeline analysis if executed on a cluster server.  This property defines the target directory on the users workstation to which the analysis will be downloaded.</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.env</em></td>
+<td align="left">Options: aws, cluster, local.  Describes runtime environment</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.limitDebugClasses</em></td>
+<td align="left">used to limit classes that log debug statements</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.logLevel</em></td>
+<td align="left">Options: DEBUG, INFO, WARN, ERROR.  Determines Java log level sensitivity</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.permissions</em></td>
+<td align="left">Set chmod -R command security bits on pipeline root directory (Ex. 770)</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.userProfile</em></td>
+<td align="left">Bash users typically use ~/.bash_profile (the standard default).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="qiime"><a href="../wiki/module.classifier.r16s">qiime</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>qiime.alphaMetrics</em></td>
+<td align="left">Options listed online: <a href="http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html">scikit-bio.org</a></td>
+</tr>
+<tr>
+<td align="left"><em>qiime.params</em></td>
+<td align="left">Optional parameters passed to qiime scripts</td>
+</tr>
+<tr>
+<td align="left"><em>qiime.pynastAlignDB</em></td>
+<td align="left">File property to define ~/.qiime_config pynast_template_alignment_fp. If supplied, <em>qiime.refSeqDB</em> and <em>qiime.taxaDB</em> must also be supplied and all three must share some parent directory.</td>
+</tr>
+<tr>
+<td align="left"><em>qiime.refSeqDB</em></td>
+<td align="left">File property to define ~/.qiime_config pick_otus_reference_seqs_fp and assign_taxonomy_reference_seqs_fp. If supplied, <em>qiime.pynastAlignDB</em> and <em>qiime.taxaDB</em> must also be supplied and all three must share some parent directory.</td>
+</tr>
+<tr>
+<td align="left"><em>qiime.removeChimeras</em></td>
+<td align="left">Options: Y/N.  If Y, remove chimeras after open or de novo OTU picking using  <em>exe.vsearch</em></td>
+</tr>
+<tr>
+<td align="left"><em>qiime.taxaDB</em></td>
+<td align="left">File property to define ~/.qiime_config assign_taxonomy_id_to_taxonomy_fp. If supplied, <em>qiime.pynastAlignDB</em> and <em>qiime.refSeqDB</em> must also be supplied and all three must share some parent directory.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="r"><a href="../wiki/module.report.r">r</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>r.colorBase</em></td>
+<td align="left">This is the base color used for labels &amp; headings in the PDF report</td>
+</tr>
+<tr>
+<td align="left"><em>r.colorHighlight</em></td>
+<td align="left">This color is used to highlight significant OTU plot titles</td>
+</tr>
+<tr>
+<td align="left"><em>r.colorPalette</em></td>
+<td align="left">palette argument passed to <a href="https://www.rdocumentation.org/packages/ggpubr/versions/0.2/topics/get_palette">get_palette {ggpubr}</a> to select colors for some output visualiztions</td>
+</tr>
+<tr>
+<td align="left"><em>r.colorPoint</em></td>
+<td align="left">Sets the color of scatterplot and strip-chart plot points</td>
+</tr>
+<tr>
+<td align="left"><em>r.debug</em></td>
+<td align="left">Options: Y/N.  If Y, will generate R Script log files</td>
+</tr>
+<tr>
+<td align="left"><em>r.excludeFields</em></td>
+<td align="left">List metadata columns to exclude from R script reports</td>
+</tr>
+<tr>
+<td align="left"><em>r.nominalFields</em></td>
+<td align="left">Explicitly override default field type assignment to model as a nominal field in R</td>
+</tr>
+<tr>
+<td align="left"><em>r.numericFields</em></td>
+<td align="left">Explicitly override default field type assignment to model as a numeric field in R</td>
+</tr>
+<tr>
+<td align="left"><em>r.pch</em></td>
+<td align="left">Sets R plot pch parameter for PDF report</td>
+</tr>
+<tr>
+<td align="left"><em>r.pvalCutoff</em></td>
+<td align="left">Sets p-value cutoff used to assign label <em>r.colorHighlight</em></td>
+</tr>
+<tr>
+<td align="left"><em>r.pValFormat</em></td>
+<td align="left">Sets the format used in R sprintf() function</td>
+</tr>
+<tr>
+<td align="left"><em>r.rareOtuThreshold</em></td>
+<td align="left">If &gt;1, R will filter OTUs below value provided.  If &lt;1, R will interperate the value as a percentage and discard OTUs not found in at least that percentage of samples</td>
+</tr>
+<tr>
+<td align="left"><em>r.reportFields</em></td>
+<td align="left">Override field used to explicitly list metadata columns to report in the R scripts.  If left undefined, all columns are reported</td>
+</tr>
+<tr>
+<td align="left"><em>r.saveRData</em></td>
+<td align="left">Options: Y/N.  If Y, all R script generating BioModules will save R Session data to the module output directory to a file using the extension ".RData"</td>
+</tr>
+<tr>
+<td align="left"><em>r.timeout</em></td>
+<td align="left">Sets # minutes before R Script will time out and fail</td>
+</tr>
+</tbody>
+</table>
+<h4 id="r_calculatestats"><a href="../wiki/module.report.r#R_CalculateStats">r_CalculateStats</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>r_CalculateStats.pAdjustScope</em></td>
+<td align="left">Options: GLOBAL, LOCAL, TAXA, ATTRIBUTE.  Used to set the p.adjust "n" parameter for how many simultaneous p-value calculations</td>
+</tr>
+<tr>
+<td align="left"><em>r_CalculateStats.pAdjustMethod</em></td>
+<td align="left">Sets the p.adjust "method" parameter</td>
+</tr>
+</tbody>
+</table>
+<h4 id="r_ploteffectsize"><a href="../wiki/module.report.r#R_PlotEffectSize">r_PlotEffectSize</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>r_PlotEffectSize.parametricPval</em></td>
+<td align="left">Options: Y/N. If Y, the parametric p-value is used when determining which taxa to include in the plot and which should get a (*).  If N (default), the non-parametric p-value is used.</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotEffectSize.disablePvalAdj</em></td>
+<td align="left">Options: Y/N. If Y, the non-adjusted p-value is used when determining which taxa to include in the plot and which should get a (*).  If N (default), the adjusted p-value is used.</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotEffectSize.excludePvalAbove</em></td>
+<td align="left">Options: [0,1], Taxa with a p-value above this value are excluded from the plot.</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotEffectSize.taxa</em></td>
+<td align="left">Override other criteria for selecting which taxa to include in the plot by specifying wich taxa should be included</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotEffectSize.maxNumTaxa</em></td>
+<td align="left">Each plot is given one page. This is the maximum number of bars to include in each one-page plot.</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotEffectSize.disableCohensD</em></td>
+<td align="left">Options: Y/N. If N (default), produce plots for binary attributes showing effect size calculated as Cohen's d. If Y, skip this plot type.</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotEffectSize.disableRSquared</em></td>
+<td align="left">Options: Y/N. If N (default), produce plots showing effect size calculated as the r-squared value. If Y, skip this plot type.</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotEffectSize.disableFoldChange</em></td>
+<td align="left">Options: Y/N. If N (default), produce plots for binary attributes showing the fold change. If Y, skip this plot type.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="r_plotmds"><a href="../wiki/module.report.r#R_PlotMds">r_PlotMds</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>r_PlotMds.numAxis</em></td>
+<td align="left">Sets # MDS axis to plot</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotMds.distance</em></td>
+<td align="left">distance metric for calculating MDS (default: bray)</td>
+</tr>
+<tr>
+<td align="left"><em>r_PlotMds.reportFields</em></td>
+<td align="left">Override field used to explicitly list metadata columns to build MDS plots.  If left undefined, all columns are reported</td>
+</tr>
+</tbody>
+</table>
+<h4 id="rarefyotucounts"><a href="../wiki/module.report.otu#RarefyOtuCounts">rarefyOtuCounts</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>rarefyOtuCounts.iterations</em></td>
+<td align="left">Positive integer. The number of iterations to randomly select the <em>rarefyOtuCounts.quantile</em> of OTUs</td>
+</tr>
+<tr>
+<td align="left"><em>rarefyOtuCounts.lowAbundantCutoff</em></td>
+<td align="left">Minimum percentage of samples that must contain an OTU.</td>
+</tr>
+<tr>
+<td align="left"><em>rarefyOtuCounts.quantile</em></td>
+<td align="left">Quantile for rarefication. The number of OTUs/sample are ordered, all samples with more OTUs than the quantile sample are subselected without replacement until they have the same number of OTUs as the quantile sample</td>
+</tr>
+<tr>
+<td align="left"><em>rarefyOtuCounts.rmLowSamples</em></td>
+<td align="left">Options: Y/N. If Y, all samples below the <em>rarefyOtuCounts.quantile</em> quantile sample are removed</td>
+</tr>
+</tbody>
+</table>
+<h4 id="rarefyseqs"><a href="../wiki/module.seq#RarefySeqs">rarefySeqs</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>rarefySeqs.max</em></td>
+<td align="left">Randomly select maximum number of sequences per sample</td>
+</tr>
+<tr>
+<td align="left"><em>rarefySeqs.min</em></td>
+<td align="left">Discard samples without minimum number of sequences</td>
+</tr>
+</tbody>
+</table>
+<h4 id="rdp"><a href="../wiki/module.classifier.r16s#RdpClassifier">rdp</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>rdp.db</em></td>
+<td align="left">File property used to define an alternate RDP database file</td>
+</tr>
+<tr>
+<td align="left"><em>rdp.jar</em></td>
+<td align="left">File property for RDP java executable JAR</td>
+</tr>
+<tr>
+<td align="left"><em>rdp.minThresholdScore</em></td>
+<td align="left">Required RDP minimum threshold score for valid OTUs</td>
+</tr>
+</tbody>
+</table>
+<h4 id="report">report</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>report.logBase</em></td>
+<td align="left">Options: 10/e.  If e, use natural log (base e), otherwise use log base 10</td>
+</tr>
+<tr>
+<td align="left"><em>report.minCount</em></td>
+<td align="left">Integer, minimum table count allowed. If a count less that this value is found, it is set to 0.</td>
+</tr>
+<tr>
+<td align="left"><em>report.numHits</em></td>
+<td align="left">Options: Y/N.  If Y, and add Num_Hits to metadata</td>
+</tr>
+<tr>
+<td align="left"><em>report.numReads</em></td>
+<td align="left">Options: Y/N.  If Y, and add Num_Reads to metadata</td>
+</tr>
+<tr>
+<td align="left"><em>report.scarceCountCutoff</em></td>
+<td align="left">Minimum percentage of samples that must contain a count value for it to be kept.</td>
+</tr>
+<tr>
+<td align="left"><em>report.scarceSampleCutoff</em></td>
+<td align="left">Minimum percentage of data columns that must be non-zero to keep the sample.</td>
+</tr>
+<tr>
+<td align="left"><em>report.taxonomyLevels</em></td>
+<td align="left">Options: domain, phylum, class, order, family, genus, species.  Generate reports for listed taxonomy levels</td>
+</tr>
+</tbody>
+</table>
+<h4 id="script">script</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>script.batchSize</em></td>
+<td align="left">Number of sequence files to process per worker script</td>
+</tr>
+<tr>
+<td align="left"><em>script.defaultHeader</em></td>
+<td align="left">Used to set shebang line to define scripts as bash executables, such as "#!/bin/bash"</td>
+</tr>
+<tr>
+<td align="left"><em>script.numThreads</em></td>
+<td align="left">Integer value passed to any module that takes a number of threads parameter</td>
+</tr>
+<tr>
+<td align="left"><em>script.permissions</em></td>
+<td align="left">Set chmod command security bits on generated scripts (Ex. 770)</td>
+</tr>
+<tr>
+<td align="left"><em>script.timeout</em></td>
+<td align="left">Integer, time (minutes) before worker scripts times out.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="seqfilevalidator"><a href="../wiki/module.seq#SeqFileValidator">seqFileValidator</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>seqFileValidator.requireEqualNumPairs</em></td>
+<td align="left">Options: Y/N. default Y.</td>
+</tr>
+<tr>
+<td align="left"><em>seqFileValidator.seqMaxLen</em></td>
+<td align="left">maximum number of bases per read</td>
+</tr>
+<tr>
+<td align="left"><em>seqFileValidator.seqMinLen</em></td>
+<td align="left">minimum number of bases per read</td>
+</tr>
+</tbody>
+</table>
+<h4 id="trimprimers"><a href="../wiki/module.seq#TrimPrimers">trimPrimers</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>trimPrimers.filePath</em></td>
+<td align="left">Path to file containing one primer sequence per line.</td>
+</tr>
+<tr>
+<td align="left"><em>trimPrimers.requirePrimer</em></td>
+<td align="left">Options: Y/N. If Y, <a href="../wiki/module.seq#TrimPrimers">TrimPrimers</a> will discard reads that do not include a primer sequence.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="validation"><a href="../wiki/Validation">validation</a></h4>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>validation.compareOn</em></td>
+<td align="left">Which columns in the expectation file should be used for the comparison. Options: name, size, md5. Default: use all columns in the expectation file.</td>
+</tr>
+<tr>
+<td align="left"><em>validation.disableValidation</em></td>
+<td align="left">Turn off validation. No validation file output is produced. Options: Y/N. default: N</td>
+</tr>
+<tr>
+<td align="left"><em>validation.expectationFile</em></td>
+<td align="left">File path to the table of expectations.  If a directory is given, BioLockJ will look for a file named after the module being evaluated.</td>
+</tr>
+<tr>
+<td align="left"><em>validation.reportOn</em></td>
+<td align="left">Which attributes of the file should be included in the validation report file. Options: name, size, md5</td>
+</tr>
+<tr>
+<td align="left"><em>validation.sizeWithinPercent</em></td>
+<td align="left">What percentage difference is permitted between an output file and its expectation. Options: any positive number</td>
+</tr>
+<tr>
+<td align="left"><em>validation.stopPipeline</em></td>
+<td align="left">If enabled, the validation utlility will stop the pipeline if any module fails validation. Options: Y/N</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../Example-Pipeline/" title="Example Pipeline">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../Commands/" title="Commands"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Commands/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../Example-Pipeline/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

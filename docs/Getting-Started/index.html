@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Getting Started - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Getting Started";
+    var mkdocs_page_input_path = "Getting-Started.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="Getting-Started.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">Getting Started</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#1-complete-program-installation">1. Complete Program Installation</a></li>
+<li class="toctree-l2"><a href="#see-installation">*  See [[Installation]]</a></li>
+<ul>
+<li><a class="toctree-l3" href="#2-configure-program-input">2. Configure Program Input</a></li>
+</ul>
+<li class="toctree-l2"><a href="#see-configuration">* See [[Configuration]]</a></li>
+<ul>
+<li><a class="toctree-l3" href="#3-start-your-1st-pipeline">3. Start Your 1st Pipeline</a></li>
+<li><a class="toctree-l3" href="#4-check-pipeline-status">4. Check Pipeline Status</a></li>
+<li><a class="toctree-l3" href="#5-investigate-failed-pipelines">5. Investigate Failed Pipelines</a></li>
+</ul>
+</ul>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Getting Started</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<hr/>
+<h3 id="1-complete-program-installation">1. Complete Program Installation</h3>
+<h2 id="see-installation">*  See [[Installation]]</h2>
+<h3 id="2-configure-program-input">2. Configure Program Input</h3>
+<h2 id="see-configuration">* See [[Configuration]]</h2>
+<h3 id="3-start-your-1st-pipeline">3. Start Your 1st Pipeline</h3>
+<ul>
+<li>
+<p>To start your pipeline, pass your [[Configuration]] file path $CONFIG_PATH to the <a href="https://github.com/msioda/BioLockJ/blob/master/script/biolockj?raw=true">biolockj</a> command: </p>
+<blockquote>
+<p>biolockj $CONFIG_PATH
+    ============================================================
+    BioLockJ JAR: /projects/afodor_research/apps/BioLockJ/dist/BioLockJ.jar
+    BioLockJ Config File: /projects/afodor_research/apps/BioLockJ/resources/test/config/hpc/testKraken.properties
+    BioLockJ started successfully!
+    ============================================================</p>
+</blockquote>
+</li>
+<li>
+<p>Verify <a href="https://github.com/msioda/BioLockJ/blob/master/script/biolockj?raw=true">biolockj</a> command output is accurate:</p>
+</li>
+<li>BioLockJ JAR file path is valid </li>
+<li>BioLockJ [[Configuration]] file path is valid</li>
+<li>Verify message "BioLockJ started successfully!" is printed.</li>
+</ul>
+<hr/>
+<h3 id="4-check-pipeline-status">4. Check Pipeline Status</h3>
+<ul>
+<li>
+<p>Check pipeline progress by tailing the pipeline Java log file with <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_go?raw=true">blj_go</a> and <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_log?raw=true">blj_log</a>:</p>
+<blockquote>
+<p>blj_go   # Go to your newest pipeline
+blj_log  # Tail pipeline log file 
+* Verify java is running:</p>
+<p>ps -u $USER
+   psu
+   PID    TTY      TIME      CMD
+   16499  pts/45   00:36:21  java
+   188510 pts/45   00:00:00  bash
+   ...
+* If running modules on the cluster, check status of BioLockJ scripts on the job queue (command depends on job queue implementation):</p>
+<p>qstat -u $USER
+                                                                                    Req'd       Req'd          Elap
+  Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S      Time</p>
+</blockquote>
+<hr/>
+<p>530799.cph-m1.uncc.edu  msioda      cph_shor 04.0_PearMergeRe  44312     1      8      64gb  01:00:00 C       00:19:23 
+  530800.cph-m1.uncc.edu  msioda      cph_shor 04.1_PearMergeRe  36453     1      8      64gb  01:00:00 R       00:05:23 </p>
+</li>
+</ul>
+<hr/>
+<h3 id="5-investigate-failed-pipelines">5. Investigate Failed Pipelines</h3>
+<ul>
+<li>Failed pipelines can be restarted to save the progress made by successful modules.</li>
+<li>See [[Failure Recovery]] for more information.</li>
+<li>Failure Recovery should be avoided until you have successfully completed your 1st pipeline.  </li>
+</ul>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../Commands/" title="Commands">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../Installation/" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Installation/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../Commands/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

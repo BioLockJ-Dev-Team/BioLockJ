@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Building Modules - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Building Modules";
+    var mkdocs_page_input_path = "Building-Modules.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="Building-Modules.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">Building Modules</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#any-java-class-that-implements-the-biomodule-interface-can-be-added-to-a-biolockj-pipeline">Any Java class that implements the BioModule interface can be added to a BioLockJ pipeline.</a></li>
+<li class="toctree-l2"><a href="#beginners">Beginners</a></li>
+<li class="toctree-l2"><a href="#coding-your-module">Coding your module</a></li>
+<ul>
+<li><a class="toctree-l3" href="#to-support-a-new-classifier-create-3-modules-that-implement-the-following-interfaces">To support a new classifier, create 3 modules that implement the following interfaces:</a></li>
+<li><a class="toctree-l3" href="#biomoduleimpl-is-the-top-level-superclass-for-all-modules">BioModuleImpl is the top-level superclass for all modules.</a></li>
+<li><a class="toctree-l3" href="#scriptmoduleimpl-extends-biomoduleimpl-superclass-for-script-generating-modules">ScriptModuleImpl extends BioModuleImpl:  superclass for script-generating modules.</a></li>
+<li><a class="toctree-l3" href="#javamoduleimpl-extends-scriptmoduleimpl-superclass-for-pure-java-modules">JavaModuleImpl extends ScriptModuleImpl: superclass for pure Java modules.</a></li>
+<li><a class="toctree-l3" href="#classifiermoduleimpl-extends-scriptmoduleimpl-biolockjmoduleclassifier-superclass">ClassifierModuleImpl extends ScriptModuleImpl: biolockj.[[module.classifier]] superclass.</a></li>
+<li><a class="toctree-l3" href="#parsermoduleimpl-extends-javamoduleimpl-biolockjmoduleimplicitparser-superclass">ParserModuleImpl extends JavaModuleImpl: biolockj.[[module.implicit.parser]] superclass.</a></li>
+<li><a class="toctree-l3" href="#otunodeimpl-is-the-superclass-for-the-biolockjnode-package">OtuNodeImpl is the superclass for the biolockj.node package.</a></li>
+</ul>
+<li class="toctree-l2"><a href="#share-your-module">Share your module</a></li>
+</ul>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Building Modules</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h4 id="any-java-class-that-implements-the-biomodule-interface-can-be-added-to-a-biolockj-pipeline">Any Java class that implements the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/BioModule.html">BioModule</a> interface can be added to a BioLockJ pipeline.</h4>
+<p>The BioLockJ v1.0 implementation is currently focused on metagenomics analysis, but the generalized application framework is not limited to this domain.  Users can implement new BioModules to automate a wide variety of bioinformatics and report analytics.  The <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/BioModule.html">BioModule</a> interface was designed so that users can develop new modules on their own.  </p>
+<h2 id="beginners">Beginners</h2>
+<p>See the BioModule hello world tutorial.</p>
+<h2 id="coding-your-module">Coding your module</h2>
+<p>To create a new <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/BioModule.html">BioModule</a>, simply extend one of the abstract Java superclasses, code it's abstract methods, and add it to your pipeline with #BioModule tag your Config file:<br/>
+1. <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/BioModuleImpl.html">BioModuleImpl</a>: Extend if a more specific interface does not apply
+1. <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/ScriptModuleImpl.html">ScriptModuleImpl</a>: Extend if your module generates and executes bash scripts
+1. <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModuleImpl.html">JavaModuleImpl</a>: Extend if your module only runs Java code 
+1. <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModuleImpl.html">ClassifierModuleImpl</a>: Extend to support a new classifier program
+1. <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html">ParserModuleImpl</a>: Extend to parse output of a new classifier program
+1. <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/report/r/R_Module.html">R_Module</a>: Extend if your module generates and executes R scripts</p>
+<h4 id="to-support-a-new-classifier-create-3-modules-that-implement-the-following-interfaces">To support a new classifier, create 3 modules that implement the following interfaces:</h4>
+<ol>
+<li><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModule.html">ClassifierModule</a>: Implement to generate bash scripts needed to call classifier program</li>
+<li><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html">ParserModule</a>: Implement to parse classifier output, configure as classifier post-requisite </li>
+<li><a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/OtuNode.html">OtuNode</a>: Classifier specific implementation holds OTU information for 1 sequence</li>
+</ol>
+<h4 id="biomoduleimpl-is-the-top-level-superclass-for-all-modules"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/BioModuleImpl.html">BioModuleImpl</a> is the top-level superclass for all modules.</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>checkDependencies()</strong></td>
+<td align="left"><strong>Must override.</strong>  Called before executeTask() to identify [[Configuration]] errors and perform runtime validations.</td>
+</tr>
+<tr>
+<td align="left"><strong>executeTask()</strong></td>
+<td align="left"><strong>Must override.</strong>  Executes core module logic.</td>
+</tr>
+<tr>
+<td align="left">cleanUp()</td>
+<td align="left">Called after executeTask() to run cleanup operations, update Config properties, etc.</td>
+</tr>
+<tr>
+<td align="left">getInputFiles()</td>
+<td align="left">Return previous module output.</td>
+</tr>
+<tr>
+<td align="left">getModuleDir()</td>
+<td align="left">Return module root directory.</td>
+</tr>
+<tr>
+<td align="left">getOutputDir()</td>
+<td align="left">Return module output directory.</td>
+</tr>
+<tr>
+<td align="left">getPostRequisiteModules()</td>
+<td align="left">Returns a list of BioModules to run after the current module.</td>
+</tr>
+<tr>
+<td align="left">getPreRequisiteModules()</td>
+<td align="left">Returns a list of BioModules to run before the current module.</td>
+</tr>
+<tr>
+<td align="left">getSummary()</td>
+<td align="left">Return output directory summary.  Most modules override this method by adding module specific summary details to super.getSummary().</td>
+</tr>
+<tr>
+<td align="left">getTempDir()</td>
+<td align="left">Return module temp directory.</td>
+</tr>
+<tr>
+<td align="left">setModuleDir(path)</td>
+<td align="left">Set module directory.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="scriptmoduleimpl-extends-biomoduleimpl-superclass-for-script-generating-modules"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/ScriptModuleImpl.html">ScriptModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/BioModuleImpl.html">BioModuleImpl</a>:  superclass for script-generating modules.</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>buildScript(files)</strong></td>
+<td align="left"><strong>Must override.</strong>  Called by executeTask() for datasets with forward reads only.  The return type is a list of lists.  Each nested list contains the bash script lines required to process 1 sample.  Obtains sequence files from getInputFiles().</td>
+</tr>
+<tr>
+<td align="left">buildScriptForPairedReads(files)</td>
+<td align="left">Calls back to buildScript(files) by default.  Subclasses override this method to generate unique scripts for datasets containing paired reads.</td>
+</tr>
+<tr>
+<td align="left">checkDependencies()</td>
+<td align="left">Called before executeTask() to validate <em>script.batchSize</em>, <em>script.exitOnError</em>, <em>script.numThreads</em>, <em>script.permissions</em>, <em>script.timeout</em></td>
+</tr>
+<tr>
+<td align="left">getJobParams()</td>
+<td align="left">Return shell command to execute the MAIN script.</td>
+</tr>
+<tr>
+<td align="left">getScriptDir()</td>
+<td align="left">Return module script directory.</td>
+</tr>
+<tr>
+<td align="left">getSummary()</td>
+<td align="left">Adds the script directory summary to super.getSummary().  Most modules override this method by adding module specific summary details to super.getSummary().</td>
+</tr>
+<tr>
+<td align="left">getTimeout()</td>
+<td align="left">Return <em>script.timeout</em>.</td>
+</tr>
+<tr>
+<td align="left">getWorkerScriptFunctions()</td>
+<td align="left">Return bash script lines for any functions needed in the worker scripts.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="javamoduleimpl-extends-scriptmoduleimpl-superclass-for-pure-java-modules"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModuleImpl.html">JavaModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/ScriptModuleImpl.html">ScriptModuleImpl</a>: superclass for pure Java modules.</h4>
+<p>To avoid running code on the cluster head node, a temporary instance of BioLockJ is spawned on a cluster node which is launched by the sole worker script from the job queue. </p>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>runModule()</strong></td>
+<td align="left"><strong>Must override.</strong>  Executes core module logic.</td>
+</tr>
+<tr>
+<td align="left">buildScript(files)</td>
+<td align="left">This method returns a single line calling java on the BioLockJ source code, passing -d parameter to run in direct mode and the full class name of the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModule.html">JavaModule</a> to indicate the module to run.</td>
+</tr>
+<tr>
+<td align="left">getSource()</td>
+<td align="left">Determines if running code from Jar or source code in order to write valid bash script lines.</td>
+</tr>
+<tr>
+<td align="left">getTimeout()</td>
+<td align="left">Return <em>java.timeout</em>.</td>
+</tr>
+<tr>
+<td align="left">moduleComplete()</td>
+<td align="left">Create the script success indicator file.</td>
+</tr>
+<tr>
+<td align="left">moduleFailed()</td>
+<td align="left">Create the script failures indicator file.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="classifiermoduleimpl-extends-scriptmoduleimpl-biolockjmoduleclassifier-superclass"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModuleImpl.html">ClassifierModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/ScriptModuleImpl.html">ScriptModuleImpl</a>: biolockj.[[module.classifier]] superclass.</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">buildScriptForPairedReads(files)</td>
+<td align="left">Called by executeTask() for datasets with paired reads.  The return type is a list of lists, where each nested list contains the bash script lines required to process 1 sample.  Obtains sequence files from <a href="https://msioda.github.io/BioLockJ/docs/biolockj/util/SeqUtil.html">SeqUtil</a>.getPairedReads(getInputFiles()).</td>
+</tr>
+<tr>
+<td align="left">checkDependencies()</td>
+<td align="left">Validate [[Configuration]] properties <em>exe.classifier</em> and <em>exe.classifierParams</em>, verify sequence file format, log classifier version info, and verify no biolockj.[[module.seq]] modules are configured run after the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModule.html">ClassifierModule</a>. Subclasses should call super.checkDependencies() if overriding this method to retain these verifications.</td>
+</tr>
+<tr>
+<td align="left">executeTask()</td>
+<td align="left">Call buildScript(files) or buildScriptForPairedReads(files) based input sequence format and calls <a href="https://msioda.github.io/BioLockJ/docs/biolockj/util/BashScriptBuilder.html">BashScriptBuilder</a> to generate the main script + 1 worker script for every <em>script.batchSize</em> samples.  To change the batch scheme, override this method to call the alternate <a href="https://msioda.github.io/BioLockJ/docs/biolockj/util/BashScriptBuilder.html">BashScriptBuilder</a>.buildScripts() method signiture and hard code the batch size.  All biolockj.[[module.classifier]] modules override this method.</td>
+</tr>
+<tr>
+<td align="left">getClassifierExe()</td>
+<td align="left">Return [[Configuration]] property <em>exe.classifier</em> to call the classifier program in the bash scripts.  If the classifier is not included in <em>cluster.modules</em>, validate that value is a valid file path.  If <em>exe.classifier</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name (less the standard module suffix <em>classifier</em>).  For example, use <em>rdp.classifier</em> for <a href="module.classifier.r16s#RdpClassifier">RdpClassifier</a> and <em>kraken.classifier</em> for <a href="module.classifier.wgs#KrakenClassifier">KrakenClassifier</a>.  This allows users to define all classifier programs in a default [[Configuration]] file rather than setting <em>exe.clssifier</em> in each project [[Configuration]] file.</td>
+</tr>
+<tr>
+<td align="left">getClassifierParams()</td>
+<td align="left">Return [[Configuration]] property <em>exe.classifierParams</em> which may contain a list of parameters (without hyphens) to pass to the classifier program in the bash scripts.  If <em>exe.classifierParams</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name as described for <em>exe.classifier</em>.</td>
+</tr>
+<tr>
+<td align="left">getSummary()</td>
+<td align="left">Adds input directory summary to super.getSummary().  Most modules override this method to add module specific summary details to super.getSummary().</td>
+</tr>
+<tr>
+<td align="left">logVersion()</td>
+<td align="left">Run <em>exe.classifier</em> --version to log version info.  <a href="module.classifier.r16s#RdpClassifier">RDP</a> overrides this method to return null since the version switch is not supported.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="parsermoduleimpl-extends-javamoduleimpl-biolockjmoduleimplicitparser-superclass"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html">ParserModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModuleImpl.html">JavaModuleImpl</a>: biolockj.[[module.implicit.parser]] superclass.</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>parseSamples()</strong></td>
+<td align="left"><strong>Must override.</strong>  Called by executeTask() to populate the Set returned by getParsedSamples().  Each classifier requires a unique parser module to decode its output.  This method should iterate through the classifier reports to build <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/OtuNode.html">OtuNode</a>s for each sample-OTU found in the report.  The <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/OtuNode.html">OtuNode</a>s are stored in a <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/ParsedSample.html">ParsedSample</a> and cached via addParsedSample(<a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/ParsedSample.html">ParsedSample</a>).</td>
+</tr>
+<tr>
+<td align="left">addParsedSample(sample)</td>
+<td align="left">Add the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/ParsedSample.html">ParsedSample</a> to the Set returned by getParsedSamples().</td>
+</tr>
+<tr>
+<td align="left">buildOtuTables()</td>
+<td align="left">Generate OTU abundance tables from <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModule.html">ClassifierModule</a> output.</td>
+</tr>
+<tr>
+<td align="left">checkDependencies()</td>
+<td align="left">Validate [[Configuration]] properties (<em>report.minOtuCount</em>, <em>report.minOtuThreshold</em>, <em>report.logBase</em>) and  verify no biolockj.[[module.classifier]] modules are configured to run after the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html">ParserModule</a>.</td>
+</tr>
+<tr>
+<td align="left">executeTask()</td>
+<td align="left">If <em>report.numHits</em>=Y, add "Num_Hits" column to metadata containing the number of reads that map to any OTU for each sample.  Calls buildOtuTables() to generate module output.</td>
+</tr>
+<tr>
+<td align="left">getParsedSample(id)</td>
+<td align="left">Return the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/ParsedSample.html">ParsedSample</a> from the the Set returned by getParsedSamples() for a given id.</td>
+</tr>
+<tr>
+<td align="left">getParsedSamples()</td>
+<td align="left">Return 1 <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/ParsedSample.html">ParsedSample</a> for each classified sample in the dataset.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="otunodeimpl-is-the-superclass-for-the-biolockjnode-package"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/OtuNodeImpl.html">OtuNodeImpl</a> is the superclass for the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/package-summary.html">biolockj.node</a> package.</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">addOtu(level, otu)</td>
+<td align="left">A node represents a single OTU, each level in the taxonomic hierarchy is populated with this method.</td>
+</tr>
+<tr>
+<td align="left">getCount()</td>
+<td align="left">Get the OTU count.</td>
+</tr>
+<tr>
+<td align="left">getLine()</td>
+<td align="left">Get the classifier report line used to create the node.</td>
+</tr>
+<tr>
+<td align="left">getOtuMap()</td>
+<td align="left">This map may contain 1 element for each of the <em>report.taxonomyLevels</em> and is populated by addOtu(level, otu).</td>
+</tr>
+<tr>
+<td align="left">getSampleId()</td>
+<td align="left">Get the sample ID to which the OTU belongs.</td>
+</tr>
+<tr>
+<td align="left">report()</td>
+<td align="left">Print node info to log file as DEBUG line - not visible unless <em>pipeline.logLevel=DEBUG</em>.</td>
+</tr>
+<tr>
+<td align="left">setCount(num)</td>
+<td align="left">Set the OTU count.</td>
+</tr>
+<tr>
+<td align="left">setLine(line)</td>
+<td align="left">Set the classifier report line used to create the node.</td>
+</tr>
+<tr>
+<td align="left">setSampleId(id)</td>
+<td align="left">set the sample ID to which the OTU belongs.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/OtuNodeImpl.html">OtuNodeImpl</a> methods do not need to be overridden.  </li>
+<li>New <a href="https://msioda.github.io/BioLockJ/docs/biolockj/node/OtuNode.html">OtuNode</a> implementations should call existing methods from their constructor.</li>
+</ul>
+<h2 id="share-your-module">Share your module</h2>
+<p>Other users can use your module by putting the compiled class in the java classpath when they run BioLockj and using #BioModule <strong>classname</strong> in their config file.</p>
+<p>You can share your module as code or as a compiled class any way that you like.  The official repository for external BioLockJ modules is <a href="https://github.com/IvoryC/blj_ext_modules">blj_ext_modules</a>.  Each module has a folder at the top level of the repository and should include the java code as well a config file to test the module alone, a test file to run a multi-module pipeline that includes the module, and (where applicable) a dockerfile.</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../Dependencies/" title="Dependencies">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../Failure-Recovery/" title="Failure Recovery"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Failure-Recovery/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../Dependencies/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

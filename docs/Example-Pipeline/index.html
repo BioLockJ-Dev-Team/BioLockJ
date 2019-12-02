@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Example Pipeline - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Example Pipeline";
+    var mkdocs_page_input_path = "Example-Pipeline.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="Example-Pipeline.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">Example Pipeline</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#step-1-prepare-biolockj-config-file">Step 1: Prepare BioLockJ Config File</a></li>
+<li class="toctree-l2"><a href="#step-2-run-biolockj-pipeline">Step 2: Run BioLockJ Pipeline</a></li>
+<li class="toctree-l2"><a href="#step-3-review-pipeline-summary">Step 3: Review Pipeline Summary</a></li>
+<li class="toctree-l2"><a href="#step-4-download-r-reports">Step 4: Download R Reports</a></li>
+<li class="toctree-l2"><a href="#step-5-analyze-r-reports">Step 5: Analyze R Reports</a></li>
+<li class="toctree-l2"><a href="#open-chinakrakenfulldb_log10_genuspdf">Open chinaKrakenFullDB_Log10_genus.pdf</a></li>
+</ul>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Example Pipeline</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p>In our example analysis, we investigate the differences between the microbiome of 20 rural and 20 recently urbanized subjects from the Chinese province of Hunan.  For more information on this dataset, please review the analysis Fodor Lab published in the Sep 2017 issue of the journal Microbiome: 
+https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-017-0338-7</p>
+<h4 id="step-1-prepare-biolockj-config-file">Step 1: Prepare BioLockJ Config File</h4>
+<p>The BioLockJ project Config chinaKrakenFullDB.properties lists 5 BioModules to run (lines 3-7) + 13 properties:  </p>
+<pre><code>  #BioModule biolockj.module.implicit.RegisterNumReads
+  #BioModule biolockj.module.classifier.wgs.KrakenClassifier
+  #BioModule biolockj.module.report.taxa.NormalizeTaxaTables
+  #BioModule biolockj.module.report.r.R_PlotPvalHistograms
+  #BioModule biolockj.module.report.r.R_PlotOtus
+</code></pre>
+<p>In addition to the 5 listed BioModules, 4  additional <a href="../wiki/module.implicit">implicit BioModules</a> will also run: </p>
+<table>
+<thead>
+<tr>
+<th align="left">Mod#</th>
+<th align="left">Module</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left"><a href="../wiki/module.implicit#ImportMetadata">ImportMetadata</a></td>
+<td align="left">Always run 1st (for all pipelines)</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><a href="../wiki/module.implicit.parser.wgs#KrakenParser">KrakenParser</a></td>
+<td align="left">Always run after <a href="../wiki/module.classifier.wgs#KrakenClassifier">KrakenClassifier</a></td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><a href="../wiki/module.report.taxa#AddMetadataToOtuTables">AddMetadataToOtuTables</a></td>
+<td align="left">Always run just before the 1st R module</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><a href="../wiki/module.report.r#R_CalculateStats">CalculateStats</a></td>
+<td align="left">Always run as the 1st R module.</td>
+</tr>
+</tbody>
+</table>
+<p>Key properties:<br/></p>
+<table>
+<thead>
+<tr>
+<th align="left">Line#</th>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">08</td>
+<td align="left"><em>cluster.jobHeader</em></td>
+<td align="left">Each script will run on 1 node, 16 cores, and 128GB RAM for up to 30 minutes</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><em>pipeline.defaultProps</em></td>
+<td align="left">Default config file defines most properties – in this case copperhead.properties</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left"><em>input.dirPaths</em></td>
+<td align="left">Directory path containing 40 gzipped whole genome sequencing (WGS) fastq files</td>
+</tr>
+<tr>
+<td align="left">18</td>
+<td align="left"><em>metadata.filePath</em></td>
+<td align="left">Metadata file path: <a href="https://github.com/msioda/BioLockJ/blob/master/resources/metadata/chinaMetadata.tsv?raw=true">chinaMetadata.tsv</a></td>
+</tr>
+</tbody>
+</table>
+<p>BioLockJ must associate sequence files in <em>input.dirPaths</em> with the correct metadata row.  This is done by matching sequence file names to the 1st column in the metadata file.  If the Sample ID is not found in your file names, the file names must be updated.  Use the following properties to ignore a file prefix or suffix when matching the sample IDs.</p>
+<ul>
+<li><em>input.suffixFw</em></li>
+<li><em>input.suffixRv</em></li>
+<li><em>input.trimPrefix</em></li>
+<li><em>input.trimSuffix</em></li>
+</ul>
+<p>Sample IDs from 1st column of the metadata file: 081A, 082A, 083A...etc.<br>
+Sequence file names: 081A_R1.fq.gz, 082A_R1.fq.gz, 083A_R1.fq.gz...etc.  </br></p>
+<p>The default Config file, copperhead.properties, has its own default Config file <a href="https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true">standard.properties</a> which defines the property <em>input.suffixFw=_R1</em>.  As a result, all characters starting with (and including) “_R1” are ignored when matching the file name to the metadata sample ID. </p>
+<h4 id="step-2-run-biolockj-pipeline">Step 2: Run BioLockJ Pipeline</h4>
+<pre><code>  &gt; biolockj ~/chinaKrakenFullDB.properties
+</code></pre>
+<ul>
+<li>Look in the BioLockJ pipeline output directory defined by $BLJ_PROJ for a new pipeline directory named after the property file + today’s date:  ~/projects/chinaKrakenFullDB_2018Apr09</li>
+<li>The 5 configured modules have run in order, with the addition of 2 implicit modules (1st and last) which are added to all pipelines automatically.</li>
+<li>The biolockjComplete file indicates the pipeline ran successfully.</li>
+</ul>
+<h4 id="step-3-review-pipeline-summary">Step 3: Review Pipeline Summary</h4>
+<ul>
+<li>
+<p>Run the <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_summary?raw=true">blj_summary</a>  command to review the pipeline execution summary.</p>
+<pre><code>&gt; blj_summary
+</code></pre>
+</li>
+<li>
+<p><a href="https://github.com/msioda/BioLockJ/blob/master/docs/example/sampleSummary.txt?raw=true">Pipeline Summary</a> </p>
+</li>
+</ul>
+<h4 id="step-4-download-r-reports">Step 4: Download R Reports</h4>
+<ul>
+<li>Run the <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_download?raw=true">blj_download</a> command to get the command needed to download the analysis. <pre><code>&gt; blj_download
+&gt; rsync
+</code></pre>
+</li>
+</ul>
+<h4 id="step-5-analyze-r-reports">Step 5: Analyze R Reports</h4>
+<ul>
+<li>Open <em>downloadDir</em> on your local filesystem to review the analysis.  This directory contains:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Output</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">/temp</td>
+<td align="left">Directory where R log files are saved if R script runs locally.</td>
+</tr>
+<tr>
+<td align="left">/tables</td>
+<td align="left">Directory containing the OTU tables.</td>
+</tr>
+<tr>
+<td align="left">/local</td>
+<td align="left">Directory where R script output is saved if R script runs locally and <em>r.debug=Y</em>.</td>
+</tr>
+<tr>
+<td align="left">*.RData</td>
+<td align="left">The saved R sessions for R modules run if <em>r.saveRData=Y</em>.</td>
+</tr>
+<tr>
+<td align="left">chinaKrakenFullDB.log</td>
+<td align="left">The pipeline Java log file.</td>
+</tr>
+<tr>
+<td align="left">MAIN_*.R</td>
+<td align="left">Each R script for each module that generated reports has been updated to run on your local filesystem.</td>
+</tr>
+<tr>
+<td align="left">*.tsv files</td>
+<td align="left">Spreadsheets containing p-value and R^2 statistics for each OTU in the taxonomy level.</td>
+</tr>
+<tr>
+<td align="left">*.pdf files</td>
+<td align="left">P-value histograms, and bar-charts or scatterplots for each OTU in the taxonomy level.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Each R module generates a report for each <em>report.taxonomyLevel</em> configured:</li>
+</ul>
+<h4 id="open-chinakrakenfulldb_log10_genuspdf">Open chinaKrakenFullDB_Log10_genus.pdf</h4>
+<ul>
+<li>The report begins with the unadjusted P-Value Distributions:</li>
+<li>Since <em>r.numHistogramBreaks=20</em> so the 1st bar represents the p-values &lt; 0.05.  The ruralUrban attribute appears significant, as indicated by the high number p-values &lt; 0.05.</li>
+<li>For each OTU, a bar-chart or scatterplot is output with adjusted parametric and non-parametric p-values formatted using in the plot header.  </li>
+<li>The p-value format is defined by <em>r.pValFormat</em>.</li>
+<li>The p-adjust method is defined by <em>rStats.pAdjustMethod</em>.</li>
+<li>P-values that meet the <em>r.pvalCutoff</em> threshold are highlighted with <em>r.colorHighlight</em>.</li>
+</ul>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../Failure-Recovery/" title="Failure Recovery">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../Configuration/" title="Configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Configuration/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../Failure-Recovery/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

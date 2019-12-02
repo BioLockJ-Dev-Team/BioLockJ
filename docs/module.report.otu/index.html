@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>OTU report modules - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "OTU report modules";
+    var mkdocs_page_input_path = "module.report.otu.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="module.report.otu.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>OTU report modules</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h1 id="otu-report-modules">OTU report modules</h1>
+<p>Modules in the <strong><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/report/package-summary.html">biolockj.module.report</a></strong> sub-pakcage normalize <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html">ParserModule</a> output, merge the OTU tables with the metadata, or process OTU tables.</p>
+<hr/>
+<h4 id="compileotucounts">CompileOtuCounts</h4>
+<p><code>#BioModule biolockj.module.report.otu.CompileOtuCounts</code></p>
+<p><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/CompileOtuCounts.html" title="view javadoc"><strong>Description:</strong></a>  Compiles the counts from all OTU count files into a single summary OTU count file containing OTU counts for the entire dataset.</p>
+<p><a href="../wiki/Configuration" title="view option descriptions"><strong>Options:</strong></a> <em>none</em></p>
+<hr/>
+<h4 id="rarefyotucounts">RarefyOtuCounts</h4>
+<p><code>#BioModule biolockj.module.report.otu.RarefyOtuCounts</code></p>
+<p><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/RarefyOtuCounts.html" title="view javadoc"><strong>Description:</strong></a>  Applies a mean iterative post-OTU classification rarefication algorithm so that each output sample will have approximately the same number of OTUs.</p>
+<p><a href="../wiki/Configuration#rarefyOtuCounts" title="view option descriptions"><strong>Options:</strong></a></p>
+<ul>
+<li><em>rarefyOtuCounts.iterations</em> </li>
+<li><em>rarefyOtuCounts.lowAbundantCutoff</em></li>
+<li><em>rarefyOtuCounts.quantile</em></li>
+<li><em>rarefyOtuCounts.removeSamplesBelowQuantile</em></li>
+</ul>
+<hr/>
+<h4 id="removelowotucounts">RemoveLowOtuCounts</h4>
+<p><code>#BioModule biolockj.module.report.otu.RemoveLowOtuCounts</code></p>
+<p><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/RemoveLowOtuCounts.html" title="view javadoc"><strong>Description:</strong></a>  Removes OTUs with counts below <em>report.minCount</em>.</p>
+<p><a href="../wiki/Configuration#report" title="view option descriptions"><strong>Options:</strong></a></p>
+<ul>
+<li><em>report.minCount</em> </li>
+<li><em>report.numHits</em></li>
+</ul>
+<hr/>
+<h4 id="removescarceotucounts">RemoveScarceOtuCounts</h4>
+<p><code>#BioModule biolockj.module.report.otu.RemoveScarceOtuCounts</code></p>
+<p><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/RemoveScarceOtuCounts.html" title="view javadoc"><strong>Description:</strong></a>  Removes OTUs that are not found in enough samples.</p>
+<p><a href="../wiki/Configuration#report" title="view option descriptions"><strong>Options:</strong></a></p>
+<ul>
+<li><em>report.scarceCountCutoff</em> </li>
+</ul>
+<hr/>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Commands - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Commands";
+    var mkdocs_page_input_path = "Commands.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="Commands.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">Commands</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#biolockj-commands-are-located-under-bljscript">BioLockJ commands are located under $BLJ/script</a></li>
+</ul>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Commands</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h3 id="biolockj-commands-are-located-under-bljscript">BioLockJ commands are located under $BLJ/script</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Command</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/biolockj?raw=true">biolockj</a></strong> [config_path]</td>
+<td align="left">Start a pipeline using the [[Configuration]] properties in [config_path].<br/>Pipeline output directory is created under <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">$BLJ_PROJ</a>.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_build?raw=true">blj_build</a></strong></td>
+<td align="left">Run <a href="https://github.com/msioda/BioLockJ/blob/master/resources/build.xml?raw=true">build.xml</a> ant script to build BioLockJ.jar from Java source code.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_complete?raw=true">blj_complete</a></strong></td>
+<td align="left">Manually completes the current module and pipeline status.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">blj_config</a></strong></td>
+<td align="left">The <a href="https://github.com/msioda/BioLockJ/blob/master/install?raw=true">install</a> script updates ~/.bash_profile to call <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">blj_config</a>.<br/>Adds BioLockJ [[Commands]] into your $PATH &amp; sets program variables:<br/> $BLJ:  BioLockJ application directory.<br/> $BLJ_SCRIPT: BioLockJ script directory containing executable script files.<br/> $BLJ_PROJ: Root pipeline directory used in multiple [[Commands]].</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_download?raw=true">blj_downlaod</a></strong></td>
+<td align="left">If on cluster, print command syntax to download current or most recent <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">$BLJ_PROJ</a> pipeline analysis to your local workstation directory: <em>pipeline.downloadDir</em>.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_functions?raw=true">blj_functions</a></strong></td>
+<td align="left">This script contains common functions used in BioLockJ.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_go?raw=true">blj_go</a></strong></td>
+<td align="left">Go to most recent <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">$BLJ_PROJ</a> pipeline &amp; list contents.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_log?raw=true">blj_log</a></strong></td>
+<td align="left">Tail last 1K lines from current or most recent <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">$BLJ_PROJ</a> pipeline log file.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_reset?raw=true">blj_reset</a></strong></td>
+<td align="left">Reset pipeline status to incomplete.<br/>If restarted, execution will start with the current module.</td>
+</tr>
+<tr>
+<td align="left"><strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_summary?raw=true">blj_summary</a></strong></td>
+<td align="left">Print current or most recent <a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">$BLJ_PROJ</a> pipeline summary.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../Configuration/" title="Configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../Getting-Started/" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Getting-Started/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../Configuration/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

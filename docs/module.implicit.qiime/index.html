@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Module.implicit.qiime - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Module.implicit.qiime";
+    var mkdocs_page_input_path = "module.implicit.qiime.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="module.implicit.qiime.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Module.implicit.qiime</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<p><strong><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/qiime/package-summary.html">biolockj.module.implicit.qiime</a></strong> modules are <a href="http://qiime.org/scripts/">QIIME Script</a> wrappers implicitly added (if needed).<br/>Implicit modules are ignored if included in the Config file unless <em>project.allowImplicitModules</em>=Y.</p>
+<hr/>
+<h4 id="buildqiimemapping">BuildQiimeMapping</h4>
+<p><code>(added by BioLockJ) #BioModule biolockj.module.implicit.qiime.BuildQiimeMapping</code></p>
+<p><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/qiime/BuildQiimeMapping.html" title="view javadoc"><strong>Description:</strong></a>  This module builds a <a href="http://qiime.org/documentation/file_formats.html#mapping-file-overview">QIIME mapping file</a> from the metadata.  If the metadata file contains the correct columns out of order, awk is used to correct the column order.  The updated mapping file is verified with the QIIME script <a href="http://qiime.org/scripts/validate_mapping_file.html">validate_mapping_file.py</a></p>
+<p><a href="../wiki/Configuration#qiime" title="view option descriptions"><strong>Options:</strong></a></p>
+<ul>
+<li><em>exe.awk</em></li>
+</ul>
+<hr/>
+<h4 id="qiimeclassifier">QiimeClassifier</h4>
+<p><code>(added by BioLockJ) #BioModule biolockj.module.implicit.qiime.QiimeClassifier</code></p>
+<p><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/qiime/QiimeClassifier.html" title="view javadoc"><strong>Description:</strong></a>  Generates bash script lines to summarize QIIME results, build taxonomy reports, and add alpha diversity metrics (if configured). For a complete list of available metrics, see: <a href="http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html" target="_top">http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html</a></p>
+<p><a href="../wiki/Configuration#qiime" title="view option descriptions"><strong>Options:</strong></a></p>
+<ul>
+<li><em>qiime.alphaMetrics</em></li>
+<li><em>qiime.pynastAlignDB</em></li>
+<li><em>qiime.refSeqDB</em></li>
+<li><em>qiime.removeChimeras</em></li>
+<li><em>qiime.taxaDB</em></li>
+</ul>
+<hr/>
+<h4 id="mergeqiimeotutables">MergeQiimeOtuTables</h4>
+<p><code>(added by BioLockJ) #BioModule biolockj.module.implicit.qiime.MergeQiimeOtuTables</code></p>
+<p><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/qiime/MergeQiimeOtuTables.html" title="view javadoc"><strong>Description:</strong></a>  This module runs the QIIME script <a href="http://qiime.org/scripts/merge_otu_tables.html">merge_otu_tables.py</a> to combine the multiple otu_table.biom files output by its required prerequisite module <a href="../wiki/module.classifier.r16s#QiimeClosedRefClassifier">QiimeClosedRefClassifier</a>, so is only necessary if #samples &gt; <em>script.batchSize</em>.  </p>
+<p><a href="../wiki/Configuration#qiime" title="view option descriptions"><strong>Options:</strong></a> <em>none</em></p>
+<hr/>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

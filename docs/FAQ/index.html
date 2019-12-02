@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>FAQ - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "FAQ";
+    var mkdocs_page_input_path = "FAQ.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="FAQ.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Installation/">Installation</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">FAQ</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#q-if-biolockj-indicates-that-my-pipeline-started-successfully-but-the-pipeline-root-directory-is-not-created-how-do-i-debug-the-root-cause-of-the-failure">Q: If biolockj indicates that my pipeline started successfully, but the pipeline root directory is not created, how do I debug the root cause of the failure?</a></li>
+<li class="toctree-l2"><a href="#q-how-should-i-configure-input-properties-for-a-demultiplexed-dataset">Q: How should I configure input properties for a demultiplexed dataset?</a></li>
+<li class="toctree-l2"><a href="#example">Example</a></li>
+<ul>
+<li><a class="toctree-l3" href="#q-how-do-i-configure-my-pipeline-for-multiplexed-data">Q: How do I configure my pipeline for multiplexed data?</a></li>
+</ul>
+</ul>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>FAQ</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<hr/>
+<h3 id="q-if-biolockj-indicates-that-my-pipeline-started-successfully-but-the-pipeline-root-directory-is-not-created-how-do-i-debug-the-root-cause-of-the-failure">Q: If biolockj indicates that my pipeline started successfully, but the pipeline root directory is not created, how do I debug the root cause of the failure?</h3>
+<hr/>
+<p><strong>A:</strong> Generally, errors are output to the pipeline log file and documented in the notification email, but  invalid configuration settings may cause a fatal error to occur before the pipeline directory is created.  In this scenario, look in your $HOME directory for a file name that starts with "biolockj_FATAL_ERROR_".  </p>
+<ul>
+<li>
+<p>Verify you are running Java 1.8+</p>
+<pre><code>java -version
+</code></pre>
+</li>
+<li>
+<p>Look in the error message found in $HOME/biolockj_FATAL_ERROR_* for a reference to one of your Config file parameters, the most common culprit is:  </p>
+</li>
+<li>
+<p><em>pipeline.defaultProps</em></p>
+</li>
+<li>$BLJ_PROJ misconfigured in /script/blj_config</li>
+</ul>
+<hr/>
+<h3 id="q-how-should-i-configure-input-properties-for-a-demultiplexed-dataset">Q: How should I configure <em>input properties</em> for a demultiplexed dataset?</h3>
+<hr/>
+<p><strong>A:</strong> Name the sequence files using the Sample IDs listed in your metadata file.  Sequence file names containing a prefix or suffix (in addition the Sample ID) can be used as long as there is a unique character string that can be used to identify the boundary between the Sample ID and its prefix or suffix.  These values can be set via the <em>input.trimPrefix</em> &amp; <em>input.trimSuffix</em> properties.</p>
+<ol>
+<li>Set <em>input.trimPrefix</em> to a character string that precedes the sample ID <strong>for all samples</strong></li>
+<li>Set <em>input.trimSuffix</em> to a character string that comes after the sample ID <strong>for all samples</strong></li>
+</ol>
+<p>If a single prefix or suffix identifier cannot be used for all samples, the file names must be updated so that a universal prefix or suffix identifier can be used.</p>
+<h2 id="example">Example</h2>
+<p><strong>Sample IDs</strong> = mbs1, mbs2, mbs3, mbs4</p>
+<p><strong>Example File names</strong>
++ gut_mbs1.fq.gz
++ gut_mbs2.fq.gz
++ oral_mbs3.fq
++ oral_mbs4.fq</p>
+<p><strong>Config Properties</strong>
++ <em>input.trimPrefix</em>=_
++ <em>input.trimSuffix</em>=.fq</p>
+<p>All characters before (and including) the 1st "_" in the file name are trimmed</p>
+<p>All characters after (and including) the 1st ".fq" in the file name are trimmed</p>
+<p>BioLockJ automatically trims extensions ".fasta" and ".fastq" as if configured in <em>input.trimSuffix</em>.</p>
+<hr/>
+<h3 id="q-how-do-i-configure-my-pipeline-for-multiplexed-data">Q: How do I configure my pipeline for multiplexed data?</h3>
+<hr/>
+<p><strong>A:</strong> BioLockJ automatically adds the <a href="../wiki/module.implicit#Demultiplexer">Demultiplexer</a> as the 2nd module - after <a href="../wiki/module.implicit#ImportMetadata">ImportMetadata</a> - when processing multiplexed data.  The <a href="../wiki/module.implicit#Demultiplexer">Demultiplexer</a> requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.</p>
+<h4 id="if-samples-are-not-identified-by-sample-id-in-the-sequence-headers">If samples are not identified by sample ID in the sequence headers:</h4>
+<ol>
+<li>Set <em>demux.strategy</em>=id_in_header</li>
+<li>Set <em>input.trimPrefix</em> to a character string that precedes the sample ID <strong>for all samples</strong>.</li>
+<li>Set <em>input.trimSuffix</em> to a character string that comes after the sample ID <strong>for all samples</strong>.</li>
+</ol>
+<p><strong>Sample IDs</strong> = mbs1, mbs2, mbs3, mbs4</p>
+<p><strong>Scenario 1: Your multiplexed files include Sample IDs in the fastq sequence headers</strong> </p>
+<pre><code>@mbs1_134_M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0
+@mbs2_12_M02825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0
+@mbs3_551_M03825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0
+@mbs4_1234_M04825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0
+</code></pre>
+<p><strong>Required Config</strong>
++ <em>input.trimPrefix</em>=@
++ <em>input.trimSuffix</em>=_</p>
+<p>All characters before (and including) the 1st "@" in the sequence header are trimmed</p>
+<p>All characters after (and including) the 1st "_" in the sequence header are trimmed</p>
+<h4 id="if-samples-are-identified-by-barcode-in-the-header-or-sequence">If samples are identified by barcode (in the header or sequence):</h4>
+<ol>
+<li>Set <em>demux.strategy</em>=barcode_in_header or <em>demux.strategy</em>=barcode_in_seq</li>
+<li>Set <em>metadata.filePath</em> to metadata file path.</li>
+<li>Set <em>metadata.barcodeColumn</em> to the barcode column name.</li>
+<li>If the metadata barcodes are listed as reverse compliments, set <em>demux.barcodeUseReverseCompliment</em>=Y.</li>
+</ol>
+<p>The metadata file must be prepared by adding a unique sequence barcode in the <em>metadata.barcodeColumn</em> column.  This information is often available in a mapping file provided by the sequencing center that produced the raw data.</p>
+<p><strong>Metadata file</strong> </p>
+<table>
+<thead>
+<tr>
+<th align="left">ID</th>
+<th align="left">BarcodeColumn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">mbs1</td>
+<td align="left">GAGGCATGACTGGATA</td>
+</tr>
+<tr>
+<td align="left">mbs2</td>
+<td align="left">NAGGCATATTTGCACA</td>
+</tr>
+<tr>
+<td align="left">mbs3</td>
+<td align="left">GACCCATGACTGCATA</td>
+</tr>
+<tr>
+<td align="left">mbs4</td>
+<td align="left">TACCCAGCACCGCTTA</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Scenario 2: Your multiplexed files include a barcode in the headers</strong></p>
+<pre><code>@M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:GAGGCATGACTGGATA
+@M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:NAGGCATATTTGCACA
+@M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0:GACCCATGACTGCATA
+@M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA
+</code></pre>
+<p><strong>Required Config</strong>
++ <em>demux.strategy</em>=barcode_in_header
++ <em>metadata.barcodeColumn</em>=BarcodeColumn
++ <em>metadata.filePath</em>=<path file="" metadata="" to=""></path></p>
+<p><strong>Scenario 3: Your multiplexed files include a barcode in the sequences</strong></p>
+<pre><code>&gt;M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:
+    GAGGCATGACTGGATATATACATACTGAGGCATGACTACTTACTATAAGGCTTACTGACTGGTTACTGACTGGGAGGCATGACTACTTACTATAA
+&gt;M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:
+    CAGGCATATTTGCACACTAGAGGCAAGTTACTGACTGGATATACTGAGGCATGGGAGGCATGACTCTATAAGGCTTACTGACTGGTTACTGACTG
+&gt;M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0: CCATGAGACCTGCATA
+    CCATGAGACCTGCATACACTGTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGGCT
+&gt;M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA 
+    TACCCAGCACCGCTTCCTTGACTTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGG
+</code></pre>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral" href="../Dependencies/" title="Dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Dependencies/" style="color: #fcfcfc;">« Previous</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>

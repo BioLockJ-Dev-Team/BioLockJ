@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../img/favicon.ico" rel="shortcut icon"/>
+<title>Installation - BioLockJ User Guide</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" rel="stylesheet" type="text/css"/>
+<link href="../css/theme.css" rel="stylesheet" type="text/css">
+<link href="../css/theme_extra.css" rel="stylesheet" type="text/css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet"/>
+<script>
+    // Current page data
+    var mkdocs_page_name = "Installation";
+    var mkdocs_page_input_path = "Installation.md";
+    var mkdocs_page_url = null;
+  </script>
+<script defer="" src="../js/jquery-2.1.1.min.js"></script>
+<script defer="" src="../js/modernizr-2.8.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</link></link><link href="Installation.pdf" rel="alternate" title="PDF Export" type="application/pdf"/></head>
+<body class="wy-body-for-nav" role="document">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side stickynav" data-toggle="wy-nav-shift">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href=".."> BioLockJ User Guide</a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input name="q" placeholder="Search docs" title="Type search term here" type="text"/>
+</form>
+</div>
+</div>
+<div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1">
+<a class="" href="../Home/">Home</a>
+</li>
+<li class="toctree-l1 current">
+<a class="current" href="./">Installation</a>
+<ul class="subnav">
+<li class="toctree-l2"><a href="#1-download-the-latest-release-unpack-the-tarball">1. Download the latest release &amp; unpack the tarball.</a></li>
+<li class="toctree-l2"><a href="#2-run-the-install-script">2. Run the install script</a></li>
+<li class="toctree-l2"><a href="#3-install-the-software-dependencies-required-by-the-modules-you-wish-to-include-in-your-pipeline">3. Install the software [[Dependencies]] required by the modules you wish to include in your pipeline.</a></li>
+<li class="toctree-l2"><a href="#notes">Notes</a></li>
+<ul>
+<li><a class="toctree-l3" href="#environments">Environments</a></li>
+</ul>
+</ul>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Getting-Started/">Getting Started</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Commands/">Commands</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Configuration/">Configuration</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Example-Pipeline/">Example Pipeline</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Failure-Recovery/">Failure Recovery</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Building-Modules/">Building Modules</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../Dependencies/">Dependencies</a>
+</li>
+<li class="toctree-l1">
+<a class="" href="../FAQ/">FAQ</a>
+</li>
+</ul>
+</div>
+       
+    </nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+<nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="..">BioLockJ User Guide</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="breadcrumbs navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a href="..">Docs</a> »</li>
+<li>Installation</li>
+<li class="wy-breadcrumbs-aside">
+</li>
+</ul>
+<hr/>
+</div>
+<div role="main">
+<div class="section">
+<h4 id="1-download-the-latest-release-unpack-the-tarball">1. Download the <a href="https://github.com/msioda/BioLockJ/releases/latest">latest release</a> &amp; unpack the tarball.</h4>
+<pre><code>    &gt; tar -zxf BioLockJ-1.2.0-beta
+</code></pre>
+<p>Put the folder to wherever you like to keep executables.</p>
+<p>If you choose to download the source code, you will need to compile it by running <code>ant</code> from the resources folder. </p>
+<h4 id="2-run-the-install-script">2. Run the install script</h4>
+<ul>
+<li>The <strong><a href="https://github.com/msioda/BioLockJ/blob/master/install?raw=true">install</a></strong> script updates the $USER bash profile to call <strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">blj_config</a></strong>.  See <strong>[[Commands]]</strong> for a full description of <strong><a href="https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true">blj_config</a></strong><pre><code>&gt; ./install
+&gt;     Saved backup:  /users/msioda/.bash_profile~
+&gt;     Saved profile:  /users/msioda/.bash_profile
+&gt; BioLockJ installation complete!
+</code></pre>
+</li>
+</ul>
+<p>This will add the required variables to your path when you start your next session.<br/>
+To use BioLockJ in the same session, run <code>source ~/.bash_profile</code>.</p>
+<h4 id="3-install-the-software-dependencies-required-by-the-modules-you-wish-to-include-in-your-pipeline">3. Install the software [[Dependencies]] required by the modules you wish to include in your pipeline.</h4>
+<h2 id="notes">Notes</h2>
+<h3 id="environments">Environments</h3>
+<p>The main BioLockJ program can be used in these environments: 
+* a local machine with a unix-like system
+* any machine running docker *
+* a cluster, running a scheduler such as torque
+* AWS cloud computing *</p>
+<p>(* The launch scripts will still be run from your local machine.)</p>
+<p>The launch process requires a unix-like environment.  This includes linux, macOS, or an ubuntu environment running on Windows.</p>
+<p>If using <strong>docker</strong>, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run within the biolockj_controller container.</p>
+<p>If using <strong>AWS</strong>, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run on AWS.</p>
+<p>If you are using BioLockJ on a shared system where another user has already installed BioLockJ, you will need to run the install script to create the required variables in your own user profile.</p>
+</div>
+</div>
+<footer>
+<div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+<a class="btn btn-neutral float-right" href="../Getting-Started/" title="Getting Started">Next <span class="icon icon-circle-arrow-right"></span></a>
+<a class="btn btn-neutral" href="../Home/" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+</div>
+<hr/>
+<div role="contentinfo">
+<!-- Copyright etc -->
+</div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+</div>
+</div>
+</section>
+</div>
+<div class="rst-versions" role="note" style="cursor: pointer">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span><a href="../Home/" style="color: #fcfcfc;">« Previous</a></span>
+<span style="margin-left: 15px"><a href="../Getting-Started/" style="color: #fcfcfc">Next »</a></span>
+</span>
+</div>
+<script>var base_url = '..';</script>
+<script defer="" src="../js/theme.js"></script>
+<script defer="" src="../search/main.js"></script>
+</body>
+</html>
