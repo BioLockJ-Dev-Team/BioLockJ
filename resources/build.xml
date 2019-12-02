@@ -77,7 +77,7 @@
 	</target>
 
 	<target name="javadoc" depends="build-jar">
-		<javadoc classpathref="lib.path" access="package" author="true" destdir="docs" doctitle="BioLockJ" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.8" sourcepath="src" splitindex="true" use="true" version="true">
+		<javadoc classpathref="lib.path" access="package" author="true" destdir="docs/javadocs" doctitle="BioLockJ" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.8" sourcepath="src" splitindex="true" use="true" version="true">
 			<tag name="blj.web_desc" description="GUI Module Name" />
 			<link href="https://docs.oracle.com/javase/8/docs/api/"/>
 		    <link href="http://docs.oracle.com/javase/8/javafx/api/"/>
