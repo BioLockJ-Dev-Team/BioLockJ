@@ -12,3 +12,5 @@ BioLockJ.jar
 *.Rproj
 /web_app/logs/*
 /resources/config/gui/*
+/mkdocs/user-guide/site/*
+/**/__*__
