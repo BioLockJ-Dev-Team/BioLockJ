@@ -1,0 +1,40 @@
+This document contains copy-paste-able code chunks.
+
+Render the user guide .md files into html and pdf using mkdocs.
+
+You may need to set up the following software:
+# mkdocs 
+# See https://www.mkdocs.org/#installation
+pip install mkdocs
+# 
+# mkdocs-pdf-export-plugin (pluggin to export pdfs)
+# See https://github.com/zhaoterryy/mkdocs-pdf-export-plugin 
+pip install mkdocs-pdf-export-plugin
+# material theme (make the htlm and pdf both look slick)
+# See https://squidfunk.github.io/mkdocs-material/
+pip install mkdocs-material
+
+# mkdocs-pdf-export-plugin has some additional dependences
+# I installed them using brew, if you don't already have homebrew then run:
+# ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+brew install cairo
+brew install pango
+brew install gdk-pixbuf
+
+# The readthedocs theme is really good, and we may use it in the future.
+# But the material theme plays nice with the pdf export.
+
+# render documentation
+cd $BLJ/mkdocs/user-guide
+export ENABLE_PDF_EXPORT=1 # change this variable to 0 to skip making the pdf
+mkdocs build
+
+# Make sure it all looks good before publishing to github.
+# The site is published to $BLJ/mkdocs/user-guid/site, which is ignored by git.
+# While editing, use `mkdocs serve` to preview the rendered html.
+# The serve command must be called from the directory that has the mkdocs.yml file.
+
+# For a release, move the contents of site to the docs folder
+mv $BLJ/mkdocs/user-guide/site/* $BLJ/docs/.
+# this location is under git control; pushing this will update what is seen through github Pages.
+
