@@ -38,3 +38,20 @@ mkdocs build
 mv $BLJ/mkdocs/user-guide/site/* $BLJ/docs/.
 # this location is under git control; pushing this will update what is seen through github Pages.
 
+An odd thing that I haven't figured out....
+In Building-Modules.md, line 79, the text "addParsedSample(sample)" had to be changed to "addParsedSample( sample )"
+or to "addParsedSample(foo)", otherwise, the pdf exported would hit an error in which "IndexError: tuple index out of range".
+
+Similarly... in Validation.md, lines 3-5,
+This is NOT ok:
+"""
+[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/util/ValidationUtil.html "view javadoc") Validation checks whether the output files of a pipeline match the [**_expectation_**](../wiki/Validation#expectations). 
+
+[**Options:**](../wiki/Configuration#validation "view option descriptions")
+"""
+But this is fine:
+"""
+**Description:** Validation checks whether the output files of a pipeline match the [expectation](#expectations). 
+
+**Options:**
+"""
