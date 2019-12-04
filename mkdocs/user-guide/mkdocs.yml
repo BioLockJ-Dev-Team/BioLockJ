@@ -9,7 +9,6 @@ plugins:
     - pdf-export:
         verbose: True
         combined: True
-        use_directory_urls: False
         enabled_if_env: ENABLE_PDF_EXPORT
         combined_output_path: pdf/BioLockJ_User_Guide.pdf
 theme:
