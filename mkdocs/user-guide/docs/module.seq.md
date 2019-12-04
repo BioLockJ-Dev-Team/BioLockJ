@@ -7,9 +7,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### AwkFastaConverter
 `#BioModule biolockj.module.seq.AwkFastaConverter`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/AwkFastaConverter.html "view javadoc")  Convert fastq files into fasta format (required by [QIIME](http://qiime.org)).   
+**Description:**  Convert fastq files into fasta format (required by [QIIME](http://qiime.org)).   
 
-[**Options:**](../wiki/Configuration#exe "view option descriptions")
+**Options:**
 
    - *exe.awk*
    - *exe.gzip*
@@ -19,9 +19,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### Gunzipper
 `#BioModule biolockj.module.seq.Gunzipper`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/Gunzipper.html "view javadoc")  Decompress gzipped files.   
+**Description:**  Decompress gzipped files.   
 
-[**Options:**](../wiki/Configuration#exe "view option descriptions")
+**Options:**
 
    - *exe.gzip* 
 
@@ -30,9 +30,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### KneadData
 `#BioModule biolockj.module.seq.KneadData`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/KneadData.html "view javadoc")  Runs the Biobakery [KneadData program](https://bitbucket.org/biobakery/kneaddata/wiki/Home) to remove contaminated DNA.    
+**Description:**  Runs the Biobakery [KneadData program](https://bitbucket.org/biobakery/kneaddata/wiki/Home) to remove contaminated DNA.    
 
-[**Options:**](../wiki/Configuration#kneaddata "view option descriptions")
+**Options:**
 
    - *kneaddata.dbs* 
    - *exe.kneaddata*
@@ -44,9 +44,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### Multiplexer
 `#BioModule biolockj.module.seq.Multiplexer`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/Multiplexer.html "view javadoc")  Multiplex samples into a single file, or two files (one with forward reads, one with reverse reads) if multiplexing paired reads.<br>  BioLockJ modules require demultiplexed data, so if included, this must be the last module in the pipeline other than [[module.report]] modules.  
+**Description:**  Multiplex samples into a single file, or two files (one with forward reads, one with reverse reads) if multiplexing paired reads.<br>  BioLockJ modules require demultiplexed data, so if included, this must be the last module in the pipeline other than [[module.report]] modules.  
 
-[**Options:**](../wiki/Configuration#metadata "view option descriptions")
+**Options:**
 
    - *metadata.barcodeColumn*
    - *metadata.filePath*  
@@ -56,9 +56,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### PearMergeReads
 `#BioModule biolockj.module.seq.PearMergeReads`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/PearMergeReads.html "view javadoc")  Merge paired reads (required for [RDP](http://rdp.cme.msu.edu/classifier/classifier.jsp) & [QIIME](http://qiime.org)).  For more informations, see the [online PEAR manual](https://sco.h-its.org/exelixis/web/software/pear/doc.html). 
+**Description:**  Merge paired reads (required for [RDP](http://rdp.cme.msu.edu/classifier/classifier.jsp) & [QIIME](http://qiime.org)).  For more informations, see the [online PEAR manual](https://sco.h-its.org/exelixis/web/software/pear/doc.html). 
 
-[**Options:**](../wiki/Configuration#exe "view option descriptions")
+**Options:**
 
    - *exe.pear* 
    - *exe.pearParams* 
@@ -68,9 +68,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### RarefySeqs
 `#BioModule biolockj.module.seq.RarefySeqs`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/RarefySeqs.html "view javadoc")  Randomly select samples to reduce all samples to the configured maximum.<br> Samples with less than the minimum number of reads are discarded.     
+**Description:**  Randomly select samples to reduce all samples to the configured maximum.<br> Samples with less than the minimum number of reads are discarded.     
 
-[**Options:**](../wiki/Configuration#rarefySeqs "view option descriptions")
+**Options:**
 
    - *rarefySeqs.max* 
    - *rarefySeqs.min*  
@@ -80,9 +80,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### SeqFileValidator
 `#BioModule biolockj.module.seq.SeqFileValidator`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/SeqFileValidator.html "view javadoc") This BioModule validates fasta/fastq file formats are valid and enforces min/max read lengths.
+**Description:** This BioModule validates fasta/fastq file formats are valid and enforces min/max read lengths.
 
-[**Options:**](../wiki/Configuration#input "view option descriptions")
+**Options:**
 
    - *input.seqMaxLen* 
    - *input.seqMinLen*  
@@ -92,9 +92,9 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### TrimPrimers
 `#BioModule biolockj.module.seq.TrimPrimers`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/seq/TrimPrimers.html "view javadoc") Remove primers from reads, option to discard reads unless primers are attached to both forward and reverse reads.
+**Description:**  Remove primers from reads, option to discard reads unless primers are attached to both forward and reverse reads.
 
-[**Options:**](../wiki/Configuration#trimPrimers "view option descriptions")
+**Options:**
 
   - *trimPrimers.filePath*
   - *trimPrimers.requirePrimer*
