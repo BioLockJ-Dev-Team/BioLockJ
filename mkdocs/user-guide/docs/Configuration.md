@@ -1,23 +1,37 @@
 Configuration files contain all system properties, program inputs, cutoff values, external dependencies, and format specifications used during pipeline execution.  
 BioLockJ takes a single configuration file as a runtime parameter.  Although all properties can be configured in one file, we recommend chaining default files through the pipeline.defaultProps option. This can often improve the portability, maintainability, and readability of the project-specific configuration files.  
 
-Our recommended approach is as follows:   
+#### Standard Properties
 
-#### 1. Use [standard.properties](https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true) to assign universal default values:
-*  Set [input](#input), [mail](#mail), [report](#report), & [R](#r) properties
-*  We recommend using the [standard.properties](https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true) file packaged with BioLockJ under [resources/config/default/](https://github.com/msioda/BioLockJ/tree/master/resources/config/default).
+  * BioLockJ will always apply the [standard.properties](https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true) file packaged with BioLockJ under [resources/config/default/](https://github.com/msioda/BioLockJ/tree/master/resources/config/default); you do not need to specify this file in your pipeline.defaultProps chain.
+  * IFF running a pipeline in docker, then BioLockJ will apply the [docker.properties](https://github.com/msioda/BioLockJ/blob/master/resources/config/default/docker.properties?raw=true) file packaged with BioLockJ under [resources/config/default/](https://github.com/msioda/BioLockJ/tree/master/resources/config/default).
 
-#### 2. Use environment.properties to assign envionment-specific defaults 
-*  Set [cluster](#cluster) & [script](#script) properties
-*  Set paths to key executables through [exe](#exe) properties
-*  Set *pipeline.defaultProps* = [standard.properties](https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true)
-*  Override [standard.properties](https://github.com/msioda/BioLockJ/blob/master/resources/config/default/standard.properties?raw=true) as needed
+#### User-specified Defaults
+We recommend creating an **environment.properties** file to assign envionment-specific defaults.
 
-#### 3. Create a new configuration file for each pipeline to assign project-specific properties:
-*  Set the [BioModule execution order](#BioModule-execution-order)
-*  Set *pipeline.defaultProps* = environment.properties
-*  Override environment.properties and standard.properties as needed
-*  Example project configuration files can be found in [templates]( https://github.com/msioda/BioLockJ/tree/master/resources/config/template ).  
+  * Set [cluster](#cluster) & [script](#script) properties
+  * Set paths to key executables through [exe](#exe) properties
+  * Override standard.properties as needed.
+  * This information is the same for many (or all) projects run in this environment, and entering the info anew for each project is tedious, time-consuming and error-prone.  
+
+If using a shared system, consider using a user.properties file.   
+
+  * Set user-specific properties such as download.dir and mail.to.
+  * For shared projects, use a path that will be updated per-user, such as `~/biolock_user.properties`
+
+Other logical intermediates my also present themselves.  For example, some group of projects may need to override several of the defaults set in environmment.properties, but others still use the those defaults.  Projects in this set can use `pipeline.defaultProps=group2.properties` and the group2.properties files may include `pipeline.defaultProps=environment.properties`
+
+#### Project Properties
+Create a new configuration file for each pipeline to assign project-specific properties:
+
+  * Set the [BioModule execution order](#biomodule-execution-order)
+  * Set `pipeline.defaultProps = environment.properties`
+  * You may use multiple default config files:           
+    `pipeline.defaultProps=environment.properties,groupSettings.properties`
+  * Override environment.properties and standard.properties as needed
+  * Example project configuration files can be found in [templates]( https://github.com/msioda/BioLockJ/tree/master/resources/config/template ). 
+
+If the same property is given in multiple config files, the highest priority goes to the file used to launch the pipeline.  Standard.properties always has the lowest priority.
 
 A copy of each configuration file is stored in the pipeline root directory to serve as primary project documentation.  
 
@@ -56,7 +70,7 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *cluster.runJavaAsScript* | Options: Y/N.  If Y, each [JavaModule](https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModule.html) will instantiate a clone of the application in direct mode on a job node via a single worker script to avoid overworking the head node where BioLockJ is deployed |
 | *cluster.validateParams* | Options: Y/N.  If Y, validate *cluster.jobHeader* "ppn:" or "procs:" value matches *script.numThreads* |
 
-#### [demultiplexer](../wiki/module.implicit#Demultiplexer)
+#### [demultiplexer](/module/implicit/module.implicit#demultiplexer)
 | Property| Description |
 | :--- | :--- |
 | *demultiplexer.barcodeCutoff* | desc |
@@ -97,14 +111,14 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *exe.vsearch* | Define executable vsearch command, if default "vsearch" is not included in your $PATH |
 | *exe.vsearchParams* | Optional vsearch parameters |
 
-#### [GenMod](../wiki/module.DIY#GenMod)
+#### [GenMod](/module/diy/module.DIY#genmod)
 | Property| Description |
 | :--- | :--- |
 | *genMod.launcher* | Define executable language command if it is not included in your $PATH  |
 | *genMod.param* | Any parameters that is needed for user's script |
 | *genMod.scriptPath* | Path where user script is stored |
 
-#### [humann2](../wiki/module.classifier.wgs#humann2classifier)
+#### [humann2](/module/classifier/module.classifier.wgs#humann2classifier)
 | Property| Description |
 | :--- | :--- |
 | *humann2.disableGeneFamilies* | Options: Y/N.  If Y, disable HumanN2 Gene Family report |
@@ -126,22 +140,22 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *input.trimPrefix* | For files named by Sample ID, provide the prefix preceding the ID to trim when extracting Sample ID.  For multiplexed sequences, provide any characters in the sequence header preceding the ID. For fastq, this value could be “@” if the sample ID was added to the header immediately after the "@" symbol. |
 | *input.trimSuffix* | For files named by Sample ID, provide the suffix after the ID, often this is just the file extension.  Do not include read direction indicators listed in *input.suffixFw/input.suffixRv*. For multiplexed sequences, provide 1st character in the sequence header found after every embedded Sample ID.  If undefined, “_” is used as the default end-of-sample-ID delimiter. |
 
-#### [kneaddata](../wiki.module.seq#KneadData)
+#### [kneaddata](/module/seq/module.seq#kneaddata)
 | Property| Description |
 | :--- | :--- |
 | *kneaddata.dbs* | Path to database for [KneadData program](https://bitbucket.org/biobakery/kneaddata/wiki/Home) |
 
-#### [kraken](../wiki/module.classifier.wgs#KrakenClassifier)
+#### [kraken](/module/classifier/module.classifier.wgs#krakenclassifier)
 | Property| Description |
 | :--- | :--- |
-| *kraken.db* | Path to database for [KRAKEN](../wiki/module.classifier.wgs#KrakenClassifier) |
+| *kraken.db* | Path to kraken database |
 
-#### [kraken2](../wiki/module.classifier.wgs#Kraken2Classifier)
+#### [kraken2](/module/classifier/module.classifier.wgs#kraken2classifier)
 | Property| Description |
 | :--- | :--- |
-| *kraken2.db* | Path to database for [KRAKEN2](../wiki/module.classifier.wgs#Kraken2Classifier) |
+| *kraken2.db* | Path to kraken2 database |
 
-#### [mail](../wiki/module.report#Email)
+#### [mail](/module/report/module.report#email)
 | Property| Description |
 | :--- | :--- |
 | *mail.encryptedPassword* | Encrypted password from email.from account.  If BioLockJ is passed a 2nd parameter (in addition to the config file), the 2nd parameter should be the clear-text password.  The password will be encrypted and stored in the prop file for future use.  **WARNING: Base64 encryption is only a trivial roadblock for malicious users.  This functionality is intended merely to keep clear-text passwords out of the configuration files and should only be used with a disposable *email.from* account.** |
@@ -164,13 +178,13 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *metadata.required* | Options: Y/N.  Require every sequence file has a corresponding row in metadata file |
 | *metadata.useEveryRow* | Options: Y/N.  Requires every metadata row to have a corresponding sequence file |
 
-#### [metaphlan2](module.classifier.wgs#Metaphlan2Classifier)
+#### [metaphlan2](/module/classifier/module.classifier.wgs#metaphlan2classifier)
 | Property | Description |
 | :--- | :--- |
 | *metaphlan2.db* | Directory property containing alternate database. Must always be paired with *metaphlan2.mpa_pkl* |
 | *metaphlan2.mpa_pkl* | File property containing path to the mpa_pkl file used to reference an alternate DB.  Must always be paired with *metaphlan2.db* |
 
-#### [multiplexer](../wiki/module.seq#multiplexer)
+#### [multiplexer](/module/seq/module.seq#multiplexer)
 | Property| Description |
 | :--- | :--- |
 | *multiplexer.gzip* | Options: Y/N.  If Y, gzip the multiplexed output |
@@ -179,9 +193,9 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | Property| Description |
 | :--- | :--- |
 | *pipeline.copyInput* | Options: Y/N.  If Y, copy *input.dirPaths* into a new directory under the project root directory |
-| *pipeline.defaultDemultiplexer* | Assign module to demultiplex datasets.  Default = [Demultiplexer](../wiki/module.implicit#Demultiplexer) |
-| *pipeline.defaultFastaConverter* | Assign module to convert fastq sequence files into fasta format when required.  Default = [AwkFastaConverter](../wiki/module.seq#AwkFastaConverter) |
-| *pipeline.defaultSeqMerger* | Assign module to merge paired reads when required.  Default = [PearMergeReads](../wiki/module.seq#PearMergeReads) |
+| *pipeline.defaultDemultiplexer* | Assign module to demultiplex datasets.  Default = [Demultiplexer](/module.implicit#Demultiplexer) |
+| *pipeline.defaultFastaConverter* | Assign module to convert fastq sequence files into fasta format when required.  Default = [AwkFastaConverter](/module.seq#AwkFastaConverter) |
+| *pipeline.defaultSeqMerger* | Assign module to merge paired reads when required.  Default = [PearMergeReads](/module.seq#PearMergeReads) |
 | *pipeline.defaultStatsModule* | Java class name for default module used generate p-value and other stats |
 | *pipeline.defaultProps* | Path to a default BioLockJ configuration file containing default property values that are overridden if defined in the primary configuration file  |
 | *pipeline.deleteTempFiles* | Options: Y/N.  If Y, delete module temp dirs after execution |
@@ -194,7 +208,7 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *pipeline.permissions* | Set chmod -R command security bits on pipeline root directory (Ex. 770) |
 | *pipeline.userProfile* | Bash users typically use ~/.bash_profile (the standard default). |
 
-#### [qiime](../wiki/module.classifier.r16s)
+#### [qiime](/module/classifier/module.classifier.r16s)
 | Property| Description |
 | :--- | :--- |
 | *qiime.alphaMetrics* | Options listed online: [scikit-bio.org](http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html) |
@@ -204,7 +218,7 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *qiime.removeChimeras* | Options: Y/N.  If Y, remove chimeras after open or de novo OTU picking using  *exe.vsearch* |
 | *qiime.taxaDB* | File property to define ~/.qiime_config assign_taxonomy_id_to_taxonomy_fp. If supplied, *qiime.pynastAlignDB* and *qiime.refSeqDB* must also be supplied and all three must share some parent directory. |
 
-#### [r](../wiki/module.report.r)
+#### [r](/module/report/module.report.r)
 | Property| Description |
 | :--- | :--- |
 | *r.colorBase* | This is the base color used for labels & headings in the PDF report |
@@ -223,13 +237,13 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *r.saveRData* | Options: Y/N.  If Y, all R script generating BioModules will save R Session data to the module output directory to a file using the extension ".RData" |
 | *r.timeout* | Sets # minutes before R Script will time out and fail |
 
-#### [r_CalculateStats](../wiki/module.report.r#R_CalculateStats)
+#### [r_CalculateStats](/module/report/module.report.r#r_calculatestats)
 | Property| Description |
 | :--- | :--- |
 | *r_CalculateStats.pAdjustScope* | Options: GLOBAL, LOCAL, TAXA, ATTRIBUTE.  Used to set the p.adjust "n" parameter for how many simultaneous p-value calculations |
 | *r_CalculateStats.pAdjustMethod* | Sets the p.adjust "method" parameter |
 
-#### [r_PlotEffectSize](../wiki/module.report.r#R_PlotEffectSize)
+#### [r_PlotEffectSize](/module/report/module.report.r#r_ploteffectsize)
 | Property| Description |
 | :--- | :--- |
 | *r_PlotEffectSize.parametricPval* | Options: Y/N. If Y, the parametric p-value is used when determining which taxa to include in the plot and which should get a (*).  If N (default), the non-parametric p-value is used. |
@@ -241,14 +255,14 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *r_PlotEffectSize.disableRSquared* | Options: Y/N. If N (default), produce plots showing effect size calculated as the r-squared value. If Y, skip this plot type. |
 | *r_PlotEffectSize.disableFoldChange* | Options: Y/N. If N (default), produce plots for binary attributes showing the fold change. If Y, skip this plot type. |
 
-#### [r_PlotMds](../wiki/module.report.r#R_PlotMds)
+#### [r_PlotMds](/module/report/module.report.r#r_plotmds)
 | Property| Description |
 | :--- | :--- |
 | *r_PlotMds.numAxis* | Sets # MDS axis to plot |
 | *r_PlotMds.distance* | distance metric for calculating MDS (default: bray) |
 | *r_PlotMds.reportFields* | Override field used to explicitly list metadata columns to build MDS plots.  If left undefined, all columns are reported |
 
-#### [rarefyOtuCounts](../wiki/module.report.otu#RarefyOtuCounts)
+#### [rarefyOtuCounts](/module/report/module.report.otu#rarefyotucounts)
 | Property| Description |
 | :--- | :--- |
 | *rarefyOtuCounts.iterations* | Positive integer. The number of iterations to randomly select the *rarefyOtuCounts.quantile* of OTUs |
@@ -256,13 +270,13 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *rarefyOtuCounts.quantile* | Quantile for rarefication. The number of OTUs/sample are ordered, all samples with more OTUs than the quantile sample are subselected without replacement until they have the same number of OTUs as the quantile sample |
 | *rarefyOtuCounts.rmLowSamples* | Options: Y/N. If Y, all samples below the *rarefyOtuCounts.quantile* quantile sample are removed |
 
-#### [rarefySeqs](../wiki/module.seq#RarefySeqs)
+#### [rarefySeqs](/module/seq/module.seq#rarefyseqs)
 | Property| Description |
 | :--- | :--- |
 | *rarefySeqs.max* | Randomly select maximum number of sequences per sample |
 | *rarefySeqs.min* | Discard samples without minimum number of sequences  |
 
-#### [rdp](../wiki/module.classifier.r16s#RdpClassifier)
+#### [rdp](/module/classifier/module.classifier.r16s#rdpclassifier)
 | Property| Description |
 | :--- | :--- |
 | *rdp.db* | File property used to define an alternate RDP database file |
@@ -289,20 +303,20 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 | *script.permissions* | Set chmod command security bits on generated scripts (Ex. 770) |
 | *script.timeout* | Integer, time (minutes) before worker scripts times out. |
 
-#### [seqFileValidator](../wiki/module.seq#SeqFileValidator)
+#### [seqFileValidator](/module/seq/module.seq#seqfilevalidator)
 | Property| Description |
 | :--- | :--- |
 | *seqFileValidator.requireEqualNumPairs* | Options: Y/N. default Y. | 
 | *seqFileValidator.seqMaxLen* | maximum number of bases per read | 
 | *seqFileValidator.seqMinLen* | minimum number of bases per read | 
 
-#### [trimPrimers](../wiki/module.seq#TrimPrimers)
+#### [trimPrimers](/module/seq/module.seq#trimprimers)
 | Property| Description |
 | :--- | :--- |
 | *trimPrimers.filePath* | Path to file containing one primer sequence per line. | 
-| *trimPrimers.requirePrimer* | Options: Y/N. If Y, [TrimPrimers](../wiki/module.seq#TrimPrimers) will discard reads that do not include a primer sequence. |
+| *trimPrimers.requirePrimer* | Options: Y/N. If Y, [TrimPrimers](/module.seq#TrimPrimers) will discard reads that do not include a primer sequence. |
 
-#### [validation](../wiki/Validation)
+#### [validation](/Validation)
 | Property| Description |
 | :--- | :--- |
 | *validation.compareOn* | Which columns in the expectation file should be used for the comparison. Options: name, size, md5. Default: use all columns in the expectation file.  |
