@@ -1,53 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Installation/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Getting-Started/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Commands/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Configuration/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Built-in-modules/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/The-Metadata-File/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Dependencies/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Failure-Recovery/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-12-02</lastmod>
+     <loc>https://ivoryc.github.io/BioLockJ/Validation/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/Building-Modules/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/Example-Pipeline/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/FAQ/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/classifier/module.classifier/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/classifier/module.classifier.r16s/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/classifier/module.classifier.wgs/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/diy/module.diy/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/implicit/module.implicit/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/implicit/module.implicit.parser/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/implicit/module.implicit.parser.r16s/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/implicit/module.implicit.parser.wgs/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/implicit/module.implicit.qiime/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/report/module.report.humann2/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/report/module.report/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/report/module.report.otu/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/report/module.report.r/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/report/module.report.taxa/</loc>
+     <lastmod>2019-12-04</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://ivoryc.github.io/BioLockJ/module/seq/module.seq/</loc>
+     <lastmod>2019-12-04</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
