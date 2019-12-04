@@ -5,7 +5,7 @@
 #### Humann2Parser
 `(added by BioLockJ) #BioModule biolockj.module.implicit.parser.wgs.Humann2Parser`
 
-**Description:**  Build OTU tables from [HumanN2 classifier module](../wiki/module.classifier.wgs#Humann2Classifier) output. 
+**Description:**  Build OTU tables from [HumanN2 classifier module](/module/classifier/module.classifier.wgs#humann2classifier) output. 
 
 **Options:**
 
@@ -38,7 +38,7 @@
 #### Metaphlan2Parser
 `(added by BioLockJ) #BioModule biolockj.module.implicit.parser.wgs.MetaphlanParser`
 
-**Description:**  Build OTU tables from [Metaphlan2 classifier module](../wiki/module.classifier.wgs#Metaphlan2Classifier) reports.   
+**Description:**  Build OTU tables from [Metaphlan2 classifier module](/module/classifier/module.classifier.wgs#metaphlan2classifier) reports.   
 
 **Options:**
 

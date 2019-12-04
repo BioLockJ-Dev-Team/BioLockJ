@@ -1,6 +1,6 @@
 # Pathway Modules
 
-Modules in the **biolockj.module.report.humann2** sub-package use  [ParserModule](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html) output to produce and process pathway tables, such as those produced by [HumanN2](../wiki/module.classifier.wgs#humann2classifier).
+Modules in the **biolockj.module.report.humann2** sub-package use  [ParserModule](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html) output to produce and process pathway tables, such as those produced by [HumanN2](/module/classifier/module.classifier.wgs#humann2classifier).
 
 ---
 

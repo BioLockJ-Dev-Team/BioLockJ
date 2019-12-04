@@ -53,4 +53,4 @@
 
 ---
 
-See also: [Typical QIIME Pipeline](../wiki/Example-Pipeline-Qiime)
+See also: [Typical QIIME Pipeline](/Example-Pipeline-Qiime)

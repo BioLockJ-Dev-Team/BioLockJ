@@ -10,14 +10,14 @@ The BioLockJ project Config chinaKrakenFullDB.properties lists 5 BioModules to r
       #BioModule biolockj.module.report.r.R_PlotPvalHistograms
       #BioModule biolockj.module.report.r.R_PlotOtus
 
-In addition to the 5 listed BioModules, 4  additional [implicit BioModules](../wiki/module.implicit) will also run: 
+In addition to the 5 listed BioModules, 4  additional implicit BioModules will also run: 
 
 | Mod# | Module | Description |
 | :-- | :-- | :-- |
-| 1 | [ImportMetadata](../wiki/module.implicit#ImportMetadata) | Always run 1st (for all pipelines) |
-| 2 | [KrakenParser](../wiki/module.implicit.parser.wgs#KrakenParser) | Always run after [KrakenClassifier](../wiki/module.classifier.wgs#KrakenClassifier) |
-| 3 | [AddMetadataToOtuTables](../wiki/module.report.taxa#AddMetadataToOtuTables) | Always run just before the 1st R module |  
-| 4 | [CalculateStats](../wiki/module.report.r#R_CalculateStats) | Always run as the 1st R module. |  
+| 1 | [ImportMetadata](/module/implicit/module.implicit#importmetadata) | Always run 1st (for all pipelines) |
+| 2 | [KrakenParser](/module/implicit/module.implicit.parser.wgs#krakenparser) | Always run after [KrakenClassifier](/module/implicit/module.classifier.wgs#krakenclassifier) |
+| 3 | [AddMetadataToOtuTables](/module/report/module.report.taxa#addmetadatatootutables) | Always run just before the 1st R module |  
+| 4 | [CalculateStats](/module/report/module.report.r#t_calculatestats) | Always run as the 1st R module. |  
 
 Key properties:<br>
 
