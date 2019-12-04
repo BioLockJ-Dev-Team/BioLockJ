@@ -9,6 +9,7 @@ plugins:
     - pdf-export:
         verbose: True
         combined: True
+        use_directory_urls: False
         enabled_if_env: ENABLE_PDF_EXPORT
         combined_output_path: pdf/BioLockJ_User_Guide.pdf
 theme:
@@ -19,33 +20,15 @@ nav:
     - Installation: Installation.md
     - Getting Started: Getting-Started.md
     - Commands: Commands.md
-    - Configuration: Configuration.md
-    - Example Pipeline: Example-Pipeline.md
-    - Failure Recovery: Failure-Recovery.md
-    - Building Modules: Building-Modules.md
-    - Dependencies: Dependencies.md
-    - FAQ: FAQ.md
     - Pipeline Componenets:
-        Metadata: The-Metadata-File.md
+        - Configuration: Configuration.md
+        - Modules: Built-in-modules.md
+        - Metadata: The-Metadata-File.md
+        - Dependencies: Dependencies.md
     - Features:
-        Validation: Validation.md
-    - Modules:
-        - classifiers:
-            about classifiers: module/classifier/module.classifier.md
-            module.classifier.r16s: module/classifier/module.classifier.r16s.md
-            module.classifier.wgs: module/classifier/module.classifier.wgs.md
-        - implicit modules: 
-            about implicit modules: module/implicit/module.implicit.md
-            implicit parsers: module/implicit/module.implicit.parser.md
-            module.implicit.parser.r16s.md: module/implicit/module.implicit.parser.r16s.md
-            module.implicit.parser.wgs.md: module/implicit/module.implicit.parser.wgs.md
-            implicit qiime modules: module/implicit/module.implicit.qiime.md
-        - report modules:
-            about report modules: module/report/module.report.md
-            humann2: module/report/module.report.humann2.md
-            report by otu: module/report/module.report.otu.md
-            report by tax: module/report/module.report.taxa.md
-            R reports: module/report/module.report.r.md
-        - sequence modules: module/seq/module.seq.md
-        - DIY modules:
-            GenMod: module/diy/module.diy.md
+        - Failure Recovery: Failure-Recovery.md
+        - Validation: Validation.md
+        - Building Modules: Building-Modules.md
+    - Example Pipeline: Example-Pipeline.md
+    - FAQ: FAQ.md
+    
