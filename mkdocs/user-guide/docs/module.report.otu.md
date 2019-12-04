@@ -7,18 +7,20 @@ Modules in the **[biolockj.module.report](https://msioda.github.io/BioLockJ/docs
 #### CompileOtuCounts
 `#BioModule biolockj.module.report.otu.CompileOtuCounts`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/CompileOtuCounts.html "view javadoc")  Compiles the counts from all OTU count files into a single summary OTU count file containing OTU counts for the entire dataset.
+**Description:**  Compiles the counts from all OTU count files into a single summary OTU count file containing OTU counts for the entire dataset.
 
-[**Options:**](../wiki/Configuration "view option descriptions") *none*
+**Options:**
+
+ *none*
 
 ----
 
 #### RarefyOtuCounts
 `#BioModule biolockj.module.report.otu.RarefyOtuCounts`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/RarefyOtuCounts.html "view javadoc")  Applies a mean iterative post-OTU classification rarefication algorithm so that each output sample will have approximately the same number of OTUs.
+**Description:**  Applies a mean iterative post-OTU classification rarefication algorithm so that each output sample will have approximately the same number of OTUs.
 
-[**Options:**](../wiki/Configuration#rarefyOtuCounts "view option descriptions")
+**Options:**
 
    - *rarefyOtuCounts.iterations* 
    - *rarefyOtuCounts.lowAbundantCutoff*
@@ -30,9 +32,9 @@ Modules in the **[biolockj.module.report](https://msioda.github.io/BioLockJ/docs
 #### RemoveLowOtuCounts
 `#BioModule biolockj.module.report.otu.RemoveLowOtuCounts`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/RemoveLowOtuCounts.html "view javadoc")  Removes OTUs with counts below *report.minCount*.
+**Description:**  Removes OTUs with counts below *report.minCount*.
 
-[**Options:**](../wiki/Configuration#report "view option descriptions")
+**Options:**
 
    - *report.minCount* 
    - *report.numHits*
@@ -42,9 +44,9 @@ Modules in the **[biolockj.module.report](https://msioda.github.io/BioLockJ/docs
 #### RemoveScarceOtuCounts
 `#BioModule biolockj.module.report.otu.RemoveScarceOtuCounts`
 
-[**Description:**](https://msioda.github.io/BioLockJ/docs/biolockj/module/report/otu/RemoveScarceOtuCounts.html "view javadoc")  Removes OTUs that are not found in enough samples.
+**Description:**  Removes OTUs that are not found in enough samples.
 
-[**Options:**](../wiki/Configuration#report "view option descriptions")
+**Options:**
 
    - *report.scarceCountCutoff* 
 
