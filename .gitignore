@@ -14,3 +14,4 @@ BioLockJ.jar
 /resources/config/gui/*
 /mkdocs/user-guide/site/*
 /**/__*__
+/javadocs/*
