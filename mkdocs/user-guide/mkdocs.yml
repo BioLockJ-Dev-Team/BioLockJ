@@ -1,19 +1,19 @@
 site_name: BioLockJ User Guide
 site_url: https://ivoryc.github.io/BioLockJ
-repo_url: https://github.com/BioLockJ-Dev-Team/BioLockJ
+#repo_url: https://github.com/BioLockJ-Dev-Team/BioLockJ
 repo_name: BioLockJ
 site_author: Ivory Blakley
 copyright: 2019 Fodor Lab
 plugins:
     - search
-    - pdf-export:
-        verbose: False
-        combined: True
-        enabled_if_env: ENABLE_PDF_EXPORT
-        combined_output_path: BioLockJ_User_Guide.pdf
+#    - pdf-export:
+#        verbose: True
+#        combined: True
+#        enabled_if_env: ENABLE_PDF_EXPORT
+#        combined_output_path: BioLockJ_User_Guide.pdf
 theme:
-  name: 'material'
-  custom_dir: 'customize_material_theme'
+  name: 'readthedocs'
+#  custom_dir: 'customize_material_theme'
 nav:
     - Home: index.md
     - Installation: Installation.md
