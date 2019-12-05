@@ -156,7 +156,7 @@
 <hr />
 <h4 id="qiimeclosedrefclassifier">QiimeClosedRefClassifier</h4>
 <p><code>#BioModule biolockj.module.classifier.r16s.QiimeClosedRefClassifier</code></p>
-<p><strong>Description:</strong>  This module picks OTUs using a closed reference database and constructs an OTU table via the QIIME script <a href="http://qiime.org/scripts/pick_closed_reference_otus.html">pick_closed_reference_otus.py</a>.  Taxonomy is assigned using a pre-defined taxonomy map of reference sequence OTU to taxonomy.  This is the fastest OTU picking method since samples can be processed in parallel batches.  Before the QIIME script is run, batches are prepared in the temp directory, with each batch directory containing a fasta directory with <em>script.batchSize</em> fasta files and a QIIME mapping file, created with awk, called batchMapping.tsv for the batch of samples.   Inherits from <a href="/module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>.</p>
+<p><strong>Description:</strong>  This module picks OTUs using a closed reference database and constructs an OTU table via the QIIME script <a href="http://qiime.org/scripts/pick_closed_reference_otus.html">pick_closed_reference_otus.py</a>.  Taxonomy is assigned using a pre-defined taxonomy map of reference sequence OTU to taxonomy.  This is the fastest OTU picking method since samples can be processed in parallel batches.  Before the QIIME script is run, batches are prepared in the temp directory, with each batch directory containing a fasta directory with <em>script.batchSize</em> fasta files and a QIIME mapping file, created with awk, called batchMapping.tsv for the batch of samples.   Inherits from <a href="../../../module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>.</p>
 <p><strong>Options:</strong></p>
 <ul>
 <li><em>exe.awk</em> </li>
@@ -164,7 +164,7 @@
 <hr />
 <h4 id="qiimedenovoclassifier">QiimeDeNovoClassifier</h4>
 <p><code>#BioModule biolockj.module.classifier.r16s.QiimeDeNovoClassifier</code></p>
-<p><strong>Description:</strong>  This module runs the QIIME <a href="http://qiime.org/scripts/pick_de_novo_otus.html">pick_de_novo_otus.py</a> script on all fasta sequence files in a single script since OTUs are assigned by a clustering algorithm.  Additional parameters for this script are set using <em>exe.classifierParams</em>.  If <em>qiime.removeChimeras</em> = "Y", vsearch is used to find chimeric sequences in the output and the QIIME script <a href="http://qiime.org/scripts/filter_otus_from_otu_table.html">filter_otus_from_otu_table.py</a> is run to remove them from ./output/otu_table.biom.  Inherits from <a href="/module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>.</p>
+<p><strong>Description:</strong>  This module runs the QIIME <a href="http://qiime.org/scripts/pick_de_novo_otus.html">pick_de_novo_otus.py</a> script on all fasta sequence files in a single script since OTUs are assigned by a clustering algorithm.  Additional parameters for this script are set using <em>exe.classifierParams</em>.  If <em>qiime.removeChimeras</em> = "Y", vsearch is used to find chimeric sequences in the output and the QIIME script <a href="http://qiime.org/scripts/filter_otus_from_otu_table.html">filter_otus_from_otu_table.py</a> is run to remove them from ./output/otu_table.biom.  Inherits from <a href="../../../module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>.</p>
 <p><strong>Options:</strong></p>
 <ul>
 <li><em>exe.vsearch</em> </li>
@@ -174,7 +174,7 @@
 <hr />
 <h4 id="qiimeopenrefclassifier">QiimeOpenRefClassifier</h4>
 <p><code>#BioModule biolockj.module.classifier.r16s.QiimeOpenRefClassifier</code></p>
-<p><strong>Description:</strong>  This module runs the QIIME <a href="http://qiime.org/scripts/pick_open_reference_otus.html">pick_open_reference_otus.py</a> script on all fasta sequence files in a single script since clusters not identified in the reference database are assigned by a clustering algorithm.  Additional parameters for this script are set using <em>exe.classifierParams</em>.  If <em>qiime.removeChimeras</em> = "Y", vsearch is used to find chimeric sequences in the output and the QIIME script <a href="http://qiime.org/scripts/filter_otus_from_otu_table.html">filter_otus_from_otu_table.py</a> is run to remove them from ./output/otu_table.biom.  Inherits from <a href="/module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>.</p>
+<p><strong>Description:</strong>  This module runs the QIIME <a href="http://qiime.org/scripts/pick_open_reference_otus.html">pick_open_reference_otus.py</a> script on all fasta sequence files in a single script since clusters not identified in the reference database are assigned by a clustering algorithm.  Additional parameters for this script are set using <em>exe.classifierParams</em>.  If <em>qiime.removeChimeras</em> = "Y", vsearch is used to find chimeric sequences in the output and the QIIME script <a href="http://qiime.org/scripts/filter_otus_from_otu_table.html">filter_otus_from_otu_table.py</a> is run to remove them from ./output/otu_table.biom.  Inherits from <a href="../../../module.implicit.qiime#QiimeClassifier">QiimeClassifier</a>.</p>
 <p><strong>Options:</strong></p>
 <ul>
 <li><em>exe.vsearch</em> </li>
@@ -193,7 +193,7 @@
 <li><em>rdp.minThresholdScore</em></li>
 </ul>
 <hr />
-<p>See also: <a href="/Example-Pipeline-Qiime">Typical QIIME Pipeline</a></p>
+<p>See also: <a href="../../../Example-Pipeline-Qiime">Typical QIIME Pipeline</a></p>
               
             </div>
           </div>

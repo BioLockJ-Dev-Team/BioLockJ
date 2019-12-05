@@ -364,7 +364,7 @@
 </tr>
 <tr>
 <td align="left">getClassifierExe()</td>
-<td align="left">Return [[Configuration]] property <em>exe.classifier</em> to call the classifier program in the bash scripts.  If the classifier is not included in <em>cluster.modules</em>, validate that value is a valid file path.  If <em>exe.classifier</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name (less the standard module suffix <em>classifier</em>).  For example, use <em>rdp.classifier</em> for <a href="../module/classifier/module.classifier.r16s#RdpClassifier">RdpClassifier</a> and <em>kraken.classifier</em> for <a href="../module/classifier/module.classifier.wgs#KrakenClassifier">KrakenClassifier</a>.  This allows users to define all classifier programs in a default [[Configuration]] file rather than setting <em>exe.clssifier</em> in each project [[Configuration]] file.</td>
+<td align="left">Return [[Configuration]] property <em>exe.classifier</em> to call the classifier program in the bash scripts.  If the classifier is not included in <em>cluster.modules</em>, validate that value is a valid file path.  If <em>exe.classifier</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name (less the standard module suffix <em>classifier</em>).  For example, use <em>rdp.classifier</em> for <a href="../module/classifier/module.classifier.r16s">RdpClassifier</a> and <em>kraken.classifier</em> for <a href="../module/classifier/module.classifier.wgs#krakenclassifier">KrakenClassifier</a>.  This allows users to define all classifier programs in a default [[Configuration]] file rather than setting <em>exe.clssifier</em> in each project [[Configuration]] file.</td>
 </tr>
 <tr>
 <td align="left">getClassifierParams()</td>
@@ -376,7 +376,7 @@
 </tr>
 <tr>
 <td align="left">logVersion()</td>
-<td align="left">Run <em>exe.classifier</em> --version to log version info.  <a href="../module/classifier/module.classifier.r16s#RdpClassifier">RDP</a> overrides this method to return null since the version switch is not supported.</td>
+<td align="left">Run <em>exe.classifier</em> --version to log version info.  <a href="../module/classifier/module.classifier.r16s#rdpclassifier">RDP</a> overrides this method to return null since the version switch is not supported.</td>
 </tr>
 </tbody>
 </table>
