@@ -9,7 +9,7 @@ Put the folder to wherever you like to keep executables.
 If you choose to download the source code, you will need to compile it by running `ant` from the resources folder. 
 
 #### 2. Run the install script 
-* The **[install](https://github.com/msioda/BioLockJ/blob/master/install?raw=true)** script updates the $USER bash profile to call **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**.  See **[Commands](/Commands)** for a full description of **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**
+* The **[install](https://github.com/msioda/BioLockJ/blob/master/install?raw=true)** script updates the $USER bash profile to call **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**.  See **[Commands](../Commands)** for a full description of **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**
 
 ```
 ./install
@@ -21,7 +21,7 @@ If you choose to download the source code, you will need to compile it by runnin
 This will add the required variables to your path when you start your next session.<br>
 To use BioLockJ in the same session, run `source ~/.bash_profile`.
 
-#### 3. Install the software [Dependencies](/Dependencies) required by the modules you wish to include in your pipeline.
+#### 3. Install the software [Dependencies](../Dependencies) required by the modules you wish to include in your pipeline.
 
 ## Notes
 

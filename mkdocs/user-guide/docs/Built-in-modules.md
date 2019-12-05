@@ -6,7 +6,7 @@ To use modules created by a third-party, add the compiled files (jar file) to yo
 
 To create your own modules, see [Building-Modules](Building-Modules).
 
-In all cases, add modules to your [BioModule order section](Configuration#biomodule-execution-order) to include them in your pipeline.
+In all cases, add modules to your [BioModule order section](../Configuration#biomodule-execution-order) to include them in your pipeline.
 
 ## Built-in BioModules:
 

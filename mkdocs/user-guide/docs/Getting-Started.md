@@ -1,6 +1,5 @@
 
 ### 1. Complete Program [Installation](../Installation)
-relative path
 
 ### 2. Configure Program Input
 * See [Configuration](../Configuration)
@@ -49,5 +48,5 @@ qstat -u $USER                                                                  
 
 ### 5. Investigate Failed Pipelines
 * Failed pipelines can be restarted to save the progress made by successful modules.
-* See [Failure Recovery](Failure-Recovery) for more information.
+* See [Failure Recovery](../Failure-Recovery) for more information.
 * Failure Recovery should be avoided until you have successfully completed your 1st pipeline.  

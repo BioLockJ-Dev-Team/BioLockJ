@@ -45,7 +45,7 @@ BioLockJ automatically trims extensions ".fasta" and ".fastq" as if configured i
 ---
 ### Q: How do I configure my pipeline for multiplexed data?
 ---
-**A:** BioLockJ automatically adds the [Demultiplexer](module/implicit/module.implicit#demultiplexer) as the 2nd module - after [ImportMetadata](module/implicit/module.implicit#importmetadata) - when processing multiplexed data.  The [Demultiplexer](module/implicit/module.implicit#demultiplexer) requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.
+**A:** BioLockJ automatically adds the [Demultiplexer](../module/implicit/module.implicit#demultiplexer) as the 2nd module - after [ImportMetadata](../module/implicit/module.implicit#importmetadata) - when processing multiplexed data.  The [Demultiplexer](../module/implicit/module.implicit#demultiplexer) requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.
 
 #### If samples are not identified by sample ID in the sequence headers:
 1. Set *demux.strategy*=id_in_header
