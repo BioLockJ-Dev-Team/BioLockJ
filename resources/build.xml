@@ -87,7 +87,6 @@
 	<target name="userguide" depends="javadoc">
 		<exec executable="mkdocs" dir="mkdocs/user-guide">
 			<arg value="build"/>
-			<arg value="--strict"/>
 			<arg value="--site-dir"/>
 			<arg value="../../docs"/>
 		</exec>
