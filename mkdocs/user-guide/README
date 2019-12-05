@@ -6,7 +6,30 @@ You may need to set up the following software:
 # mkdocs 
 # See https://www.mkdocs.org/#installation
 pip install mkdocs
-# 
+
+
+# To render the docs, 
+cd $BLJ/mkdocs/user-guide
+mkdocs build
+
+# Make sure it all looks good before publishing to github.
+# The site is published to $BLJ/mkdocs/user-guid/site, which is ignored by git.
+# When editing, use `mkdocs serve` to preview the rendered html.
+# The serve command must be called from the directory that has the mkdocs.yml file.
+mkdocs serve
+# then open http://127.0.0.1:8000 in your browser.
+
+# To render the docs to publish a release, 
+cd $BLJ/resources
+ant userguide
+
+
+####################
+
+
+That should be enough.  EVENTUALLY we may want to export a pdf, and for that we would need an extra pluggin.
+
+
 # mkdocs-pdf-export-plugin (pluggin to export pdfs)
 # See https://github.com/zhaoterryy/mkdocs-pdf-export-plugin 
 pip install mkdocs-pdf-export-plugin
@@ -29,14 +52,8 @@ cd $BLJ/mkdocs/user-guide
 export ENABLE_PDF_EXPORT=1 # change this variable to 0 to skip making the pdf
 mkdocs build
 
-# Make sure it all looks good before publishing to github.
-# The site is published to $BLJ/mkdocs/user-guid/site, which is ignored by git.
-# While editing, use `mkdocs serve` to preview the rendered html.
-# The serve command must be called from the directory that has the mkdocs.yml file.
 
-# For a release, move the contents of site to the docs folder
-mv $BLJ/mkdocs/user-guide/site/* $BLJ/docs/.
-# this location is under git control; pushing this will update what is seen through github Pages.
+
 
 An odd thing that I haven't figured out....
 In Building-Modules.md, line 79, the text "addParsedSample(sample)" had to be changed to "addParsedSample( sample )"
