@@ -44,7 +44,7 @@ Modules from the **[biolockj.module.seq](https://msioda.github.io/BioLockJ/docs/
 #### Multiplexer
 `#BioModule biolockj.module.seq.Multiplexer`
 
-**Description:**  Multiplex samples into a single file, or two files (one with forward reads, one with reverse reads) if multiplexing paired reads.<br>  BioLockJ modules require demultiplexed data, so if included, this must be the last module in the pipeline other than [[module.report]] modules.  
+**Description:**  Multiplex samples into a single file, or two files (one with forward reads, one with reverse reads) if multiplexing paired reads.<br>  BioLockJ modules require demultiplexed data, so if included, this must be the last module in the pipeline other than module.report modules.  
 
 **Options:**
 

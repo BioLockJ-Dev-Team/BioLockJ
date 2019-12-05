@@ -4,10 +4,10 @@ Modules in the biolockj.module.report package process [ParserModule](https://msi
 
 This package contains the following sub-packages:
 
-  * [[module.report.otu]] contains modules designed to produce or process otu tables.
-  * [[module.report.taxa]] contains modules designed to produce or process taxa tables.
-  * [[module.report.r]] contains modules that use R to generate statistics and/or visualizations.
-  * [[module.report.humann2]] contains modules designed to produce or process pathway tables.
+  * module.report.otu contains modules designed to produce or process otu tables.
+  * module.report.taxa contains modules designed to produce or process taxa tables.
+  * module.report.r contains modules that use R to generate statistics and/or visualizations.
+  * module.report.humann2 contains modules designed to produce or process pathway tables.
 
 ---
 

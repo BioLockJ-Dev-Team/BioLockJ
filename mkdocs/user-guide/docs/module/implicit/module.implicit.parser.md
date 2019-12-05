@@ -2,8 +2,8 @@
 
 This package contains the following sub-packages:
 
-1. [[module.implicit.parser.r16s]] modules parse [[module.classifier.r16s]] reports.
-1. [[module.implicit.parser.wgs]] modules parse [[module.classifier.wgs]] reports.
+1. module.implicit.parser.r16s modules parse module.classifier.r16s reports.
+1. module.implicit.parser.wgs modules parse module.classifier.wgs reports.
 
 ----
 

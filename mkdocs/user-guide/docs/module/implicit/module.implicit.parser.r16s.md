@@ -1,4 +1,4 @@
-**biolockj.module.implicit.parser.r16s** is a sub package of [[module.implicit.parser]].<br>
+**biolockj.module.implicit.parser.r16s** is a sub package of module.implicit.parser.<br>
 
 Package modules extend [ParserModuleImpl](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html) to  generate OTU tables from 16S classifier output.
 

@@ -1,4 +1,4 @@
-**biolockj.module.classifier.r16s** is a sub-package of [[module.classifier]].<br><br>Package modules extend [ClassifierModuleImpl](https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModuleImpl.html) to cluster and classify 16S micbrobial samples for taxonomy assignment.
+**biolockj.module.classifier.r16s** is a sub-package of module.classifier.<br><br>Package modules extend [ClassifierModuleImpl](https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModuleImpl.html) to cluster and classify 16S micbrobial samples for taxonomy assignment.
 
 ----
 

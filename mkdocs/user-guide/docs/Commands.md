@@ -2,7 +2,7 @@
 
 | Command | Description |
 | :-- | :-- |
-| **[biolockj](https://github.com/msioda/BioLockJ/blob/master/script/biolockj?raw=true)** [config_path] | Start a pipeline using the [[Configuration]] properties in [config_path].<br>Pipeline output directory is created under [$BLJ_PROJ](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true). |
+| **[biolockj](https://github.com/msioda/BioLockJ/blob/master/script/biolockj?raw=true)** [config_path] | Start a pipeline using the Configuration properties in [config_path].<br>Pipeline output directory is created under [$BLJ_PROJ](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true). |
 | **[blj_go](https://github.com/msioda/BioLockJ/blob/master/script/blj_go?raw=true)** | Go to most recent [$BLJ_PROJ](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true) pipeline & list contents. |
 | **[blj_log](https://github.com/msioda/BioLockJ/blob/master/script/blj_log?raw=true)** | Tail last 1K lines from current or most recent [$BLJ_PROJ](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true) pipeline log file. |
 | **[blj_summary](https://github.com/msioda/BioLockJ/blob/master/script/blj_summary?raw=true)** | Print current or most recent [$BLJ_PROJ](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true) pipeline summary. |

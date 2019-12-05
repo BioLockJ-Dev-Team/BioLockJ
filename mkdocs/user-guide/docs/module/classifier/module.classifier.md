@@ -2,8 +2,8 @@
 
 Modules in the **[biolockj.module.classifier](https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/package-summary.html)** package categorize micbrobial samples into Operational Taxonomic Units (OTUs) either by reference or with clustering algorithms. <br><br>  This package contains 2 sub-packages:<br>
 
-1. [[module.classifier.r16s]] contains modules designed to classify 16S data.
-1. [[module.classifier.wgs]] contains modules designed to classify whole genome sequence data.
+1. module.classifier.r16s contains modules designed to classify 16S data.
+1. module.classifier.wgs contains modules designed to classify whole genome sequence data.
 
 Modules in these sub-packages extend the ClassifierModuleImpl class.
 

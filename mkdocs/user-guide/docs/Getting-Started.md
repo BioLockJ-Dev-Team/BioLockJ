@@ -13,7 +13,7 @@ biolockj $CONFIG_PATH
 
 * Verify biolockj command output is accurate:
    - BioLockJ JAR file path is valid 
-   - BioLockJ [[Configuration]] file path is valid
+   - BioLockJ Configuration file path is valid
    - Verify message "BioLockJ started successfully!" is printed.
 
 

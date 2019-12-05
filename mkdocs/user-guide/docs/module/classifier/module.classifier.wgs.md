@@ -1,6 +1,6 @@
 # Whole Genome Sequence Classifiers
 
-**biolockj.module.classifier.wgs** is a sub-package of [[module.classifier]].<br><br>Package modules categorize whole genome sequence micbrobial samples into Operational Taxonomic Units (OTUs) either by reference or with clustering algorithms.<br>
+**biolockj.module.classifier.wgs** is a sub-package of module.classifier.<br><br>Package modules categorize whole genome sequence micbrobial samples into Operational Taxonomic Units (OTUs) either by reference or with clustering algorithms.<br>
 
 ----
 

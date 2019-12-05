@@ -1,9 +1,9 @@
 **biolockj.module.implicit** modules are added to BioLockJ pipelines automatically if needed.<br>Implicit modules are ignored if included in the Config file unless *project.allowImplicitModules=Y*<br><br>  This package contains the following sub-packages:
 
-1. [[module.implicit.parser]] contains [ParserModule](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html) interface & [ParserModuleImpl](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html) superclass.
-1. [[module.implicit.parser.r16s]] contains 16S parser modules.
-1. [[module.implicit.parser.wgs]] contains WGS parser modules.
-1. [[module.implicit.qiime]] contains QIIME Script wrappers.
+1. module.implicit.parser contains [ParserModule](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html) interface & [ParserModuleImpl](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html) superclass.
+1. module.implicit.parser.r16s contains 16S parser modules.
+1. module.implicit.parser.wgs contains WGS parser modules.
+1. module.implicit.qiime contains QIIME Script wrappers.
 
 ----
 

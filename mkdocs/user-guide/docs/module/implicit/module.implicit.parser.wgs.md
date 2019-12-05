@@ -1,4 +1,4 @@
-**biolockj.module.implicit.parser.wgs** is a sub package of [[module.implicit.parser]].<br><br>Package modules extend [ParserModuleImpl](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html) to  generate OTU tables from WGS classifier output.<br>Implicit modules are ignored if included in the Config file unless *project.allowImplicitModules*=Y.<br>
+**biolockj.module.implicit.parser.wgs** is a sub package of module.implicit.parser.<br><br>Package modules extend [ParserModuleImpl](https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html) to  generate OTU tables from WGS classifier output.<br>Implicit modules are ignored if included in the Config file unless *project.allowImplicitModules*=Y.<br>
 
 ----
 
