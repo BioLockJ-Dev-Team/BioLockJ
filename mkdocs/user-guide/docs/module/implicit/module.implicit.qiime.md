@@ -31,7 +31,7 @@
 #### MergeQiimeOtuTables
 `(added by BioLockJ) #BioModule biolockj.module.implicit.qiime.MergeQiimeOtuTables`
 
-**Description:**  This module runs the QIIME script [merge_otu_tables.py](http://qiime.org/scripts/merge_otu_tables.html) to combine the multiple otu_table.biom files output by its required prerequisite module [QiimeClosedRefClassifier](/module/classifier/module.classifier.r16s#qiimeclosedrefclassifier), so is only necessary if #samples > *script.batchSize*.  
+**Description:**  This module runs the QIIME script [merge_otu_tables.py](http://qiime.org/scripts/merge_otu_tables.html) to combine the multiple otu_table.biom files output by its required prerequisite module [QiimeClosedRefClassifier](../../../module/classifier/module.classifier.r16s#qiimeclosedrefclassifier), so is only necessary if #samples > *script.batchSize*.  
 
 **Options:**
 
