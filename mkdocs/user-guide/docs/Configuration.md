@@ -45,7 +45,7 @@ To include a BioModule in your pipeline, add a `#BioModule` line to the top your
 #BioModule biolockj.module.report.r.R_PlotMds
 ```
 
-BioModules will be executed in the order they are listed in here.  A typical pipeline contians one [classifier module](module.classifier).  Any number of [sequence pre-processing](module.seq) modules may come before the classifier module. Any number of [report modules](module.report) may come after the classifier module.  In addition to the BioModules specified in the configuration file, BioLockJ may add [implicit modules](module.implicit) that the are required by specified modules.  See [Example Pipeline](Example-Pipeline).
+BioModules will be executed in the order they are listed in here.  A typical pipeline contians one [classifier module](/module/classifier/module.classifier).  Any number of [sequence pre-processing](/module/seq/module.seq) modules may come before the classifier module. Any number of [report modules](/module/report/module.report) may come after the classifier module.  In addition to the BioModules specified in the configuration file, BioLockJ may add [implicit modules](/module/implicit/module.implicit) that the are required by specified modules.  See [Example Pipeline](Example-Pipeline).
 
 ## Summary of Properties
 
