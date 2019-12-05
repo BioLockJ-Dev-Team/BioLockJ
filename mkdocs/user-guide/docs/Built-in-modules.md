@@ -1,10 +1,10 @@
-# Built-in BioModules
+# BioModules
 Some modules are packaged with BioLockJ (see below).
 
 To use modules created by a third-party, add the compiled files (jar file) to your biolockj extentions folder.  When you call `biolockj`, use the `--external-modules` arg to pass in the location of the extra modules:                  
 `biolockj --external-modules </path/to/extentions/folder> <config.properties>`
 
-To create your own modules, see [Building-Modules](Building-Modules).
+To create your own modules, see [Building-Modules](../Building-Modules).
 
 In all cases, add modules to your [BioModule order section](../Configuration#biomodule-execution-order) to include them in your pipeline.
 
