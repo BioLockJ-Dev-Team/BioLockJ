@@ -19,7 +19,7 @@
     // Current page data
     var mkdocs_page_name = "FAQ";
     var mkdocs_page_input_path = "FAQ.md";
-    var mkdocs_page_url = null;
+    var mkdocs_page_url = "/BioLockJ/FAQ/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
@@ -213,7 +213,7 @@
 <hr />
 <h3 id="q-how-do-i-configure-my-pipeline-for-multiplexed-data">Q: How do I configure my pipeline for multiplexed data?</h3>
 <hr />
-<p><strong>A:</strong> BioLockJ automatically adds the <a href="/module/implicit/module.implicit#demultiplexer">Demultiplexer</a> as the 2nd module - after <a href="/module/implicit/module.implicit#importmetadata">ImportMetadata</a> - when processing multiplexed data.  The <a href="/module/implicit/module.implicit#demultiplexer">Demultiplexer</a> requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.</p>
+<p><strong>A:</strong> BioLockJ automatically adds the <a href="module/implicit/module.implicit#demultiplexer">Demultiplexer</a> as the 2nd module - after <a href="module/implicit/module.implicit#importmetadata">ImportMetadata</a> - when processing multiplexed data.  The <a href="module/implicit/module.implicit#demultiplexer">Demultiplexer</a> requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.</p>
 <h4 id="if-samples-are-not-identified-by-sample-id-in-the-sequence-headers">If samples are not identified by sample ID in the sequence headers:</h4>
 <ol>
 <li>Set <em>demux.strategy</em>=id_in_header</li>

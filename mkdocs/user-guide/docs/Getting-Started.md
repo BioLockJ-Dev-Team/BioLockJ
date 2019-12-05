@@ -1,8 +1,9 @@
 
-### 1. Complete Program [Installation](Installation)
+### 1. Complete Program [Installation](../Installation)
+relative path
 
 ### 2. Configure Program Input
-* See [Configuration](Configuration)
+* See [Configuration](../Configuration)
 
 ### 3. Start Your 1st Pipeline
 * To start your pipeline, pass your configuration file path $CONFIG_PATH to the [biolockj](https://github.com/msioda/BioLockJ/blob/master/script/biolockj?raw=true) command: 
