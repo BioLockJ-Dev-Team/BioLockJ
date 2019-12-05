@@ -1,9 +1,11 @@
 biolockj
 biolockj.exception
 biolockj.module
+biolockj.module.assembly
 biolockj.module.classifier
 biolockj.module.classifier.r16s
 biolockj.module.classifier.wgs
+biolockj.module.diy
 biolockj.module.implicit
 biolockj.module.implicit.parser
 biolockj.module.implicit.parser.r16s
