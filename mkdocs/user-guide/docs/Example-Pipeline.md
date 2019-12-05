@@ -14,10 +14,10 @@ In addition to the 5 listed BioModules, 4  additional implicit BioModules will a
 
 | Mod# | Module | Description |
 | :-- | :-- | :-- |
-| 1 | [ImportMetadata](/module/implicit/module.implicit#importmetadata) | Always run 1st (for all pipelines) |
-| 2 | [KrakenParser](/module/implicit/module.implicit.parser.wgs#krakenparser) | Always run after [KrakenClassifier](/module/implicit/module.classifier.wgs#krakenclassifier) |
-| 3 | [AddMetadataToOtuTables](/module/report/module.report.taxa#addmetadatatootutables) | Always run just before the 1st R module |  
-| 4 | [CalculateStats](/module/report/module.report.r#t_calculatestats) | Always run as the 1st R module. |  
+| 1 | [ImportMetadata](module/implicit/module.implicit#importmetadata) | Always run 1st (for all pipelines) |
+| 2 | [KrakenParser](module/implicit/module.implicit.parser.wgs#krakenparser) | Always run after [KrakenClassifier](module/implicit/module.classifier.wgs#krakenclassifier) |
+| 3 | [AddMetadataToOtuTables](module/report/module.report.taxa#addmetadatatootutables) | Always run just before the 1st R module |  
+| 4 | [CalculateStats](module/report/module.report.r#t_calculatestats) | Always run as the 1st R module. |  
 
 Key properties:<br>
 
