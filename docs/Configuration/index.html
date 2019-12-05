@@ -19,7 +19,7 @@
     // Current page data
     var mkdocs_page_name = "Configuration";
     var mkdocs_page_input_path = "Configuration.md";
-    var mkdocs_page_url = "/BioLockJ/Configuration/";
+    var mkdocs_page_url = null;
   </script>
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
@@ -276,7 +276,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 #BioModule biolockj.module.report.r.R_PlotMds
 </code></pre>
 
-<p>BioModules will be executed in the order they are listed in here.  A typical pipeline contians one <a href="module/classifier/module.classifier">classifier module</a>.  Any number of <a href="module/seq/module.seq">sequence pre-processing</a> modules may come before the classifier module. Any number of <a href="module/report/module.report">report modules</a> may come after the classifier module.  In addition to the BioModules specified in the configuration file, BioLockJ may add <a href="module/implicit/module.implicit">implicit modules</a> that the are required by specified modules.  See <a href="Example-Pipeline">Example Pipeline</a>.</p>
+<p>BioModules will be executed in the order they are listed in here.  A typical pipeline contians one <a href="../module/classifier/module.classifier">classifier module</a>.  Any number of <a href="../module/seq/module.seq">sequence pre-processing</a> modules may come before the classifier module. Any number of <a href="../module/report/module.report">report modules</a> may come after the classifier module.  In addition to the BioModules specified in the configuration file, BioLockJ may add <a href="../module/implicit/module.implicit">implicit modules</a> that the are required by specified modules.  See <a href="Example-Pipeline">Example Pipeline</a>.</p>
 <h2 id="summary-of-properties">Summary of Properties</h2>
 <p>Properties are defined as name-value pairs. List-values are comma separated. Leading and trailing whitespace is removed so "propName=x,y" is equivalent to "propName = x, y".</p>
 <h4 id="aws">aws</h4>
@@ -345,7 +345,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="demultiplexer"><a href="module/implicit/module.implicit#demultiplexer">demultiplexer</a></h4>
+<h4 id="demultiplexer"><a href="../module/implicit/module.implicit#demultiplexer">demultiplexer</a></h4>
 <table>
 <thead>
 <tr>
@@ -494,7 +494,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="genmod"><a href="module/diy/module.DIY#genmod">GenMod</a></h4>
+<h4 id="genmod"><a href="../module/diy/module.DIY#genmod">GenMod</a></h4>
 <table>
 <thead>
 <tr>
@@ -517,7 +517,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="humann2"><a href="module/classifier/module.classifier.wgs#humann2classifier">humann2</a></h4>
+<h4 id="humann2"><a href="../module/classifier/module.classifier.wgs#humann2classifier">humann2</a></h4>
 <table>
 <thead>
 <tr>
@@ -595,7 +595,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="kneaddata"><a href="module/seq/module.seq#kneaddata">kneaddata</a></h4>
+<h4 id="kneaddata"><a href="../module/seq/module.seq#kneaddata">kneaddata</a></h4>
 <table>
 <thead>
 <tr>
@@ -610,7 +610,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="kraken"><a href="module/classifier/module.classifier.wgs#krakenclassifier">kraken</a></h4>
+<h4 id="kraken"><a href="../module/classifier/module.classifier.wgs#krakenclassifier">kraken</a></h4>
 <table>
 <thead>
 <tr>
@@ -625,7 +625,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="kraken2"><a href="module/classifier/module.classifier.wgs#kraken2classifier">kraken2</a></h4>
+<h4 id="kraken2"><a href="../module/classifier/module.classifier.wgs#kraken2classifier">kraken2</a></h4>
 <table>
 <thead>
 <tr>
@@ -640,7 +640,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="mail"><a href="module/report/module.report#email">mail</a></h4>
+<h4 id="mail"><a href="../module/report/module.report#email">mail</a></h4>
 <table>
 <thead>
 <tr>
@@ -722,7 +722,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="metaphlan2"><a href="module/classifier/module.classifier.wgs#metaphlan2classifier">metaphlan2</a></h4>
+<h4 id="metaphlan2"><a href="../module/classifier/module.classifier.wgs#metaphlan2classifier">metaphlan2</a></h4>
 <table>
 <thead>
 <tr>
@@ -741,7 +741,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="multiplexer"><a href="module/seq/module.seq#multiplexer">multiplexer</a></h4>
+<h4 id="multiplexer"><a href="../module/seq/module.seq#multiplexer">multiplexer</a></h4>
 <table>
 <thead>
 <tr>
@@ -771,15 +771,15 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 <tr>
 <td align="left"><em>pipeline.defaultDemultiplexer</em></td>
-<td align="left">Assign module to demultiplex datasets.  Default = <a href="module.implicit#Demultiplexer">Demultiplexer</a></td>
+<td align="left">Assign module to demultiplex datasets.  Default = <a href="../module.implicit#Demultiplexer">Demultiplexer</a></td>
 </tr>
 <tr>
 <td align="left"><em>pipeline.defaultFastaConverter</em></td>
-<td align="left">Assign module to convert fastq sequence files into fasta format when required.  Default = <a href="module.seq#AwkFastaConverter">AwkFastaConverter</a></td>
+<td align="left">Assign module to convert fastq sequence files into fasta format when required.  Default = <a href="../module.seq#AwkFastaConverter">AwkFastaConverter</a></td>
 </tr>
 <tr>
 <td align="left"><em>pipeline.defaultSeqMerger</em></td>
-<td align="left">Assign module to merge paired reads when required.  Default = <a href="module.seq#PearMergeReads">PearMergeReads</a></td>
+<td align="left">Assign module to merge paired reads when required.  Default = <a href="../module.seq#PearMergeReads">PearMergeReads</a></td>
 </tr>
 <tr>
 <td align="left"><em>pipeline.defaultStatsModule</em></td>
@@ -827,7 +827,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="qiime"><a href="module/classifier/module.classifier.r16s">qiime</a></h4>
+<h4 id="qiime"><a href="../module/classifier/module.classifier.r16s">qiime</a></h4>
 <table>
 <thead>
 <tr>
@@ -862,7 +862,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="r"><a href="module/report/module.report.r">r</a></h4>
+<h4 id="r"><a href="../module/report/module.report.r">r</a></h4>
 <table>
 <thead>
 <tr>
@@ -933,7 +933,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="r_calculatestats"><a href="module/report/module.report.r#r_calculatestats">r_CalculateStats</a></h4>
+<h4 id="r_calculatestats"><a href="../module/report/module.report.r#r_calculatestats">r_CalculateStats</a></h4>
 <table>
 <thead>
 <tr>
@@ -952,7 +952,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="r_ploteffectsize"><a href="module/report/module.report.r#r_ploteffectsize">r_PlotEffectSize</a></h4>
+<h4 id="r_ploteffectsize"><a href="../module/report/module.report.r#r_ploteffectsize">r_PlotEffectSize</a></h4>
 <table>
 <thead>
 <tr>
@@ -995,7 +995,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="r_plotmds"><a href="module/report/module.report.r#r_plotmds">r_PlotMds</a></h4>
+<h4 id="r_plotmds"><a href="../module/report/module.report.r#r_plotmds">r_PlotMds</a></h4>
 <table>
 <thead>
 <tr>
@@ -1018,7 +1018,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="rarefyotucounts"><a href="module/report/module.report.otu#rarefyotucounts">rarefyOtuCounts</a></h4>
+<h4 id="rarefyotucounts"><a href="../module/report/module.report.otu#rarefyotucounts">rarefyOtuCounts</a></h4>
 <table>
 <thead>
 <tr>
@@ -1045,7 +1045,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="rarefyseqs"><a href="module/seq/module.seq#rarefyseqs">rarefySeqs</a></h4>
+<h4 id="rarefyseqs"><a href="../module/seq/module.seq#rarefyseqs">rarefySeqs</a></h4>
 <table>
 <thead>
 <tr>
@@ -1064,7 +1064,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="rdp"><a href="module/classifier/module.classifier.r16s#rdpclassifier">rdp</a></h4>
+<h4 id="rdp"><a href="../module/classifier/module.classifier.r16s#rdpclassifier">rdp</a></h4>
 <table>
 <thead>
 <tr>
@@ -1157,7 +1157,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="seqfilevalidator"><a href="module/seq/module.seq#seqfilevalidator">seqFileValidator</a></h4>
+<h4 id="seqfilevalidator"><a href="../module/seq/module.seq#seqfilevalidator">seqFileValidator</a></h4>
 <table>
 <thead>
 <tr>
@@ -1180,7 +1180,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 </tbody>
 </table>
-<h4 id="trimprimers"><a href="module/seq/module.seq#trimprimers">trimPrimers</a></h4>
+<h4 id="trimprimers"><a href="../module/seq/module.seq#trimprimers">trimPrimers</a></h4>
 <table>
 <thead>
 <tr>
@@ -1195,11 +1195,11 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 <tr>
 <td align="left"><em>trimPrimers.requirePrimer</em></td>
-<td align="left">Options: Y/N. If Y, <a href="module.seq#TrimPrimers">TrimPrimers</a> will discard reads that do not include a primer sequence.</td>
+<td align="left">Options: Y/N. If Y, <a href="../module.seq#TrimPrimers">TrimPrimers</a> will discard reads that do not include a primer sequence.</td>
 </tr>
 </tbody>
 </table>
-<h4 id="validation"><a href="Validation">validation</a></h4>
+<h4 id="validation"><a href="../Validation">validation</a></h4>
 <table>
 <thead>
 <tr>

@@ -19,7 +19,7 @@
     // Current page data
     var mkdocs_page_name = "Example Pipeline";
     var mkdocs_page_input_path = "Example-Pipeline.md";
-    var mkdocs_page_url = "/BioLockJ/Example-Pipeline/";
+    var mkdocs_page_url = null;
   </script>
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
@@ -195,22 +195,22 @@ https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-017-0338-7</
 <tbody>
 <tr>
 <td align="left">1</td>
-<td align="left"><a href="module/implicit/module.implicit#importmetadata">ImportMetadata</a></td>
+<td align="left"><a href="../module/implicit/module.implicit#importmetadata">ImportMetadata</a></td>
 <td align="left">Always run 1st (for all pipelines)</td>
 </tr>
 <tr>
 <td align="left">2</td>
-<td align="left"><a href="module/implicit/module.implicit.parser.wgs#krakenparser">KrakenParser</a></td>
-<td align="left">Always run after <a href="module/implicit/module.classifier.wgs#krakenclassifier">KrakenClassifier</a></td>
+<td align="left"><a href="../module/implicit/module.implicit.parser.wgs#krakenparser">KrakenParser</a></td>
+<td align="left">Always run after <a href="../module/implicit/module.classifier.wgs#krakenclassifier">KrakenClassifier</a></td>
 </tr>
 <tr>
 <td align="left">3</td>
-<td align="left"><a href="module/report/module.report.taxa#addmetadatatootutables">AddMetadataToOtuTables</a></td>
+<td align="left"><a href="../module/report/module.report.taxa#addmetadatatootutables">AddMetadataToOtuTables</a></td>
 <td align="left">Always run just before the 1st R module</td>
 </tr>
 <tr>
 <td align="left">4</td>
-<td align="left"><a href="module/report/module.report.r#t_calculatestats">CalculateStats</a></td>
+<td align="left"><a href="../module/report/module.report.r#t_calculatestats">CalculateStats</a></td>
 <td align="left">Always run as the 1st R module.</td>
 </tr>
 </tbody>
