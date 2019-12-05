@@ -8,6 +8,7 @@ version: 2
 # Build documentation with MkDocs
 mkdocs:
   configuration: mkdocs/user-guide/mkdocs.yml
+  docs_dir: mkdocs/user-guide/docs
 
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
