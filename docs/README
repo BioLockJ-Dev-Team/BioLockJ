@@ -1,5 +1,0 @@
-main.html
-- Overrides a content block so as NOT to produce the "Edit this page" button.
-
-assets/images/favicon.png
-- Supplies the BioLockJ icon shown in the web-browser tab.
