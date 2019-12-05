@@ -13,6 +13,7 @@ plugins:
 #        combined_output_path: BioLockJ_User_Guide.pdf
 theme:
   name: 'readthedocs'
+#  name: 'material'
 #  custom_dir: 'customize_material_theme'
 nav:
     - Home: index.md
@@ -30,21 +31,21 @@ nav:
         - Building Modules: Building-Modules.md
     - Example Pipeline: Example-Pipeline.md
     - FAQ: FAQ.md
-    - more:
-        - module/classifier/module.classifier.md
-        - module/classifier/module.classifier.r16s.md
-        - module/classifier/module.classifier.wgs.md
-        - module/diy/module.diy.md
-        - module/implicit/module.implicit.md
-        - module/implicit/module.implicit.parser.md
-        - module/implicit/module.implicit.parser.r16s.md
-        - module/implicit/module.implicit.parser.wgs.md
-        - module/implicit/module.implicit.qiime.md
-        - module/report/module.report.humann2.md
-        - module/report/module.report.md
-        - module/report/module.report.otu.md
-        - module/report/module.report.r.md
-        - module/report/module.report.taxa.md
-        - module/seq/module.seq.md
+    # - more:
+    #     - module/classifier/module.classifier.md
+    #     - module/classifier/module.classifier.r16s.md
+    #     - module/classifier/module.classifier.wgs.md
+    #     - module/diy/module.diy.md
+    #     - module/implicit/module.implicit.md
+    #     - module/implicit/module.implicit.parser.md
+    #     - module/implicit/module.implicit.parser.r16s.md
+    #     - module/implicit/module.implicit.parser.wgs.md
+    #     - module/implicit/module.implicit.qiime.md
+    #     - module/report/module.report.humann2.md
+    #     - module/report/module.report.md
+    #     - module/report/module.report.otu.md
+    #     - module/report/module.report.r.md
+    #     - module/report/module.report.taxa.md
+    #     - module/seq/module.seq.md
 
     
