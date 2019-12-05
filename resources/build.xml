@@ -84,7 +84,7 @@
 		</javadoc>
 	</target>
 
-	<target name="userguide">
+	<target name="userguide" depends="javadoc">
 		<exec executable="mkdocs" dir="mkdocs/user-guide">
 			<arg value="build"/>
 			<arg value="--site-dir"/>
@@ -93,7 +93,7 @@
 		<move file="javadocs" tofile="docs/javadocs"/>
 	</target>
 	
-	<target name="deploy" depends="javadoc,userguide">
+	<target name="deploy" depends="userguide">
 		<delete>
 			<fileset dir="dist" includes="*.tgz"/>
 		</delete>
