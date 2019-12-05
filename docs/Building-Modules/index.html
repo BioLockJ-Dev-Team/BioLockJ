@@ -126,9 +126,9 @@
         
             <li><a class="toctree-l4" href="#javamoduleimpl-extends-scriptmoduleimpl-superclass-for-pure-java-modules">JavaModuleImpl extends ScriptModuleImpl: superclass for pure Java modules.</a></li>
         
-            <li><a class="toctree-l4" href="#classifiermoduleimpl-extends-scriptmoduleimpl-biolockjmoduleclassifier-superclass">ClassifierModuleImpl extends ScriptModuleImpl: biolockj.[[module.classifier]] superclass.</a></li>
+            <li><a class="toctree-l4" href="#classifiermoduleimpl-extends-scriptmoduleimpl-biolockjmoduleclassifier-superclass">ClassifierModuleImpl extends ScriptModuleImpl: biolockj.module.classifier superclass.</a></li>
         
-            <li><a class="toctree-l4" href="#parsermoduleimpl-extends-javamoduleimpl-biolockjmoduleimplicitparser-superclass">ParserModuleImpl extends JavaModuleImpl: biolockj.[[module.implicit.parser]] superclass.</a></li>
+            <li><a class="toctree-l4" href="#parsermoduleimpl-extends-javamoduleimpl-biolockjmoduleimplicitparser-superclass">ParserModuleImpl extends JavaModuleImpl: biolockj.module.implicit.parser superclass.</a></li>
         
             <li><a class="toctree-l4" href="#otunodeimpl-is-the-superclass-for-the-biolockjnode-package">OtuNodeImpl is the superclass for the biolockj.node package.</a></li>
         
@@ -218,7 +218,7 @@
 <tbody>
 <tr>
 <td align="left"><strong>checkDependencies()</strong></td>
-<td align="left"><strong>Must override.</strong>  Called before executeTask() to identify [[Configuration]] errors and perform runtime validations.</td>
+<td align="left"><strong>Must override.</strong>  Called before executeTask() to identify Configuration errors and perform runtime validations.</td>
 </tr>
 <tr>
 <td align="left"><strong>executeTask()</strong></td>
@@ -341,7 +341,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="classifiermoduleimpl-extends-scriptmoduleimpl-biolockjmoduleclassifier-superclass"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModuleImpl.html">ClassifierModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/ScriptModuleImpl.html">ScriptModuleImpl</a>: biolockj.[[module.classifier]] superclass.</h4>
+<h4 id="classifiermoduleimpl-extends-scriptmoduleimpl-biolockjmoduleclassifier-superclass"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModuleImpl.html">ClassifierModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/ScriptModuleImpl.html">ScriptModuleImpl</a>: biolockj.module.classifier superclass.</h4>
 <table>
 <thead>
 <tr>
@@ -356,19 +356,19 @@
 </tr>
 <tr>
 <td align="left">checkDependencies()</td>
-<td align="left">Validate [[Configuration]] properties <em>exe.classifier</em> and <em>exe.classifierParams</em>, verify sequence file format, log classifier version info, and verify no biolockj.[[module.seq]] modules are configured run after the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModule.html">ClassifierModule</a>. Subclasses should call super.checkDependencies() if overriding this method to retain these verifications.</td>
+<td align="left">Validate Configuration properties <em>exe.classifier</em> and <em>exe.classifierParams</em>, verify sequence file format, log classifier version info, and verify no biolockj.module.seq modules are configured run after the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/classifier/ClassifierModule.html">ClassifierModule</a>. Subclasses should call super.checkDependencies() if overriding this method to retain these verifications.</td>
 </tr>
 <tr>
 <td align="left">executeTask()</td>
-<td align="left">Call buildScript(files) or buildScriptForPairedReads(files) based input sequence format and calls <a href="https://msioda.github.io/BioLockJ/docs/biolockj/util/BashScriptBuilder.html">BashScriptBuilder</a> to generate the main script + 1 worker script for every <em>script.batchSize</em> samples.  To change the batch scheme, override this method to call the alternate <a href="https://msioda.github.io/BioLockJ/docs/biolockj/util/BashScriptBuilder.html">BashScriptBuilder</a>.buildScripts() method signiture and hard code the batch size.  All biolockj.[[module.classifier]] modules override this method.</td>
+<td align="left">Call buildScript(files) or buildScriptForPairedReads(files) based input sequence format and calls <a href="https://msioda.github.io/BioLockJ/docs/biolockj/util/BashScriptBuilder.html">BashScriptBuilder</a> to generate the main script + 1 worker script for every <em>script.batchSize</em> samples.  To change the batch scheme, override this method to call the alternate <a href="https://msioda.github.io/BioLockJ/docs/biolockj/util/BashScriptBuilder.html">BashScriptBuilder</a>.buildScripts() method signiture and hard code the batch size.  All biolockj.module.classifier modules override this method.</td>
 </tr>
 <tr>
 <td align="left">getClassifierExe()</td>
-<td align="left">Return [[Configuration]] property <em>exe.classifier</em> to call the classifier program in the bash scripts.  If the classifier is not included in <em>cluster.modules</em>, validate that value is a valid file path.  If <em>exe.classifier</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name (less the standard module suffix <em>classifier</em>).  For example, use <em>rdp.classifier</em> for <a href="../module/classifier/module.classifier.r16s#rdpclassifier">RdpClassifier</a> and <em>kraken.classifier</em> for <a href="../module/classifier/module.classifier.wgs#krakenclassifier">KrakenClassifier</a>.  This allows users to define all classifier programs in a default [[Configuration]] file rather than setting <em>exe.clssifier</em> in each project [[Configuration]] file.</td>
+<td align="left">Return Configuration property <em>exe.classifier</em> to call the classifier program in the bash scripts.  If the classifier is not included in <em>cluster.modules</em>, validate that value is a valid file path.  If <em>exe.classifier</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name (less the standard module suffix <em>classifier</em>).  For example, use <em>rdp.classifier</em> for <a href="../module/classifier/module.classifier.r16s#rdpclassifier">RdpClassifier</a> and <em>kraken.classifier</em> for <a href="../module/classifier/module.classifier.wgs#krakenclassifier">KrakenClassifier</a>.  This allows users to define all classifier programs in a default Configuration file rather than setting <em>exe.clssifier</em> in each project Configuration file.</td>
 </tr>
 <tr>
 <td align="left">getClassifierParams()</td>
-<td align="left">Return [[Configuration]] property <em>exe.classifierParams</em> which may contain a list of parameters (without hyphens) to pass to the classifier program in the bash scripts.  If <em>exe.classifierParams</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name as described for <em>exe.classifier</em>.</td>
+<td align="left">Return Configuration property <em>exe.classifierParams</em> which may contain a list of parameters (without hyphens) to pass to the classifier program in the bash scripts.  If <em>exe.classifierParams</em> is undefined, replace the property prefix <em>exe</em> with the lowercase prefix of the module class name as described for <em>exe.classifier</em>.</td>
 </tr>
 <tr>
 <td align="left">getSummary()</td>
@@ -380,7 +380,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="parsermoduleimpl-extends-javamoduleimpl-biolockjmoduleimplicitparser-superclass"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html">ParserModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModuleImpl.html">JavaModuleImpl</a>: biolockj.[[module.implicit.parser]] superclass.</h4>
+<h4 id="parsermoduleimpl-extends-javamoduleimpl-biolockjmoduleimplicitparser-superclass"><a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModuleImpl.html">ParserModuleImpl</a> extends <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/JavaModuleImpl.html">JavaModuleImpl</a>: biolockj.module.implicit.parser superclass.</h4>
 <table>
 <thead>
 <tr>
@@ -403,7 +403,7 @@
 </tr>
 <tr>
 <td align="left">checkDependencies()</td>
-<td align="left">Validate [[Configuration]] properties (<em>report.minOtuCount</em>, <em>report.minOtuThreshold</em>, <em>report.logBase</em>) and  verify no biolockj.[[module.classifier]] modules are configured to run after the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html">ParserModule</a>.</td>
+<td align="left">Validate Configuration properties (<em>report.minOtuCount</em>, <em>report.minOtuThreshold</em>, <em>report.logBase</em>) and  verify no biolockj.module.classifier modules are configured to run after the <a href="https://msioda.github.io/BioLockJ/docs/biolockj/module/implicit/parser/ParserModule.html">ParserModule</a>.</td>
 </tr>
 <tr>
 <td align="left">executeTask()</td>
