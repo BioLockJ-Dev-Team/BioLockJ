@@ -44,6 +44,22 @@ public class ModuleUtil {
 	public static String displayID( final BioModule module ) {
 		return BioLockJUtil.formatDigits( module.getID(), 2 );
 	}
+	
+	/**
+	 * Return the name of the module (or an alias if it has one).
+	 * 
+	 * @param module BioModule
+	 * @return ID display value
+	 */
+	public static String displayName( final BioModule module ) {
+		String alias = module.getAlias();
+		if (alias != null) return alias;
+		return module.getClass().getSimpleName();
+	}
+	
+	public static String displaySignature( final BioModule module ) {
+		return displayID( module ) + "_" + displayName( module );
+	}
 
 	/**
 	 * Get a classifier module<br>
@@ -140,13 +156,24 @@ public class ModuleUtil {
 	}
 
 	/**
-	 * Construct a BioModule based on its className.
+	 * Construct a BioModule based on its className for temporary use.
 	 * 
 	 * @param className BioModule class name
 	 * @return BioModule module
 	 * @throws Exception if errors occur
 	 */
-	public static BioModule getModule( final String className ) throws Exception {
+	public static BioModule getTempModule( final String className ) throws Exception {
+		return (BioModule) Class.forName( className ).newInstance();
+	}
+	
+	/**
+	 * Construct a BioModule based on its className to add it to the pipeline.
+	 * 
+	 * @param className BioModule class name
+	 * @return BioModule module
+	 * @throws Exception if errors occur
+	 */
+	public static BioModule createModuleInstance( final String className ) throws Exception {
 		return (BioModule) Class.forName( className ).newInstance();
 	}
 
@@ -330,7 +357,7 @@ public class ModuleUtil {
 		BioLockJUtil.markStatus( module, Constants.BLJ_COMPLETE );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 		Log.info( ModuleUtil.class,
-			"FINISHED [ " + ModuleUtil.displayID( module ) + " ] " + module.getClass().getName() );
+			"FINISHED [ " + ModuleUtil.displaySignature( module ) + " ] " );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 	}
 
@@ -348,7 +375,7 @@ public class ModuleUtil {
 		BioLockJUtil.markStatus( module, Constants.BLJ_STARTED );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 		Log.info( ModuleUtil.class,
-			"STARTING [ " + ModuleUtil.displayID( module ) + " ] " + module.getClass().getName() );
+			"STARTING [ " + ModuleUtil.displaySignature( module ) + " ] " );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 	}
 

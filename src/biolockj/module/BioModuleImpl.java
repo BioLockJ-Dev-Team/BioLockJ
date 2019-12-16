@@ -19,6 +19,7 @@ import org.apache.commons.io.filefilter.HiddenFileFilter;
 import biolockj.*;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigNotFoundException;
+import biolockj.exception.PipelineFormationException;
 import biolockj.util.*;
 
 /**
@@ -67,6 +68,19 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 
 	@Override
 	public abstract void executeTask() throws Exception;
+	
+	@Override
+	public String getAlias() {
+		return alias;
+	}
+
+	@Override
+	// TODO: limit this access... maybe move BioModule and BioModuleImpl to the biolockj package
+	public void setAlias( String alias ) throws PipelineFormationException {
+		if (alias.contains( "." )) throw new PipelineFormationException( "Invalid alias: [" + alias + "]; an alias cannot contain a \".\" character." );
+		if ( ! alias.substring( 0, 1 ).equals( alias.substring( 0, 1 ).toUpperCase() )) throw new PipelineFormationException("Invalid alias: [" + alias + "]; an alias must start with a capital letter.");
+		this.alias = alias;
+	}
 
 	@Override
 	public Integer getID() {
@@ -155,7 +169,7 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 	public void init() throws Exception {
 		this.moduleId = nextId++;
 		this.moduleDir = new File(
-			Config.pipelinePath() + File.separator + ModuleUtil.displayID( this ) + "_" + getClass().getSimpleName() );
+			Config.pipelinePath() + File.separator + ModuleUtil.displaySignature( this ) );
 
 		if( !this.moduleDir.isDirectory() ) {
 			this.moduleDir.mkdirs();
@@ -184,7 +198,7 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 	public String toString() {
 		String val = getID() + "_" + getClass().getName();
 		try {
-			val = ModuleUtil.displayID( this ) + "_" + getClass().getName();
+			val = ModuleUtil.displaySignature( this );
 		} catch( final Exception ex ) {
 			Log.error( getClass(), "Unable to find ID for: " + getClass().getName(), ex );
 		}
@@ -281,6 +295,7 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 	private final List<File> inputFiles = new ArrayList<>();
 	private File moduleDir = null;
 	private Integer moduleId;
+	private String alias = null;
 
 	/**
 	 * BioLockJ gzip file extension constant: {@value #GZIP_EXT}

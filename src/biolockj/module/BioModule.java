@@ -13,6 +13,7 @@ package biolockj.module;
 
 import java.io.File;
 import java.util.List;
+import biolockj.exception.PipelineFormationException;
 
 /**
  * Classes that implement this interface are eligible to be included in a BioLockJ pipeline.<br>
@@ -68,6 +69,17 @@ public interface BioModule {
 	 * @return Module ID
 	 */
 	public Integer getID();
+	
+	/**
+	 * Some BioModules may be added to a pipeline multiple times.<br>
+	 * The user may provide an alias for a module in the run order, 
+	 * thus allowing the user direct properties to an individual instance of a module.
+	 * 
+	 * @return Module ID
+	 */
+	public String getAlias(); 
+
+	public void setAlias( String alias ) throws PipelineFormationException; 
 
 	/**
 	 * Each BioModule takes the previous BioModule output as input:<br>

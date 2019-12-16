@@ -269,7 +269,7 @@ public class ValidationUtil {
 					if( canHaltPipeline( module ) ) throw new ValidationException( module );
 				}
 			} else Log.debug( ValidationUtil.class, "Validation is turned off for module: " +
-				ModuleUtil.displayID( module ) + "_" + module.getClass().getSimpleName() );
+				ModuleUtil.displaySignature( module ) );
 		} catch( final BioLockJException bljEx ) {
 			throw bljEx;
 		} catch( final Exception ex ) {
@@ -376,7 +376,7 @@ public class ValidationUtil {
 	}
 
 	private static String getOutputFileName( final BioModule module ) {
-		return ModuleUtil.displayID( module ) + "_" + module.getClass().getSimpleName() + OUTPUT_FILE_SUFFIX;
+		return ModuleUtil.displaySignature( module ) + OUTPUT_FILE_SUFFIX;
 	}
 
 	private static HashMap<String, FileSummary> getPrevSummaries( final BioModule module ) throws BioLockJException {
@@ -400,8 +400,7 @@ public class ValidationUtil {
 
 			rowNum++;
 		}
-		if( prevOutput.isEmpty() ) Log.info( ValidationUtil.class, "Module " + ModuleUtil.displayID( module ) + "_" +
-			module.getClass().getSimpleName() + " is expected to have not output." );
+		if( prevOutput.isEmpty() ) Log.info( ValidationUtil.class, "Module " + ModuleUtil.displaySignature( module ) + " is expected to have no output." );
 		return prevOutput;
 	}
 

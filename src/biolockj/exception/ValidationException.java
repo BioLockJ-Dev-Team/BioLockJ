@@ -42,7 +42,7 @@ public class ValidationException extends BioLockJException {
 
 	private static String buildMessage( final BioModule module ) {
 		return "This pipeline has validaiton turned on to verify the output of module " +
-			ModuleUtil.displayID( module ) + "_" + module.getClass().getSimpleName() +
+			ModuleUtil.displaySignature( module ) +
 			". The output is different from the expectations, so the pipeline was halted.";
 	}
 

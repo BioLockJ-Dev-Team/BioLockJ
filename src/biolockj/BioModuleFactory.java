@@ -13,6 +13,7 @@ package biolockj;
 
 import java.util.*;
 import biolockj.exception.ConfigFormatException;
+import biolockj.exception.PipelineFormationException;
 import biolockj.module.BioModule;
 import biolockj.module.implicit.ImportMetadata;
 import biolockj.module.implicit.RegisterNumReads;
@@ -25,8 +26,7 @@ import biolockj.util.*;
  */
 public class BioModuleFactory {
 	private BioModuleFactory() throws Exception {
-		if( BioLockJUtil.isDirectMode() ) this.moduleCache = Config.getList( null, Constants.INTERNAL_ALL_MODULES );
-		else initModules();
+		initModules();
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class BioModuleFactory {
 		for( final String postReq: module.getPostRequisiteModules() ) {
 			if( !postReqs.contains( postReq ) ) postReqs.add( postReq );
 
-			final List<String> postPostReqs = getPostRequisites( ModuleUtil.getModule( postReq ) );
+			final List<String> postPostReqs = getPostRequisites( ModuleUtil.getTempModule( postReq ) );
 			for( final String postPostReq: postPostReqs )
 				if( !postReqs.contains( postPostReq ) ) postReqs.add( postPostReq );
 		}
@@ -63,7 +63,7 @@ public class BioModuleFactory {
 			throw new Exception( "Too many calls [" + SAFE_MAX + "] to getPreRequisites( module )" );
 		final List<String> preReqs = new ArrayList<>();
 		for( final String preReq: module.getPreRequisiteModules() ) {
-			final List<String> prePreReqs = getPreRequisites( ModuleUtil.getModule( preReq ) );
+			final List<String> prePreReqs = getPreRequisites( ModuleUtil.getTempModule( preReq ) );
 			for( final String prePreReq: prePreReqs )
 				if( !preReqs.contains( prePreReq ) ) preReqs.add( prePreReq );
 
@@ -90,9 +90,25 @@ public class BioModuleFactory {
 	 */
 	private List<BioModule> buildModules() throws Exception {
 		final List<BioModule> bioModules = new ArrayList<>();
-		for( final String className: this.moduleCache ) {
-			final BioModule module = (BioModule) Class.forName( className ).getDeclaredConstructor().newInstance();
+		for( final String moduleLine: this.moduleCache ) {
+			String[] parts = moduleLine.split(Constants.ASSIGN_ALIAS);
+			String className = parts[0].trim();
+			final BioModule module = ModuleUtil.createModuleInstance( className );
+			if( parts.length > 1 ) {
+				if (parts.length > 2) {
+					throw new PipelineFormationException( "Too many parts to the module definition line: " + moduleLine );
+				}
+				module.setAlias( parts[1].trim() );
+				Log.debug(BioModuleFactory.class, "This instance of the [" + module.getClass().getSimpleName() 
+					+ "] module will be refered to by its alias: \"" + module.getAlias() + "\".");
+			}			
 			module.init();
+			for( final BioModule existingModule : bioModules) {
+				if ( ModuleUtil.displayName( existingModule ).equals( ModuleUtil.displayName( module ) ) ) {
+					throw new PipelineFormationException( "Cannot have multiple modules in the same pipeline that are called \"" 
+				+ ModuleUtil.displayName( module ) + "\"." + System.lineSeparator() + "Use \"module.path AS newName\" in the module run order to give one of them a different alias." );
+				}
+			}
 			bioModules.add( module );
 		}
 
@@ -120,14 +136,16 @@ public class BioModuleFactory {
 		final List<String> configModules = getConfigModules();
 		List<String> branchModules = new ArrayList<>();
 
-		for( final String className: configModules ) {
+		for( final String moduleLine: configModules ) {
 			this.safteyCheck = SAFE_MAX;
-			final BioModule module = ModuleUtil.getModule( className );
+			String[] parts = moduleLine.split(Constants.ASSIGN_ALIAS);
+			String className = parts[0].trim();
+			final BioModule module = ModuleUtil.getTempModule( className );
 			if( !Config.getBoolean( null, Constants.DISABLE_PRE_REQ_MODULES ) )
 				for( final String mod: getPreRequisites( module ) )
 				if( !branchModules.contains( mod ) ) branchModules.add( addModule( mod ) );
 
-			if( !branchModules.contains( className ) ) branchModules.add( addModule( className ) );
+			if( !branchModules.contains( moduleLine ) ) branchModules.add( addModule( moduleLine ) );
 
 			this.safteyCheck = SAFE_MAX;
 			if( !module.getPostRequisiteModules().isEmpty() ) for( final String mod: getPostRequisites( module ) )

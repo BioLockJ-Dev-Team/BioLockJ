@@ -20,6 +20,11 @@ public class Constants {
 	 * Captures the application start time
 	 */
 	public static final long APP_START_TIME = System.currentTimeMillis();
+	
+	/**
+	 * The key string to define an alias for an individual module: {@value 
+	 */
+	public static final String ASSIGN_ALIAS = " AS ";
 
 	/**
 	 * {@link biolockj.Config} Integer property: {@value #AWS_S3_XFER_TIMEOUT}<br>

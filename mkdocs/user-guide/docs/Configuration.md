@@ -37,7 +37,7 @@ A copy of each configuration file is stored in the pipeline root directory to se
 
 ## BioModule execution order
 
-To include a BioModule in your pipeline, add a `#BioModule` line to the top your configuration file, as shown in the examples found in [templates]( https://github.com/msioda/BioLockJ/tree/master/resources/config/template ).  Each line has the `#BioModule` keyword followed by the path to the jar file for that module.  For example:
+To include a BioModule in your pipeline, add a `#BioModule` line to the top your configuration file, as shown in the examples found in [templates]( https://github.com/msioda/BioLockJ/tree/master/resources/config/template ).  Each line has the `#BioModule` keyword followed by the path for that module.  For example:
 
 ```
 #BioModule biolockj.module.seq.PearMergeReads
@@ -46,6 +46,14 @@ To include a BioModule in your pipeline, add a `#BioModule` line to the top your
 ```
 
 BioModules will be executed in the order they are listed in here.  A typical pipeline contians one [classifier module](../module/classifier/module.classifier).  Any number of [sequence pre-processing](../module/seq/module.seq) modules may come before the classifier module. Any number of [report modules](../module/report/module.report) may come after the classifier module.  In addition to the BioModules specified in the configuration file, BioLockJ may add [implicit modules](../module/implicit/module.implicit) that the are required by specified modules.  See [Example Pipeline](Example-Pipeline).
+
+A module can be given an alias by using the `AS` keyword in its execution line:
+```
+#BioModule biolockj.module.seq.PearMergeReads AS Pear
+```
+This is is generally used for modules that are used more than once in the same pipeline.  Given this alias, the folder for this module will be called `01_Pear` instead of `01_PearMergeReads`, and any general properties directed to this module would use the prefix `Pear` instead of `PearMergedReads`. An alias must start with a capital letter, and cannot duplicate a name/alias of any other module in the same pipeline.  
+
+Some pipeline properties (usually those used by pipeline utilities) can be directed to a specific module.  For example, `script.numThreads` is a general property that specifies that number of threads alloted to each script launched by any module; and `PearMergeReads.numThreads` overrides that property ONLY for the PearMergeReads module.  
 
 ## Summary of Properties
 

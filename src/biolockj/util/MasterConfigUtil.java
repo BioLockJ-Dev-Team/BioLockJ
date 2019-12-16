@@ -126,7 +126,7 @@ public class MasterConfigUtil {
 				final String val = usedProps.get( key );
 				if( val == null || val.trim().isEmpty() ) Log.debug( MasterConfigUtil.class,
 					"Remove unused property from sanatized MASTER Config: " + key + "=" + val );
-				else if( !isInternalProperty(key) ) props.put( key, val );
+				else if( !Config.isInternalProperty(key) ) props.put( key, val );
 			}
 
 			Log.info( MasterConfigUtil.class, "The original version of project Config contained: " +
@@ -246,7 +246,7 @@ public class MasterConfigUtil {
 			final TreeSet<String> keys = new TreeSet<>( props.keySet() );
 			for( final String key: keys ) {
 				final String val = props.get( key );
-				if( isInternalProperty(key) && val != null && !val.isEmpty() )
+				if( Config.isInternalProperty(key) && val != null && !val.isEmpty() )
 					writer.write( "###     " + key + "=" + props.get( key ) + RETURN );
 			}
 			writer.write( "###" + RETURN );
@@ -271,10 +271,6 @@ public class MasterConfigUtil {
 		for( final String module: Config.getList( null, Constants.INTERNAL_BLJ_MODULE ) )
 			writer.write( Constants.BLJ_MODULE_TAG + " " + module + RETURN );
 		writer.write( RETURN );
-	}
-	
-	private static boolean isInternalProperty( final String property ) {
-		return property.startsWith( Constants.INTERNAL_PREFIX );
 	}
 
 	private static final String DEFAULT_CONFIG_FLAG = "# ----> Default Config: ";

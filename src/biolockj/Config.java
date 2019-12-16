@@ -156,7 +156,8 @@ public class Config {
 		final File f = getExistingFileObject( getString( module, property ) );
 		if( f != null && !f.isDirectory() ) throw new ConfigPathException( property, ConfigPathException.DIRECTORY );
 
-		if( props != null && f != null ) Config.setFilePathProperty( property, f.getAbsolutePath() );
+		// TODO: figure out why this is here and clean up, 
+		if( props != null && f != null ) Config.setFilePathProperty( getModulePropName( module, property ), f.getAbsolutePath() );
 
 		return f;
 	}
@@ -178,7 +179,8 @@ public class Config {
 			f = new File( f.list( HiddenFileFilter.VISIBLE )[ 0 ] );
 		} else throw new ConfigPathException( property, ConfigPathException.FILE );
 
-		if( props != null && f != null ) Config.setFilePathProperty( property, f.getAbsolutePath() );
+		// TODO: figure out why this is here and clean up, 
+		if( props != null && f != null ) Config.setFilePathProperty( getModulePropName( module, property ), f.getAbsolutePath() );
 
 		return f;
 	}
@@ -229,14 +231,22 @@ public class Config {
 
 	/**
 	 * Return property name after substituting the module name as its prefix.
+	 * Give first priority to a property that uses the module's alias, then one that uses the module name.
+	 * If both of those are null, then use the property as given.
 	 * 
 	 * @param module BioModule
 	 * @param property Property name
 	 * @return BioModule specific property name
 	 */
 	public static String getModulePropName( final BioModule module, final String property ) {
-		if( module != null ) return module.getClass().getSimpleName() + "." + suffix( property );
-		return null;
+		if( module != null ) {
+			String aliasProp = ModuleUtil.displayName( module ) + "." + suffix( property );
+			if( aliasProp != null && props.getProperty( aliasProp ) != null ) {
+				Log.debug( Class.class, "Looking for property [" + property + "], found overriding module-specific form: [" + aliasProp + "]." );
+				return aliasProp;
+			}
+		}
+		return property;
 	}
 
 	/**
@@ -334,7 +344,6 @@ public class Config {
 	public static String getString( final BioModule module, final String property ) {
 		if( props == null ) return null;
 		String prop = getModulePropName( module, property );
-		if( prop == null || props.getProperty( prop ) == null ) prop = property;
 		String val = props.getProperty( prop );
 		if( val != null ) val = val.trim();
 		val = replaceEnvVar( val );
@@ -858,6 +867,10 @@ public class Config {
 
 	private static String suffix( final String prop ) {
 		return prop.indexOf( "." ) > -1 ? prop.substring( prop.indexOf( "." ) + 1 ): prop;
+	}
+	
+	public static boolean isInternalProperty( final String property ) {
+		return property.startsWith( Constants.INTERNAL_PREFIX );
 	}
 
 	/**

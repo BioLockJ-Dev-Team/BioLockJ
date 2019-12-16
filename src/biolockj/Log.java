@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import biolockj.exception.ConfigFormatException;
 import biolockj.util.*;
 
 /**
@@ -49,7 +50,7 @@ public class Log {
 			return;
 		}
 
-		if( isInitialized() && !debugClasses().isEmpty() ) {
+		if( isInitialized() && !getAlwaysDebugClasses().contains( loggingClass.getName() ) && !debugClasses().isEmpty() ) {
 			boolean isDebugClass = false;
 			for( final String val: debugClasses() )
 				if( loggingClass.getName().contains( val ) ) isDebugClass = true;
@@ -168,7 +169,6 @@ public class Log {
 	public static void initialize( final String name ) throws Exception {
 		logFile = new File( Config.pipelinePath(), name + Constants.LOG_EXT);
 		logFile.createNewFile();
-		
 		System.setProperty( LOG_FILE, logFile.getAbsolutePath() );
 		System.setProperty( Constants.LOG_LEVEL_PROPERTY, validateLogLevel() );
 		System.setProperty( LOG_APPEND, String.valueOf( logFile.isFile() ) );
@@ -291,13 +291,13 @@ public class Log {
 		final String logLevel = Config.requireString( null, Constants.LOG_LEVEL_PROPERTY ).toUpperCase();
 		if( !logLevel.equals( "DEBUG" ) && !logLevel.equals( "INFO" ) && !logLevel.equals( "WARN" ) &&
 			!logLevel.equals( "ERROR" ) )
-			throw new Exception( "Config property: " + Constants.LOG_LEVEL_PROPERTY +
-				"missing or invlid.  Please configure a valid option: " + "[DEBUG/INFO/WARN/ERROR]" );
+			throw new ConfigFormatException(Constants.LOG_LEVEL_PROPERTY, "Please configure a valid option: " + "[DEBUG/INFO/WARN/ERROR]" );
 		return logLevel;
 	}
 
 	/**
-	 * Some classes should always print DEBUG. This limitation is designed to avoid unwanted BioModule DEBUG in your
+	 * The user may choose to show debug messages for only selected classes.
+	 * This limitation is designed to avoid unwanted BioModule DEBUG in your
 	 * pipeline.
 	 * 
 	 * @return Set of debug classes
@@ -306,18 +306,31 @@ public class Log {
 		if( debugClasses == null ) {
 			debugClasses = Config.getSet( null, Constants.LIMIT_DEBUG_CLASSES );
 			if( !debugClasses.isEmpty() ) {
-				debugClasses.add( BioLockJ.class.getName() );
-				debugClasses.add( BioModuleFactory.class.getName() );
-				debugClasses.add( Config.class.getName() );
-				debugClasses.add( Log.class.getName() );
-				debugClasses.add( Pipeline.class.getName() );
-				debugClasses.add( Properties.class.getName() );
-				debugClasses.add( DockerUtil.class.getName() );
+				debugClasses.addAll( getAlwaysDebugClasses() );
 				warn( Log.class, "Log [DEBUG] messages for class names containing any of the following key strings: " +
 					debugClasses );
 			}
 		}
 		return debugClasses;
+	}
+	
+	/**
+	 * Some classes should always print DEBUG, 
+	 * even when the user has specified specific classes to debug.
+	 * @return
+	 */
+	private static Set<String> getAlwaysDebugClasses(){
+		if( alwaysDebugClasses == null ) {
+			alwaysDebugClasses = new TreeSet<>();
+			alwaysDebugClasses.add( BioLockJ.class.getName() );
+			alwaysDebugClasses.add( BioModuleFactory.class.getName() );
+			alwaysDebugClasses.add( Config.class.getName() );
+			alwaysDebugClasses.add( Log.class.getName() );
+			alwaysDebugClasses.add( Pipeline.class.getName() );
+			alwaysDebugClasses.add( Properties.class.getName() );
+			alwaysDebugClasses.add( DockerUtil.class.getName() );
+		}
+		return alwaysDebugClasses;
 	}
 
 	private static boolean isInitialized() {
@@ -376,6 +389,7 @@ public class Log {
 	 */
 	protected static final String LOG_FORMAT = "LOG_FORMAT";
 	private static Set<String> debugClasses = null;
+	private static Set<String> alwaysDebugClasses = null;
 	private static boolean enableLogs = true;
 	private static boolean gaveDebugWarning = false;
 	private static File logFile = null;
