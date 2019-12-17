@@ -46,7 +46,9 @@ calculateStats <- function( level ) {
    if( cutoffValue < 1 ) cutoffValue = cutoffValue * nrow(countTable)
    numDataCols = ncol(countTable) - ncol(metaTable);
    for( countCol in 1:numDataCols ){
-      if( sum( countTable[,countCol] > 0 ) >= cutoffValue ) {
+      if( sum( countTable[,countCol] > 0 ) < cutoffValue ) {
+         logInfo( c( "Excluding: ", names(countTable)[countCol], "; only found in ", sum( countTable[,countCol] > 0 ), "samples.") )
+      }else{
          names[ length(names)+1 ] = names(countTable)[countCol]
          if( length( getBinaryFields() ) > 0 ) {
             for( field in getBinaryFields() ) {
