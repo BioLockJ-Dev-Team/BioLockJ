@@ -35,6 +35,9 @@ public class ImportMetadata extends BioModuleImpl {
 		if( SeqUtil.isMultiplexed() && !MetaUtil.exists() )
 			throw new Exception( "Metadata file is required for multiplexed datasets, please set Config property: " +
 				MetaUtil.META_FILE_PATH );
+		if ( Config.getString( null, MetaUtil.META_FILE_PATH ) != null ) {
+			Config.requireExistingFile( null, MetaUtil.META_FILE_PATH );
+		}
 	}
 
 	/**

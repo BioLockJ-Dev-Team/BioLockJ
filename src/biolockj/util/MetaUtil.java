@@ -14,7 +14,9 @@ package biolockj.util;
 import java.io.*;
 import java.util.*;
 import biolockj.*;
+import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
+import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.MetadataException;
 import biolockj.module.BioModule;
 
@@ -357,8 +359,11 @@ public class MetaUtil {
 	 * </ul>
 	 * 
 	 * @throws MetadataException If unable to initialize the metadata file
+	 * @throws DockerVolCreationException 
+	 * @throws ConfigNotFoundException 
+	 * @throws ConfigPathException 
 	 */
-	public static void initialize() throws MetadataException {
+	public static void initialize() throws MetadataException, ConfigPathException, ConfigNotFoundException, DockerVolCreationException {
 
 		Log.info( MetaUtil.class,
 			"Initialize metadata property [ " + META_NULL_VALUE + " ] = " + getNullValue( null ) );
@@ -374,6 +379,7 @@ public class MetaUtil {
 			META_COMMENT_CHAR + " property must be a single character.  Config value = \"" + commentChar + "\"" );
 
 		if( Config.getString( null, META_FILE_PATH ) != null ) {
+			Config.requireExistingFile( null, META_FILE_PATH );
 			setFile( getMetadata() );
 			refreshCache();
 		}

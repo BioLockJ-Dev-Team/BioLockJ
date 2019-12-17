@@ -139,7 +139,7 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 	 */
 	@Override
 	public String getSummary() throws Exception {
-		Log.info( SummaryUtil.class, "Building module summary for: " + getClass().getSimpleName() );
+		Log.info( SummaryUtil.class, "Building module summary for: " + ModuleUtil.displaySignature( this ) );
 		return SummaryUtil.getOutputDirSummary( this );
 	}
 
