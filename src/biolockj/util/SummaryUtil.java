@@ -691,6 +691,7 @@ public class SummaryUtil {
 		final StringBuffer sb = new StringBuffer();
 		sb.append( RETURN + EXT_SPACER + RETURN + getLabel( PIPELINE_NAME ) + "  " + Config.pipelineName() + RETURN );
 		sb.append( getLabel( PIPELINE_CONFIG ) + Config.getConfigFilePath() + RETURN );
+		sb.append( getLabel( BIOLOCKJ_VERSION_HEADER ) + BioLockJUtil.getVersion() + RETURN );
 		sb.append( getLabel( NUM_MODULES ) + "      " + Pipeline.getModules().size() + RETURN );
 		sb.append( getLabel( NUM_ATTEMPTS ) + "     1" + RETURN );
 		sb.append( EXT_SPACER + RETURN );
@@ -754,6 +755,7 @@ public class SummaryUtil {
 	}
 
 	private static String downloadCommand = null;
+	private static final String BIOLOCKJ_VERSION_HEADER = "BioLockJ version";
 	private static final String EXCEPTION_LABEL = "Exception:";
 	private static final String EXT_SPACER = getDashes( 154 );
 	private static final String FINAL_META = "Final Metadata";
