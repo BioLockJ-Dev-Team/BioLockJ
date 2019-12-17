@@ -247,7 +247,7 @@ If you are running a pipeline using docker, it is assumed that all file paths in
 | *r.pch* | Sets R plot pch parameter for PDF report |
 | *r.pvalCutoff* | Sets p-value cutoff used to assign label *r.colorHighlight* |
 | *r.pValFormat* | Sets the format used in R sprintf() function |
-| *r.rareOtuThreshold* | If >1, R will filter OTUs below value provided.  If <1, R will interperate the value as a percentage and discard OTUs not found in at least that percentage of samples |
+| *r.rareOtuThreshold* | If >=1, R will filter OTUs found in fewer than this many samples.  If <1, R will interperate the value as a percentage and discard OTUs not found in at least that percentage of samples |
 | *r.reportFields* | Override field used to explicitly list metadata columns to report in the R scripts.  If left undefined, all columns are reported |
 | *r.saveRData* | Options: Y/N.  If Y, all R script generating BioModules will save R Session data to the module output directory to a file using the extension ".RData" |
 | *r.timeout* | Sets # minutes before R Script will time out and fail |
