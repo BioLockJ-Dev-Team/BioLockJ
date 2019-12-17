@@ -39,10 +39,15 @@
 
 ## Links for Developers
 
-See [javadocs](/BioLockJ/javadocs) at https://ivoryc.github.io/BioLockJ/javadocs/
+See javadocs at                       
+[https://BioLockJ-Dev-Team.github.io/BioLockJ/javadocs/](https://BioLockJ-Dev-Team.github.io/BioLockJ/javadocs/)
 
-See the [sheepdog_testing_suite](https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite) at https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite for developtment tests.
+See developement tests in the sheepdog_testing_suite at                  
+[https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite](https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite)
 
-View this User Guide online: [BioLockJ User Guide](/BioLockJ/) at https://ivoryc.github.io/BioLockJ/
+See the user guide for our latest stable version at                    
+[https://biolockj-dev-team.github.io/BioLockJ/](https://biolockj-dev-team.github.io/BioLockJ/)
 
+You can also see the guide for the current development version, and previous stable versions at                 
+[https://biolockj.readthedocs.io/en/latest/](https://biolockj.readthedocs.io/en/latest/)
 
