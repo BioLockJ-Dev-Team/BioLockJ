@@ -53,11 +53,18 @@ A module can be given an alias by using the `AS` keyword in its execution line:
 ```
 This is is generally used for modules that are used more than once in the same pipeline.  Given this alias, the folder for this module will be called `01_Pear` instead of `01_PearMergeReads`, and any general properties directed to this module would use the prefix `Pear` instead of `PearMergedReads`. An alias must start with a capital letter, and cannot duplicate a name/alias of any other module in the same pipeline.  
 
-Some pipeline properties (usually those used by pipeline utilities) can be directed to a specific module.  For example, `script.numThreads` is a general property that specifies that number of threads alloted to each script launched by any module; and `PearMergeReads.numThreads` overrides that property ONLY for the PearMergeReads module.  
-
 ## Summary of Properties
 
 Properties are defined as name-value pairs. List-values are comma separated. Leading and trailing whitespace is removed so "propName=x,y" is equivalent to "propName = x, y".
+
+Some pipeline properties (usually those used by pipeline utilities) can be directed to a specific module.  For example, `script.numThreads` is a general property that specifies that number of threads alloted to each script launched by any module; and `PearMergeReads.numThreads` overrides that property ONLY for the PearMergeReads module.  
+
+`pipeline.defaultProps` is a handled before any other property.  It is used to link another properties file.  The properties from that file are added to the MASTER set. The defaultProps property is not included in the MASTER properties set.
+
+`exe.` properties are used to specify the path to common executables.  Modules are sometimes written to use a common tool, such as `Rscript` or `bowtie`.  These modules will write scripts with the assumption that this command is on the `$PATH` when the script is executed UNLESS `exe.Rscript` is given specifying a path to use.  The `exe.` properties are often specified in a defaultProps file for a given environment rather than in individual project properties files.  
+
+If you are running a pipeline using docker, it is assumed that all file paths in your config file are written in terms of your host machine. The _EXCEPTION_ to this is the `exe.` file paths. Most often, docker containers are used because of the executables baked into them. In the rare case where you want to use an executable from your local machine, while running a pipeline in docker, you can specify this by using the prefix `hostExe.` in place of `exe.`.
+
 
 #### aws
 | Property| Description |
