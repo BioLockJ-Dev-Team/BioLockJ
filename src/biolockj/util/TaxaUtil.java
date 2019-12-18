@@ -11,11 +11,18 @@
  */
 package biolockj.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import biolockj.*;
+import biolockj.exception.BioLockJException;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigNotFoundException;
+import biolockj.module.report.taxa.TaxaLevelTable;
 
 /**
  * This utility helps work individual Taxa names, not full OTU path files which need {@link biolockj.util.OtuUtil}.<br>
@@ -345,6 +352,104 @@ public class TaxaUtil {
 		if( topLevel == null ) topLevel = getTaxaLevels().get( 0 );
 		return topLevel;
 	}
+	
+
+	/**
+	 * Read a table of counts, formatted with samples as rows (ids in first column) and taxa as columns (ids in header).
+	 * @param taxaTable
+	 * @return Map linking sample name to map that links taxa IDs to value.
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws BioLockJException
+	 */
+	public static TaxaLevelTable readTaxaTable(final File taxaTable) throws FileNotFoundException, IOException, BioLockJException{
+		TaxaLevelTable data = new TaxaLevelTable(TaxaUtil.getTaxonomyTableLevel( taxaTable ));
+		final List<String> otuNames = new ArrayList<>();
+		
+		final BufferedReader reader = BioLockJUtil.getFileReader( taxaTable );
+		try {
+			otuNames.addAll( getOtuNames( reader.readLine() ) );
+			String nextLine = reader.readLine();
+
+			while( nextLine != null ) {
+				final StringTokenizer st = new StringTokenizer( nextLine, DELIM );
+				final String sampleID = st.nextToken();
+				final HashMap<String, Double> rowValues = data.newSampleRow( sampleID );
+				int i = 0;
+				while( st.hasMoreTokens() ) {
+					final String nextToken = st.nextToken();
+					if( nextToken.length() > 0 ) {
+						rowValues.put( otuNames.get( i ), new Double( nextToken ) );
+					}
+					i++;
+				}
+				if ( rowValues.size() != otuNames.size() ) {
+					throw new BioLockJException("Header included [" + otuNames.size() + "] taxa, but the row for sample [" + 
+				sampleID + "] has [" + rowValues.size() + "] values.");
+				}
+
+				nextLine = reader.readLine();
+			}
+		} finally {
+			if( reader != null ) reader.close();
+		}
+		return data;
+	}
+	
+	/**
+	 * Parse Taxa names from the given header line.
+	 * 
+	 * @param header Head line of table
+	 * @return List of Taxa
+	 */
+	private static List<String> getOtuNames( final String header ) {
+		final List<String> otuNames = new ArrayList<>();
+		final StringTokenizer st = new StringTokenizer( header, DELIM );
+		st.nextToken(); // skip ID & then strip quotes
+		while( st.hasMoreTokens() )
+			otuNames.add( BioLockJUtil.removeOuterQuotes( st.nextToken() ) );
+		return otuNames;
+	}
+	
+
+	/**
+	 * Write transformed data to file
+	 * 
+	 * @param outFile File to write to
+	 * @param sampleNames Sample names to include
+	 * @param taxaNames Taxa names to include
+	 * @param taxaCounts transformed Taxa counts
+	 * @throws Exception if errors occur
+	 */
+	public static void writeDataToFile( final File outFile, final List<String> sampleNames,
+		final List<String> taxaNames, final TaxaLevelTable taxaCounts ) throws Exception {
+		final BufferedWriter writer = new BufferedWriter( new FileWriter( outFile ) );
+
+		writer.write( MetaUtil.getID() );
+
+		for( final String s: taxaNames ) writer.write( DELIM + s );
+
+		for( String sampleID : sampleNames ) {
+			writer.write( Constants.RETURN );
+			writer.write( sampleID );
+			for( String taxaID : taxaNames ) {
+				writer.write( DELIM + taxaCounts.get( sampleID ).get( taxaID ) );
+			}	
+		}
+
+		writer.close();
+	}
+	
+	public static void writeDataToFile( final File outFile, final TaxaLevelTable taxaCounts ) throws Exception {
+		List<String> samples = new ArrayList<>();
+		samples.addAll(taxaCounts.keySet() );
+		Collections.sort(samples);
+		List<String> taxa = new ArrayList<>();
+		taxa.addAll( taxaCounts.get( samples.get(0) ).keySet() );
+		Collections.sort(taxa);
+		writeDataToFile(outFile, samples, taxa, taxaCounts);
+	}
+
 
 	/**
 	 * File suffix appended to normalized taxa count tables: {@value #NORMALIZED}
@@ -362,4 +467,8 @@ public class TaxaUtil {
 	private static final List<String> TAXA_LEVELS = Arrays.asList( Constants.DOMAIN, Constants.PHYLUM, Constants.CLASS,
 		Constants.ORDER, Constants.FAMILY, Constants.GENUS, Constants.SPECIES );
 	private static String topLevel = null;
+	
+	private static final String DELIM = Constants.TAB_DELIM;
+	public static final String FILE_EXT = Constants.TSV_EXT;
+	
 }

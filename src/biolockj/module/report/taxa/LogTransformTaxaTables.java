@@ -11,18 +11,36 @@
  */
 package biolockj.module.report.taxa;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.util.*;
+import biolockj.Config;
+import biolockj.Constants;
 import biolockj.Log;
-import biolockj.util.*;
+import biolockj.exception.ConfigFormatException;
 
 /**
  * This utility is used to log-transform the raw OTU counts on Log10 or Log-e scales.
  * 
  * @blj.web_desc Log Transform Taxa Tables
  */
-public class LogTransformTaxaTables extends NormalizeTaxaTables {
+public class LogTransformTaxaTables extends TransformTaxaTables {
+	
+	/**
+	 * Verify {@link biolockj.Config}.{@value biolockj.Constants#REPORT_LOG_BASE} property is valid (if defined) with a
+	 * value = (e or 10).
+	 *
+	 * @throws ConfigFormatException if REPORT_LOG_BASE is not set to a valid option (e or 10)
+	 */
+	@Override
+	public void checkDependencies() throws Exception {
+		this.logBase = Config.requireString( this, Constants.REPORT_LOG_BASE );
+		if( !getLogBase().equalsIgnoreCase( LOG_10 ) && !getLogBase().equalsIgnoreCase( LOG_E ) ) {
+			throw new ConfigFormatException( Constants.REPORT_LOG_BASE,
+				"Property only accepts value \"" + LOG_10 + "\" or \"" + LOG_E + "\"" );
+		}
+		Log.debug( getClass(), "Found logBase: " + this.getLogBase() );
+		super.checkDependencies();
+	}
+
 	/**
 	 * Log transform the data
 	 *
@@ -30,70 +48,63 @@ public class LogTransformTaxaTables extends NormalizeTaxaTables {
 	 * @throws Exception if unable to construct LogTransformTaxaTables
 	 */
 	@Override
-	protected void transform( final File otuTable ) throws Exception {
-		final List<List<String>> dataPointsLogged = new ArrayList<>();
-		final List<List<Long>> dataPointsUnnormalized = new ArrayList<>();
-		final List<String> sampleIDs = new ArrayList<>();
-		final List<String> otuNames = new ArrayList<>();
-		final BufferedReader reader = BioLockJUtil.getFileReader( otuTable );
-		try {
-			otuNames.addAll( getOtuNames( reader.readLine() ) );
-			String nextLine = reader.readLine();
-			while( nextLine != null ) {
-				final StringTokenizer st = new StringTokenizer( nextLine, TAB_DELIM );
-				final String sampleID = st.nextToken();
-				final List<Long> innerList = new ArrayList<>();
-				sampleIDs.add( sampleID );
-				dataPointsUnnormalized.add( innerList );
-				dataPointsLogged.add( new ArrayList<String>() );
-
-				while( st.hasMoreTokens() ) {
-					final String nextToken = st.nextToken();
-					long d = 0;
-					if( nextToken.length() > 0 ) d = Long.parseLong( nextToken );
-					innerList.add( d );
-				}
-
-				final long rowSum = innerList.stream().mapToLong( Long::longValue ).sum();
-				if( rowSum == 0 ) throw new Exception( sampleID + " has all zeros for table counts." );
-				nextLine = reader.readLine();
-			}
-		} finally {
-			if( reader != null ) reader.close();
-		}
-
-		final Set<Integer> allZeroIndex = findAllZeroIndex( dataPointsUnnormalized );
-		final List<String> filteredSampleIDs = filterZeroSampleIDs( sampleIDs, allZeroIndex );
-
-		Log.debug( getClass(), "# samples with all zeros (to be removed)  = " + allZeroIndex.size() );
-
-		for( int x = 0; x < dataPointsUnnormalized.size(); x++ ) {
-			final List<String> loggedInnerList = dataPointsLogged.get( x );
-			for( int y = 0; y < dataPointsUnnormalized.get( x ).size(); y++ ) {
-				final long val = dataPointsUnnormalized.get( x ).get( y ) + 1L;
-				if( allZeroIndex.contains( x ) ) {
-					// index 0 = col headers, so add + 1
-					final String id = MetaUtil.getSampleIds().get( x + 1 );
-					Log.warn( getClass(), "All zero row will not be transformed - ID ommitted: " + id );
-				} else if( getLogBase().equalsIgnoreCase( LOG_E ) ) {
-					final String res = new Double( Math.log( val ) ).toString();
-					loggedInnerList.add( res );
-				} else if( getLogBase().equalsIgnoreCase( LOG_10 ) ) {
-					final String res = new Double( Math.log10( val ) ).toString();
-					Log.debug( getClass(), "Math.log10( " + val + ") = " + Math.log10( val ) + " ==> " + res );
-					loggedInnerList.add( res );
-				}
+	protected TaxaLevelTable transform(
+		TaxaLevelTable inputData,
+		List<String> filteredSampleIDs,
+		List<String> filteredTaxaIDs) throws Exception {
+		Log.debug( getClass(), "Log transforming table for level: " + inputData.getLevel() );
+		TaxaLevelTable newData = new TaxaLevelTable(inputData.getLevel());
+		for (String sampleID : filteredSampleIDs) {
+			newData.newSampleRow( sampleID );
+			for (String taxaID : filteredTaxaIDs) {
+				Double oldVal = inputData.get( sampleID ).get( taxaID );
+				Double newVal = logTransform(oldVal);
+				newData.get( sampleID ).put(taxaID, newVal);
 			}
 		}
-
-		final String level = TaxaUtil.getTaxonomyTableLevel( otuTable );
-		Log.debug( getClass(), "Transforming table for level: " + level );
-		final File logNormTable = getLogTransformedFile( level );
-		writeDataToFile( logNormTable, filteredSampleIDs, otuNames, dataPointsLogged );
+		return(newData);
 	}
-
-	private File getLogTransformedFile( final String level ) throws Exception {
-		return TaxaUtil.getTaxonomyTableFile( getOutputDir(), level, "_Log" + getLogBase() );
+	
+	private Double logTransform(Double val) {
+		Double res = null;
+		if( getLogBase().equalsIgnoreCase( LOG_E ) ) {
+			res = new Double( Math.log( val ) );
+		} else if( getLogBase().equalsIgnoreCase( LOG_10 ) ) {
+			res = new Double( Math.log10( val ) );
+		} 
+		return res;
 	}
+	
+	
+	@Override
+	protected String getProcessSuffix() {
+		return "Log" + getLogBase();
+	}
+	
+	/**
+	 * Get the Log base (10 or e)
+	 * 
+	 * @return Log base
+	 */
+	protected String getLogBase() {
+		return this.logBase;
+	}
+	
+	@Override
+	public String getSummary() throws Exception {
+		return super.getSummary() + "Data were transformed to a Log(base=" + Config.getString( this, Constants.REPORT_LOG_BASE ) + ") scale.";
+	}
+	
 
+	/**
+	 * Log 10 display string a supported value for: {@value biolockj.Constants#REPORT_LOG_BASE}
+	 */
+	protected static final String LOG_10 = "10";
+
+	/**
+	 * Log e display string a supported value for: {@value biolockj.Constants#REPORT_LOG_BASE}
+	 */
+	protected static final String LOG_E = "e";
+	
+	private String logBase = "";
 }
