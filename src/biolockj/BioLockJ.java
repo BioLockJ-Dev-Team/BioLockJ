@@ -176,6 +176,7 @@ public class BioLockJ {
 	 * @throws Exception if errors occur
 	 */
 	protected static void initBioLockJ( final String[] args ) throws Exception {
+		Log.debug( BioLockJ.class, "APP_START_TIME (millis): " + Constants.APP_START_TIME );
 		MemoryUtil.reportMemoryUsage( "INTIAL MEMORY STATS" );
 		RuntimeParamUtil.registerRuntimeParameters( args );
 		Config.initialize();
