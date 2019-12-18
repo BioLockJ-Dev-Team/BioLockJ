@@ -146,24 +146,14 @@ public class SummaryUtil {
 	 */
 	public static String getFooter() throws Exception {
 		final long duration = System.currentTimeMillis() - Constants.APP_START_TIME;
+		Log.debug(SummaryUtil.class, "duration : " + duration);
 		final StringBuffer sb = new StringBuffer();
-		String meta = Config.getString( null, MetaUtil.META_FILE_PATH );
-		if( meta == null ) meta = "N/A";
-		sb.append( getLabel( PIPELINE_NAME ) + "    " + Config.pipelineName() + RETURN );
 		sb.append( EXT_SPACER + RETURN );
-		sb.append( getLabel( RUNTIME_ENV ) + "       " + getRuntimeEnv() + RETURN );
 		sb.append( getLabel( PIPELINE_STATUS ) + "   " + Pipeline.getStatus() + RETURN );
 		sb.append( getLabel( PIPELINE_RUNTIME ) + "  " + getRunTime( duration ) + RETURN );
-		sb.append( EXT_SPACER + RETURN );
-		sb.append( getLabel( PIPELINE_CONFIG ) + "   " + Config.getConfigFilePath() + RETURN );
-		sb.append( getLabel( PIPELINE_INPUT ) + "    " + Config.getString( null, Constants.INPUT_DIRS ) + RETURN );
-		sb.append( getLabel( PIPELINE_META ) + meta + RETURN );
-		sb.append( EXT_SPACER + RETURN );
-		sb.append( getLabel( PIPELINE_OUTPUT ) + "   " + Config.pipelinePath() + RETURN );
 		sb.append( getLabel( MASTER_CONFIG ) + "     " + MasterConfigUtil.getPath() + RETURN );
 		sb.append( getLabel( FINAL_META ) + "    " + ( MetaUtil.exists() ? MetaUtil.getPath(): "N/A" ) + RETURN );
 		if( downloadCmd() != null ) sb.append( EXT_SPACER + RETURN + downloadCmd() + RETURN );
-		sb.append( EXT_SPACER + RETURN );
 		return sb.toString();
 	}
 
@@ -528,34 +518,31 @@ public class SummaryUtil {
 	 * @throws Exception if unable to build the summary
 	 */
 	public static void reportSuccess( final BioModule module ) throws Exception {
-		final StringBuffer sb = new StringBuffer();
 		final File summaryFile = getSummaryFile();
-		if( module == null ) sb.append( getFooter() );
-		else {
+		if (!summaryFile.exists()) saveSummary( getHeading() );
+		if( module == null ) {
+			saveSummary( getFooter() );
+		}else {
 			Log.info( SummaryUtil.class,
-				"Update BioModule summary [ " + module.getClass().getName() + " ] " + summaryFile.getAbsolutePath() );
-			Integer modNum = 0;
-			if( !summaryFile.isFile() ) sb.append( getHeading() );
-			else {
-				resetModuleSummary( module );
-				modNum = getModuleNumber();
-			}
+				"Update BioModule summary [ " + ModuleUtil.displaySignature( module ) + " ] " + summaryFile.getAbsolutePath() );
+			
+			resetModuleSummary( module );
 
-			String gap = "  ";
-			if( modNum.toString().length() == 2 ) gap += " ";
-			final String modLabel = getLabel( MODULE + "[" + modNum + "]" ) + module.getClass().getName();
-			final String runtime = getLabel( RUN_TIME ) + gap + getModuleRunTime( module );
-			sb.append( modLabel + RETURN );
-			sb.append( runtime + RETURN );
+			final StringBuffer sb = new StringBuffer();
+			sb.append( getLabel( MODULE ) + ModuleUtil.displaySignature( module ) + RETURN );
+			sb.append( getLabel( MODULE_CLASS ) + module.getClass().getName() + RETURN );
+			sb.append( getLabel( RUN_TIME ) + getModuleRunTime( module ) + RETURN );
 
 			final String summary = module.getSummary();
-			if( summary != null && !summary.isEmpty() )
-				sb.append( getDashes( Math.max( modLabel.length(), runtime.length() ) ) + RETURN + summary +
+			
+			if( summary != null && !summary.isEmpty() ) {
+				sb.append( getDashes( 50 ) + RETURN + summary +
 					( summary.endsWith( RETURN ) ? "": RETURN ) );
+			}	
 			sb.append( EXT_SPACER + RETURN );
-		}
-
-		saveSummary( sb.toString() );
+			
+			saveSummary( sb.toString() );
+		}	
 	}
 
 	/**
@@ -583,29 +570,6 @@ public class SummaryUtil {
 				writer.close();
 			}
 		}
-	}
-
-	/**
-	 * Read the summary file to find the last completed module number and return the next number.
-	 * 
-	 * @return Next module number
-	 * @throws Exception if unable to determine the module number
-	 */
-	protected static Integer getModuleNumber() throws Exception {
-		Integer num = null;
-		final BufferedReader reader = BioLockJUtil.getFileReader( getSummaryFile() );
-		try {
-			if( getSummaryFile().isFile() )
-				for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
-				final String label = MODULE + "[";
-				if( line.startsWith( label ) && line.indexOf( "]" ) > 0 )
-					num = Integer.valueOf( line.substring( label.length(), line.indexOf( "]" ) ) );
-				}
-		} finally {
-			reader.close();
-		}
-
-		return num == null ? 0: num + 1;
 	}
 
 	/**
@@ -687,11 +651,16 @@ public class SummaryUtil {
 		return getSpacer( "-", len );
 	}
 
-	private static String getHeading() {
+	private static String getHeading() throws DockerVolCreationException {
 		final StringBuffer sb = new StringBuffer();
-		sb.append( RETURN + EXT_SPACER + RETURN + getLabel( PIPELINE_NAME ) + "  " + Config.pipelineName() + RETURN );
+		String meta = Config.getString( null, MetaUtil.META_FILE_PATH );
+		if( meta == null ) meta = "N/A";
+		sb.append( getLabel( PIPELINE_NAME ) + "  " + Config.pipelineName() + RETURN );
 		sb.append( getLabel( PIPELINE_CONFIG ) + Config.getConfigFilePath() + RETURN );
+		sb.append( getLabel( PIPELINE_META ) + meta + RETURN );
 		sb.append( getLabel( BIOLOCKJ_VERSION_HEADER ) + BioLockJUtil.getVersion() + RETURN );
+		sb.append( getLabel( RUNTIME_ENV ) + "       " + getRuntimeEnv() + RETURN );
+		sb.append( getLabel( PIPELINE_INPUT ) + "    " + Config.getString( null, Constants.INPUT_DIRS ) + RETURN );
 		sb.append( getLabel( NUM_MODULES ) + "      " + Pipeline.getModules().size() + RETURN );
 		sb.append( getLabel( NUM_ATTEMPTS ) + "     1" + RETURN );
 		sb.append( EXT_SPACER + RETURN );
@@ -761,6 +730,7 @@ public class SummaryUtil {
 	private static final String FINAL_META = "Final Metadata";
 	private static final String MASTER_CONFIG = "Master Config";
 	private static final String MODULE = "Module";
+	private static final String MODULE_CLASS = "Module class";
 	private static final String NUM_ATTEMPTS = "# Attempts";
 	private static final String NUM_MODULES = "# Modules";
 	private static final String PIPELINE_CONFIG = "Pipeline Config";
