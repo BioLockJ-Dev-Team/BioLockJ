@@ -5,6 +5,7 @@ docs_dir: docs
 repo_name: BioLockJ
 site_author: Ivory Blakley
 copyright: 2019 Fodor Lab
+
 plugins:
     - search
 #    - pdf-export:
@@ -12,6 +13,13 @@ plugins:
 #        combined: True
 #        enabled_if_env: ENABLE_PDF_EXPORT
 #        combined_output_path: BioLockJ_User_Guide.pdf
+
+extra_javascript: 
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+markdown_extensions:
+    - mdx_math
+
 theme:
   name: 'readthedocs'
 #  name: 'material'

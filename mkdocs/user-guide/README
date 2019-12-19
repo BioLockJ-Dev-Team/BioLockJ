@@ -7,6 +7,10 @@ You may need to set up the following software:
 # See https://www.mkdocs.org/#installation
 pip install mkdocs
 
+# may also need this extention:
+pip install python-markdown-math
+# I used this:
+# pip install https://github.com/mitya57/python-markdown-math/archive/master.zip
 
 # To render the docs, 
 cd $BLJ/mkdocs/user-guide
