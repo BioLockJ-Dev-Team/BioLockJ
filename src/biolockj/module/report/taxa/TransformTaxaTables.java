@@ -12,16 +12,20 @@
 package biolockj.module.report.taxa;
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 import biolockj.*;
 import biolockj.util.*;
 
 /**
  * This utility is used to normalize, log-transform or othewise transfrom data that is stored as taxa counts.
- * This uses the TaxaCountModule methods to read taxa table data, 
- * and extends the functionality to writing taxa table data.
+ * This uses the TaxaCountModule methods to get taxa table files, 
+ * and uses the functionality to writing taxa table data.
  * 
+ * It is generally assumed that the output will contain the same samples and taxa as the input.
+ * If any samples or taxa are removed that should be abundantly clear.
+ * 
+ * The provided filterSamples removes all samples that have all-0 values.
  */
 public abstract class TransformTaxaTables extends TaxaCountModule {
 		
@@ -52,20 +56,19 @@ public abstract class TransformTaxaTables extends TaxaCountModule {
 		List<String> filteredSampleIDs,
 		List<String> filteredTaxaIDs) throws Exception ;
 	
+
 	/**
 	 * Filter out any samples in which all values are 0.
 	 * @param inputData
 	 * @return
 	 */
-	protected List<String> filterSamples( HashMap<String, HashMap<String, Double>> inputData ){
+	protected List<String> filterSamples( TaxaLevelTable inputData ){
 		final Set<String> allSampleIDs = inputData.keySet();
 		final Set<String> allZeroSamples = new TreeSet<>();
 		final List<String> filteredSampleIDs = new ArrayList<>();
 		for (String id : allSampleIDs) {
-			BigDecimal rowSum = inputData.get( id ).values().stream()
-							.map( val -> BigDecimal.valueOf( val ) )
-							.reduce(BigDecimal.ZERO, BigDecimal::add);
-			if ( rowSum.equals( BigDecimal.ZERO ) ) {
+			Long numNon0s = inputData.get( id ).values().stream().filter( d -> ! d.equals( Double.valueOf( 0 ) ) ).collect( Collectors.counting() );
+			if ( numNon0s.equals( Long.valueOf( 0 ) ) ) {
 				allZeroSamples.add( id );
 			}else {
 				filteredSampleIDs.add( id );
@@ -82,18 +85,8 @@ public abstract class TransformTaxaTables extends TaxaCountModule {
 		return( filteredSampleIDs );
 	}
 	
-	protected List<String> filterTaxa( HashMap<String, HashMap<String, Double >> inputData ){
-		
-		Set<String> bigSet = new TreeSet<>();
-		for (String sample : inputData.keySet() ) {
-			bigSet.addAll( inputData.get( sample ).keySet() );
-		}
-		
-		List<String> allTaxa = new ArrayList<>();
-		allTaxa.addAll( bigSet );
-		Collections.sort(allTaxa);
-		
-		return allTaxa;
+	protected List<String> filterTaxa( TaxaLevelTable inputData ){
+		return inputData.listTaxa();
 	};
 
 	protected File getOutputFile(File inputFile) throws Exception{

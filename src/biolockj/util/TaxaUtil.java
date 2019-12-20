@@ -365,6 +365,7 @@ public class TaxaUtil {
 	public static TaxaLevelTable readTaxaTable(final File taxaTable) throws FileNotFoundException, IOException, BioLockJException{
 		TaxaLevelTable data = new TaxaLevelTable(TaxaUtil.getTaxonomyTableLevel( taxaTable ));
 		final List<String> otuNames = new ArrayList<>();
+		boolean foundBigValues = false;
 		
 		final BufferedReader reader = BioLockJUtil.getFileReader( taxaTable );
 		try {
@@ -379,7 +380,9 @@ public class TaxaUtil {
 				while( st.hasMoreTokens() ) {
 					final String nextToken = st.nextToken();
 					if( nextToken.length() > 0 ) {
-						rowValues.put( otuNames.get( i ), new Double( nextToken ) );
+						Double cellValue = new Double( nextToken );
+						if ( (cellValue + 1) <= cellValue ) foundBigValues = true;
+						rowValues.put( otuNames.get( i ), cellValue);
 					}
 					i++;
 				}
@@ -393,6 +396,7 @@ public class TaxaUtil {
 		} finally {
 			if( reader != null ) reader.close();
 		}
+		if (foundBigValues) Log.warn(TaxaUtil.class, "Values in this table may be larger than can be precisely stored as a Double.");
 		return data;
 	}
 	
@@ -441,13 +445,7 @@ public class TaxaUtil {
 	}
 	
 	public static void writeDataToFile( final File outFile, final TaxaLevelTable taxaCounts ) throws Exception {
-		List<String> samples = new ArrayList<>();
-		samples.addAll(taxaCounts.keySet() );
-		Collections.sort(samples);
-		List<String> taxa = new ArrayList<>();
-		taxa.addAll( taxaCounts.get( samples.get(0) ).keySet() );
-		Collections.sort(taxa);
-		writeDataToFile(outFile, samples, taxa, taxaCounts);
+		writeDataToFile(outFile, taxaCounts.listSamples(), taxaCounts.listTaxa(), taxaCounts);
 	}
 
 

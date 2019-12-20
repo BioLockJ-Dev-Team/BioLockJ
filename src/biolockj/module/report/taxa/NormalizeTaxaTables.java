@@ -11,10 +11,10 @@
  */
 package biolockj.module.report.taxa;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 import biolockj.*;
+import biolockj.exception.BioLockJException;
 import biolockj.util.TaxaUtil;
 
 /**
@@ -54,31 +54,33 @@ public class NormalizeTaxaTables extends TransformTaxaTables {
 		String level = inputData.getLevel();
 		Log.info( getClass(), "Normalizing table for level: " + level );
 		
-		HashMap<String, BigDecimal> rowSums = new HashMap<>();
-		int scale = 0;
+		HashMap<String, Double> rowSums = new HashMap<>();
 		for (String sampleID : filteredSampleIDs) {
 			Log.debug( getClass(), "Adding values from sample: " + sampleID );
-			BigDecimal rowSum = inputData.get( sampleID ).values().stream()
-							.map( val -> BigDecimal.valueOf( val ) )
-							.reduce(BigDecimal.ZERO, BigDecimal::add);
+			Double rowSum = inputData.get( sampleID ).values().stream().collect( Collectors.summingDouble( Double::valueOf ) );
 			rowSums.put(sampleID, rowSum);
-			scale = Math.abs(rowSum.scale()) > Math.abs( scale ) ? Math.abs(rowSum.scale()) : scale;
 			Log.debug(getClass(), "rowSum = " + rowSum);
 		}
-		BigDecimal tableSum = rowSums.values().stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+		Double tableSum = rowSums.values().stream().collect( Collectors.summingDouble( Double::valueOf ) );
 		Log.debug(getClass(), "tableSum = " + tableSum);
 		
-		BigDecimal averageSampleSum = tableSum.divide(BigDecimal.valueOf(filteredSampleIDs.size()), scale, RoundingMode.HALF_EVEN);
+		Double averageSampleSum = tableSum / filteredSampleIDs.size(); 
 		summary += Constants.RETURN + "Total table (" + level + "): " + tableSum;
 		summary += Constants.RETURN + "Average sample sequencing depth (" + level + "): " + averageSampleSum;
+		
+		if (averageSampleSum.isInfinite()) {
+			String msg = "The calculated average sample sequencing depth is infinitly large.";
+			Log.error(getClass(), msg);
+			throw new BioLockJException(msg);
+		}
 		
 		TaxaLevelTable newData = new TaxaLevelTable(level);
 		for (String sampleID : filteredSampleIDs) {
 			newData.newSampleRow(sampleID);
 			for ( String taxaID : filteredTaxaIDs ) {
 				Double RC = inputData.get( sampleID ).get( taxaID );
-				BigDecimal n = rowSums.get( sampleID );
-				Double newValue = ( RC / n.doubleValue() ) * averageSampleSum.doubleValue() ;
+				Double n = rowSums.get( sampleID );
+				Double newValue = ( RC / n.doubleValue() ) * averageSampleSum ;
 				newData.get( sampleID ).put( taxaID, newValue + 1 );
 			}
 		}

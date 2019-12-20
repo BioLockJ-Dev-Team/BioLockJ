@@ -1,8 +1,8 @@
 package biolockj.module.report.taxa;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import biolockj.Config;
 import biolockj.Constants;
 import biolockj.Log;
@@ -15,6 +15,8 @@ import biolockj.util.TaxaUtil;
  *
  */
 public class NormalizeByReadsPerMillion extends TransformTaxaTables {
+	
+	private static final Double MILLION = new Double( 1000000 );
 
 	@Override
 	protected TaxaLevelTable transform( TaxaLevelTable inputData, List<String> filteredSampleIDs,
@@ -28,11 +30,9 @@ public class NormalizeByReadsPerMillion extends TransformTaxaTables {
 		TaxaLevelTable newData = new TaxaLevelTable(level);
 		for (String sampleID : filteredSampleIDs) {
 			newData.newSampleRow( sampleID );
-			BigDecimal rowSum = inputData.get( sampleID ).values().stream()
-							.map( val -> BigDecimal.valueOf( val ) )
-							.reduce(BigDecimal.ZERO, BigDecimal::add);
+			Double rowSum = inputData.get( sampleID ).values().stream().collect( Collectors.summingDouble( Double::valueOf ) );
 			Log.debug(getClass(), "rowSum [" + sampleID + "] = " + rowSum);
-			Double NormFactor = rowSum.divide( BigDecimal.valueOf( 1000000 ) ).doubleValue();
+			Double NormFactor = rowSum / MILLION;
 			summary += Constants.RETURN + sampleID + ": " + NormFactor;
 			for ( String taxaID : filteredTaxaIDs ) {
 				Double rawValue = inputData.get( sampleID ).get( taxaID );
