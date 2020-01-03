@@ -17,6 +17,17 @@ Modules in the **[biolockj.module.report.taxa](https://msioda.github.io/BioLockJ
 
 ---
 
+#### AddPseudoCount
+`#BioModule biolockj.module.report.taxa.AddPseudoCount`
+
+**Description:**  Add 1.0 to every value in each table.  This is typically done to avoid the mathmatecal consequences of 0's, and is generally only done on raw counts data.
+
+**Options:**
+
+*none*
+
+---
+
 #### BuildTaxaTables
 `#BioModule biolockj.module.report.taxa.BuildTaxaTables`
 
@@ -36,6 +47,17 @@ Modules in the **[biolockj.module.report.taxa](https://msioda.github.io/BioLockJ
 **Options:**
 
    - *report.logBase* 
+
+---
+
+#### NormalizeByReadsPerMillion
+`#BioModule biolockj.module.report.taxa.NormalizeByReadsPerMillion`
+
+**Description:**  Normalize each sample for sequencing depth by reporting each value as the number of counts per million counts in a given sample.
+
+**Options:**
+
+*none*
 
 ---
 
