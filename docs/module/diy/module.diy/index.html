@@ -154,16 +154,44 @@
               
                 <h1 id="do-it-yourself-diy-package">Do It Yourself - DIY Package</h1>
 <h2 id="diy-package">DIY package</h2>
-<p>The DIY package allows users to customize BioLockJ to fit their needs. </p>
+<p>The DIY package allows users to customize BioLockJ. </p>
 <h4 id="genmod">GenMod</h4>
 <p><code>#BioModule biolockj.module.diy.GenMod</code></p>
-<p>Description: Allows user to add external scripts into the BioLockJ pipeline.</p>
+<p>Description: Allows user to add their own scripts into the BioLockJ pipeline.</p>
 <p><strong>Options:</strong></p>
 <ul>
 <li><em>genMod.launcher</em> </li>
 <li><em>genMod.param</em></li>
 <li><em>genMod.scriptPath</em></li>
+<li><em>genMod.dockerContainerName</em></li>
 </ul>
+<p>The specified script is executed using the modules script directory as the current working directory. A <em>scriptPath</em> is required.  If specified, the <em>launcher</em> program (ie R, Python) will be used.  If specified, any <em>param</em> will be listed as arguments to the script.  If running in docker, <em>dockerContainerName</em> is required.</p>
+<p>This is ideal for:</p>
+<ul>
+<li>Custom analysis for a given pipeline, such as an R or python script</li>
+<li>Any steps where an appropriate BioLockJ module does not exist</li>
+</ul>
+<p>Any step in your analysis process that might otherwise have to be done manually can be stored as a custom script so that the entire process is as reproducible as possible.</p>
+<p>It is SCRONGLY encouraged that users write scripts using common module conventions:</p>
+<ul>
+<li>use relative file paths (starting with <code>.</code> or <code>..</code>)</li>
+<li>put all generated output in the modules <code>output</code> directory (<code>../output</code>)</li>
+<li>put any temporary files in the modules <code>temp</code> directory (<code>../tmep</code>).  </li>
+<li>the main pipeline directory would be <code>../..</code>, and the output of a previous module such as <code>PearMergedReads</code> would be in <code>../../*_PearMergedReads/output</code></li>
+</ul>
+<p>To use the GenMod module multiple times in a single pipeline, use the <code>AS</code> keyword to direct properties to the correct instance of the module.</p>
+<p>For example:</p>
+<pre><code>#BioModule biolockj.module.diy.GenMod AS Part1
+#&lt;other modules&gt;
+#BioModule biolockj.module.diy.GenMod AS Part2
+
+Part1.launcher=python
+Part1.script=path/to/first/script.py
+
+Part2.script=path/to/bash/script/doLast.sh
+</code></pre>
+
+<p>With this, <code>script.py</code> will be run using python.  Then other modules will run. Then <code>doLast.sh</code> will be run using the default system (probably bash, unless it has a shebang line specifiying something else).</p>
 <hr />
               
             </div>
@@ -199,6 +227,7 @@
 </div>
     <script>var base_url = '../../..';</script>
     <script src="../../../js/theme.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../../../search/main.js" defer></script>
 
 </body>

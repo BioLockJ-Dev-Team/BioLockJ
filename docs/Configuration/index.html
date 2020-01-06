@@ -270,15 +270,24 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 <p>If the same property is given in multiple config files, the highest priority goes to the file used to launch the pipeline.  Standard.properties always has the lowest priority.</p>
 <p>A copy of each configuration file is stored in the pipeline root directory to serve as primary project documentation.  </p>
 <h2 id="biomodule-execution-order">BioModule execution order</h2>
-<p>To include a BioModule in your pipeline, add a <code>#BioModule</code> line to the top your configuration file, as shown in the examples found in <a href="https://github.com/msioda/BioLockJ/tree/master/resources/config/template">templates</a>.  Each line has the <code>#BioModule</code> keyword followed by the path to the jar file for that module.  For example:</p>
+<p>To include a BioModule in your pipeline, add a <code>#BioModule</code> line to the top your configuration file, as shown in the examples found in <a href="https://github.com/msioda/BioLockJ/tree/master/resources/config/template">templates</a>.  Each line has the <code>#BioModule</code> keyword followed by the path for that module.  For example:</p>
 <pre><code>#BioModule biolockj.module.seq.PearMergeReads
 #BioModule biolockj.module.classifier.wgs.Kraken2Classifier
 #BioModule biolockj.module.report.r.R_PlotMds
 </code></pre>
 
 <p>BioModules will be executed in the order they are listed in here.  A typical pipeline contians one <a href="../module/classifier/module.classifier">classifier module</a>.  Any number of <a href="../module/seq/module.seq">sequence pre-processing</a> modules may come before the classifier module. Any number of <a href="../module/report/module.report">report modules</a> may come after the classifier module.  In addition to the BioModules specified in the configuration file, BioLockJ may add <a href="../module/implicit/module.implicit">implicit modules</a> that the are required by specified modules.  See <a href="Example-Pipeline">Example Pipeline</a>.</p>
+<p>A module can be given an alias by using the <code>AS</code> keyword in its execution line:</p>
+<pre><code>#BioModule biolockj.module.seq.PearMergeReads AS Pear
+</code></pre>
+
+<p>This is is generally used for modules that are used more than once in the same pipeline.  Given this alias, the folder for this module will be called <code>01_Pear</code> instead of <code>01_PearMergeReads</code>, and any general properties directed to this module would use the prefix <code>Pear</code> instead of <code>PearMergedReads</code>. An alias must start with a capital letter, and cannot duplicate a name/alias of any other module in the same pipeline.  </p>
 <h2 id="summary-of-properties">Summary of Properties</h2>
 <p>Properties are defined as name-value pairs. List-values are comma separated. Leading and trailing whitespace is removed so "propName=x,y" is equivalent to "propName = x, y".</p>
+<p>Some pipeline properties (usually those used by pipeline utilities) can be directed to a specific module.  For example, <code>script.numThreads</code> is a general property that specifies that number of threads alloted to each script launched by any module; and <code>PearMergeReads.numThreads</code> overrides that property ONLY for the PearMergeReads module.  </p>
+<p><code>pipeline.defaultProps</code> is a handled before any other property.  It is used to link another properties file.  The properties from that file are added to the MASTER set. The defaultProps property is not included in the MASTER properties set.</p>
+<p><code>exe.</code> properties are used to specify the path to common executables.  Modules are sometimes written to use a common tool, such as <code>Rscript</code> or <code>bowtie</code>.  These modules will write scripts with the assumption that this command is on the <code>$PATH</code> when the script is executed UNLESS <code>exe.Rscript</code> is given specifying a path to use.  The <code>exe.</code> properties are often specified in a defaultProps file for a given environment rather than in individual project properties files.  </p>
+<p>If you are running a pipeline using docker, it is assumed that all file paths in your config file are written in terms of your host machine. The <em>EXCEPTION</em> to this is the <code>exe.</code> file paths. Most often, docker containers are used because of the executables baked into them. In the rare case where you want to use an executable from your local machine, while running a pipeline in docker, you can specify this by using the prefix <code>hostExe.</code> in place of <code>exe.</code>.</p>
 <h4 id="aws">aws</h4>
 <table>
 <thead>
@@ -917,7 +926,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </tr>
 <tr>
 <td align="left"><em>r.rareOtuThreshold</em></td>
-<td align="left">If &gt;1, R will filter OTUs below value provided.  If &lt;1, R will interperate the value as a percentage and discard OTUs not found in at least that percentage of samples</td>
+<td align="left">If &gt;=1, R will filter OTUs found in fewer than this many samples.  If &lt;1, R will interperate the value as a percentage and discard OTUs not found in at least that percentage of samples</td>
 </tr>
 <tr>
 <td align="left"><em>r.reportFields</em></td>
@@ -1281,6 +1290,7 @@ BioLockJ takes a single configuration file as a runtime parameter.  Although all
 </div>
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="../search/main.js" defer></script>
 
 </body>
