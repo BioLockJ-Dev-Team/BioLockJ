@@ -13,8 +13,10 @@
 ##   7. Add $BLJ_SCRIPT to your $PATH                                  ##
 ##                                                                     ##
 #########################################################################
-export BLJ_SCRIPT="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
-export BLJ="$(dirname $BLJ_SCRIPT)"
+if [ ! -f "/.dockerenv" ]; then 
+	export BLJ_SCRIPT="$( cd "$( dirname ${BASH_SOURCE[0]} )" && pwd )"
+	export BLJ="$(dirname $BLJ_SCRIPT)"
+fi
 export BLJ_PROJ="${BLJ}/pipelines"
 export EC2_USER="ec2-user"
 export EC2_HOME="/home/${EC2_USER}"

@@ -1,0 +1,44 @@
+README
+
+This project has a minimal amount of data to let you test your installation of the BioLockJ pipeline manager.
+
+The pipeline it creates is extemely limited to minimize dependencies and to finish within a few seconds.  This doesn't showcase a good analysis. It quickly gets to an example of pipeline layout.
+
+
+
+
+
+
+
+
+Data in the "rhizosphere_16S_data" folder are subsampled from the this project:
+Mendes et al.
+"Influence of resistance breeding in common bean on rhizosphere microbiome composition and function" 
+https://doi.org/10.1038/ismej.2017.158
+
+see additional citation info below.
+
+
+
+Data Citation:
+
+TY  - JOUR
+AU  - Mendes, Lucas William
+AU  - Raaijmakers, Jos M
+AU  - de Hollander, Mattias
+AU  - Mendes, Rodrigo
+AU  - Tsai, Siu Mui
+TI  - Influence of resistance breeding in common bean on rhizosphere microbiome composition and function
+JO  - The Isme Journal
+PY  - 2017/10/13/online
+VL  - 12
+SP  - 212
+EP  -
+PB  - International Society for Microbial Ecology
+SN  -
+UR  - https://doi.org/10.1038/ismej.2017.158
+L3  - 10.1038/ismej.2017.158
+M3  - Original Article
+L3  - https://www.nature.com/articles/ismej2017158#supplementary-information
+ER  -
+

@@ -1,5 +1,5 @@
 # suggested build command:
-# name=biolockj_controller
+# name=blj_basic
 # cd ${BLJ}
 # docker build --build-arg DOCKER_HUB_USER=biolockjdevteam -t biolockjdevteam/${name} . -f resources/docker/${name}.Dockerfile 
 
@@ -7,6 +7,7 @@ FROM ubuntu:18.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 #1.) Setup Standard Dirs (used by some but not all ancestors)
+SHELL ["/bin/bash", "-c"]
 ENV APP="/app"
 ENV APP_BIN="${APP}/bin"
 ENV BIN="/usr/local/bin"
@@ -16,7 +17,7 @@ ENV EFS="/mnt/efs"
 ENV BLJ_CONFIG="${EFS}/config"
 ENV BLJ_HOST_HOME="/home/ec2-user"
 ENV BLJ_PROJ="${EFS}/pipelines"
-ENV BLJ_SCRIPT="${EFS}/script"
+ENV BLJ_SCRIPT="${BLJ}/script"
 ENV PATH="$PATH:${BLJ_HOST_HOME}/miniconda/bin:${APP_BIN}"
 
 #2.) Build Standard Directories 

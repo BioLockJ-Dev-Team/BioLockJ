@@ -3,7 +3,7 @@
 # cd ${BLJ}
 # docker build --build-arg DOCKER_HUB_USER=biolockjdevteam -t biolockjdevteam/${name} . -f resources/docker/${name}.Dockerfile 
 
-ARG BUILDER_IMG=biolockjdevteam/build_with_ant
+ARG BUILDER_IMG=biolockjdevteam/build_with_ant:1.9.14
 ARG DOCKER_HUB_USER=biolockj
 FROM ${BUILDER_IMG} AS builder
 
@@ -12,7 +12,8 @@ RUN ls /blj
 RUN $ANT_DIST/bin/ant -buildfile blj/resources/build.xml build-jar
 
 ARG DOCKER_HUB_USER
-FROM ${DOCKER_HUB_USER}/blj_basic_py2
+ARG FROM_VERSION=v1.2.7
+FROM ${DOCKER_HUB_USER}/blj_basic_py2:${FROM_VERSION}
 ARG DEBIAN_FRONTEND=noninteractive
 
 #1.) Install Ubuntu Software
@@ -37,8 +38,9 @@ RUN cd $BIN && \
 
 #4.) Install BioLockJ
 COPY --from=builder /blj/dist/BioLockJ.jar $BLJ/dist/BioLockJ.jar
-COPY --from=builder /blj/script $BLJ/script
 COPY --from=builder /blj/resources $BLJ/resources
+COPY --from=builder /blj/script $BLJ/script
+COPY --from=builder /blj/templates $BLJ/templates
 COPY --from=builder /blj/.version /blj/install $BLJ/
 
 RUN $BLJ/install
@@ -55,9 +57,9 @@ RUN	mv /usr/share/ca-certificates* ~ && mv /usr/share/npm ~ && \
 	rm -rf /usr/share/* && \
 	mv ~/npm /usr/share && mv ~/ca-certificates* /usr/share
 
-#7.) Update  ~/.bashrc
-RUN echo '[ -f "$BLJ/script/blj_config" ] && . $BLJ/script/blj_config' >> ~/.bashrc && \
-	echo 'alias goblj=blj_go' >> ~/.bashrc
+#7.) configure active session without relying on user profile
+RUN . $BLJ/script/blj_config
+ENV PATH="${BLJ}/script:$PATH"
 		
 #8.) Setup environment and assign default command
 CMD java -cp $BLJ/dist/BioLockJ.jar:$BLJ_MODS/* biolockj.BioLockJ $BLJ_OPTIONS

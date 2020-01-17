@@ -2,7 +2,10 @@
 
 <img src="img/BioLockJ_Block_green.png" width="300" alt="BioLockJ logo"  class="center">
 
-**BioLockJ optimizes your bioinformatics pipeline and metagenomics analysis.**  
+
+## What is BioLockJ
+
+**BioLockJ** optimizes your bioinformatics pipeline and metagenomics analysis.  
 
 *  Modular design logically partitions analysis and expedites failure recovery
 *  Automated script generation eliminates syntax errors and ensures uniform execution
@@ -13,7 +16,6 @@
 
 
 ## BioLockJ User Guide:
- * [Installation](#Installation.md)
  * [Getting Started](Getting-Started.md)
  * [Commands](Commands.md)
  * Pipeline Componenets
@@ -32,22 +34,28 @@
  * Examples and Templates
      * [Example Pipeline](Example-Pipeline.md)
  * [FAQ](FAQ.md)
- * Citation
-
 
 
 
 ## Links for Developers
 
-See javadocs at                       
+Javadocs                       
 [https://BioLockJ-Dev-Team.github.io/BioLockJ/javadocs/](https://BioLockJ-Dev-Team.github.io/BioLockJ/javadocs/)
 
-See developement tests in the sheepdog_testing_suite at                  
+Developement tests in the sheepdog_testing_suite                  
 [https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite](https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite)
 
-See the user guide for our latest stable version at                    
+The user guide for our latest stable version                    
 [https://biolockj-dev-team.github.io/BioLockJ/](https://biolockj-dev-team.github.io/BioLockJ/)
 
-You can also see the guide for the current development version, and previous stable versions at                 
+The user guide for the current development version, and previous stable versions                 
 [https://biolockj.readthedocs.io/en/latest/](https://biolockj.readthedocs.io/en/latest/)
 
+Guidelines for new modules                    
+[Building Modules](Building-Modules.md)
+
+## Citing BioLockJ
+
+If you use BioLockJ in your research, you should cite BioLockJ itself AND the tools that make up the pipeline.  The majority of BioLockJ modules are wrappers for independent tools.  See the summary of your pipeline for citation information from the modules in your pipeline. This information is also available in the modules' documentation.
+
+To cite BioLockJ itself, please cite the public project git repository (https://github.com/BioLockJ-Dev-Team/BioLockJ) and author Mike Sioda.

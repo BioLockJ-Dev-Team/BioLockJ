@@ -4,7 +4,8 @@
 # docker build --build-arg DOCKER_HUB_USER=biolockjdevteam -t biolockjdevteam/${name} . -f resources/docker/${name}.Dockerfile 
 
 ARG DOCKER_HUB_USER=biolockj
-FROM ${DOCKER_HUB_USER}/blj_basic_py2
+ARG FROM_VERSION=v1.2.7
+FROM ${DOCKER_HUB_USER}/blj_basic_py2:${FROM_VERSION}
 
 #1.) Install dependencies
 RUN pip install numpy biopython && pip install biom-format

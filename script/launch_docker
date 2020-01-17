@@ -53,6 +53,7 @@ main(){
 }
 
 . ${BLJ_SCRIPT}/blj_user_arg_lib
+. ${BLJ_SCRIPT}/docker_config
 
 # Read script args and bash env vars
 # Param 1 - Array of launch_docker script args

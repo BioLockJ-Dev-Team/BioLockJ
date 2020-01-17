@@ -4,7 +4,8 @@
 # docker build --build-arg DOCKER_HUB_USER=biolockjdevteam -t biolockjdevteam/${name} . -f resources/docker/${name}.Dockerfile 
 
 ARG DOCKER_HUB_USER=biolockj
-FROM ${DOCKER_HUB_USER}/blj_basic
+ARG FROM_VERSION=v1.2.7
+FROM ${DOCKER_HUB_USER}/blj_basic:${FROM_VERSION}
   
 #1.) Install Kraken
 ENV KRAKEN_VER=2.0.7-beta

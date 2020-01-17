@@ -117,7 +117,7 @@ public class DockerUtil {
 
 		final List<String> dockerVolumes = new ArrayList<>();
 		dockerVolumes.add( " -v " + DOCKER_SOCKET + ":" + DOCKER_SOCKET  + WRAP_LINE);
-		dockerVolumes.add( " -v " + RuntimeParamUtil.get_BLJ_PROJ( false ) + ":" + DOCKER_PIPELINE_DIR + ":delegated" + WRAP_LINE );
+		dockerVolumes.add( " -v " + deContainerizePath( Config.getPipelineDir().getParent() ) + ":" + Config.getPipelineDir().getParent() + ":delegated" + WRAP_LINE );
 		for ( String key : volumeMap.keySet() ) {
 			if ( key.equals( DOCKER_SOCKET ) ) continue;
 			if ( volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) continue;

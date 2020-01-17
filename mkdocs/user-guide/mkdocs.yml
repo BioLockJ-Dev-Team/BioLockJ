@@ -26,7 +26,6 @@ theme:
 #  custom_dir: 'customize_material_theme'
 nav:
     - Home: index.md
-    - Installation: Installation.md
     - Getting Started: Getting-Started.md
     - Commands: Commands.md
     - Pipeline Componenets:

@@ -10,6 +10,7 @@
 # param 2 - one of: upload or mount
 main(){
 	primaryConfig="$1"
+	dirList=($(dirname $(to_abs_path $primaryConfig)))
 	dockerCopyPath=$(get_host_file $primaryConfig) && primaryConfig=$dockerCopyPath
 	
 	check_args $@
@@ -22,7 +23,6 @@ main(){
 	allProps=()
 	split_list_props # populates allProps
 
-	dirList=($(dirname $(to_abs_path $primaryConfig)))
 	fileList=(primaryConfig)
 
 	if [ $2 == upload ]; then
@@ -89,14 +89,17 @@ read_properties(){
 # param 1 - host file path
 get_host_file(){
 	if in_docker_env ; then
-		local newDir="/tmp/vol_$('ls' -l /tmp | wc -l )"
+		#local newDir="/tmp/vol_$('ls' -l /tmp | wc -l )"
+		local newDir="/tmp/vol_0"
 		mkdir $newDir
+		local parent=$(dirname $1)
 		local newPath=$newDir/$(basename "$1")
-		local file="tmpTest/$(basename $1)"
+		local file="/tmpTest/$(basename $1)"
 		# cat the file IFF it is a file AND it is not rediculously large (standard.properties is only 6197 bytes)
-		local cmd="[ -f $file ] && [ `stat --printf=\"%s\" $file` -lt 100000 ] && cat $file"
+		#local cmd='[ -f $file ] && [ `stat --printf=\"%s\" $file` -lt 100000 ] && cat $file'
+		local cmd='[ -f $file ] && cat $file'
 		# copy the file from a peer-docker-container, if that fails (||) exit with error message.
- 		docker run --rm --mount type=bind,source=$(dirname $1),target=/tmpTest ubuntu ${cmd} > $newPath || exit_with_message "Could not find file: $1"
+ 		docker run --rm -e file=$file --mount type=bind,source=$parent,target=/tmpTest ubuntu "/bin/bash" "-c" "${cmd}" > $newPath || exit_with_message "Could not find file: $1"
 		echo $newPath
 	else
 		return 1
