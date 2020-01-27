@@ -46,7 +46,21 @@ qstat -u $USER                                                                  
 
 ```
 
-### 5. Investigate Failed Pipelines
-* Failed pipelines can be restarted to save the progress made by successful modules.
-* See [Failure Recovery](../Failure-Recovery) for more information.
-* Failure Recovery should be avoided until you have successfully completed your 1st pipeline.  
+### 5. Making your own pipline
+Now that you have a working example, you can make your own pipeline.  
+You may want to modify the example above, or look at others under `/templates`.
+
+Things are seldom perfect the first time.  Its safe to assume you will want to make iterative changes to your pipeline configuration.  BioLockJ offers some tools to facilitate this process.
+
+ * Check your pipeline using [precheck](Check-Dependencies.md) mode 
+
+ * Add modules onto your partial pipeline using [restart](Failure-Recovery.md)
+
+ * Look through the base set of [modules](Built-in-modules.md) and even [create your own](Building-Modules.md)
+
+A recommended practice is to make a subset of your data, and use that to develope your pipeline. 
+
+### 6. Investigate Failed Pipelines
+Failed pipelines can be restarted to save the progress made by completed modules.
+See [Failure Recovery](../Failure-Recovery) for more information.
+

@@ -11,6 +11,7 @@ main(){
 	set_pipeline_dir
 	set_reset_module
 	
+	possibleStatus=(biolockjComplete biolockjStarted biolockjFailed precheckStarted precheckFailed precheckComplete)
 	reset_modules
 	reset_pipeline_root
 	
@@ -72,19 +73,17 @@ reset_modules(){
 		if ! $(is_empty "$modDir"); then
 			dirName=$(basename "$modDir")
 			if $(is_module_dir "$modDir") && [ $(get_module_number $dirName) -gt $lastCompleted ]; then
+				for statusFlag in ${possibleStatus[@]} ; do
+					local flag="$modDir/$statusFlag"
+					[ -f "$flag" ] && rm "$flag" && echo "Deleted $flag"
+				done
 				touch "$modDir/biolockjFailed" && echo "Created $modDir/biolockjFailed"
-				if [ -f "$modDir/biolockjComplete" ]; then 
-					rm "$modDir/biolockjComplete" && echo "Deleted $modDir/biolockjComplete"
-				elif [ -f "$modDir/biolockjStarted" ]; then
-					rm "$modDir/biolockjStarted" && echo "Deleted $modDir/biolockjStarted"
-				fi
 			fi
 		fi
 	done
 }
 
 reset_pipeline_root(){
-	local possibleStatus=(biolockjComplete biolockjStarted biolockjFailed)
 	for statusFlag in ${possibleStatus[@]} ; do
 		local flag="$pipeDir/$statusFlag"
 		[ -f "$flag" ] && rm "$flag" && echo "Deleted $flag"

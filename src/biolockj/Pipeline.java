@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import biolockj.exception.DirectModuleException;
+import biolockj.exception.StopAfterPrecheck;
 import biolockj.module.*;
 import biolockj.module.report.Email;
 import biolockj.module.report.r.R_Module;
@@ -94,7 +95,6 @@ public class Pipeline {
 		Log.info( Pipeline.class, "Initialize " + ( BioLockJUtil.isDirectMode() ? "DIRECT module ":
 			DockerUtil.inAwsEnv() ? "AWS ": DockerUtil.inDockerEnv() ? "DOCKER ": "" ) + "pipeline" );
 		bioModules = BioModuleFactory.buildPipeline();
-		initializeModules();
 	}
 
 	/**
@@ -130,6 +130,7 @@ public class Pipeline {
 	 * @throws Exception if any fatal error occurs during execution
 	 */
 	public static void runPipeline() throws Exception {
+		if (RuntimeParamUtil.isPrecheckMode() ) throw new StopAfterPrecheck();
 		BioLockJUtil.markStatus( Constants.BLJ_STARTED );
 		try {
 			executeModules();
@@ -210,7 +211,7 @@ public class Pipeline {
 	 * @throws Exception thrown if propagated by called methods
 	 * @return true if no errors are thrown
 	 */
-	protected static boolean initializeModules() throws Exception {
+	protected static boolean checkModuleDependencies() throws Exception {
 		for( final BioModule module: getModules() ) {
 			setExeModule( module );
 			if( ModuleUtil.isIncomplete( module ) && ( !BioLockJUtil.isDirectMode() || module instanceof Email ) ) {
@@ -219,7 +220,8 @@ public class Pipeline {
 				FileUtils.forceDelete( module.getModuleDir() );
 				new File( path ).mkdirs();
 			}
-
+			
+			if (RuntimeParamUtil.isPrecheckMode()) BioLockJUtil.markStatus( module, Constants.PRECHECK_STARTED );
 			info( "Check dependencies for: " + module.getClass().getName() );
 			module.checkDependencies();
 			ValidationUtil.checkDependencies( module );
@@ -229,6 +231,8 @@ public class Pipeline {
 				module.cleanUp();
 				if( !BioLockJUtil.isDirectMode() ) ValidationUtil.validateModule( module );
 				refreshRCacheIfNeeded();
+			}else {
+				BioLockJUtil.markStatus( module, Constants.PRECHECK_COMPLETE );
 			}
 		}
 

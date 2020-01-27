@@ -61,7 +61,7 @@ public class FatalExceptionHandler {
 			setFailedStatus( ex );
 		}
 
-		if( !BioLockJUtil.isDirectMode() ) SummaryUtil.addSummaryFooterForFailedPipeline();
+		if( !BioLockJUtil.isDirectMode() && !RuntimeParamUtil.isPrecheckMode()) SummaryUtil.addSummaryFooterForFailedPipeline();
 		logFatalException( args, ex );
 
 		if( getErrorLog() != null ) {
@@ -200,20 +200,35 @@ public class FatalExceptionHandler {
 	}
 
 	private static void setFailedStatus(Exception fetalEx) {
-		try {
-			if( Config.getPipelineDir() != null ) {
-				File failFlagPath = BioLockJUtil.markStatus( Constants.BLJ_FAILED );
-				if( fetalEx != null ) {
-					final FileWriter writer = new FileWriter( failFlagPath );
-					writer.write( ERROR_TYPE + fetalEx.getClass().getSimpleName() + System.lineSeparator() );
-					writer.write( ERROR_MSG + fetalEx.getMessage() );
-					writer.close();
-				}
+		if (fetalEx instanceof StopAfterPrecheck) {
+			try {
+				BioLockJUtil.markStatus( Constants.PRECHECK_COMPLETE );
+			} catch( BioLockJStatusException | IOException e ) {
+				Log.error( FatalExceptionHandler.class,
+					"Pipeline root directory not found - unable to save Pipeline Status File: " + Constants.PRECHECK_COMPLETE +
+					" : " + e.getMessage() );
 			}
-		} catch( final Exception ex ) {
-			Log.error( FatalExceptionHandler.class,
-				"Pipeline root directory not found - unable save Pipeline Status File: " + Constants.BLJ_FAILED +
+		}else {
+			try {
+				File failFlagPath;
+				if (RuntimeParamUtil.isPrecheckMode()) {
+					failFlagPath = BioLockJUtil.markStatus( Constants.PRECHECK_FAILED );
+				}else {
+					failFlagPath = BioLockJUtil.markStatus( Constants.BLJ_FAILED );
+				}
+				if( Config.getPipelineDir() != null ) {
+					if( fetalEx != null ) {
+						final FileWriter writer = new FileWriter( failFlagPath );
+						writer.write( ERROR_TYPE + fetalEx.getClass().getSimpleName() + System.lineSeparator() );
+						writer.write( ERROR_MSG + fetalEx.getMessage() );
+						writer.close();
+					}
+				}
+			} catch( final Exception ex ) {
+				Log.error( FatalExceptionHandler.class,
+					"Pipeline root directory not found - unable to save Pipeline Status File: " + Constants.BLJ_FAILED +
 					" : " + ex.getMessage() );
+			}
 		}
 	}
 

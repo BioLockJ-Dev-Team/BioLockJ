@@ -520,6 +520,24 @@ public class Constants {
 	public static final String PIPELINE_NAME = "pipeline.name";
 
 	/**
+	 * Name of the file created in the BioModule root directory to indicate the precheck 
+	 * process encountered an error (if running in precheck mode): {@value #PRECHECK_COMPLETE}
+	 */
+	public static final String PRECHECK_COMPLETE = "precheckComplete";
+	
+	/**
+	 * Name of the file created in the BioModule root directory to indicate the precheck 
+	 * process has completed (if running in precheck mode): {@value #PRECHECK_FAILED}
+	 */
+	public static final String PRECHECK_FAILED = "precheckFailed";
+	
+	/**
+	 * Name of the file created in the BioModule root directory to indicate the precheck 
+	 * process has started (if running in precheck mode): {@value #PRECHECK_STARTED}
+	 */
+	public static final String PRECHECK_STARTED = "precheckStarted";
+	
+	/**
 	 * File suffix appended to processed samples in the module output directory: {@value #PROCESSED}
 	 */
 	public static final String PROCESSED = "_reported" + Constants.TSV_EXT;

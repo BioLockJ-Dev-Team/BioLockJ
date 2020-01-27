@@ -31,13 +31,14 @@ set_arg_names(){
 	PROJ_ARG="blj_proj"
 	ENV_ARG="env-var"
 	WAIT_ARG="wait-for-start"
+	PRECHECK="precheck-only"
 }
 
 init_defaults(){
 	# Order does not matter for $longArgName or $takeShortArg, but it is easier to read if they match
 	# Order MATTERS for $shortArgName and $parameters ---they must match whatever order is in $longArgName.
-	longArgName=( $GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $ENV_ARG $WAIT_ARG $PROJ_ARG $EXT_MODS_ARG $BLJ_ARG )
-	takeShortArg=($GUI_ARG $PASSWORD_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $ENV_ARG $WAIT_ARG help version)
+	longArgName=( $GUI_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $ENV_ARG $WAIT_ARG $PRECHECK $PASSWORD_ARG $PROJ_ARG $EXT_MODS_ARG $BLJ_ARG )
+	takeShortArg=($GUI_ARG $CONFIG_ARG $RESTART_ARG $AWS_ARG $DOCKER_ARG $FG_ARG $ENV_ARG $WAIT_ARG $PRECHECK help version)
 	shortArgName=()
 	parameters=()
 	mustTakeValue=($PASSWORD_ARG $CONFIG_ARG $EXT_MODS_ARG $PROJ_ARG $ENV_ARG)
@@ -223,25 +224,37 @@ print_pipeline_status_and_exit(){
 	printf "Fetching pipeline status "
 	local i=0
 	local maxtime=$2
-	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG ; do
+	while [ $i -lt $maxtime ] || ifArgUsed $WAIT_ARG || ifArgUsed $PRECHECK ; do
 		i=$((i+1))
-		if [ -f ${pipeRootDir}/biolockjFailed ]; then 
+		if [ -f ${pipeRootDir}/biolockjFailed ] ; then 
 			echo ""; echo ""
 			echo "BioLockJ has stopped."
 			echo ""
 			cat ${pipeRootDir}/biolockjFailed
 			echo ""; echo ""
 			exit
+		elif [ -f ${pipeRootDir}/precheckFailed ] ; then 
+			echo ""; echo ""
+			echo "There is a problem with this pipeline configuration."
+			echo ""
+			cat ${pipeRootDir}/precheckFailed
+			echo ""; echo ""
+			exit
 		elif [ -f ${pipeRootDir}/biolockjComplete ]; then
 			echo ""; echo ""
 			echo "Pipeline is complete."
+			exit
+		elif [ -f ${pipeRootDir}/precheckComplete ]; then
+			echo ""; echo ""
+			echo "Precheck is complete. No problems were found in this pipeline configuration."
+			echo ""
 			exit
 		elif [ -f ${pipeRootDir}/biolockjStarted ]; then
 			echo ""; echo ""
 			echo "Pipeline is running."
 			exit
 		elif [ $i -eq $maxtime ]; then
-			if ifArgUsed $WAIT_ARG ; then
+			if ifArgUsed $WAIT_ARG || ifArgUsed $PRECHECK ; then
 				printf "(no timeout) "
 			else
 				printf "Reached max wait time: $maxtime seconds. "
@@ -295,7 +308,9 @@ display_help() {
     echo 'Options:'
     addSpace "version"       "Show version"
     addSpace "help"          "Show help menu"
-    addSpace "restart"       "Resume an existing pipeline"
+    addSpace "$PRECHECK"     "Set up pipeline and check dependencies and then STOP;"
+    continueDescriptoin      "do not execute the pipeline. This is helpful when testing edits to config files."
+    addSpace "$RESTART_ARG"  "Resume an existing pipeline"
     addSpace "$CONFIG_ARG <file>" "New config file (if restarting a pipeline)"
     addSpace "$PASSWORD_ARG <password>" "Encrypt password"
     addSpace "$DOCKER_ARG"   "Run in docker"

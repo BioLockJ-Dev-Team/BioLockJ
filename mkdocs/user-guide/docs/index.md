@@ -24,10 +24,10 @@
      * input files
      * [Dependencies](Dependencies.md)
  * Features
+     * [Check Dependencies](Check-Dependencies.md) before pipeline start
      * [Failure Recovery](Failure-Recovery.md)
      * [Validation](Validation.md)
      * Supported Environments
-     * Check dependencies before pipeline start
      * Expand BioLockJ by [Building Modules](Building-Modules.md)
  * Examples and Templates
      * [Example Pipeline](Example-Pipeline.md)

@@ -172,7 +172,8 @@ most_recent_pipeline() {
 }
 
 restartDir_has_status_flag(){
-	ifDefined $restartDir && [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ]
+	ifDefined $restartDir && [ -f $restartDir/biolockjStarted ] || [ -f $restartDir/biolockjFailed ] || [ -f $restartDir/biolockjComplete ] \
+		|| [ -f $restartDir/precheckStarted ] || [ -f $restartDir/precheckFailed ] || [ -f $restartDir/precheckComplete ] 
 }
 
 

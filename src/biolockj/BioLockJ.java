@@ -12,6 +12,7 @@
 package biolockj;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import org.apache.commons.io.FileUtils;
 import biolockj.exception.DockerVolCreationException;
@@ -90,6 +91,7 @@ public class BioLockJ {
 		System.out.println( "Starting BioLockj...");
 		try {
 			initBioLockJ( args );
+			checkDependencies();
 			runPipeline();
 		} catch( final Exception ex ) {
 			FatalExceptionHandler.logFatalError( args, ex );
@@ -97,6 +99,8 @@ public class BioLockJ {
 			if( !BioLockJUtil.isDirectMode() ) pipelineShutDown();
 		}
 	}
+	
+	
 
 	/**
 	 * Create a copy of the sequence files in property {@value biolockj.Constants#INPUT_DIRS}, output to a directory
@@ -153,10 +157,33 @@ public class BioLockJ {
 		final String dateString = "_" + year + month + day;
 		File projectDir = new File( baseString + dateString );
 		int i = 2;
-		while( projectDir.isDirectory() )
-			projectDir = new File( baseString + "_" + i++ + dateString );
+		while( !isNameAvailable(projectDir) )
+			projectDir = new File( baseString + "_" + i++ + dateString ); //TODO: dateString before i; or no date string
 		projectDir.mkdirs();
 		return projectDir;
+	}
+	
+	/*
+	 * If a directory exists with this pipeline name, but it is marked as a precheck pipeline,
+	 * then it is ok to delete it the file.  Precheck pipelines do not need to be preserved.
+	 */
+	private static boolean isNameAvailable(File dir) {
+		if ( ! dir.isDirectory() ) return true;
+		boolean isPrecheck = false;
+		String[] precheckDoneFlags = {Constants.PRECHECK_COMPLETE, Constants.PRECHECK_FAILED };
+		for (String str : precheckDoneFlags ) {
+			File flag = new File(dir, str);
+			if (flag.exists()) {
+				Log.info(BioLockJ.class, "Removing precheck pipeline: " + dir.getAbsolutePath());
+				try {
+					FileUtils.forceDelete(dir.getAbsoluteFile());
+					if ( ! flag.exists()) isPrecheck = true;
+				} catch( IOException e ) {
+					//e.printStackTrace();
+				}
+			}
+		}
+		return isPrecheck;
 	}
 
 	/**
@@ -201,6 +228,22 @@ public class BioLockJ {
 		if( !BioLockJUtil.isDirectMode() && BioLockJUtil.copyInputFiles() ) copyInputData();
 
 		SeqUtil.initialize();
+		
+		if( RuntimeParamUtil.doChangePassword() ) {
+			Log.info( BioLockJ.class, "Save encrypted password to: " + Config.getConfigFilePath() );
+			Email.encryptAndStoreEmailPassword();
+			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
+			return;
+		}
+		
+		Pipeline.initializePipeline();
+	}
+	
+	private static void checkDependencies() throws Exception{
+		Pipeline.checkModuleDependencies();
+		if( ! BioLockJUtil.isDirectMode() ) {
+			MasterConfigUtil.saveMasterConfig();
+		}
 	}
 
 	/**
@@ -276,19 +319,11 @@ public class BioLockJ {
 	 * @throws Exception if runtime errors occur
 	 */
 	protected static void runPipeline() throws Exception {
-		if( RuntimeParamUtil.doChangePassword() ) {
-			Log.info( BioLockJ.class, "Save encrypted password to: " + Config.getConfigFilePath() );
-			Email.encryptAndStoreEmailPassword();
-			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
-			return;
-		}
-
-		Pipeline.initializePipeline();
 		
 		if( BioLockJUtil.isDirectMode() )
 			Pipeline.runDirectModule( getDirectModuleID( RuntimeParamUtil.getDirectModuleDir() ) );
 		else {
-			MasterConfigUtil.saveMasterConfig();
+			
 			if( DockerUtil.inAwsEnv() ) NextflowUtil.startNextflow( Pipeline.getModules() );
 
 			Pipeline.runPipeline();
@@ -298,9 +333,10 @@ public class BioLockJ {
 				if( NextflowUtil.saveEfsDataToS3() ) NextflowUtil.purgeEfsData();
 				else throw new Exception( "Pipeline completed successfully, EFS data failed to transfer to S3!" );
 			}
-
-			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
+			
 			if( Config.getBoolean( null, Constants.RM_TEMP_FILES ) ) removeTempFiles();
+			
+			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
 		}
 	}
 

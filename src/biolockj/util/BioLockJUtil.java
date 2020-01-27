@@ -81,7 +81,7 @@ public class BioLockJUtil {
 	}
 
 	public static void clearStatus(String dirPath) {
-		String [] allFlags = {Constants.BLJ_STARTED, Constants.BLJ_FAILED, Constants.BLJ_COMPLETE};
+		String [] allFlags = {Constants.BLJ_STARTED, Constants.BLJ_FAILED, Constants.BLJ_COMPLETE, Constants.PRECHECK_COMPLETE, Constants.PRECHECK_FAILED, Constants.PRECHECK_STARTED};
 		for (String flag : allFlags) {
 			File ff = new File(dirPath + File.separator + flag);
 			if ( ff.exists() ) ff.delete();

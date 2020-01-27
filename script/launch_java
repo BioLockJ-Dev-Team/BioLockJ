@@ -41,6 +41,7 @@ check_env_vars(){
 
 check_basic_args(){
 	if ifArgUsed $RESTART_ARG ; then
+		ifArgUsed $PRECHECK && exit_with_message "Error [ launch_java ]: \"$PRECHECK\" can only be used with new pipelines; cannot be used in conjunction with \"$RESTART_ARG\". "
 		[ ! -d $restartDir ] && exit_with_message "Error [ launch_java ]: $restartDir is not a directory on the filesystem."
 		ifArgUsed $CONFIG_ARG && [ ! -f "${configFile}" ] && exit_with_message "Error [ launch_java ]: Config file [ $configFile ] not found on filesystem."
 	else
@@ -73,12 +74,14 @@ assemble_args(){
 	args="-projectDir ${BLJ_PROJ} -homeDir ${HOME}"
 	ifArgUsed $PASSWORD_ARG && args="${args} -password $(get_arg_value $PASSWORD_ARG)" 
 	ifArgUsed $RESTART_ARG && args="${args} -restartDir ${restartDir}"
+	ifArgUsed $PRECHECK && args="${args} -precheck"
 	[ ${#configFile} -gt 0 ] && args="${args} -config ${configFile}"
 	echo $args
 }
 
 before_java_start(){
 	initDir="$(most_recent_pipeline)"
+	[ -f "${initDir}/precheckComplete" ] || [ -f "${initDir}/precheckFailed" ] && replacePrecheckPipe=true
 	pipeDir="${initDir}"
 	initJava=$(ps | grep -c java)
 	numJava=${initJava}
@@ -123,7 +126,7 @@ print_info(){
 		echo "Restarting pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 5
-	elif [ "${initDir}" != "${pipeDir}" ] ; then 
+	elif [ "${initDir}" != "${pipeDir}" ] || [ replacePrecheckPipe ] ; then 
 		echo "Building pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 5

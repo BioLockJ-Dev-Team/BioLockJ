@@ -57,6 +57,7 @@ main(){
 # Read script args and bash env vars
 # Param 1 - Array of launch_docker script args
 scan_script_and_env_args() {
+	ifArgUsed $PRECHECK && ifArgUsed $RESTART_ARG && exit_with_message "Error [ launch_docker ]: \"$PRECHECK\" can only be used with new pipelines; cannot be used in conjunction with \"$RESTART_ARG\". "
 	ifArgUsed $PASSWORD_ARG && newPass=$(get_arg_value $PASSWORD_ARG)
 	ifArgUsed $EXT_MODS_ARG && extMods=$(get_arg_value $EXT_MODS_ARG)
 	ifArgUsed $GUI_ARG && echo "Starting BioLockJ GUI..."
@@ -115,6 +116,7 @@ blj_options() {
 	ifDefined $restartDir && options="${options} -restartDir $restartDir"
 	ifArgUsed $PASSWORD_ARG && options="${options} -password $newPass"
 	ifArgUsed $AWS_ARG && options="${options} -aws"
+	ifArgUsed $PRECHECK && options="${options} -precheck"
 	ifDefined $configFile && options="${options} -config $(to_abs_path ${configFile})"
 	echo "${options}"
 }

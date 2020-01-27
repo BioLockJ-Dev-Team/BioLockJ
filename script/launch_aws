@@ -9,6 +9,10 @@ main(){
 	take_standard_biolockj_args "$@"
 	assign_main_arg
 	
+	if ifArgUsed $PRECHECK ; then 
+		exit_with_message "argument \"--$PRECHECK\" is not currently support when running on AWS"
+	fi
+	
 	if ifArgUsed $GUI_ARG ; then
 		exit_after_command run_aws_gui
 	else

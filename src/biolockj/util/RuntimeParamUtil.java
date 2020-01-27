@@ -204,6 +204,10 @@ public class RuntimeParamUtil {
 	public static boolean isAwsMode() {
 		return params.get( AWS_FLAG ) != null;
 	}
+	
+	public static boolean isPrecheckMode() {
+		return params.get( PRECHECK_FLAG ) != null;
+	}
 
 	/**
 	 * Return TRUE if runtime parameters indicate Logs should be written to system.out
@@ -417,8 +421,13 @@ public class RuntimeParamUtil {
 	 * Log to System.out instead of Log for debug early runtime errors with switch: {@value #SYSTEM_OUT_FLAG}
 	 */
 	protected static final String SYSTEM_OUT_FLAG = "-systemOut";
+	
+	/**
+	 * Flag argument; if present, BioLockJ will stop after checkDependencies step. flag: {@value #SYSTEM_OUT_FLAG}
+	 */
+	protected static final String PRECHECK_FLAG = "-precheck";
 
-	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG );
+	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG );
 	private static final List<String> DIR_ARGS = Arrays.asList( BLJ_PROJ_DIR, HOME_DIR, RESTART_DIR );
 	private static final List<String> extraParams = new ArrayList<>();
 	private static final List<String> NAMED_ARGS = Arrays.asList( CONFIG_FILE, DIRECT_MODE, HOSTNAME, PASSWORD );

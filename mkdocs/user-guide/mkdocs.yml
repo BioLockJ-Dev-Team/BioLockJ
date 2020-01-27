@@ -35,6 +35,7 @@ nav:
         - Metadata: The-Metadata-File.md
         - Dependencies: Dependencies.md
     - Features:
+        - Check Dependencies: Check-Dependencies.md
         - Failure Recovery: Failure-Recovery.md
         - Validation: Validation.md
         - Building Modules: Building-Modules.md
