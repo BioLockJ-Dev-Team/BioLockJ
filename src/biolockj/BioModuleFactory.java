@@ -174,10 +174,10 @@ public class BioModuleFactory {
 		final int i = getCountModIndex();
 		for( final String module: this.moduleCache ) {
 			if( finalModules.size() == i ) {
-				finalModules.add( SeqFileValidator.class.getName() );
+				finalModules.add( RegisterNumReads.class.getName() );
 				info( "Config property [ " + Constants.REPORT_NUM_READS + "=" + Constants.TRUE + " ] & [ " +
 					Constants.INTERNAL_SEQ_TYPE + "=" + Config.requireString( null, Constants.INTERNAL_SEQ_TYPE ) +
-					" ] --> Adding module: " + SeqFileValidator.class.getName() );
+					" ] --> Adding module: " + RegisterNumReads.class.getName() );
 				this.foundSeqMod = true;
 			}
 			if( isSeqProcessingModule( module ) ) this.foundSeqMod = true;

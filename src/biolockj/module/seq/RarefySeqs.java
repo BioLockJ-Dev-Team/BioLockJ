@@ -216,7 +216,7 @@ public class RarefySeqs extends JavaModuleImpl implements SeqModule {
 
 	private boolean needsCountModule() throws Exception {
 		for( final String module: Config.requireList( this, Constants.INTERNAL_BLJ_MODULE ) )
-			if( module.equals( SeqFileValidator.class.getName() ) || module.equals( TrimPrimers.class.getName() ) )
+			if( module.contentEquals( RegisterNumReads.class.getName() ) || module.equals( SeqFileValidator.class.getName() ) || module.equals( TrimPrimers.class.getName() ) )
 				return false;
 			else if( module.equals( getClass().getName() ) ) return true;
 
