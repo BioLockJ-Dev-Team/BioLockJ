@@ -115,7 +115,7 @@ See all of the pipelines in your projects folder.  The variable `$BLJ_PROJ` poin
 ```bash
 ls $BLJ_PROJ
 ```
-By default, `$BLJ_PROJ` is set to the "pipelines" folder in BioLockJ (`$BLJ/projects`).  To change this, add a line to your bash_profile (or equivilent file): `export BLJ_PROJ=/path/to/my/projects`.  This line must be _after_ the call to the blj_config script.
+By default, `$BLJ_PROJ` is set to the "pipelines" folder in BioLockJ (`$BLJ/pipelines`).  To change this, add a line to your bash_profile (or equivilent file): `export BLJ_PROJ=/path/to/my/projects`.  This line must be _after_ the call to the blj_config script.
 
 Look at your most recent pipeline:
 ```bash
