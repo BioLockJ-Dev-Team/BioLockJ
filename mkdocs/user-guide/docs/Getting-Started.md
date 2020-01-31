@@ -190,7 +190,7 @@ For more information about the how/why to use each environment, see [Supported E
 
 BioLockJ will shut down appropriately on its own when a pipeline either completes or fails.  
 
-_Sometimes_, it is necissary to shut down the program pre-maturely.
+_Sometimes_, it is necessary to shut down the program pre-maturely.
 
 This is not an ideal exit and the steps depend on your environment.  The main program is terminated by killing the java process.  Any worker-processes that are still in progress will need to be shut down directly (or allowed to time out).
 
