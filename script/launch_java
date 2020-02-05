@@ -81,6 +81,7 @@ assemble_args(){
 
 before_java_start(){
 	initDir="$(most_recent_pipeline)"
+	replacePrecheckPipe=""
 	if [ -f "${initDir}/precheckComplete" ] || [ -f "${initDir}/precheckFailed" ]; then
 		local initbase=$(basename initDir)
 		if [ ${#configFile} -gt 0 ] && local newbase="${initbase/.*}" && [ "${initbase/$newbase}" != "${initbase}" ]; then 
@@ -131,7 +132,7 @@ print_info(){
 		echo "Restarting pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 5
-	elif [ "${initDir}" != "${pipeDir}" ] || [ replacePrecheckPipe ] ; then 
+	elif [ "${initDir}" != "${pipeDir}" ] || [ $replacePrecheckPipe ] ; then 
 		echo "Building pipeline:  ${pipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 5
