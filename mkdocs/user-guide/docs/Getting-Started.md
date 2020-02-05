@@ -3,14 +3,16 @@
 
 ### Basic installation
 
-The basic installation assumes a unix-like environment.
+The basic installation assumes a unix-like environment and a **bash** shell.
+To see what shell you currently using, run `echo $0`.
+**If** you are not in a bash shell, you can change your current session to a bash shell, run `chsh -s /bin/bash`.
 
 #### 1. Download the [latest release](https://github.com/BioLockJ-Dev-Team/BioLockJ/releases/latest) & unpack the tarball.
 ```bash
 tar -zxf BioLockJ-v1.2.7.tar.gz
 ```
-Put the folder to wherever you like to keep executables.
-If you choose to download the source code, you will need to compile it by running `ant` with the `build.xml` file in the `resources` folder. 
+Save the folder wherever you like to keep executables.
+**If** you choose to download the source code, you will need to compile it by running `ant` with the `build.xml` file in the `resources` folder. 
 
 #### 2. Run the install script 
 The `install` script updates the $USER bash profile to call **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**.  See **[Commands](../Commands)** for a full description of **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**
@@ -24,9 +26,12 @@ cd BioLockJ*
 ```
 
 This will add the required variables to your path when you start your next session.<br>
-To use BioLockJ in the same session, run `source ~/.bash_profile`.
 
-Start a new session and verify that `biolockj` is on your `$PATH`.
+```bash
+exit # exit and start a new session
+```
+
+Start a new bash session and verify that `biolockj` is on your `$PATH`.  A new terminal window or a fresh log in will start a new session.
 
 ```bash
 biolockj --version
@@ -52,9 +57,7 @@ Notice the use of the `$BLJ` variable. This variable is created by the installat
 
 The myFirstPipeline project is the first in the tutorial series designed to introduce new users to the layout of a BioLockJ pipeline.
 
-**Install the software [Dependencies](../Dependencies) required by the modules you wish to include in your pipeline.**
-
-BioLockJ is a pipeline manager, desigend to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed **OR** run through docker using the docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.
+You should take a moment to [review your first pipeline](../Getting-Started#review-your-first-pipeline).
 
 
 ### Docker installation
@@ -99,6 +102,8 @@ biolockj --docker --blj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.propert
 # Pipeline is complete.
 ```
 
+You should take a moment to [review your first pipeline](../Getting-Started#review-your-first-pipeline).
+
 ### Cluster installation
 
 Installing BioLockJ on a cluster follows the same process as the [Basic Installation](../Getting-Started#Basic-Installation).  EACH USER must run the `install` script in order to run the BioLockJ launch scripts.  Use the property `pipeline.env=cluster` in your pipeline configuration to take advantage of parallell computing through the cluster.
@@ -106,12 +111,7 @@ Installing BioLockJ on a cluster follows the same process as the [Basic Installa
 
 ## Review your first pipeline
 
-Look at the pipeline configureation file ("config"):
-```bash
-cat ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
-```
-
-See all of the pipelines in your projects folder.  The variable `$BLJ_PROJ` points to your projects folder.
+The variable `$BLJ_PROJ` points to your projects folder. See a list of all of the pipelines in your projects folder.  
 ```bash
 ls $BLJ_PROJ
 ```
@@ -122,15 +122,20 @@ Look at your most recent pipeline:
 blj_go
 ```
 
-Notice that modules are specified in the config using the keyword `#BioModule`.  Each module in the pipeline creates a folder in the pipeline directory.  Notice that an additional module "ImportMetaData" was added automatically.
+This folder represents the analysis pipeline that you launched when you called `biolockj` on the file _${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties_.
 
-At the top level of the pipeline we see an empty **flag** file "biolockjComplete" which indicates that the pipeline finished successfully. If the pipeline is still in progress, the flag would be "biolockjStarted"; and if the pipeline stopped due to an error, the flag would be "biolockjFailed".
+Notice that the original configuration ("config") file has been copied to this folder. Review the config file that was used to launch this pipeline:
+```bash
+cat myFirstPipeline.properties
+```
+
+Notice that modules are specified in the config using the keyword `#BioModule`.  Each module in the pipeline creates a folder in the pipeline directory.  Notice that an additional module "00_ImportMetaData" was added automatically.
+
+At the top level of the pipeline we see an empty **flag** file "biolockjComplete" which indicates that the pipeline finished successfully. While the pipeline is still in progress, the flag is "biolockjStarted"; and if the pipeline stopps due to an error, the flag is "biolockjFailed".
 
 The `summary.txt` file is a summary of each module as it ran during pipeline execution.  This is the best place to start when reviewing a pipeline.
 
-The original config file was copied to the pipeline top level, in this case: "myFirstPipeline.properties".
-
-The file `"MASTER_myFirstPipeline_<DATE>.properties"` is the complete list of all properties used during this pipeline.  This includes properties that were set in the primary config file ("myFirstPipeline.properties"), or that are set as defaults in the BioLockJ program, or that are set in user-supplied default config files, which are specied in the primary config file using the `pipeline.defaultProps=` property.  This "MASTER_*.properties" file contains all of the settings required to reproduce this pipeline.  
+The file `"MASTER_myFirstPipeline_<DATE>.properties"` is the complete list of all properties used during this pipeline.  This includes properties that were set in the primary config file ("myFirstPipeline.properties"), and properties that are set as defaults in the BioLockJ program, and properties that are set in user-supplied default config files, which are specified in the primary config file using the `pipeline.defaultProps=` property.  This "MASTER_*.properties" file contains all of the settings required to reproduce this pipeline.  
 
 If the pipeline was run using docker, a file named `dockerInfo.json` will show the container information.
 
@@ -159,6 +164,9 @@ A recommended practice is to make a subset of your data, and use that to develop
 
 ## Other notes for starting out
 
+**Install any/all software [Dependencies](../Dependencies) required by the modules you wish to include in your pipeline.**
+
+BioLockJ is a pipeline manager, desigend to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed **OR** run through docker using the docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.
 
 ### Notes about environments
 
