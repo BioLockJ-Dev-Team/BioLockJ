@@ -156,12 +156,11 @@ is_pipeline_dir() {
 	[ "$dir" == "${dir/.}" ] && [ -d "$1" ] && [ "$prefix" == "_" ] && [ ${#year} -eq 4 ] && [ ${#mon1} -eq 1 ] && [ ${#mon23} -eq 2 ] && [ ${#day} -eq 2 ]
 }
 
-# Override function in $BLJ_SCRIPT/blj_functions to return the most recent pipeline dir-path 
 most_recent_pipeline() {
 	if [ -d "${BLJ_PROJ}" ]; then
 		local contents=$(ls ${BLJ_PROJ})
 		if [ ${#contents} -eq 0 ]; then
-			echo ""; return
+			echo "none"; return
 		fi
 		IFS=$'\n' && dirs=$(\ls -1dt ${BLJ_PROJ}/*) && myDirs=( "$dirs" )
 		for dir in $myDirs; do

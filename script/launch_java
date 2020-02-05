@@ -81,7 +81,12 @@ assemble_args(){
 
 before_java_start(){
 	initDir="$(most_recent_pipeline)"
-	[ -f "${initDir}/precheckComplete" ] || [ -f "${initDir}/precheckFailed" ] && replacePrecheckPipe=true
+	if [ -f "${initDir}/precheckComplete" ] || [ -f "${initDir}/precheckFailed" ]; then
+		local initbase=$(basename initDir)
+		if [ ${#configFile} -gt 0 ] && local newbase="${initbase/.*}" && [ "${initbase/$newbase}" != "${initbase}" ]; then 
+			replacePrecheckPipe=true
+		fi
+	fi
 	pipeDir="${initDir}"
 	initJava=$(ps | grep -c java)
 	numJava=${initJava}
