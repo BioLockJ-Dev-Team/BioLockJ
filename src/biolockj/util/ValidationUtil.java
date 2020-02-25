@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 import org.apache.commons.io.FilenameUtils;
 import biolockj.*;
 import biolockj.Properties;
@@ -108,16 +109,22 @@ public class ValidationUtil {
 				", validationStatus=" + ValidationUtil.statusStrings[ this.validationStatus ] + "]";
 		}
 
-		protected void calcMd5() throws IOException, NoSuchAlgorithmException {
+		protected void calcMd5() throws IOException, NoSuchAlgorithmException, SpecialPropertiesException, InterruptedException {
 			final MessageDigest md = MessageDigest.getInstance( "MD5" );
-			final InputStream fis = new FileInputStream( this.file.getAbsoluteFile() );
+			InputStream isFile= new FileInputStream( this.file.getAbsoluteFile() );
+			InputStream is;
+			if (this.file.getName().endsWith( ".gz" ) ) {
+				is = new GZIPInputStream(isFile);
+			}else {
+				is = isFile;
+			}
 			final byte[] bytes = new byte[ 1024 ];
 			int numRead;
 			do {
-				numRead = fis.read( bytes );
+				numRead = is.read( bytes );
 				if( numRead > 0 ) md.update( bytes, 0, numRead );
 			} while( numRead != -1 );
-			fis.close();
+			is.close();
 			final byte[] digest = md.digest();
 
 			String md5sum = "";

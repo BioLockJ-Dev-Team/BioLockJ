@@ -55,3 +55,7 @@ For example:
 Maybe module 5 is a resource-intensive classifier, and modules 1-4 are processing and filtering steps ending with the SeqFileValidator.  If modules 1-4 filter out too much, you might not want to move forward with module 5 until you've made adjustments to the earlier modules.                   
 You could create an expectation file for module 4, that just lists the names of the files and their pre-filtering file size (in bytes), and set `validation.sizeWithinPercent=80` and `SeqFileValidator.stopPipeline=Y`.  With this, the pipeline will stop if any of those files are not in the module 4 output or if any of them have been reduced by more than 80%.                   
 The output file names are predictable if you've ever seen output from that module before.                    
+                   
+## Other notes                   
+                   
+**gzip** is a common utility, frequently used with sequence data. It can incorporate metadata into the zipped file, a minor variation which can cause md5 checks to fail.  To avoid these misleading failures, the validation utility will take the md5 of the decompressed form of the file for any file that ends in ".gz".  Thus, the md5 reported for a fastq file is the same regardless of whether it has been gzipped.                   
