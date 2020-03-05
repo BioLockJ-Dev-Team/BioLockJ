@@ -60,7 +60,7 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule {
 				throw e;
 			}
 			final String downloadLine = Config.getExe(this, EXE_FASTERQ) + " -O " + outputDir + " " + sraId;
-			final String compressLine = Config.getExe(this, Constants.EXE_GZIP) + " -n " + outputDir + File.separator
+			final String compressLine = Config.getExe(this, Constants.EXE_GZIP) + " " + outputDir + File.separator
 					+ sraId + "*.fastq";
 			lines.add(downloadLine);
 			lines.add(compressLine);
