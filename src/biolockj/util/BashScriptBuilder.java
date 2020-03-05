@@ -222,7 +222,7 @@ public class BashScriptBuilder {
 		lines.add( "# Submit job script" );
 		lines.add( "function " + FUNCTION_RUN_JOB + "() {" );
 		lines.add( "scriptName=$(basename $1)");
-		lines.add( "id=$(" + Config.requireString( null, CLUSTER_BATCH_COMMAND ) + " $1)" );
+		lines.add( "id=$(" + Config.requireString( module, CLUSTER_BATCH_COMMAND ) + " $1)" );
 		lines.add( "echo \"$scriptName:" + CLUSTER_KEY + ":$id\" >> " + startedFlag );
 		lines.add( "}" + RETURN );
 		return(lines);
@@ -449,7 +449,7 @@ public class BashScriptBuilder {
 	 * {@value #CLUSTER_STATUS_COMMAND_DESC}
 	 */
 	protected static final String CLUSTER_STATUS_COMMAND = "cluster.statusCommand";
-	private static final String CLUSTER_STATUS_COMMAND_DESC = "Terminal command used to submit jobs on the cluster";
+	private static final String CLUSTER_STATUS_COMMAND_DESC = "Terminal command used to check the status of jobs on the cluster";
 
 	/**
 	 * {@link biolockj.Config} List property: {@value #CLUSTER_MODULES}<br>
