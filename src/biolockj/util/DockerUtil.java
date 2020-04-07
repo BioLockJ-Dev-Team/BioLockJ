@@ -304,14 +304,17 @@ public class DockerUtil {
 	}
 	
 	public static String deContainerizePath(String innerPath) throws DockerVolCreationException {
-		TreeMap<String, String> vmap;
-		vmap = getVolumeMap();
 		String hostPath = innerPath;
-		for (String s : vmap.keySet()) {
-			if ( innerPath.startsWith( vmap.get( s ) ) ) {
-				hostPath = hostPath.replaceFirst( vmap.get( s ), s );
-				break;
+		if( DockerUtil.inDockerEnv() ) {
+			TreeMap<String, String> vmap;
+			vmap = getVolumeMap();
+			for( String s: vmap.keySet() ) {
+				if( innerPath.startsWith( vmap.get( s ) ) ) {
+					hostPath = hostPath.replaceFirst( vmap.get( s ), s );
+					break;
+				}
 			}
+
 		}
 		return hostPath;
 	}
