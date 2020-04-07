@@ -16,7 +16,7 @@ import biolockj.Config;
 /**
  * ConfigException is the superclass for all BioLockJ configuration file Exceptions used to ensure message uniformity.
  */
-public abstract class ConfigException extends BioLockJException {
+public class ConfigException extends BioLockJException {
 	/**
 	 * Abstract {@link biolockj.Config} exception calls super to instantiate using the superclass
 	 * {@link java.lang.Exception} implementation
