@@ -3,6 +3,7 @@ blj_basic_py2.Dockerfile
 blj_basic_java.Dockerfile
 build_with_ant.Dockerfile
 biolockj_controller.Dockerfile
+pysradb.Dockerfile
 pear.Dockerfile
 knead_data_dbfree.Dockerfile
 knead_data.Dockerfile
