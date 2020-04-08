@@ -824,6 +824,12 @@ public class BioLockJUtil {
 	public static final String PIPELINE_SEQ_INPUT_TYPE = "seq";
 
 	/**
+	 * Internal {@link biolockj.Config} String property: {@value #PIPELINE_PAIRED_READS_INPUT_TYPE}<br>
+	 * Set as the value of {@value #INTERNAL_PIPELINE_INPUT_TYPES} for paired sequence input files.
+	 */
+	public static final String PIPELINE_PAIRED_READS_INPUT_TYPE = "paired";
+
+	/**
 	 * Internal {@link biolockj.Config} String property: {@value #PIPELINE_STATS_TABLE_INPUT_TYPE}<br>
 	 * Set as the value of {@value #INTERNAL_PIPELINE_INPUT_TYPES} if input files are tables of statistics such as those
 	 * output by {@link biolockj.module.report.r.R_CalculateStats}.

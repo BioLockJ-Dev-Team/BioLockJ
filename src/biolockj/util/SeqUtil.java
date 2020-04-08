@@ -154,11 +154,12 @@ public class SeqUtil {
 	public static Map<File, File> getPairedReads( final Collection<File> files )
 		throws SequnceFormatException, ConfigFormatException, ConfigViolationException, MetadataException {
 		Log.debug( SeqUtil.class, "Looking for paired reads in " + ( files == null ? 0: files.size() ) + " files " );
-		if( files == null || files.isEmpty() )
-			throw new SequnceFormatException( "No files passed to getPairedReads( files )" );
 		final Map<File, File> map = new HashMap<>();
 		final Set<String> rvReads = new HashSet<>();
 		final Set<File> unpairedFwReads = new HashSet<>();
+		
+		if( files == null || files.isEmpty() ) { return map; }
+		
 		for( final File fwRead: files ) {
 			final String name = fwRead.getName();
 			if( !isForwardRead( name ) ) {
@@ -633,23 +634,34 @@ public class SeqUtil {
 				FASTQ_HEADER_DELIM + "\"" );
 		}
 
-		if( foundFasta != null && foundFastq != null ) throw new ConfigFormatException( Constants.INTERNAL_SEQ_TYPE,
-			"Input files from: " + Constants.INPUT_DIRS + " must all be of a single type (FASTA or FASTQ)." +
-				Constants.RETURN + "FASTA file found: " + foundFasta + Constants.RETURN + "FASTQ file found: " +
-				foundFastq );
+		if( foundFasta != null && foundFastq != null ) {
+			throw new ConfigFormatException( Constants.INTERNAL_SEQ_TYPE,
+				"Input files from: " + Constants.INPUT_DIRS + " must all be of a single type (FASTA or FASTQ)." +
+								Constants.RETURN + "FASTA file found: " + foundFasta + Constants.RETURN + "FASTQ file found: " +
+								foundFastq );
+		}
 
 		if( foundFasta == null && foundFastq == null ) {
-			if ( Config.getList( null, BioLockJUtil.PIPELINE_SEQ_INPUT_TYPE ).contains( Constants.FASTA ) ) foundFasta = "true";
-			else if ( Config.getList( null, BioLockJUtil.PIPELINE_SEQ_INPUT_TYPE ).contains( Constants.FASTQ ) ) foundFastq = "true";
-			else {
+			Log.debug(SeqUtil.class, "No input files were found that were determined to be " + Constants.FASTA + " or " + Constants.FASTQ + ".");
+			if ( Config.getList( null, BioLockJUtil.INTERNAL_PIPELINE_INPUT_TYPES ).contains( Constants.FASTA ) ) {
+				foundFasta = "true";
+				Log.info(SeqUtil.class, "[" + BioLockJUtil.INTERNAL_PIPELINE_INPUT_TYPES + "] specifies type \"" + Constants.FASTA + "\"; setting seqType to " + Constants.FASTA);
+			}else if ( Config.getList( null, BioLockJUtil.INTERNAL_PIPELINE_INPUT_TYPES ).contains( Constants.FASTQ ) ) {
+				foundFastq = "true";
+				Log.info(SeqUtil.class, "[" + BioLockJUtil.INTERNAL_PIPELINE_INPUT_TYPES + "] specifies type \"" + Constants.FASTQ + "\"; setting seqType to " + Constants.FASTQ);
+			}else {
 				throw new ConfigFormatException( Constants.INTERNAL_SEQ_TYPE, "No FASTA or FASTQ files found in: " + Constants.INPUT_DIRS );
 			}
 		}
 
-		Config.setConfigProperty( Constants.INTERNAL_SEQ_HEADER_CHAR, headerChar );
-
-		if( foundFasta != null ) setSeqType( Constants.FASTA );
-		if( foundFastq != null ) setSeqType( Constants.FASTQ );
+		if( foundFasta != null ) {
+			setSeqType( Constants.FASTA );
+			Config.setConfigProperty( Constants.INTERNAL_SEQ_HEADER_CHAR, FASTA_HEADER_DEFAULT_DELIM );
+		}
+		if( foundFastq != null ) {
+			setSeqType( Constants.FASTQ );
+			Config.setConfigProperty( Constants.INTERNAL_SEQ_HEADER_CHAR, FASTQ_HEADER_DELIM );
+		}
 
 		final String configSeqType = Config.getString( null, Constants.INTERNAL_SEQ_TYPE );
 		if( configSeqType != null && !configSeqType.toLowerCase().equals( getSeqType() ) ) {
@@ -696,7 +708,8 @@ public class SeqUtil {
 						"Reverse read indicator found in headers: " + ILLUMINA_RV_READ_IND +
 						"All datasets must contain forward read indicators in the headers: " + ILLUMINA_FW_READ_IND );
 			}
-		} else foundPairedReads = !getPairedReads( BioLockJUtil.getPipelineInputFiles() ).isEmpty();
+		} else foundPairedReads = getPairedReads( BioLockJUtil.getPipelineInputFiles() ).size() > 0 || 
+						BioLockJUtil.INTERNAL_PIPELINE_INPUT_TYPES.contains( BioLockJUtil.PIPELINE_PAIRED_READS_INPUT_TYPE );
 
 		info( "Set " + Constants.INTERNAL_PAIRED_READS + "=" + ( foundPairedReads ? Constants.TRUE: Constants.FALSE ) );
 		Config.setConfigProperty( Constants.INTERNAL_PAIRED_READS, foundPairedReads ? Constants.TRUE: Constants.FALSE );
