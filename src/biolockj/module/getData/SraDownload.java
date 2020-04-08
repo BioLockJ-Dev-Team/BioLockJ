@@ -18,11 +18,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import biolockj.api.ApiModule;
+import biolockj.exception.ConfigPathException;
+import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.MetadataException;
 import biolockj.Config;
 import biolockj.module.ScriptModuleImpl;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.MetaUtil;
+import biolockj.util.SeqUtil;
 import biolockj.Constants;
 import biolockj.Log;
 import biolockj.Properties;
@@ -33,6 +36,7 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule, InputDat
 		super();
 		addNewProperty(METADATA_SRA_ID_COL_NAME, Properties.STRING_TYPE,
 				"Specifies the metadata file column name containing SRA run ids", "sra");
+		addNewProperty(DEST_DIR, Properties.FILE_PATH, "Path to directory where downloaded files should be saved. If specified, it must exist.");
 		addNewProperty(EXE_FASTERQ, Properties.FILE_PATH, "Optional - specifies a path to fasterq-dump");
 		addGeneralProperty(Constants.EXE_GZIP, Properties.FILE_PATH, "Optional - specifies a path to gzip");
 	}
@@ -45,7 +49,7 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule, InputDat
 	@Override
 	public List<List<String>> buildScript(List<File> files) throws Exception {
 
-		final String outputDir = getOutputDir().getAbsolutePath();
+		final String outputDir = getDestDir().getAbsolutePath();
 		String sraId = null;
 
 		final List<List<String>> data = new ArrayList<>();
@@ -72,44 +76,42 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule, InputDat
 		return (data);
 
 	}
+	
+	private File getDestDir() throws ConfigPathException, DockerVolCreationException {
+		File dest;
+		if ( Config.getExistingDir( this, DEST_DIR ) != null ) {
+			dest = Config.getExistingDir( this, DEST_DIR );
+		}else {
+			dest = getOutputDir();
+		}
+		return dest;
+	}
 
 	@Override
 	public Boolean isValidProp(String property) throws Exception {
 		Boolean isValid = super.isValidProp(property);
 		switch (property) {
 		case MetaUtil.META_FILE_PATH:
-			try {
-				Config.requireExistingFile(this, MetaUtil.META_FILE_PATH);
-			} catch (Exception e) {
-				isValid = false;
-				Log.error(this.getClass(),
-						"The " + MetaUtil.META_FILE_PATH + " configuration property is missing.");
-				throw e;
-			}
+			Config.requireExistingFile(this, MetaUtil.META_FILE_PATH);
 			isValid = true;
 			break;
 		case METADATA_SRA_ID_COL_NAME:
-			try {
-				Config.requireString(this, METADATA_SRA_ID_COL_NAME);
-			} catch (Exception e) {
-				isValid = false;
-				Log.error(this.getClass(), "The " + METADATA_SRA_ID_COL_NAME
-						+ " configuration property is missing or invalid. Must be a string.");
-				throw e;
-			}
+			Config.requireString(this, METADATA_SRA_ID_COL_NAME);
 			isValid = true;
 			break;
-
+		case DEST_DIR:
+			Config.getExistingDir( this, DEST_DIR );
+			isValid = true;
+			break;
 		}
 		return isValid;
 	}
 
 	@Override
 	public void checkDependencies() throws Exception {
-
 		isValidProp(MetaUtil.META_FILE_PATH);
 		isValidProp(METADATA_SRA_ID_COL_NAME);
-
+		isValidProp(DEST_DIR);
 	}
 
 	@Override
@@ -121,7 +123,12 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule, InputDat
 	public String getDetails() {
 		return ("Downloading and compressing files requires fasterq-dump and gzip. Your metadata file should "
 				+ "include a column that contains SRA run accessions, and the name of this column must be "
-				+ "specified in the configuration file, if named something other than 'sra'");
+				+ "specified in the configuration file, if named something other than 'sra'"
+				+ System.lineSeparator() + "If *" + DEST_DIR + "* is not specified, the files will be downlaoded to this modules output directory."
+				+ "It is recommended to use an external directory that can be shared across projects, and referenced in *"
+				+ Constants.INPUT_DIRS + "*, for example: " + Constants.INPUT_DIRS + " = ${" + DEST_DIR + "}"
+				+ System.lineSeparator() + "Typically, BioLockJ will automatically determine modules to add to the pipeline to process sequence data." 
+				+ "If the files are not present on the system when the pipeline starts, then it is up to the user to configure any and all sequence processing modules.");
 	}
 
 	@Override
@@ -153,9 +160,19 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule, InputDat
 		return types;
 	}
 	
+	@Override
+	public void cleanUp() throws Exception {
+		if ( BioLockJUtil.getInputDirs().contains( getDestDir() )) {
+			Log.info(SraDownload.class, "Initialize SeqUtil now that sequences have been downloaded.");
+			SeqUtil.initialize();
+		}
+		super.cleanUp();
+	}
+	
 	private String dataSource = "";
 
 	private static final String METADATA_SRA_ID_COL_NAME = "sraDownload.metadataSraIdColumnName";
+	private static final String DEST_DIR = "sraDownload.destinationDir";
 	private static final String EXE_FASTERQ = "exe.fasterq-dump";
 
 }
