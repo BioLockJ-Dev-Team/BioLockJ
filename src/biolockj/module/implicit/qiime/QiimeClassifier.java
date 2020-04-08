@@ -20,6 +20,7 @@ import biolockj.exception.*;
 import biolockj.module.BioModule;
 import biolockj.module.classifier.ClassifierModuleImpl;
 import biolockj.module.classifier.r16s.QiimeOpenRefClassifier;
+import biolockj.module.seq.Gunzipper;
 import biolockj.util.*;
 
 /**
@@ -279,6 +280,9 @@ public class QiimeClassifier extends ClassifierModuleImpl {
 		if( SeqUtil.piplineHasSeqInput() && !SeqUtil.isFastA() ) preReqs.add( Config.getString( null, Constants.DEFAULT_MOD_FASTA_CONV) );
 		if( !getClass().getName().equals( QiimeClassifier.class.getName() ) )
 			preReqs.add( BuildQiimeMapping.class.getName() );
+		Log.info(getClass(), "Qiime does not accept \"" + Constants.GZIP_EXT + "\" format, so adding required pre-req module: " +
+					Gunzipper.class.getName() );
+			preReqs.add( Gunzipper.class.getName() );
 		return preReqs;
 	}
 

@@ -13,12 +13,9 @@ package biolockj;
 
 import java.util.*;
 import biolockj.api.ApiModule;
-import biolockj.exception.ConfigFormatException;
 import biolockj.exception.PipelineFormationException;
 import biolockj.module.BioModule;
 import biolockj.module.implicit.ImportMetadata;
-import biolockj.module.implicit.RegisterNumReads;
-import biolockj.module.seq.*;
 import biolockj.util.*;
 
 /**
@@ -131,18 +128,6 @@ public class BioModuleFactory {
 		return bioModules;
 	}
 
-	private int getCountModIndex() throws Exception {
-		int i = -1;
-		final boolean addMod = requireCountMod();
-		if( addMod ) if( this.moduleCache.size() == 1 ||
-			!this.moduleCache.get( 1 ).equals( Config.getString( null, Constants.DEFAULT_MOD_DEMUX) ) ) i = 1;
-		else if( this.moduleCache.get( 1 ).equals( Config.getString( null, Constants.DEFAULT_MOD_DEMUX ) ) ) i = 2;
-
-		Log.debug( getClass(), addMod ? "ADD count module at index: " + i: "No need to add count mdoule" );
-
-		return i;
-	}
-
 	/**
 	 * Register the complete list of Java class.getSimpleName() values for the configured modules.
 	 * 
@@ -182,43 +167,6 @@ public class BioModuleFactory {
 
 		if( !branchModules.isEmpty() ) this.moduleCache.addAll( branchModules );
 
-		insertConditionalModules();
-	}
-
-	private void insertConditionalModules() throws Exception {
-		final List<String> finalModules = new ArrayList<>();
-		final int i = getCountModIndex();
-		for( final String module: this.moduleCache ) {
-			if( finalModules.size() == i ) {
-				finalModules.add( RegisterNumReads.class.getName() );
-				info( "Config property [ " + Constants.REPORT_NUM_READS + "=" + Constants.TRUE + " ] & [ " +
-					Constants.INTERNAL_SEQ_TYPE + "=" + Config.requireString( null, Constants.INTERNAL_SEQ_TYPE ) +
-					" ] --> Adding module: " + RegisterNumReads.class.getName() );
-				this.foundSeqMod = true;
-			}
-			if( isSeqProcessingModule( module ) ) this.foundSeqMod = true;
-			else if( requireGunzip( module ) ) {
-				info(
-					"Qiime does not accept \"" + Constants.GZIP_EXT + "\" format, so adding required pre-req module: " +
-						Gunzipper.class.getName() + " before " + module );
-				this.foundSeqMod = true;
-				finalModules.add( Gunzipper.class.getName() );
-			}
-
-			finalModules.add( module );
-		}
-
-		this.moduleCache = finalModules;
-	}
-
-	private boolean requireCountMod() throws Exception {
-		return !this.foundCountMod && Collections.disjoint( this.moduleCache, getCountModules() ) &&
-			Config.getBoolean( null, Constants.REPORT_NUM_READS ) && SeqUtil.piplineHasSeqInput();
-	}
-
-	private boolean requireGunzip( final String module ) throws ConfigFormatException {
-		return !this.foundSeqMod && hasGzippedInput() && isSeqProcessingModule( module ) &&
-			module.toLowerCase().contains( Constants.QIIME );
 	}
 
 	/**
@@ -278,22 +226,6 @@ public class BioModuleFactory {
 		return modules;
 	}
 
-	private static List<String> getCountModules() {
-		final List<String> mods = new ArrayList<>();
-		mods.add( RegisterNumReads.class.getName() );
-		mods.add( SeqFileValidator.class.getName() );
-		mods.add( TrimPrimers.class.getName() );
-		mods.add( PearMergeReads.class.getName() );
-		return mods;
-
-	}
-
-	private static boolean hasGzippedInput() throws ConfigFormatException {
-		return !BioLockJUtil.getPipelineInputFiles().isEmpty() &&
-			SeqUtil.isGzipped( BioLockJUtil.getPipelineInputFiles().iterator().next().getName() ) &&
-			!Config.getBoolean( null, Constants.REPORT_NUM_READS );
-	}
-
 	private static void info( final String msg ) {
 		if( !BioLockJUtil.isDirectMode() ) Log.info( BioModuleFactory.class, msg );
 	}
@@ -302,21 +234,8 @@ public class BioModuleFactory {
 		factory = new BioModuleFactory();
 	}
 
-	/**
-	 * Check if module belongs to a package that processes sequences
-	 */
-	private static boolean isSeqProcessingModule( final String name ) {
-		return name.startsWith( Constants.MODULE_SEQ_PACKAGE ) || name.startsWith( MODULE_CLASSIFIER_PACKAGE );
-	}
-
-	private static void warn( final String msg ) {
-		if( !BioLockJUtil.isDirectMode() ) Log.warn( BioModuleFactory.class, msg );
-	}
-
 	private boolean branchClassifier = false;
 	private boolean foundClassifier = false;
-	private final boolean foundCountMod = false;
-	private boolean foundSeqMod = false;
 	private List<String> moduleCache = new ArrayList<>();
 	private int safteyCheck = 0;
 	private static BioModuleFactory factory = null;
