@@ -16,6 +16,7 @@ import java.util.*;
 import org.apache.commons.io.FileUtils;
 import biolockj.Log;
 import biolockj.exception.SequnceFormatException;
+import biolockj.module.CountsReads;
 import biolockj.module.JavaModuleImpl;
 import biolockj.module.SeqModule;
 import biolockj.util.*;
@@ -26,7 +27,7 @@ import biolockj.util.*;
  * 
  * @blj.web_desc Register Number of Reads
  */
-public class RegisterNumReads extends JavaModuleImpl implements SeqModule {
+public class RegisterNumReads extends JavaModuleImpl implements SeqModule, CountsReads {
 
 	@Override
 	public List<File> getSeqFiles( final Collection<File> files ) throws SequnceFormatException {

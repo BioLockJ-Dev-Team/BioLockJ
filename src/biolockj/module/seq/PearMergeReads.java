@@ -17,6 +17,7 @@ import biolockj.*;
 import biolockj.Properties;
 import biolockj.api.ApiModule;
 import biolockj.exception.MetadataException;
+import biolockj.module.CountsReads;
 import biolockj.module.SeqModuleImpl;
 import biolockj.module.implicit.RegisterNumReads;
 import biolockj.util.*;
@@ -29,7 +30,7 @@ import biolockj.util.*;
  * 
  * @blj.web_desc Merge Reads with PEAR
  */
-public class PearMergeReads extends SeqModuleImpl implements ApiModule {
+public class PearMergeReads extends SeqModuleImpl implements ApiModule, CountsReads {
 	
 	public PearMergeReads() {
 		super();

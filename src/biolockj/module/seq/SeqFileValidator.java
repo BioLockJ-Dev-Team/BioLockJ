@@ -19,6 +19,7 @@ import biolockj.Properties;
 import biolockj.api.ApiModule;
 import biolockj.exception.ConfigViolationException;
 import biolockj.exception.SequnceFormatException;
+import biolockj.module.CountsReads;
 import biolockj.module.JavaModuleImpl;
 import biolockj.module.SeqModule;
 import biolockj.module.implicit.RegisterNumReads;
@@ -29,7 +30,7 @@ import biolockj.util.*;
  * 
  * @blj.web_desc Sequence File Validator
  */
-public class SeqFileValidator extends JavaModuleImpl implements SeqModule, ApiModule {
+public class SeqFileValidator extends JavaModuleImpl implements SeqModule, ApiModule, CountsReads {
 	
 	public SeqFileValidator() {
 		super();

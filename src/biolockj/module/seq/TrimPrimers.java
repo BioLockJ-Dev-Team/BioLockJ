@@ -18,6 +18,7 @@ import biolockj.*;
 import biolockj.Properties;
 import biolockj.api.ApiModule;
 import biolockj.exception.*;
+import biolockj.module.CountsReads;
 import biolockj.module.JavaModuleImpl;
 import biolockj.module.SeqModule;
 import biolockj.module.implicit.RegisterNumReads;
@@ -29,7 +30,7 @@ import biolockj.util.*;
  * 
  * @blj.web_desc Trim Primers
  */
-public class TrimPrimers extends JavaModuleImpl implements SeqModule, ApiModule {
+public class TrimPrimers extends JavaModuleImpl implements SeqModule, ApiModule, CountsReads {
 	
 	public TrimPrimers() {
 		super();
