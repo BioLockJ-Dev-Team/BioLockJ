@@ -638,8 +638,13 @@ public class SeqUtil {
 				Constants.RETURN + "FASTA file found: " + foundFasta + Constants.RETURN + "FASTQ file found: " +
 				foundFastq );
 
-		if( foundFasta == null && foundFastq == null ) throw new ConfigFormatException( Constants.INTERNAL_SEQ_TYPE,
-			"No FASTA or FASTQ files found in: " + Constants.INPUT_DIRS );
+		if( foundFasta == null && foundFastq == null ) {
+			if ( Config.getList( null, BioLockJUtil.PIPELINE_SEQ_INPUT_TYPE ).contains( Constants.FASTA ) ) foundFasta = "true";
+			else if ( Config.getList( null, BioLockJUtil.PIPELINE_SEQ_INPUT_TYPE ).contains( Constants.FASTQ ) ) foundFastq = "true";
+			else {
+				throw new ConfigFormatException( Constants.INTERNAL_SEQ_TYPE, "No FASTA or FASTQ files found in: " + Constants.INPUT_DIRS );
+			}
+		}
 
 		Config.setConfigProperty( Constants.INTERNAL_SEQ_HEADER_CHAR, headerChar );
 

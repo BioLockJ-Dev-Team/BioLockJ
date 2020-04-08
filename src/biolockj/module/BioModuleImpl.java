@@ -251,11 +251,11 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 
 	@Override
 	public String toString() {
-		String val = getID() + "_" + getClass().getName();
+		String val = getClass().getName();
 		try {
 			val = ModuleUtil.displaySignature( this );
 		} catch( final Exception ex ) {
-			Log.error( getClass(), "Unable to find ID for: " + getClass().getName(), ex );
+			Log.warn( getClass(), "Unable to find ID for: " + val);
 		}
 		return val;
 	}

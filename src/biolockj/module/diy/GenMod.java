@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.commons.io.FileUtils;
 import biolockj.Config;
 import biolockj.Constants;
@@ -25,6 +27,7 @@ import biolockj.api.ApiModule;
 import biolockj.api.BuildDocs;
 import biolockj.exception.ConfigPathException;
 import biolockj.module.ScriptModuleImpl;
+import biolockj.module.getData.InputData;
 import biolockj.util.BioLockJUtil;
 
 /**
@@ -32,7 +35,7 @@ import biolockj.util.BioLockJUtil;
  * 
  * @blj.web_desc Allows User made scripts into the BLJ pipeline
  */
-public class GenMod extends ScriptModuleImpl implements ApiModule {
+public class GenMod extends ScriptModuleImpl implements ApiModule, InputData {
 
 	public GenMod() {
 		super();
@@ -88,6 +91,15 @@ public class GenMod extends ScriptModuleImpl implements ApiModule {
 		copy.setExecutable( true, false );
 		Log.debug( GenMod.class, "Users script saved to: " + copy.getAbsolutePath() );
 		return copy.getAbsolutePath();
+	}
+	
+//	@Override
+//	public String getDataSource() {
+//		return "Completely open-ended; depends on user-supplied script.";
+//	}
+	@Override
+	public Set<String> getInputDataTypes() {
+		return new TreeSet<String>();
 	}
 	
 	/**

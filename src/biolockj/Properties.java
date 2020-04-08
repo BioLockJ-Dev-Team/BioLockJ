@@ -190,7 +190,7 @@ public class Properties extends java.util.Properties {
 		return null;
 	}
 
-	private static List<String> getListedModules( final File file ) throws Exception {
+	public static List<String> getListedModules( final File file ) throws Exception {
 		final List<String> modules = new ArrayList<>();
 		final BufferedReader reader = BioLockJUtil.getFileReader( file );
 		try {

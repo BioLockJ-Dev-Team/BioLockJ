@@ -21,8 +21,10 @@ import java.util.zip.GZIPInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import biolockj.*;
+import biolockj.Properties;
 import biolockj.exception.*;
 import biolockj.module.BioModule;
+import biolockj.module.getData.InputData;
 import biolockj.module.report.r.R_CalculateStats;
 
 /**
@@ -281,12 +283,21 @@ public class BioLockJUtil {
 	 * Get the list of input directories for the pipeline.
 	 * 
 	 * @return List of system directory file paths
-	 * @throws ConfigNotFoundException if a required property is undefined
-	 * @throws ConfigPathException if configured directory does not exist on the file-system "N" value
-	 * @throws DockerVolCreationException 
+	 * @throws Exception 
 	 */
-	public static List<File> getInputDirs() throws ConfigNotFoundException, ConfigPathException, DockerVolCreationException {
-		return Config.requireExistingDirs( null, Constants.INPUT_DIRS );
+	public static List<File> getInputDirs() throws Exception {
+		List<File> list = new ArrayList<>();
+		try {
+			list = Config.requireExistingDirs( null, Constants.INPUT_DIRS );
+		} catch( ConfigNotFoundException ex ) {
+			if (getInputModules().size() > 0) {
+				Log.warn(BioLockJUtil.class, "Typically, a value is required for [" + Constants.INPUT_DIRS + "]; " 
+					+ "presumably the input data will be supplied by modules: " + getCollectionAsString( getInputModules() ));
+			}else{
+				throw ex;
+			}
+		}
+		return list;
 	}
 
 	/**
@@ -381,14 +392,10 @@ public class BioLockJUtil {
 
 	/**
 	 * Basic input files may be sequences, or any other file type acceptable in a pipeline module.
-	 * 
-	 * @throws ConfigNotFoundException if a required property is undefined
-	 * @throws ConfigPathException if configured directory does not exist on the file-system
-	 * @throws ConfigViolationException if input directories contain duplicate file names
-	 * @throws DockerVolCreationException 
+	 * @throws Exception 
 	 */
 	public static void initPipelineInput()
-		throws ConfigNotFoundException, ConfigPathException, ConfigViolationException, DockerVolCreationException {
+		throws Exception {
 		Collection<File> files = new HashSet<>();
 		for( final File dir: getInputDirs() ) {
 			Log.info( BioLockJUtil.class, "Found pipeline input dir " + dir.getAbsolutePath() );
@@ -400,6 +407,18 @@ public class BioLockJUtil {
 		inputFiles.addAll( files );
 		Log.info( BioLockJUtil.class, "# Initial input files after removing empty/ignored files: " + files.size() );
 		setPipelineInputFileTypes();
+	}
+	
+	private static List<InputData> getInputModules() throws Exception {
+		List<InputData> inputModules = new ArrayList<>();
+		List<String> biomoduleLines = Properties.getListedModules( RuntimeParamUtil.getConfigFile() );
+		for (String moduleLine : biomoduleLines ) {
+			String[] parts = moduleLine.split(Constants.ASSIGN_ALIAS);
+			String className = parts[0].trim();
+			BioModule mod = ModuleUtil.createModuleInstance( className );
+			if ( mod instanceof InputData ) inputModules.add( ( InputData ) mod );
+		}
+		return inputModules;
 	}
 
 	/**
@@ -484,7 +503,15 @@ public class BioLockJUtil {
 	 * @throws ConfigNotFoundException if {@value #INTERNAL_PIPELINE_INPUT_TYPES} is undefined
 	 */
 	public static boolean pipelineInputType( final String type ) throws ConfigNotFoundException {
-		return Config.requireSet( null, INTERNAL_PIPELINE_INPUT_TYPES ).contains( type );
+		boolean bool = false;
+		try {
+			bool = Config.requireSet( null, INTERNAL_PIPELINE_INPUT_TYPES ).contains( type );
+		}catch( ConfigNotFoundException ex ) {
+			throw new ConfigNotFoundException(INTERNAL_PIPELINE_INPUT_TYPES, 
+				"Check property [" + Constants.INPUT_DIRS + "]." + System.lineSeparator() + 
+				"It may be necissary to supply the input types via property [" + Constants.INPUT_TYPES + "].");
+		}
+		return bool;
 	}
 
 	/**
@@ -663,9 +690,9 @@ public class BioLockJUtil {
 		System.err.println( "See: \"biolockj --help\" " );
 	}
 
-	private static void setPipelineInputFileTypes() {
+	private static void setPipelineInputFileTypes() throws DockerVolCreationException, Exception {
 		final Set<String> fileTypes = new HashSet<>();
-		for( final File file: inputFiles )
+		for( final File file: inputFiles ) {
 			if( SeqUtil.isSeqFile( file ) ) fileTypes.add( PIPELINE_SEQ_INPUT_TYPE );
 			else if( file.getName().endsWith( Constants.PROCESSED ) ) fileTypes.add( PIPELINE_PARSER_INPUT_TYPE );
 			else if( R_CalculateStats.isStatsFile( file ) ) fileTypes.add( PIPELINE_STATS_TABLE_INPUT_TYPE );
@@ -679,8 +706,31 @@ public class BioLockJUtil {
 				fileTypes.add( PIPELINE_TAXA_COUNT_TABLE_INPUT_TYPE );
 			} else if( TaxaUtil.isTaxaFile( file ) ) fileTypes.add( PIPELINE_TAXA_COUNT_TABLE_INPUT_TYPE );
 			else if( PathwayUtil.isPathwayFile( file ) ) fileTypes.add( PIPELINE_HUMANN2_COUNT_TABLE_INPUT_TYPE );
-
+		}
+		
+		for (InputData inMod : getInputModules() ) {
+			Set<String> filesFromMod = inMod.getInputDataTypes();
+			Log.info(BioLockJUtil.class, "The module [" + inMod.getClass().getSimpleName() + "] brings filetype(s): " + getCollectionAsString(filesFromMod) );
+			fileTypes.addAll( filesFromMod );
+		}
+			
+		if ( Config.getList( null, Constants.INPUT_TYPES ).size() > 0 ) {
+			List<String> manualTypes = Config.getList( null, Constants.INPUT_TYPES );
+			Log.warn(BioLockJUtil.class, "The property [" + Constants.INPUT_TYPES + "] overrides automatic file type detection.");
+			Log.warn(BioLockJUtil.class, "Without property [" + Constants.INPUT_TYPES + "], the file types would be to: " + getCollectionAsString( fileTypes ));
+			Log.warn(BioLockJUtil.class, "Instead, the value of [" + INTERNAL_PIPELINE_INPUT_TYPES + "] will be set to: " + getCollectionAsString( manualTypes ) );
+			fileTypes.clear();
+			fileTypes.addAll( manualTypes );
+		}
+		
 		Config.setConfigProperty( INTERNAL_PIPELINE_INPUT_TYPES, fileTypes );
+		if (fileTypes.isEmpty()) {
+			Log.warn(BioLockJUtil.class, "No input types.");
+			if ( ! getInputModules().isEmpty() ) {
+				Log.warn(BioLockJUtil.class, "This pipeline contains InputData modules:  " + getCollectionAsString( getInputModules() ) );
+				Log.warn(BioLockJUtil.class, "It may be necissary to supply the input types via property [" + Constants.INPUT_TYPES + "].");
+			}
+		}
 	}
 
 	/**

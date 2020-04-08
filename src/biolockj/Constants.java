@@ -48,6 +48,7 @@ public class Constants {
 		Properties.registerProp( INPUT_REVERSE_READ_SUFFIX, "regex", "file suffix used to identify reverse reads in" + INPUT_DIRS );
 		Properties.registerProp( INPUT_TRIM_PREFIX, Properties.STRING_TYPE, INPUT_TRIM_PREFIX_DESC );
 		Properties.registerProp( INPUT_TRIM_SUFFIX, Properties.STRING_TYPE, INPUT_TRIM_SUFFIX_DESC );
+		Properties.registerProp( INPUT_TYPES, Properties.LIST_TYPE, INPUT_TYPES_DESC);
 		Properties.registerProp( QIIME_ALPHA_DIVERSITY_METRICS, Properties.LIST_TYPE, "alpha diversity metrics to calculate through qiime; For complete list of skbio.diversity.alpha options, see <a href= \"http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html\" target=\"_top\">http://scikit-bio.org/docs/latest/generated/skbio.diversity.alpha.html</a>" );
 		Properties.registerProp( RM_TEMP_FILES, Properties.BOOLEAN_TYPE, RM_TEMP_FILES_DESC );
 		
@@ -412,6 +413,13 @@ public class Constants {
 	 */
 	public static final String INPUT_TRIM_SUFFIX = "input.trimSuffix";
 	private static final String INPUT_TRIM_SUFFIX_DESC = "suffix to trim from sequence file names or headers to obtain Sample ID";
+	
+	/**
+	 * {@link biolockj.Config} List property: {@value #INPUT_TYPES}<br>
+	 * {@value #INPUT_TYPES_DESC}
+	 */
+	public static final String INPUT_TYPES = "pipeline.inputTypes";
+	private static final String INPUT_TYPES_DESC = "List of file types. This manually overrides the recommended auto-detection.";
 	
 	/**
 	 * Any {@link biolockj.Config} property that starts with the {@value INTERNAL_PREFIX}

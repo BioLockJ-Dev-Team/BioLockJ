@@ -15,7 +15,8 @@ import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
+import java.util.TreeSet;
 import biolockj.api.ApiModule;
 import biolockj.exception.MetadataException;
 import biolockj.Config;
@@ -26,14 +27,12 @@ import biolockj.Constants;
 import biolockj.Log;
 import biolockj.Properties;
 
-public class SraDownload extends ScriptModuleImpl implements ApiModule {
+public class SraDownload extends ScriptModuleImpl implements ApiModule, InputData {
 
 	public SraDownload() {
 		super();
 		addNewProperty(METADATA_SRA_ID_COL_NAME, Properties.STRING_TYPE,
 				"Specifies the metadata file column name containing SRA run ids", "sra");
-		addGeneralProperty(Constants.INPUT_DIRS,
-				"Specifies a path to dummy seq data e.g. $SHEP/data_tiny/input/seq/fq/single_sample/separate_fw_rv/rhizosphere_16S_data/R1/rhizo_R1_subdir");
 		addNewProperty(EXE_FASTERQ, Properties.FILE_PATH, "Optional - specifies a path to fasterq-dump");
 		addGeneralProperty(Constants.EXE_GZIP, Properties.FILE_PATH, "Optional - specifies a path to gzip");
 	}
@@ -50,6 +49,7 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule {
 		String sraId = null;
 
 		final List<List<String>> data = new ArrayList<>();
+		dataSource = dataSource + Constants.RETURN + "Accessions: ";
 		for (final String sample : MetaUtil.getSampleIds()) {
 			final ArrayList<String> lines = new ArrayList<>();
 			try {
@@ -59,6 +59,7 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule {
 						+ Config.getString(this, METADATA_SRA_ID_COL_NAME) + " for sample " + sample + ".");
 				throw e;
 			}
+			dataSource = dataSource + Constants.RETURN + sraId;
 			final String downloadLine = Config.getExe(this, EXE_FASTERQ) + " -O " + outputDir + " " + sraId;
 			final String compressLine = Config.getExe(this, Constants.EXE_GZIP) + " " + outputDir + File.separator
 					+ sraId + "*.fastq";
@@ -134,6 +135,25 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule {
 	public String getDockerImageName() {
 		return "";//TODO: actually supply docker image name; this just avoids compile errors.
 	}
+	
+	@Override
+	public String getSummary() throws Exception {
+		return super.getSummary() + "Data source: " + getDataSource() ;
+	}
+	
+//	@Override
+	public String getDataSource() {
+		return "https://www.ncbi.nlm.nih.gov/sra" + dataSource;
+	}
+	@Override
+	public Set<String> getInputDataTypes() {
+		Set<String> types = new TreeSet<String>();
+		types.add( BioLockJUtil.PIPELINE_SEQ_INPUT_TYPE );
+		types.add( Constants.FASTQ );
+		return types;
+	}
+	
+	private String dataSource = "";
 
 	private static final String METADATA_SRA_ID_COL_NAME = "sraDownload.metadataSraIdColumnName";
 	private static final String EXE_FASTERQ = "exe.fasterq-dump";
