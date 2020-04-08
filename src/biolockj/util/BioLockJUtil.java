@@ -409,7 +409,7 @@ public class BioLockJUtil {
 		setPipelineInputFileTypes();
 	}
 	
-	private static List<InputData> getInputModules() throws Exception {
+	public static List<InputData> getInputModules() throws Exception {
 		List<InputData> inputModules = new ArrayList<>();
 		List<String> biomoduleLines = Properties.getListedModules( RuntimeParamUtil.getConfigFile() );
 		for (String moduleLine : biomoduleLines ) {

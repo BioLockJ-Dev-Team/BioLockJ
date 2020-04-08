@@ -239,12 +239,27 @@ public class BioModuleFactory {
 		final List<String> configModules = Config.requireList( null, Constants.INTERNAL_BLJ_MODULE );
 		final List<String> modules = new ArrayList<>();
 		if( !Config.getBoolean( null, Constants.DISABLE_ADD_IMPLICIT_MODULES ) ) {
-			info( "Set required 1st module (for all pipelines): " + ImportMetadata.class.getName() );
-			configModules.remove( ImportMetadata.class.getName() );
-			modules.add( ImportMetadata.class.getName() );
+			if( modules.contains( ImportMetadata.class.getName() )) {
+				info( ImportMetadata.class.getName() + " has already been placed in the module run order.");
+				if (modules.indexOf( ImportMetadata.class.getName() ) != 0) {
+					Log.warn(BioModuleFactory.class, ImportMetadata.class.getName() + " is typically the FIRST module in the pipeline.");
+				}
+			}else if( Config.getExistingFile( null, MetaUtil.META_FILE_PATH ) != null ) {
+				info( "Pipeline has metadata file. Set 1st module: " + ImportMetadata.class.getName() );
+				modules.add( ImportMetadata.class.getName() );
+			}else if( BioLockJUtil.pipelineInputType( BioLockJUtil.PIPELINE_SEQ_INPUT_TYPE ) ) {
+				info( "Pipeline has no metadata file. Metadata can be inferred from input files. Set 1st module: " + ImportMetadata.class.getName() );
+				modules.add( ImportMetadata.class.getName() );
+				if ( BioLockJUtil.getInputModules().size() > 0) {
+					Log.warn(BioModuleFactory.class, ImportMetadata.class.getName() + "was added to the beginning of the pipeline.");
+					Log.warn(BioModuleFactory.class, "The following module(s) may bring input data to the pipeline: " + BioLockJUtil.getCollectionAsString( BioLockJUtil.getInputModules() ) );
+					Log.warn(BioModuleFactory.class, "That data will not be detected by " + ImportMetadata.class.getName() );
+					Log.warn(BioModuleFactory.class, "To remedy this, add " + ImportMetadata.class.getName() + " in the biomodule run order after the data input module(s)." );
+				}
+			}
 
 			if( SeqUtil.isMultiplexed() ) {
-				info( "Set required 2nd module (for multiplexed data): " + Config.getString( null, Constants.DEFAULT_MOD_DEMUX ) );
+				info( "Set required module (for multiplexed data): " + Config.getString( null, Constants.DEFAULT_MOD_DEMUX ) );
 				configModules.remove( Config.getString(null, Constants.DEFAULT_MOD_DEMUX) );
 				modules.add( Config.getString(null, Constants.DEFAULT_MOD_DEMUX) );
 			}
@@ -257,14 +272,9 @@ public class BioModuleFactory {
 			}
 		}
 
-		for( final String module: configModules )
-			if( isImplicitModule( module ) && !Config.getBoolean( null, Constants.DISABLE_ADD_IMPLICIT_MODULES ) )
-				warn( "Ignoring configured module [" + module +
-					"] since implicit BioModules are added to the pipeline by the system if needed.  " +
-					"To override this behavior and ignore implicit designation, udpate project Config: [" +
-					Constants.DISABLE_ADD_IMPLICIT_MODULES + "=" + Constants.TRUE + "]" );
-			else modules.add( module );
-
+		for( final String module: configModules ) {
+			modules.add( module );
+		}
 		return modules;
 	}
 
@@ -292,10 +302,6 @@ public class BioModuleFactory {
 		factory = new BioModuleFactory();
 	}
 
-	private static boolean isImplicitModule( final String moduleName ) {
-		return moduleName.startsWith( MODULE_IMPLICIT_PACKAGE );
-	}
-
 	/**
 	 * Check if module belongs to a package that processes sequences
 	 */
@@ -315,6 +321,5 @@ public class BioModuleFactory {
 	private int safteyCheck = 0;
 	private static BioModuleFactory factory = null;
 	private static final String MODULE_CLASSIFIER_PACKAGE = "biolockj.module.classifier";
-	private static final String MODULE_IMPLICIT_PACKAGE = "biolockj.module.implicit";
 	private static final int SAFE_MAX = 10;
 }
