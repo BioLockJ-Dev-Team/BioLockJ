@@ -127,7 +127,6 @@ blj_options() {
 # TODO use mount instead of volumes
 get_volumes() {
 	vols="-v ${DOCK_SOCK}:${DOCK_SOCK}"
-	vols="${vols} -v ${HOME}:${BLJ_HOST_HOME}:delegated" #TODO - DO NOT map home directory
 	ifArgUsed $BLJ_ARG && vols="${vols} -v ${BLJ}:/app/biolockj:ro"
 	ifArgUsed $EXT_MODS_ARG && vols="${vols} -v ${extMods}:/app/external_modules:ro"
 	if ifArgUsed $AWS_ARG ; then
