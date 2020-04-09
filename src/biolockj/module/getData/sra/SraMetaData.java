@@ -3,16 +3,19 @@ package biolockj.module.getData.sra;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import biolockj.Config;
 import biolockj.Constants;
 import biolockj.Log;
 import biolockj.Properties;
 import biolockj.api.ApiModule;
 import biolockj.exception.ConfigFormatException;
+import biolockj.module.getData.InputData;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.DockerUtil;
 
-public class SraMetaData extends SequenceReadArchive implements ApiModule {
+public class SraMetaData extends SequenceReadArchive implements ApiModule, InputData {
 	
 	public SraMetaData() {
 		super();
@@ -116,5 +119,12 @@ public class SraMetaData extends SequenceReadArchive implements ApiModule {
 	private static final String SRP = "sraMetaData.SraProjectId";
 	
 	private static final String FUNCTION_NAME = "main";
+
+	@Override
+	public Set<String> getInputDataTypes() {
+		Set<String> types = new TreeSet<String>();
+		types.add( "sra metadata" );
+		return types;
+	}
 
 }

@@ -3,6 +3,8 @@ package biolockj.module.getData.sra;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import biolockj.Config;
 import biolockj.Constants;
 import biolockj.Log;
@@ -10,11 +12,14 @@ import biolockj.Properties;
 import biolockj.api.ApiModule;
 import biolockj.exception.ConfigException;
 import biolockj.exception.ConfigFormatException;
+import biolockj.exception.ConfigPathException;
+import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.SpecialPropertiesException;
+import biolockj.module.WritesOutsidePipeline;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.DockerUtil;
 
-public class SraMetaDB extends SequenceReadArchive implements ApiModule {
+public class SraMetaDB extends SequenceReadArchive implements ApiModule, WritesOutsidePipeline {
 	
 	public SraMetaDB() {
 		super();
@@ -127,6 +132,14 @@ public class SraMetaDB extends SequenceReadArchive implements ApiModule {
 						+ "BioLockJ " + BioLockJUtil.getVersion();
 	}
 	
+	@Override
+	public Set<String> getWriteDirs() throws DockerVolCreationException, ConfigPathException {
+		Set<String> dirs = new TreeSet<>();
+		File dbFolder = Config.getExistingDir( this, DB_DIR );
+		dirs.add( DockerUtil.deContainerizePath( dbFolder.getAbsolutePath() ) );
+		return dirs;
+	}
+
 	/**
 	 * {@link biolockj.Config} property: {@value #DO_UPDATE}<br>
 	 * {@value #DO_UPDATE_DESC}

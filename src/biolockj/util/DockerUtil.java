@@ -117,11 +117,24 @@ public class DockerUtil {
 		for ( String key : volumeMap.keySet() ) {
 			if ( key.equals( DOCKER_SOCKET ) ) continue;
 			if ( volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) continue;
-			dockerVolumes.add( " -v " + key + ":" + volumeMap.get( key ) + ":ro" + WRAP_LINE );
+			String access = needsWritePermission(module, key) ? ":delegated" : ":ro" ;
+			dockerVolumes.add( " -v " + key + ":" + volumeMap.get( key ) + access + WRAP_LINE );
 		}
 		
 		Log.debug( DockerUtil.class, "Passed along volumes: " + dockerVolumes );
 		return dockerVolumes;
+	}
+
+	private static boolean needsWritePermission(BioModule module, String key) throws DockerVolCreationException, ConfigPathException {
+		if (module instanceof WritesOutsidePipeline ) {
+			WritesOutsidePipeline wopMod = (WritesOutsidePipeline) module;
+			Set<String> wopDirs = wopMod.getWriteDirs();
+			if (wopDirs.contains( key )) {
+				Log.info(DockerUtil.class, "The module [" + ModuleUtil.displaySignature( module ) + "] is granted write access to the folder [" + key + "]");
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
