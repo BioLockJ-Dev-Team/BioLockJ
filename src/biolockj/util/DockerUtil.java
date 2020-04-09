@@ -129,7 +129,7 @@ public class DockerUtil {
 		if (module instanceof WritesOutsidePipeline ) {
 			WritesOutsidePipeline wopMod = (WritesOutsidePipeline) module;
 			Set<String> wopDirs = wopMod.getWriteDirs();
-			if (wopDirs.contains( key )) {
+			if (wopDirs.contains( volumeMap.get( key ) )) {
 				Log.info(DockerUtil.class, "The module [" + ModuleUtil.displaySignature( module ) + "] is granted write access to the folder [" + key + "]");
 				return true;
 			}
@@ -302,16 +302,22 @@ public class DockerUtil {
 		TreeMap<String, String> vmap = getVolumeMap();
 		String pipelineKey = null;
 		for (String key : volumeMap.keySet()) {
-			if (volumeMap.get( key ).startsWith( DOCKER_PIPELINE_DIR ) ) pipelineKey = key;
-			if ( DockerUtil.inAwsEnv() && volumeMap.get( key ).startsWith( DOCKER_BLJ_MOUNT_DIR ) ) pipelineKey = key;
+			if (volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) pipelineKey = key;
+			if ( DockerUtil.inAwsEnv() && volumeMap.get( key ).equals( DOCKER_BLJ_MOUNT_DIR ) ) pipelineKey = key;
 		}
 		if (pipelineKey == null) throw new DockerVolCreationException("no pipeline dir !");
 		if ( pipelineKey != null && path.startsWith( pipelineKey ) ) return innerPath.replaceFirst( pipelineKey, vmap.get( pipelineKey ) );
+		
+		String bestMatch = null;
+		int bestMatchLen = 0;
 		for (String s : vmap.keySet()) {
-			if ( path.startsWith( s ) ) {
-				innerPath = innerPath.replaceFirst( s, vmap.get( s ) );
-				break;
+			if ( path.startsWith( s ) && s.length() > bestMatchLen) {
+					bestMatch = String.valueOf( s );
+					bestMatchLen = s.length();
 			}
+		}
+		if (bestMatch != null) {
+			innerPath = innerPath.replaceFirst( bestMatch, vmap.get( bestMatch ) );
 		}
 		return innerPath;
 	}
