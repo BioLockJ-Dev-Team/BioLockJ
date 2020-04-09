@@ -226,8 +226,8 @@
 <td align="left"><em>executable</em> <br>Path for the "fasterq-dump" executable; if not supplied, any script that needs the fasterq-dump command will assume it is on the PATH.<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
-<td align="left"><em>input.dirPaths</em></td>
-<td align="left"><em>list of file paths</em> <br>Specifies a path to dummy seq data e.g. $SHEP/data_tiny/input/seq/fq/single_sample/separate_fw_rv/rhizosphere_16S_data/R1/rhizo_R1_subdir<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>sraDownload.destinationDir</em></td>
+<td align="left"><em>file path</em> <br>Path to directory where downloaded files should be saved. If specified, it must exist.<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>sraDownload.metadataSraIdColumnName</em></td>
@@ -262,27 +262,27 @@
 </tr>
 <tr>
 <td align="left"><em>cluster.statusCommand</em></td>
-<td align="left"><em>string</em> <br>Terminal command used to submit jobs on the cluster<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>string</em> <br>Terminal command used to check the status of jobs on the cluster<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
-<td align="left"><em>docker.imgVersion</em></td>
+<td align="left"><em>docker.imageName</em></td>
+<td align="left"><em>string</em> <br>The name of a docker image to override whatever a module says to use.<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>docker.imageTag</em></td>
 <td align="left"><em>string</em> <br>indicate specific version of Docker images<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>docker.imgOwner</em></td>
+<td align="left"><em>string</em> <br>name of the Docker Hub user that owns the docker containers<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>docker.saveContainerOnExit</em></td>
 <td align="left"><em>boolean</em> <br>if ture, docker run command will NOT include the --rm flag<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
-<td align="left"><em>docker.user</em></td>
-<td align="left"><em>string</em> <br>name of the Docker Hub user for getting docker containers<br><em>default:</em>  <em>null</em></td>
-</tr>
-<tr>
 <td align="left"><em>exe.gzip</em></td>
 <td align="left"><em>executable</em> <br>Path for the "gzip" executable; if not supplied, any script that needs the gzip command will assume it is on the PATH.<br><em>default:</em>  <em>null</em></td>
-</tr>
-<tr>
-<td align="left"><em>input.dirPaths</em></td>
-<td align="left"><em>list of file paths</em> <br>Specifies a path to dummy seq data e.g. $SHEP/data_tiny/input/seq/fq/single_sample/separate_fw_rv/rhizosphere_16S_data/R1/rhizo_R1_subdir<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>script.defaultHeader</em></td>
@@ -307,14 +307,17 @@
 </tbody>
 </table>
 <h2 id="details">Details<a class="headerlink" href="#details" title="Permanent link">#</a></h2>
-<p>Downloading and compressing files requires fasterq-dump and gzip. Your metadata file should include a column that contains SRA run accessions, and the name of this column must be specified in the configuration file, if named something other than 'sra'</p>
+<p>Downloading and compressing files requires fasterq-dump and gzip. Your metadata file should include a column that contains SRA run accessions, and the name of this column must be specified in the configuration file, if named something other than 'sra'
+If <em>sraDownload.destinationDir</em> is not specified, the files will be downlaoded to this modules output directory.It is recommended to use an external directory that can be shared across projects, and referenced in <em>input.dirPaths</em>, for example: input.dirPaths = ${sraDownload.destinationDir}
+Typically, BioLockJ will automatically determine modules to add to the pipeline to process sequence data.If the files are not present on the system when the pipeline starts, then it is up to the user to configure any and all sequence processing modules.</p>
 <h2 id="adds-modules">Adds modules<a class="headerlink" href="#adds-modules" title="Permanent link">#</a></h2>
 <p><strong>pre-requisite modules</strong>                  <br />
 <em>none found</em>                 <br />
 <strong>post-requisite modules</strong>                  <br />
 <em>none found</em>                   </p>
 <h2 id="citation">Citation<a class="headerlink" href="#citation" title="Permanent link">#</a></h2>
-<p>Module developed by Philip Badzuh                 <br />
+<p><a href="https://github.com/ncbi/sra-tools">sra-tools</a>                 <br />
+Module developed by Philip Badzuh                 <br />
 BioLockj v1.2.9-dev</p>
               
             </div>

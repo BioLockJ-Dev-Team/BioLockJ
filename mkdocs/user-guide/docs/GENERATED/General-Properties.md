@@ -7,14 +7,15 @@
 | *cluster.jobHeader* | _string_ <br>Header written at top of worker scripts<br>*default:*  *null* |
 | *cluster.modules* | _list_ <br>List of cluster modules to load at start of worker scripts<br>*default:*  *null* |
 | *cluster.prologue* | _string_ <br>To run at the start of every script after loading cluster modules (if any)<br>*default:*  *null* |
-| *cluster.statusCommand* | _string_ <br>Terminal command used to submit jobs on the cluster<br>*default:*  *null* |
+| *cluster.statusCommand* | _string_ <br>Terminal command used to check the status of jobs on the cluster<br>*default:*  *null* |
 
 ### [docker](Docker.md)                    
 | Property| Description |
 | :--- | :--- |
-| *docker.imgVersion* | _string_ <br>indicate specific version of Docker images<br>*default:*  *null* |
+| *docker.imageName* | _string_ <br>The name of a docker image to override whatever a module says to use.<br>*default:*  *null* |
+| *docker.imageTag* | _string_ <br>indicate specific version of Docker images<br>*default:*  *null* |
+| *docker.imgOwner* | _string_ <br>name of the Docker Hub user that owns the docker containers<br>*default:*  *null* |
 | *docker.saveContainerOnExit* | _boolean_ <br>if ture, docker run command will NOT include the --rm flag<br>*default:*  *null* |
-| *docker.user* | _string_ <br>name of the Docker Hub user for getting docker containers<br>*default:*  *null* |
 
 ### [exe](../../Configuration/#exe-properties)                    
 | Property| Description |
@@ -25,11 +26,6 @@
 | *exe.gzip* | _executable_ <br>Path for the "gzip" executable; if not supplied, any script that needs the gzip command will assume it is on the PATH.<br>*default:*  *null* |
 | *exe.java* | _executable_ <br>Path for the "java" executable; if not supplied, any script that needs the java command will assume it is on the PATH.<br>*default:*  *null* |
 | *exe.python* | _executable_ <br>Path for the "python" executable; if not supplied, any script that needs the python command will assume it is on the PATH.<br>*default:*  *null* |
-
-### genMod                   
-| Property| Description |
-| :--- | :--- |
-| *genMod.dockerContainerName* | _string_ <br>Name of the docker container to use when executing an instance of the GenMod module.<br>*default:*  *null* |
 
 ### humann2                   
 | Property| Description |
@@ -76,6 +72,7 @@
 | *pipeline.disableAddPreReqModules* | _boolean_ <br>If set to true, prerequisite modules will not be added to the pipeline.<br>*default:*  *null* |
 | *pipeline.downloadDir* | _file path_ <br>local directory used as the destination in the download command<br>*default:*  $HOME/projects/downloads |
 | *pipeline.env* | _string_ <br>Environment in which a pipeline is run. Options: cluster, aws, local<br>*default:*  local |
+| *pipeline.inputTypes* | _list_ <br>List of file types. This manually overrides the recommended auto-detection.<br>*default:*  *null* |
 | *pipeline.limitDebugClasses* | _list_ <br>limit classes that log debug statements<br>*default:*  *null* |
 | *pipeline.logLevel* | _string_ <br>Options: DEBUG, INFO, WARN, ERROR<br>*default:*  INFO |
 | *pipeline.permissions* | _string_ <br>Set chmod -R command security bits on pipeline root directory (Ex. 770)<br>*default:*  770 |

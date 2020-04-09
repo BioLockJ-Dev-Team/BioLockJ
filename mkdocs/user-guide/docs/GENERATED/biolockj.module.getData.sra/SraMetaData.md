@@ -3,7 +3,7 @@ Add to module run order:
 `#BioModule biolockj.module.getData.sra.SraMetaData`
 
 ## Description 
-Extract and save all relevant metadata from copy of SRAmetadb.sqlite.
+Extract metadata via pysradb from local copy of SRAmetadb.sqlite.
 
 ## Properties 
 *Properties are the `name=value` pairs in the [configuration](../../../Configuration#properties) file.*                   
@@ -11,8 +11,9 @@ Extract and save all relevant metadata from copy of SRAmetadb.sqlite.
 ### SraMetaData properties: 
 | Property| Description |
 | :--- | :--- |
+| *exe.pysradb* | _executable_ <br>Path for the "pysradb" executable; if not supplied, any script that needs the pysradb command will assume it is on the PATH.<br>*default:*  *null* |
 | *sequenceReadArchive.metaDataDir* | _file path_ <br>path to the directory where the *SRAmetadb.sqlite* database is stored.<br>*default:*  *null* |
-| *sraMetaData.SraProjectId* | _string_ <br>The project id referencesing a project in the NCBI SRA. example: SRP009633<br>*default:*  *null* |
+| *sraMetaData.SraProjectId* | _list_ <br>The project id(s) referencesing a project in the NCBI SRA. example: SRP009633, ERP016051<br>*default:*  *null* |
 
 ### General properties applicable to this module: 
 | Property| Description |

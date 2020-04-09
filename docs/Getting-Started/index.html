@@ -274,7 +274,7 @@ biolockj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
 
 # Initializing BioLockJ..
 # Building pipeline:  /Users/joe/apps/BioLockJ/pipelines/myFirstPipeline_2020Jan17
-# blj_go       -&gt; Move to pipeline output directory
+# cd-blj       -&gt; Move to pipeline output directory
 # blj_log      -&gt; Tail pipeline log (accepts tail runtime parameters)
 # blj_summary  -&gt; View module execution summary
 # Fetching pipeline status 
@@ -311,7 +311,7 @@ biolockj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
 # Docker container id: 336259e7d3b8d9ab2fa71202258b562664be1bf9645d503a790ae5e9da15ce97
 # Initializing BioLockJ..
 # Building pipeline:  /Users/joe/apps/BioLockJ/pipelines/myFirstPipeline_2020Jan17
-# blj_go       -&gt; Move to pipeline output directory
+# cd-blj       -&gt; Move to pipeline output directory
 # blj_log      -&gt; Tail pipeline log (accepts tail runtime parameters)
 # blj_summary  -&gt; View module execution summary
 # Fetching pipeline status 
@@ -329,7 +329,7 @@ biolockj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
 
 <p>By default, <code>$BLJ_PROJ</code> is set to the "pipelines" folder in BioLockJ (<code>$BLJ/pipelines</code>).  To change this, add a line to your bash_profile (or equivilent file): <code>export BLJ_PROJ=/path/to/my/projects</code>.  This line must be <em>after</em> the call to the blj_config script.</p>
 <p>Look at your most recent pipeline:</p>
-<pre><code class="bash">blj_go
+<pre><code class="bash">cd-blj
 </code></pre>
 
 <p>This folder represents the analysis pipeline that you launched when you called <code>biolockj</code> on the file <em>${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties</em>.</p>

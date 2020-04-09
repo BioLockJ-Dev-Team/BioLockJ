@@ -80,9 +80,6 @@
     <li class="toctree-l3"><a href="#exe">exe</a></li>
     
 
-    <li class="toctree-l3"><a href="#genmod">genMod</a></li>
-    
-
     <li class="toctree-l3"><a href="#humann2">humann2</a></li>
     
 
@@ -288,7 +285,7 @@
 </tr>
 <tr>
 <td align="left"><em>cluster.statusCommand</em></td>
-<td align="left"><em>string</em> <br>Terminal command used to submit jobs on the cluster<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>string</em> <br>Terminal command used to check the status of jobs on the cluster<br><em>default:</em>  <em>null</em></td>
 </tr>
 </tbody>
 </table>
@@ -302,16 +299,20 @@
 </thead>
 <tbody>
 <tr>
-<td align="left"><em>docker.imgVersion</em></td>
+<td align="left"><em>docker.imageName</em></td>
+<td align="left"><em>string</em> <br>The name of a docker image to override whatever a module says to use.<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>docker.imageTag</em></td>
 <td align="left"><em>string</em> <br>indicate specific version of Docker images<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>docker.imgOwner</em></td>
+<td align="left"><em>string</em> <br>name of the Docker Hub user that owns the docker containers<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>docker.saveContainerOnExit</em></td>
 <td align="left"><em>boolean</em> <br>if ture, docker run command will NOT include the --rm flag<br><em>default:</em>  <em>null</em></td>
-</tr>
-<tr>
-<td align="left"><em>docker.user</em></td>
-<td align="left"><em>string</em> <br>name of the Docker Hub user for getting docker containers<br><em>default:</em>  <em>null</em></td>
 </tr>
 </tbody>
 </table>
@@ -347,21 +348,6 @@
 <tr>
 <td align="left"><em>exe.python</em></td>
 <td align="left"><em>executable</em> <br>Path for the "python" executable; if not supplied, any script that needs the python command will assume it is on the PATH.<br><em>default:</em>  <em>null</em></td>
-</tr>
-</tbody>
-</table>
-<h3 id="genmod">genMod<a class="headerlink" href="#genmod" title="Permanent link">#</a></h3>
-<table>
-<thead>
-<tr>
-<th align="left">Property</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left"><em>genMod.dockerContainerName</em></td>
-<td align="left"><em>string</em> <br>Name of the docker container to use when executing an instance of the GenMod module.<br><em>default:</em>  <em>null</em></td>
 </tr>
 </tbody>
 </table>
@@ -526,6 +512,10 @@
 <tr>
 <td align="left"><em>pipeline.env</em></td>
 <td align="left"><em>string</em> <br>Environment in which a pipeline is run. Options: cluster, aws, local<br><em>default:</em>  local</td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.inputTypes</em></td>
+<td align="left"><em>list</em> <br>List of file types. This manually overrides the recommended auto-detection.<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>pipeline.limitDebugClasses</em></td>

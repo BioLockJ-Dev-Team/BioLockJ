@@ -258,19 +258,23 @@
 </tr>
 <tr>
 <td align="left"><em>cluster.statusCommand</em></td>
-<td align="left"><em>string</em> <br>Terminal command used to submit jobs on the cluster<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>string</em> <br>Terminal command used to check the status of jobs on the cluster<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
-<td align="left"><em>docker.imgVersion</em></td>
+<td align="left"><em>docker.imageName</em></td>
+<td align="left"><em>string</em> <br>The name of a docker image to override whatever a module says to use.<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>docker.imageTag</em></td>
 <td align="left"><em>string</em> <br>indicate specific version of Docker images<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>docker.imgOwner</em></td>
+<td align="left"><em>string</em> <br>name of the Docker Hub user that owns the docker containers<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>docker.saveContainerOnExit</em></td>
 <td align="left"><em>boolean</em> <br>if ture, docker run command will NOT include the --rm flag<br><em>default:</em>  <em>null</em></td>
-</tr>
-<tr>
-<td align="left"><em>docker.user</em></td>
-<td align="left"><em>string</em> <br>name of the Docker Hub user for getting docker containers<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>pipeline.defaultSeqMerger</em></td>

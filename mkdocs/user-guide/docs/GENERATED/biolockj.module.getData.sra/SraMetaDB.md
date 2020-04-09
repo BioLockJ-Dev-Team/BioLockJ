@@ -11,6 +11,8 @@ Makes sure that the SRAmetadb exists, downloads if it does not already exist.
 ### SraMetaDB properties: 
 | Property| Description |
 | :--- | :--- |
+| *exe.gunzip* | _executable_ <br>Path for the "gunzip" executable; if not supplied, any script that needs the gunzip command will assume it is on the PATH.<br>*default:*  *null* |
+| *exe.wget* | _executable_ <br>Path for the "wget" executable; if not supplied, any script that needs the wget command will assume it is on the PATH.<br>*default:*  *null* |
 | *sequenceReadArchive.metaDataDir* | _file path_ <br>path to the directory where the *SRAmetadb.sqlite* database is stored.<br>*default:*  *null* |
 | *sraMetaData.forceUpdate* | _boolean_ <br>Y/N: download a newer verionsion if available.<br>*default:*  N |
 
@@ -34,8 +36,14 @@ Makes sure that the SRAmetadb exists, downloads if it does not already exist.
 
 ## Details 
 If *sraMetaData.forceUpdate* is set to Y, then the zipped form of the database is downloaded, and kept and used to compare the local version to the server version; and the server version is downloaded if it is newer.
+
 Server version location: https://starbuck1.s3.amazonaws.com/sradb/SRAmetadb.sqlite.gz
-*sequenceReadArchive.metaDataDir* directory must exist.  If the database does not exist at that location, it will be downlaoded.
+
+*sequenceReadArchive.metaDataDir* directory must exist.  If the database does not exist at that location, it will be downloaded.
+
+The download process is somewhat error-prone, especially in docker. The download is about 4GB and the unzipped database is up to 30GB.It is generally recommended to download and unzip the database manually:
+
+wget https://starbuck1.s3.amazonaws.com/sradb/SRAmetadb.sqlite.gz;  <br>gunzip SRAmetadb.sqlite
 
 ## Adds modules 
 **pre-requisite modules**                    

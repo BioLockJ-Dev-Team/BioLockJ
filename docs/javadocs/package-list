@@ -8,6 +8,7 @@ biolockj.module.classifier.r16s
 biolockj.module.classifier.wgs
 biolockj.module.diy
 biolockj.module.getData
+biolockj.module.getData.sra
 biolockj.module.implicit
 biolockj.module.implicit.parser
 biolockj.module.implicit.parser.r16s
