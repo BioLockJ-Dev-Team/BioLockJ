@@ -121,9 +121,18 @@ public class SraMetaDB extends SequenceReadArchive implements ApiModule, WritesO
 	@Override
 	public String getDetails() {
 		return "If *" + DO_UPDATE + "* is set to Y, then the zipped form of the database is downloaded, and kept and used to compare " 
-						+ "the local version to the server version; and the server version is downloaded if it is newer." + System.lineSeparator()
-						+ "Server version location: " + DB_URL + System.lineSeparator()
-						+ "*" + DB_DIR + "* directory must exist.  If the database does not exist at that location, it will be downloaded.";
+						+ "the local version to the server version; and the server version is downloaded if it is newer." 
+						+ System.lineSeparator() + System.lineSeparator() 
+						+ "Server version location: " + DB_URL 
+						+ System.lineSeparator() + System.lineSeparator() 
+						+ "*" + DB_DIR + "* directory must exist.  If the database does not exist at that location, it will be downloaded."
+						+ System.lineSeparator() + System.lineSeparator() 
+						+ "The download process is somewhat error-prone, especially in docker. "
+						+ "The download is about 4GB and the unzipped database is up to 30GB."
+						+ "It is generally recommended to download and unzip the database manually:"
+						+ System.lineSeparator() + System.lineSeparator() 
+						+ "wget " + DB_URL + ";  <br>"
+						+ "gunzip " + DB_NAME;
 	}
 
 	@Override

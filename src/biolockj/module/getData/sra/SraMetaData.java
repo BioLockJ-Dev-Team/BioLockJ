@@ -20,6 +20,7 @@ public class SraMetaData extends SequenceReadArchive implements ApiModule, Input
 	public SraMetaData() {
 		super();
 		addNewProperty( SRP, Properties.LIST_TYPE, "The project id(s) referencesing a project in the NCBI SRA. example: SRP009633, ERP016051");
+		addGeneralProperty( EXE_PYSRADB );
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class SraMetaData extends SequenceReadArchive implements ApiModule, Input
 		lines.add( "echo Project ID: $1" );
 		lines.add( "echo Saving table to file: $2" );
 		lines.add( "DB=" + dbFile.getAbsolutePath() );
-		lines.add( "pysradb metadata --db $DB --detailed --expand --saveto $2 $1" );
+		lines.add( Config.getExe( this, EXE_PYSRADB )+ " metadata --db $DB --detailed --expand --saveto $2 $1" );
 		lines.add( "}" );
 		
 		return lines;
@@ -102,7 +103,7 @@ public class SraMetaData extends SequenceReadArchive implements ApiModule, Input
 
 	@Override
 	public String getDescription() {
-		return "Extract and save metadata available via pysradb from copy of " + DB_NAME + ".";
+		return "Extract metadata via pysradb from local copy of " + DB_NAME + ".";
 	}
 	
 	@Override
@@ -115,11 +116,7 @@ public class SraMetaData extends SequenceReadArchive implements ApiModule, Input
 		return "Module developed by Malcolm Zapatas and Ivory Blakley" + System.lineSeparator()
 						+ "BioLockJ " + BioLockJUtil.getVersion();
 	}
-
-	private static final String SRP = "sraMetaData.SraProjectId";
 	
-	private static final String FUNCTION_NAME = "main";
-
 	@Override
 	public Set<String> getInputDataTypes() {
 		Set<String> types = new TreeSet<String>();
@@ -127,4 +124,10 @@ public class SraMetaData extends SequenceReadArchive implements ApiModule, Input
 		return types;
 	}
 
+	private static final String SRP = "sraMetaData.SraProjectId";
+	
+	private static final String FUNCTION_NAME = "main";
+
+	private final String EXE_PYSRADB = "exe.pysradb";
+	
 }
