@@ -12,7 +12,7 @@
 package biolockj.module.getData.sra;
 
 import java.io.File;
-
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -65,13 +65,19 @@ public class SraDownload extends SequenceReadArchive implements ApiModule, Input
 						+ Config.getString(this, METADATA_SRA_ID_COL_NAME) + " for sample " + sample + ".");
 				throw e;
 			}
-			dataSource = dataSource + Constants.RETURN + sraId;
-			final String downloadLine = Config.getExe(this, EXE_FASTERQ) + " -O " + outputDir + " " + sraId;
-			final String compressLine = Config.getExe(this, Constants.EXE_GZIP) + " " + outputDir + File.separator
-					+ sraId + "*.fastq";
-			lines.add(downloadLine);
-			lines.add(compressLine);
-			data.add(lines);
+			String existingFile = existingFileInfo(sraId);
+			if (existingFile.length() > 0) {
+				dataSource = dataSource + Constants.RETURN + sraId + " - keeping prexisting file: " + existingFile;
+				Log.info(SraDownload.class, "Skipping " + sraId + " because [" + existingFile + "] already exists in destination [" + outputDir + "].");
+			}else {
+				dataSource = dataSource + Constants.RETURN + sraId + " (download)";
+				final String downloadLine = Config.getExe(this, EXE_FASTERQ) + " -O " + outputDir + " " + sraId;
+				final String compressLine = Config.getExe(this, Constants.EXE_GZIP) + " " + outputDir + File.separator
+						+ sraId + "*.fastq";
+				lines.add(downloadLine);
+				lines.add(compressLine);
+				data.add(lines);
+			}
 		}
 
 		System.out.println(data);
@@ -87,6 +93,27 @@ public class SraDownload extends SequenceReadArchive implements ApiModule, Input
 			dest = getOutputDir();
 		}
 		return dest;
+	}
+	
+	private String existingFileInfo( String sraId ) throws ConfigPathException, DockerVolCreationException {
+		File dest = getDestDir();
+		File[] files = dest.listFiles( new FilenameFilter() {
+			@Override
+			public boolean accept( File dir, String name ) {
+				if ( !dir.equals( dest )) return false;
+				if (name.startsWith( sraId )) {
+					if ( name.endsWith( Constants.FASTQ ) || name.endsWith( Constants.FASTQ + ".gz") ) {
+						return true;
+					}
+				}
+				return false;
+			}
+		} );
+		String returnVal = "";
+		for (File file : files) {
+			returnVal += DockerUtil.deContainerizePath( file.getName() );
+		}
+		return returnVal;
 	}
 
 	@Override
