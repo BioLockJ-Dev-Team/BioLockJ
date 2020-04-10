@@ -9,7 +9,7 @@
  * will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
  * PARTICULAR PURPOSE. See the GNU General Public License for more details at http://www.gnu.org *
  */
-package biolockj.module.getData;
+package biolockj.module.getData.sra;
 
 import java.io.File;
 
@@ -23,6 +23,7 @@ import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.MetadataException;
 import biolockj.Config;
 import biolockj.module.ScriptModuleImpl;
+import biolockj.module.getData.InputData;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.MetaUtil;
 import biolockj.util.SeqUtil;
