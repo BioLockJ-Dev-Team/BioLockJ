@@ -22,16 +22,17 @@ import biolockj.exception.ConfigPathException;
 import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.MetadataException;
 import biolockj.Config;
-import biolockj.module.ScriptModuleImpl;
+import biolockj.module.WritesOutsidePipeline;
 import biolockj.module.getData.InputData;
 import biolockj.util.BioLockJUtil;
+import biolockj.util.DockerUtil;
 import biolockj.util.MetaUtil;
 import biolockj.util.SeqUtil;
 import biolockj.Constants;
 import biolockj.Log;
 import biolockj.Properties;
 
-public class SraDownload extends ScriptModuleImpl implements ApiModule, InputData {
+public class SraDownload extends SequenceReadArchive implements ApiModule, InputData, WritesOutsidePipeline {
 
 	public SraDownload() {
 		super();
@@ -146,7 +147,8 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule, InputDat
 	
 	@Override
 	public String getSummary() throws Exception {
-		return super.getSummary() + "Data source: " + getDataSource() ;
+		return super.getSummary() + "Data source: " + getDataSource() + Constants.RETURN 
+						+ "Files saved to: " + DockerUtil.deContainerizePath( getDestDir().getAbsolutePath() );
 	}
 	
 //	@Override
@@ -168,6 +170,13 @@ public class SraDownload extends ScriptModuleImpl implements ApiModule, InputDat
 			SeqUtil.initialize();
 		}
 		super.cleanUp();
+	}
+	
+	@Override
+	public Set<String> getWriteDirs() throws DockerVolCreationException, ConfigPathException {
+		Set<String> dirs = new TreeSet<>();
+		dirs.add( getDestDir().getAbsolutePath() );
+		return dirs;
 	}
 	
 	private String dataSource = "";
