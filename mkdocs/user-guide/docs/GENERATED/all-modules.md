@@ -8,6 +8,7 @@
 [BuildQiimeMapping](biolockj.module.implicit.qiime/BuildQiimeMapping.md)                   
 [BuildTaxaTables](biolockj.module.report.taxa/BuildTaxaTables.md)                   
 [CompileOtuCounts](biolockj.module.report.otu/CompileOtuCounts.md)                   
+[DESeq2](biolockj.module.rnaseq/DESeq2.md) - *Determine statistically significant differences using DESeq2.*                   
 [Demultiplexer](biolockj.module.implicit/Demultiplexer.md) - *Demultiplex samples into separate files for each sample.*                   
 [Email](biolockj.module.report/Email.md) - *Send an email containing the pipeline summary when the pipeline either completes or fails.*                   
 [GenMod](biolockj.module.diy/GenMod.md) - *Allows user to add their own scripts into the BioLockJ pipeline.*                   

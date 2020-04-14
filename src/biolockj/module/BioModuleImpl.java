@@ -305,7 +305,9 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 					moduleInputFiles.addAll( FileUtils.listFiles( previousModule.getOutputDir(),
 						HiddenFileFilter.VISIBLE, HiddenFileFilter.VISIBLE ) );
 					Log.debug( getClass(), "# Files found: " + moduleInputFiles.size() );
-				} else previousModule = ModuleUtil.getPreviousModule( previousModule );
+				} else {
+					previousModule = ModuleUtil.getPreviousModule( previousModule );
+				}
 			}
 
 		return BioLockJUtil.removeIgnoredAndEmptyFiles( moduleInputFiles );

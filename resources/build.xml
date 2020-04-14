@@ -64,7 +64,7 @@
 		<jar destfile="dist/BioLockJ.jar">
 			<zipgroupfileset dir="lib" includes="*.jar"/>
 			<fileset dir="bin"/>
-			<fileset dir="src" includes="biolockj/module/**/*.md"/>
+			<fileset dir="src" excludes="**.java"/>
 			<manifest>
 				<attribute name="Specification-Title" value="BioLockJ"/>
 				<attribute name="Specification-Version" value="${blj_version}"/>

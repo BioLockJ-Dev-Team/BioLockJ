@@ -3,6 +3,7 @@ blj_basic_py2.Dockerfile
 blj_basic_java.Dockerfile
 build_with_ant.Dockerfile
 biolockj_controller.Dockerfile
+r_deseq2.Dockerfile
 sratoolkit.Dockerfile
 pysradb.Dockerfile
 pear.Dockerfile

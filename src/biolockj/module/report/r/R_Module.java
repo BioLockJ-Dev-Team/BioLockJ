@@ -360,7 +360,7 @@ public abstract class R_Module extends ScriptModuleImpl {
 		}
 	}
 
-	private static File getFunctionLib() throws Exception {
+	public static File getFunctionLib() throws Exception {
 		final File rFile = new File( getRTemplateDir() + Constants.R_FUNCTION_LIB );
 		if( !rFile.isFile() ) throw new Exception( "Missing R function library: " + rFile.getAbsolutePath() );
 

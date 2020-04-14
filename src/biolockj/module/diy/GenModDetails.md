@@ -8,7 +8,7 @@ This is ideal for:
 
 Any step in your analysis process that might otherwise have to be done manually can be stored as a custom script so that the entire process is as reproducible as possible.
 
-It is SCRONGLY encouraged that users write scripts using common module conventions:
+It is STRONGLY encouraged that users write scripts using common module conventions:
 
  * use relative file paths (starting with `.` or `..`)
  * put all generated output in the modules `output` directory (`../output`)

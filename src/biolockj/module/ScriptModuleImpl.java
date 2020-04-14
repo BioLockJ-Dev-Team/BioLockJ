@@ -40,6 +40,9 @@ public abstract class ScriptModuleImpl extends BioModuleImpl implements ScriptMo
 		}
 	}
 
+	/**
+	 * Return an inner list of lines to execute for each sample. Return these as a list (outer list)
+	 */
 	@Override
 	public abstract List<List<String>> buildScript( final List<File> files ) throws Exception;
 
