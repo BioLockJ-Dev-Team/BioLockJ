@@ -226,7 +226,7 @@ public class BioLockJ_API {
 		Set<Class<? extends BioModule>> subTypes = reflections.getSubTypesOf( BioModule.class );
 		for (Class<? extends BioModule> st : subTypes ) {
 			try {
-				BioModule tmp = ModuleUtil.createModuleInstance( st.getName() );
+				BioModule tmp = (BioModule) Class.forName( st.getName() ).newInstance();
 				allBioModules.add( tmp.getClass().getName() );
 			}catch(InstantiationException | ExceptionInInitializerError ex) {
 				//System.err.println("The class [" + st.getName() + "] is in scope, but cannot be instantiated.");

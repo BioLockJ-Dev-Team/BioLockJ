@@ -15,9 +15,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import biolockj.*;
+import biolockj.api.BioLockJ_API;
 import biolockj.exception.BioLockJStatusException;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigNotFoundException;
+import biolockj.exception.PipelineFormationException;
 import biolockj.module.BioModule;
 import biolockj.module.JavaModule;
 import biolockj.module.classifier.ClassifierModule;
@@ -127,9 +129,73 @@ public class ModuleUtil {
 	 * @throws Exception if errors occur
 	 */
 	public static BioModule createModuleInstance( final String className ) throws Exception {
-		return (BioModule) Class.forName( className ).newInstance();
+		BioModule module;
+		try {
+			module = (BioModule) Class.forName( className ).newInstance();
+		}catch( ClassNotFoundException ex) {
+			String path = getFullClass(className);
+			if (path == null) suggestFullClass(className);
+			module = (BioModule) Class.forName( getFullClass(className) ).newInstance();
+		}
+		return module;
 	}
-
+	
+	/**
+	 * @throws Exception 
+	 * 
+	 */
+	private static String getFullClass(String simpleName ) throws Exception {
+		initClassMap();
+		Log.debug(ModuleUtil.class, "Found " + classMap.size() + " classes.");
+		String classPath = classMap.get( simpleName );
+		if ( classPath == null ) return null;
+		else if ( classPath.contains( MODULE_NAME_SEP )) {
+			throw new PipelineFormationException( "The name \"" + simpleName + "\" could refer to multiple modules. " + System.lineSeparator() 
+			+ "Please use one of the following full class paths:" + System.lineSeparator() + classPath );
+		}
+		Log.info(ModuleUtil.class, "Interpreting module name \"" + simpleName + "\" as [ " + classPath + " ].");
+		return classPath;
+	}
+	
+	private static void initClassMap() throws Exception {
+		if (classMap == null) {
+			classMap = new HashMap<>();
+			List<String> allModules = BioLockJ_API.listModules();
+			for (String longName : allModules ) {
+				String shortName = Class.forName( longName ).getSimpleName();
+				if (classMap.containsKey( shortName )) {
+					String existing;
+					if ( classMap.get( shortName ).startsWith( Constants.BLJ_MODULE_TAG + " " )) existing = classMap.get( shortName );
+					else existing = Constants.BLJ_MODULE_TAG + " " + classMap.get( shortName );
+					longName = existing + MODULE_NAME_SEP + Constants.BLJ_MODULE_TAG + " " + longName;
+				}
+				classMap.put( shortName, longName);
+			}
+		}
+	}
+	
+	private static void suggestFullClass(String className) throws Exception {
+		String[] parts = className.split( "[.]" );
+		String simpleName = parts[ parts.length - 1 ];
+		Log.debug(ModuleUtil.class, "Consider the simple class name: " + simpleName);
+		String suggestion = null;
+		try{
+			suggestion = getFullClass(simpleName);
+		}catch(PipelineFormationException pe) {
+			throw new PipelineFormationException( "The name \"" + className 
+				+ "\" does not represent a valid BioModule. There may other modules called \"" + simpleName + "\"" );
+		}
+		if ( suggestion != null ) {
+			throw new PipelineFormationException( "The name \"" + className 
+				+ "\" does not represent a valid BioModule." + System.lineSeparator() + "Consider this module with same name:"
+				+ System.lineSeparator() + Constants.BLJ_MODULE_TAG + " " + suggestion);
+		}else {
+			throw new PipelineFormationException( "The name \"" + className 
+				+ "\" does not represent a valid BioModule.");
+		}
+		
+	}
+	
 	/**
 	 * Return pipeline modules after the given module if checkAhead = TRUE<br>
 	 * Otherwise return pipeline modules before the given module.<br>
@@ -385,5 +451,12 @@ public class ModuleUtil {
 			if( m instanceof R_Module ) ids.add( m.getID() );
 		return ids;
 	}
+	
+	/**
+	 * Key is the simple name and value is the long name for module classes.
+	 */
+	private static HashMap<String, String> classMap = null;
+	
+	private static final String MODULE_NAME_SEP = System.lineSeparator();
 
 }
