@@ -128,7 +128,7 @@ getLogFile <- function( name ) {
 
 # Return the name of the BioLockJ MASTER Config file
 getMasterConfigFile <- function() {
-	testDir = dirname( getModuleScript() )
+	testDir = dirname( getwd() )
 	propFile = vector( mode="character" )
 	while( length( propFile ) == 0 && testDir != "/" ) {
 		propFile = list.files( testDir, "MASTER.*.properties", full.names=TRUE )
