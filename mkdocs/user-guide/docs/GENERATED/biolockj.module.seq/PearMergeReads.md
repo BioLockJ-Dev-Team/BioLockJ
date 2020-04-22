@@ -41,6 +41,16 @@ Run pear, the Paired-End reAd mergeR
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/pear:v1.3.2
+```
+This can be modified using the following properties:<br>
+`PearMergeReads.imgOwner`<br>
+`PearMergeReads.imageName`<br>
+`PearMergeReads.imageTag`<br>
+
 ## Citation 
 Jiajie Zhang, Kassian Kobert, Tomáš Flouri, Alexandros Stamatakis, PEAR: a fast and accurate Illumina Paired-End reAd mergeR, Bioinformatics, Volume 30, Issue 5, 1 March 2014, Pages 614–620, https://doi.org/10.1093/bioinformatics/btt593                   
 https://cme.h-its.org/exelixis/web/software/pear/doc.html                   

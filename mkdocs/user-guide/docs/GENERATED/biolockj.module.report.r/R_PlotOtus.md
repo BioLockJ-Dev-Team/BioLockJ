@@ -52,7 +52,17 @@ Generate OTU-metadata box-plots and scatter-plots for each reportable metadata f
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/r_module:v1.3.2
+```
+This can be modified using the following properties:<br>
+`R_PlotOtus.imgOwner`<br>
+`R_PlotOtus.imageName`<br>
+`R_PlotOtus.imageTag`<br>
+
 ## Citation 
 Module developed by Mike Sioda                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

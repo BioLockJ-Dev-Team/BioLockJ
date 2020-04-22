@@ -43,6 +43,16 @@ Classify WGS samples with [MetaPhlAn2](http://bitbucket.org/biobakery/metaphlan2
 **post-requisite modules**                    
 biolockj.module.implicit.parser.wgs.Metaphlan2Parser                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/metaphlan2_classifier:v1.3.2
+```
+This can be modified using the following properties:<br>
+`Metaphlan2Classifier.imgOwner`<br>
+`Metaphlan2Classifier.imageName`<br>
+`Metaphlan2Classifier.imageTag`<br>
+
 ## Citation 
 MetaPhlAn2 for enhanced metagenomic taxonomic profiling. Duy Tin Truong, Eric A Franzosa, Timothy L Tickle, Matthias Scholz, George Weingart, Edoardo Pasolli, Adrian Tett, Curtis Huttenhower & Nicola Segata. Nature Methods 12, 902-903 (2015)
 

@@ -49,8 +49,18 @@ Typically, BioLockJ will automatically determine modules to add to the pipeline 
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/sratoolkit:v1.3.2
+```
+This can be modified using the following properties:<br>
+`SraDownload.imgOwner`<br>
+`SraDownload.imageName`<br>
+`SraDownload.imageTag`<br>
+
 ## Citation 
 [sra-tools](https://github.com/ncbi/sra-tools)                   
 Module developed by Philip Badzuh                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

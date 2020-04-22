@@ -12,3 +12,13 @@ Add to module run order:
 **post-requisit modules**                    
 biolockj.module.implicit.parser.r16s.QiimeParser                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/qimme_classifier:v1.1
+```
+This can be modified using the following properties:<br>
+`QiimeClassifier.imgOwner`<br>
+`QiimeClassifier.imageName`<br>
+`QiimeClassifier.imageTag`<br>
+

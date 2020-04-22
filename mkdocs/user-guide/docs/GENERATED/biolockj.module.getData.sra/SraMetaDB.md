@@ -51,7 +51,17 @@ wget https://starbuck1.s3.amazonaws.com/sradb/SRAmetadb.sqlite.gz;  <br>gunzip S
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/blj_basic:v1.3.2
+```
+This can be modified using the following properties:<br>
+`SraMetaDB.imgOwner`<br>
+`SraMetaDB.imageName`<br>
+`SraMetaDB.imageTag`<br>
+
 ## Citation 
 Module developed by Malcolm Zapatas and Ivory Blakley                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

@@ -50,6 +50,16 @@ This module picks OTUs using a closed reference database and constructs an OTU t
 biolockj.module.implicit.qiime.QiimeClassifier                   
 biolockj.module.implicit.parser.r16s.QiimeParser                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/qimme_classifier:v1.1
+```
+This can be modified using the following properties:<br>
+`QiimeClosedRefClassifier.imgOwner`<br>
+`QiimeClosedRefClassifier.imageName`<br>
+`QiimeClosedRefClassifier.imageTag`<br>
+
 ## Citation 
 QIIME allows analysis of high-throughput community sequencing data                   
 J Gregory Caporaso, Justin Kuczynski, Jesse Stombaugh, Kyle Bittinger, Frederic D Bushman, Elizabeth K Costello, Noah Fierer, Antonio Gonzalez Pena, Julia K Goodrich, Jeffrey I Gordon, Gavin A Huttley, Scott T Kelley, Dan Knights, Jeremy E Koenig, Ruth E Ley, Catherine A Lozupone, Daniel McDonald, Brian D Muegge, Meg Pirrung, Jens Reeder, Joel R Sevinsky, Peter J Turnbaugh, William A Walters, Jeremy Widmann, Tanya Yatsunenko, Jesse Zaneveld and Rob Knight; Nature Methods, 2010; doi:10.1038/nmeth.f.303                   

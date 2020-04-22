@@ -47,7 +47,17 @@ Generate a summary statistics table with [adjusted and unadjusted] [parameteric 
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/r_module:v1.3.2
+```
+This can be modified using the following properties:<br>
+`R_CalculateStats.imgOwner`<br>
+`R_CalculateStats.imageName`<br>
+`R_CalculateStats.imageTag`<br>
+
 ## Citation 
-BioLockJ v1.3.1                   
+BioLockJ v1.3.2-dev                   
 Module developted by Mike Sioda.
 

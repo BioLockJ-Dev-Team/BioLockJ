@@ -43,6 +43,16 @@ If running in docker, the default docker container contains a kmer database whic
 **post-requisite modules**                    
 biolockj.module.implicit.parser.wgs.KrakenParser                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/kraken_classifier:v1.3.2
+```
+This can be modified using the following properties:<br>
+`KrakenClassifier.imgOwner`<br>
+`KrakenClassifier.imageName`<br>
+`KrakenClassifier.imageTag`<br>
+
 ## Citation 
 Wood DE, Salzberg SL: Kraken: ultrafast metagenomic sequence classification using exact alignments. Genome Biology 2014, 15:R46.
 

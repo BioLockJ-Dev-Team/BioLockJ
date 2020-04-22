@@ -42,7 +42,17 @@ biolockj.module.getData.sra.SraMetaDB
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/pysradb:v1.3.2
+```
+This can be modified using the following properties:<br>
+`SraMetaData.imgOwner`<br>
+`SraMetaData.imageName`<br>
+`SraMetaData.imageTag`<br>
+
 ## Citation 
 Module developed by Malcolm Zapatas and Ivory Blakley                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

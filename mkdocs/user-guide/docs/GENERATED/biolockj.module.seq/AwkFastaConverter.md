@@ -40,7 +40,17 @@ This module was first introduced because it was required for [QIIME](http://qiim
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/blj_basic:v1.3.2
+```
+This can be modified using the following properties:<br>
+`AwkFastaConverter.imgOwner`<br>
+`AwkFastaConverter.imageName`<br>
+`AwkFastaConverter.imageTag`<br>
+
 ## Citation 
-BioLockJ v1.3.1                   
+BioLockJ v1.3.2-dev                   
 Module developed by Mike Sioda
 

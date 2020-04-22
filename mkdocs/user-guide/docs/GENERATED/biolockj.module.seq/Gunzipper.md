@@ -39,7 +39,17 @@ Decompress gzipped files.
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/blj_basic:v1.3.2
+```
+This can be modified using the following properties:<br>
+`Gunzipper.imgOwner`<br>
+`Gunzipper.imageName`<br>
+`Gunzipper.imageTag`<br>
+
 ## Citation 
-BioLockJ v1.3.1                   
+BioLockJ v1.3.2-dev                   
 Module developed by Mike Sioda
 

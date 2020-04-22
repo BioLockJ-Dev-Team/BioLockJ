@@ -12,3 +12,13 @@ Add to module run order:
 **post-requisit modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/qimme_classifier:v1.3.2
+```
+This can be modified using the following properties:<br>
+`BuildQiimeMapping.imgOwner`<br>
+`BuildQiimeMapping.imageName`<br>
+`BuildQiimeMapping.imageTag`<br>
+

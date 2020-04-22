@@ -12,3 +12,13 @@ Add to module run order:
 **post-requisit modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/biolockj_controller:v1.3.2
+```
+This can be modified using the following properties:<br>
+`Metaphlan2Parser.imgOwner`<br>
+`Metaphlan2Parser.imageName`<br>
+`Metaphlan2Parser.imageTag`<br>
+

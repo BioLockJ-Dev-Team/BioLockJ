@@ -44,7 +44,17 @@ This sets the value of *sra.sraAccList* to the SraAccList.txt file in this modul
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+ncbi/edirect:latest
+```
+This can be modified using the following properties:<br>
+`SrpSrrConverter.imgOwner`<br>
+`SrpSrrConverter.imageName`<br>
+`SrpSrrConverter.imageTag`<br>
+
 ## Citation 
 Module developed by Malcolm Zapatas and Ivory Blakley                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

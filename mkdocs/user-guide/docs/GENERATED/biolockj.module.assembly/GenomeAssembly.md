@@ -38,6 +38,16 @@ Assemble WGS sequences with MetaSPAdes, bin contigs with Metabat2 and check qual
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/genome_assembly:v1.2.0
+```
+This can be modified using the following properties:<br>
+`GenomeAssembly.imgOwner`<br>
+`GenomeAssembly.imageName`<br>
+`GenomeAssembly.imageTag`<br>
+
 ## Citation 
 checkM database                   
 https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz                   
@@ -55,5 +65,5 @@ PRODIGAL
 https://github.com/hyattpd/Prodigal/releases/download/v2.6.3/prodigal.linux                   
                    
 Module developed by Shan Sun                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

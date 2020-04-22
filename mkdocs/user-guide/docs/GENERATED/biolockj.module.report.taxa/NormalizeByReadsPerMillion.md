@@ -39,7 +39,17 @@ Represent each count value in the table as: counts / (total counts in sample / 1
 **post-requisite modules**                    
 biolockj.module.report.taxa.LogTransformTaxaTables                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/biolockj_controller:v1.3.2
+```
+This can be modified using the following properties:<br>
+`NormalizeByReadsPerMillion.imgOwner`<br>
+`NormalizeByReadsPerMillion.imageName`<br>
+`NormalizeByReadsPerMillion.imageTag`<br>
+
 ## Citation 
 Module developed by Ivory Blakley                   
-BioLockj v1.3.1
+BioLockj v1.3.2-dev
 

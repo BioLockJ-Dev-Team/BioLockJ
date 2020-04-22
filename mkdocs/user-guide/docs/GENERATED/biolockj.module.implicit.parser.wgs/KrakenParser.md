@@ -39,7 +39,17 @@ Build OTU tables from [KRAKEN](http://ccb.jhu.edu/software/kraken/) mpa-format r
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/biolockj_controller:v1.3.2
+```
+This can be modified using the following properties:<br>
+`KrakenParser.imgOwner`<br>
+`KrakenParser.imageName`<br>
+`KrakenParser.imageTag`<br>
+
 ## Citation 
 Module developed by Mike Sioda                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

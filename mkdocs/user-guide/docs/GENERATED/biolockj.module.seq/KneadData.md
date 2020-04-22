@@ -42,6 +42,16 @@ Run the Biobakery [KneadData](https://bitbucket.org/biobakery/kneaddata/wiki/Hom
 **post-requisite modules**                    
 *none found*                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/kraken_classifier:v1.3.2
+```
+This can be modified using the following properties:<br>
+`KneadData.imgOwner`<br>
+`KneadData.imageName`<br>
+`KneadData.imageTag`<br>
+
 ## Citation 
 https://bitbucket.org/biobakery/kneaddata/wiki/Home                   
 Module developed by Mike Sioda

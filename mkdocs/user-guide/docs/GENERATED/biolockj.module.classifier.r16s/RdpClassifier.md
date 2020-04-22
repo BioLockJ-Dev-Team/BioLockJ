@@ -44,7 +44,17 @@ Classify 16s samples with [RDP](http://rdp.cme.msu.edu/classifier/classifier.jsp
 **post-requisite modules**                    
 biolockj.module.implicit.parser.r16s.RdpParser                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/rdp_classifier:v1.3.2
+```
+This can be modified using the following properties:<br>
+`RdpClassifier.imgOwner`<br>
+`RdpClassifier.imageName`<br>
+`RdpClassifier.imageTag`<br>
+
 ## Citation 
 Module developed by Mike Sioda                   
-BioLockJ v1.3.1
+BioLockJ v1.3.2-dev
 

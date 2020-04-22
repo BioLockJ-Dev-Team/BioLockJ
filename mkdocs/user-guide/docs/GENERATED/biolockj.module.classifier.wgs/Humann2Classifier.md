@@ -45,6 +45,16 @@ Profile the presence/absence and abundance of microbial pathways in a community 
 **post-requisite modules**                    
 biolockj.module.implicit.parser.wgs.Humann2Parser                   
 
+## Docker 
+If running in docker, this module will run in a docker container from this image:<br>
+```
+biolockjdevteam/humann2_classifier:v1.3.2
+```
+This can be modified using the following properties:<br>
+`Humann2Classifier.imgOwner`<br>
+`Humann2Classifier.imageName`<br>
+`Humann2Classifier.imageTag`<br>
+
 ## Citation 
 Franzosa EA*, McIver LJ*, Rahnavard G, Thompson LR, Schirmer M, Weingart G, Schwarzberg Lipson K, Knight R, Caporaso JG, Segata N, Huttenhower C.                    
 Species-level functional profiling of metagenomes and metatranscriptomes. Nat Methods 15: 962-968 (2018).                   
