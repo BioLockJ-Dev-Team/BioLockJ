@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import biolockj.Config;
 import biolockj.Constants;
 import biolockj.Properties;
+import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
 import biolockj.module.BioModule;
 import biolockj.util.BioLockJUtil;
+import biolockj.util.DockerUtil;
 import biolockj.util.ModuleUtil;
 
 /**
@@ -159,18 +162,9 @@ public class BuildDocs {
 		writer.write( details + System.lineSeparator() );
 		writer.write( System.lineSeparator() );
 		
-		writer.write( "## Adds modules " + System.lineSeparator() );
-		writer.write( "**pre-requisite modules** " + markDownReturn );
-		List<String> preMods = getPrePostReqModules(tmp, true);
-		for (String mod : preMods ) {
-			writer.write( mod + markDownReturn );
-		}
-		writer.write( "**post-requisite modules** " + markDownReturn );
-		List<String> postMods = getPrePostReqModules(tmp, false);
-		for (String mod : postMods ) {
-			writer.write( mod + markDownReturn );
-		}
-		writer.write( System.lineSeparator() );
+		writeReqModules(tmp, writer);
+		
+		writeDockerInfo(tmp, writer);
 		
 		writer.write( "## Citation " + System.lineSeparator() );
 		String citation = tmp.getCitationString().replaceAll( System.lineSeparator(), markDownReturn );
@@ -179,6 +173,34 @@ public class BuildDocs {
 		writer.write( System.lineSeparator() );
 		
 		writer.close();		
+	}
+	
+	private static void writeReqModules(BioModule module, FileWriter writer) throws Exception {
+		writer.write( "## Adds modules " + System.lineSeparator() );
+		writer.write( "**pre-requisite modules** " + markDownReturn );
+		List<String> preMods = getPrePostReqModules(module, true);
+		for (String mod : preMods ) {
+			writer.write( mod + markDownReturn );
+		}
+		writer.write( "**post-requisite modules** " + markDownReturn );
+		List<String> postMods = getPrePostReqModules(module, false);
+		for (String mod : postMods ) {
+			writer.write( mod + markDownReturn );
+		}
+		writer.write( System.lineSeparator() );
+	}
+	
+	private static void writeDockerInfo(BioModule module, FileWriter writer) throws IOException, ConfigNotFoundException {
+		writer.write( "## Docker " + System.lineSeparator() );
+		writer.write( "If running in docker, this module will run in a docker container from this image:<br>" + System.lineSeparator() );
+		writer.write( "```" + System.lineSeparator());
+		writer.write( DockerUtil.getDockerImage( module ) + System.lineSeparator());
+		writer.write( "```" + System.lineSeparator());
+		writer.write( "This can be modified using the following properties:<br>" + System.lineSeparator() );
+		writer.write( "`" + Config.getModuleFormProp( module, DockerUtil.DOCKER_HUB_USER )  + "`<br>" + System.lineSeparator() );
+		writer.write( "`" + Config.getModuleFormProp( module, DockerUtil.DOCKER_IMG )  + "`<br>" + System.lineSeparator() );
+		writer.write( "`" + Config.getModuleFormProp( module, DockerUtil.DOCKER_IMG_VERSION )  + "`<br>" + System.lineSeparator() );
+		writer.write( System.lineSeparator() );
 	}
 	
 	private static File getPageLocation(String modPath) throws IOException {
@@ -286,18 +308,9 @@ public class BuildDocs {
 		writer.write( "*There may be a manually created page elsewhere.*" + System.lineSeparator() );
 		writer.write( System.lineSeparator() );
 		
-		writer.write( "## Adds modules " + System.lineSeparator() );
-		writer.write( "**pre-requisit modules** " + markDownReturn );
-		List<String> preMods = getPrePostReqModules(module, true);
-		for (String mod : preMods ) {
-			writer.write( mod + markDownReturn );
-		}
-		writer.write( "**post-requisit modules** " + markDownReturn );
-		List<String> postMods = getPrePostReqModules(module, false);
-		for (String mod : postMods ) {
-			writer.write( mod + markDownReturn );
-		}
-		writer.write( System.lineSeparator() );
+		writeReqModules(module, writer);
+		
+		writeDockerInfo(module, writer);
 		
 		writer.close();
 	}

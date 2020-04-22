@@ -233,13 +233,17 @@ public class Config {
 	 */
 	public static String getModulePropName( final BioModule module, final String property ) {
 		if( module != null ) {
-			String aliasProp = ModuleUtil.displayName( module ) + "." + suffix( property );
+			String aliasProp = getModuleFormProp( module, property );
 			if( aliasProp != null && props.getProperty( aliasProp ) != null ) {
 				Log.debug( Class.class, "Looking for property [" + property + "], found overriding module-specific form: [" + aliasProp + "]." );
 				return aliasProp;
 			}
 		}
 		return property;
+	}
+	
+	public static String getModuleFormProp(final BioModule module, final String property) {
+		return ModuleUtil.displayName( module ) + "." + suffix( property );
 	}
 
 	/**

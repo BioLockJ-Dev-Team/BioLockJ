@@ -454,7 +454,7 @@ public class DockerUtil {
 	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG_VERSION}
 	 * {@value #DOCKER_IMG_VERSION_DESC}
 	 */
-	static final String DOCKER_IMG_VERSION = "docker.imageTag";
+	public static final String DOCKER_IMG_VERSION = "docker.imageTag";
 	private static final String DOCKER_IMG_VERSION_DESC = "indicate specific version of Docker images";
 
 	/**
@@ -473,7 +473,7 @@ public class DockerUtil {
 	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG}
 	 * {@value #DOCKER_IMG_DESC}
 	 */
-	private static final String DOCKER_IMG = "docker.imageName";
+	public static final String DOCKER_IMG = "docker.imageName";
 	private static final String DOCKER_IMG_DESC = "The name of a docker image to override whatever a module says to use.";
 	
 	/**
@@ -483,7 +483,7 @@ public class DockerUtil {
 	 * By default the "biolockj" user is used to pull the standard modules, but advanced users can deploy their own
 	 * versions of these modules and add new modules in their own Docker Hub account.
 	 */
-	protected static final String DOCKER_HUB_USER = "docker.imgOwner";
+	public static final String DOCKER_HUB_USER = "docker.imgOwner";
 	private static final String DOCKER_HUB_USER_DESC = "name of the Docker Hub user that owns the docker containers";
 
 	private static final String DOCK_RM_FLAG = "--rm";
