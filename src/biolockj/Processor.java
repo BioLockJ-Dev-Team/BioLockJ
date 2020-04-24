@@ -69,9 +69,9 @@ public class Processor {
 	 * @throws IOException if errors occur reading the InputStream
 	 * @throws InterruptedException if the thread process is interrupted
 	 */
-	protected String runJob( final String[] args, final String label ) throws IOException, InterruptedException {
+	protected String runJob( final String[] args, final String label, File workDir ) throws IOException, InterruptedException {
 		Log.info( getClass(), "[ " + label + " ]: STARTING CMD --> " + getArgsAsString( args ) );
-		final Process p = Runtime.getRuntime().exec( args );
+		final Process p = Runtime.getRuntime().exec( args, null, workDir );
 		final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
 		String returnVal = null;
 		String s = null;
@@ -84,6 +84,9 @@ public class Processor {
 		p.destroy();
 		Log.info( getClass(), "[ " + label + " ]: COMPLETE" );
 		return returnVal;
+	}
+	protected String runJob( final String[] args, final String label ) throws IOException, InterruptedException {
+		return runJob( args, label, null );
 	}
 
 	/**
@@ -174,7 +177,7 @@ public class Processor {
 	 * @throws InterruptedException if the thread process is interrupted
 	 */
 	public static void submit( final ScriptModule module ) throws IOException, InterruptedException {
-		new Processor().runJob( module.getJobParams(), module.getClass().getSimpleName() );
+		new Processor().runJob( module.getJobParams(), module.getClass().getSimpleName(), module.getScriptDir() );
 	}
 
 	/**
