@@ -28,6 +28,11 @@ import biolockj.util.*;
  * @blj.web_desc Import metadata
  */
 public class ImportMetadata extends BioModuleImpl implements ApiModule {
+	
+	public ImportMetadata() {
+		addGeneralProperty( MetaUtil.META_COLUMN_DELIM );
+		addGeneralProperty( MetaUtil.META_FILE_PATH );
+	}
 
 	@Override
 	public void checkDependencies() throws Exception {
@@ -107,19 +112,20 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 
 	/**
 	 * Create a simple metadata file in the module output directory, with only the 1st column populated with Sample IDs.
-	 *
-	 * @throws MetadataException if attempt to build new metadata file fails for any reason
+	 * @throws BioLockJException 
 	 */
-	protected void buildNewMetadataFile() throws MetadataException {
+	protected void buildNewMetadataFile() throws BioLockJException {
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter( new FileWriter( getMetadata() ) );
 			writer.write( MetaUtil.getID() + RETURN );
 			for( final String id: getSampleIds() )
 				writer.write( id + RETURN );
+		} catch( final BioLockJException ex ) {
+			throw ex;
 		} catch( final Exception ex ) {
 			ex.printStackTrace();
-			throw new MetadataException( "Unable to find module input sequence files: " + ex.getMessage() );
+			throw new MetadataException( "Unable to find input files: " + ex.getMessage() );
 		} finally {
 			try {
 				if( writer != null ) writer.close();
@@ -188,8 +194,13 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 	protected TreeSet<String> getSampleIds()
 		throws ConfigFormatException, ConfigViolationException, MetadataException, SequnceFormatException {
 		final TreeSet<String> ids = new TreeSet<>();
-		final Collection<File> inputFiles = SeqUtil.hasPairedReads() ?
-			new TreeSet<>( SeqUtil.getPairedReads( getInputFiles() ).keySet() ): getInputFiles();
+		
+		Collection<File> inputFiles = BioLockJUtil.getPipelineInputFiles();
+		if ( inputFiles.isEmpty() ) throw new MetadataException( "Could not create default metadata file; no pipeline input files found." );
+		
+		if ( SeqUtil.hasPairedReads() ) {
+			inputFiles = SeqUtil.getPairedReads( inputFiles ).keySet();
+		}
 
 		for( final File file: inputFiles ) {
 			final String id = SeqUtil.getSampleId( file.getName() );
