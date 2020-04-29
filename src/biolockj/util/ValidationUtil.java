@@ -343,16 +343,12 @@ public class ValidationUtil {
 	}
 
 	private static File getExpectationFile( final BioModule module ) throws ConfigException, DockerVolCreationException {
+		File expectationFileObj = Config.getExistingFileObject( Config.getString( module, EXPECTATION_FILE ) );
 		File expectationFile = null;
-		String expectationFilePath = Config.getString( module, EXPECTATION_FILE );
-		if( expectationFilePath != null && !expectationFilePath.isEmpty() ) {
-			if ( DockerUtil.inDockerEnv() ) expectationFilePath = DockerUtil.containerizePath( expectationFilePath );
-			expectationFile = new File( expectationFilePath );
-			if( !expectationFile.exists() ) throw new ConfigPathException( expectationFile );
-			System.out.println("expectation file path: " + expectationFilePath );
-			if( expectationFile.isDirectory() ) {
-				expectationFile = new File(
-					expectationFilePath + File.separator + getOutputFileName( module ) );
+		if( expectationFileObj != null ) {
+			if( !expectationFileObj.exists() ) throw new ConfigPathException( expectationFileObj );
+			if( expectationFileObj.isDirectory() ) {
+				expectationFile = new File( expectationFileObj, getOutputFileName( module ) );
 				if( !expectationFile.exists() )
 					throw new ConfigPathException( expectationFile, "Could not find file: " +
 						getOutputFileName( module ) + " in directory " + Config.getString( module, EXPECTATION_FILE ) );

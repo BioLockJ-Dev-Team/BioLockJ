@@ -748,16 +748,42 @@ public class Config {
 	 * @throws ConfigPathException if path is defined but is not found on the file system
 	 * @throws DockerVolCreationException 
 	 */
-	protected static File getExistingFileObject( String filePath ) throws ConfigPathException, DockerVolCreationException {
+	public static File getExistingFileObject( final String filePath ) throws ConfigPathException, DockerVolCreationException {
 		if( filePath != null ) {
+			String path = filePath;
+			if (path.startsWith(".") ) path = convertRelativePath( path );
 			if ( DockerUtil.inDockerEnv() ) {
-				filePath = DockerUtil.containerizePath( filePath );
+				Log.debug(Config.class, "The file path \"" + filePath + "\" has been interpreted as host file: " + path );
+				path = DockerUtil.containerizePath( path );
 			} 
-			final File f = new File( filePath );
+			Log.debug(Config.class, "The file path \"" + filePath + "\" has been internally interpreted as: " + path );
+			final File f = new File( path );
 			if( f.exists() ) return f;
 			throw new ConfigPathException( f );
 		}
 		return null;
+	}
+	
+	/**
+	 * Given a relative path (ie, one that starts with "."), get the absolute path---even when runnig in docker.
+	 * In the config file, users can use ./ to reference files in the same directory as the config file.
+	 * And by extension, "../" can reference the parent of that directory.
+	 * We tell users to use host paths in their config file, so when we replace the . or .., 
+	 * it is important that replace it with the HOST path to the config file directory.  
+	 * @param filePath
+	 * @return
+	 * @throws DockerVolCreationException
+	 */
+	private static String convertRelativePath(final String filePath) throws DockerVolCreationException {
+		String path = filePath;
+		final String CONFIG_DOT=DockerUtil.deContainerizePath( RuntimeParamUtil.getConfigFile().getParent() );
+		final String CONFIG_DOT_DOT=(new File(CONFIG_DOT)).getParent();
+		
+		if ( path.startsWith( ".." + File.separator ) ) path = path.replaceFirst( "..", CONFIG_DOT_DOT);
+		if ( path.equals( ".." ) ) path = CONFIG_DOT_DOT;
+		if ( path.startsWith( "." + File.separator ) ) path = path.replaceFirst( ".", CONFIG_DOT);
+		if ( path.equals( "." ) ) path = CONFIG_DOT;
+		return path;
 	}
 
 	/**
@@ -831,10 +857,16 @@ public class Config {
 			if (props != null) {Log.info(Config.class, "Got props, value for ["+bashVar+"] is: " + props.getProperty( stripBashMarkUp( bashVar )));}
 			if (props != null && props.getProperty( stripBashMarkUp( bashVar )) != null ) {
 				bashVal = props.getProperty( stripBashMarkUp( bashVar ) );
+				moduleUsedProps.put(stripBashMarkUp( bashVar ), bashVal);
 			}else if ( bashVar.equals( BLJ_BASH_VAR ) ) {
-				final File blj = BioLockJUtil.getBljDir();
-				if( blj != null && blj.isDirectory() ) {
-					bashVal =  blj.getAbsolutePath();
+				final File dir = BioLockJUtil.getBljDir();
+				if( dir != null && dir.isDirectory() ) {
+					bashVal =  dir.getAbsolutePath();
+				}
+			}else if(bashVar.equals( BLJ_PROJ_VAR )) {
+				final File dir = RuntimeParamUtil.get_BLJ_PROJ();
+				if( dir != null && dir.isDirectory() ) {
+					bashVal =  dir.getAbsolutePath();
 				}
 			}else if( stripBashMarkUp( bashVar ).equals( "HOME" ) ) {
 				bashVal =  RuntimeParamUtil.getHomeDir().getAbsolutePath();
@@ -955,7 +987,12 @@ public class Config {
 	 * Bash variable with path to BioLockJ directory: {@value #BLJ_BASH_VAR}
 	 */
 	public static final String BLJ_BASH_VAR = "${BLJ}";
-
+	
+	/**
+	 * Bash variable with path to projects directory: {@value #BLJ_PROJ_VAR}
+	 */
+	public static final String BLJ_PROJ_VAR = "${BLJ_PROJ}";
+	
 	private static final Map<String, String> bashVarMap = new HashMap<>();
 	private static File configFile = null;
 	private static File pipelineDir = null;

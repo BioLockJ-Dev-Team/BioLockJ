@@ -10,6 +10,7 @@
 # param 2 - one of: upload or mount
 main(){
 	primaryConfig="$1"
+	cd $(dirname $primaryConfig)
 	dirList=($(dirname $(to_abs_path $primaryConfig)))
 	dockerCopyPath=$(get_host_file $primaryConfig) && primaryConfig=$dockerCopyPath
 	
@@ -133,6 +134,10 @@ find_files(){
 	for prop in ${allProps[@]}; do
 		processedVars=$(eval echo "$prop") && prop=$processedVars
 		if possible_file_path $prop; then
+			prop=$(echo ${prop/#..\//`cd ..; pwd`\/})
+			[ $prop == ".." ] && prop=$(`cd ..; pwd`)
+			prop=$(echo ${prop/#.\//`pwd`\/})
+			[ $prop == "." ] && prop=`pwd`
 			if verifyDir $prop; then
 				add_to_dirList $prop
 				add_to_fileList $prop

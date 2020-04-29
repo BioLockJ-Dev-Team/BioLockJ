@@ -166,6 +166,9 @@ export_env_vars(){
 		BLJ_PROJ="${BLJ_PROJ:0:len}"
 	fi
 	export BLJ_PROJ
+	if [ ${#configFile} -gt 0 ]; then
+		cd $(dirname $configFile)
+	fi
 	if ifArgUsed $ENV_ARG ; then
 		envVars=$(get_arg_value $ENV_ARG)
 		vars=${envVars//,/" "}

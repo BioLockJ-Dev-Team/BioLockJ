@@ -43,7 +43,55 @@ Properties are defined as name-value pairs. List-values are comma separated. Lea
 See the [list of available properties](GENERATED/General-Properties.md).
 
 
-### Special properties
+### Variables
+
+Bash variables can be referenced in the config. They must be "fully dressed": `${VAR}`          
+                    
+There are two variables that BioLockJ requires:            
+`BLJ` is the file path to the BioLockJ direcotry and                
+`BLJ_PROJ` is the directory where pipelines created by BioLockJ are stored and run.            
+After installation these are defined in the shell profile.  These can referenced in the config file.
+
+The `~` ("tilde") is replaced with `${HOME}` if (and only if) the ~ is the *first* character.
+
+Variables can also be defined in the config file and referenced in the same way:
+```text
+DIR=/path/to/big/data/dir                    
+sra.destinationDir=${DIR}/seqs  
+sra.sraAccList=${DIR}/SraAccList.txt      
+input.dirPaths=${DIR}/seqs      
+```
+
+If you are referencing environment variables *and* running in docker, you will need to use the -e parameter to biolockj to pass the variables into the docker environment (even if the variable is defined in the config file). For example:          
+```
+biolockj --docker -e SHEP=$SHEP,DIR=/path/to/big/data/dir config.properties
+```    
+
+### Relative file paths
+
+File paths can be given using relative paths.  The path should start with `./`.         
+The location `.` is interpreted as being the directory where the configuration file is.        
+
+
+Example file structure:
+```
+ /users/joe/analysis01/
+                       config.properties 
+                       metadata.txt
+                       /sra/
+                            SraAccList.txt
+```
+Properties in config.properties can use relative paths:
+```text
+metadata.filePath=./metadata.txt                    
+sra.sraAccList=./sra/SraAccList.txt                   
+``` 
+
+Note: `../` is also supported but it does not stack ( ../../../data/ is not supported). 
+
+With this design, the "analysis01" folder could be shared or moved and the configuration file would not need to be updated to reflect the new location of the project files it references.
+
+## Special properties
 
 Some properties invoke special handling.
 
