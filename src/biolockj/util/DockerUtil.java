@@ -309,7 +309,8 @@ public class DockerUtil {
 		String bestMatch = null;
 		int bestMatchLen = 0;
 		for (String s : vmap.keySet()) {
-			if ( path.startsWith( s ) && s.length() > bestMatchLen) {
+			if ( path.startsWith( s ) && s.length() > bestMatchLen
+					&& (path.equals( s ) || path.charAt( s.length() ) == File.separatorChar )) {
 					bestMatch = String.valueOf( s );
 					bestMatchLen = s.length();
 			}
