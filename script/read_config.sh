@@ -153,7 +153,7 @@ find_files(){
 # if this could be a file (add function to filter out strings that can't be file paths ...)
 # param 1 - string that might be a file path
 possible_file_path(){
-	[ true ]
+	[ ${#1} -gt 0 ]
 }
 
 # param 1 - element to add (IFF it is not already there)
