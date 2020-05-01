@@ -237,7 +237,7 @@ exit_after_command(){
 	local CMD="$@"
 	[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && echo "${BIOLOCKJ_TEST_MODE}$CMD" && exit
 	eval $CMD
-	exit
+	exit $?
 }
 
 # If the variable BIOLOCKJ_TEST_MODE exists, the command is shown, not run and the program exits.

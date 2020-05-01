@@ -31,7 +31,8 @@ main(){
 	restartDir_has_status_flag && ${BLJ}/script/blj_reset $restartDir
 
 	GUI_PORT=8080
-	CMD="docker run $(docker_args) -e \"BLJ_OPTIONS=$(blj_options)\" $(get_volumes) $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
+	volumns=$(get_volumes) || exit_with_message "${volumns[@]}"
+	CMD="docker run $(docker_args) -e \"BLJ_OPTIONS=$(blj_options)\" $volumns $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
 		
 	build_clone_script "${CMD}"
 	
@@ -144,7 +145,9 @@ get_volumes() {
 		else 
 			local i=1
 			readableConfig=$(get_readable_config)
-			configuredDirs=$(${BLJ}/script/read_config.sh $readableConfig "mount")
+			# collec the output of read_config.  IFF that call has a non-0 exit, print any collected error messages.
+			configuredDirs=$(${BLJ}/script/read_config.sh $readableConfig "mount") 
+			[ ! $? -eq 0 ] && echo "${configuredDirs[@]}" && exit 1 #this is called in subshell, failures have to get passed up the chain
 			for dir in ${configuredDirs[@]}; do
 				vols="${vols} -v ${dir}:${EFS}/vol_${i}:ro" 
 				i=$(( i + 1 ))

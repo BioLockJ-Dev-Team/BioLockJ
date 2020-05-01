@@ -398,8 +398,9 @@ public class Config {
 	public static void initialize() throws Exception {
 		configFile = RuntimeParamUtil.getConfigFile();
 		Log.info( Config.class, "Initialize Config: " + configFile.getAbsolutePath() );
-		props = replaceEnvVars( Properties.loadProperties( configFile ) );
 		setPipelineRootDir();
+		props = replaceEnvVars( Properties.loadProperties( configFile ) );
+		setFilePathProperty( Constants.INTERNAL_PIPELINE_DIR, pipelineDir.getAbsolutePath() );
 		if( !BioLockJUtil.isDirectMode() && !FileUtils.directoryContains( getPipelineDir(), configFile ) )
 			FileUtils.copyFileToDirectory( configFile, getPipelineDir() );
 		Log.info( Config.class, "Total # initial properties: " + props.size() );
@@ -734,7 +735,8 @@ public class Config {
 	 * @throws DockerVolCreationException 
 	 */
 	public static void setPipelineDir( final File dir ) throws DockerVolCreationException {
-		setFilePathProperty( Constants.INTERNAL_PIPELINE_DIR, dir.getAbsolutePath() );
+		// Set this after the props are initialized. Dir is formed FIRST in case of errors while initializing props.
+		//setFilePathProperty( Constants.INTERNAL_PIPELINE_DIR, dir.getAbsolutePath() );
 		pipelineDir = dir;
 		String printPathOnScreen = DockerUtil.inDockerEnv() ? DockerUtil.deContainerizePath( pipelineDir.getAbsolutePath() ) : pipelineDir.getAbsolutePath();
 		System.out.println( Constants.PIPELINE_LOCATION_KEY + printPathOnScreen);

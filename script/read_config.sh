@@ -67,6 +67,7 @@ read_properties(){
 			for DPROP in ${DPROPS[@]}; do
 				processedVars=$(eval echo "$DPROP") && DPROP=$processedVars
 				dockerCopyPath=$(get_host_file "$DPROP") && DPROP=$dockerCopyPath
+				[ ! -f $DPROP ] && echo "Configured default props file, [$DPROP] is not a file." && exit 1
 				read_properties "$DPROP"
 			done
 		fi
