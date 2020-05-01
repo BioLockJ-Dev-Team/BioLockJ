@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import biolockj.*;
@@ -44,19 +45,20 @@ public class DockerUtil {
 	 * @throws ConfigFormatException If {@value #SAVE_CONTAINER_ON_EXIT} property value is not set as a boolean
 	 * {@value biolockj.Constants#TRUE} or {@value biolockj.Constants#FALSE}
 	 * @throws ConfigPathException If mounted Docker volumes are not found on host or container file-system
-	 * @throws DockerVolCreationException 
-	 * @throws SpecialPropertiesException 
+	 * @throws DockerVolCreationException
+	 * @throws SpecialPropertiesException
 	 */
 	public static List<String> buildSpawnDockerContainerFunction( final BioModule module, final String startedFlag )
 		throws ConfigException, DockerVolCreationException {
 		final List<String> lines = new ArrayList<>();
 		lines.add( "# Spawn Docker container" );
 		lines.add( "function " + SPAWN_DOCKER_CONTAINER + "() {" );
-		lines.add(  SCRIPT_ID_VAR + "=$(basename $1)");
-		lines.add(  ID_VAR + "=$(" + Config.getExe( module, Constants.EXE_DOCKER ) + " run " + DOCKER_DETACHED_FLAG + " "+ rmFlag( module ) + WRAP_LINE );
-		lines.addAll(  getDockerVolumes( module )); 
+		lines.add( SCRIPT_ID_VAR + "=$(basename $1)" );
+		lines.add( ID_VAR + "=$(" + Config.getExe( module, Constants.EXE_DOCKER ) + " run " + DOCKER_DETACHED_FLAG +
+			" " + rmFlag( module ) + WRAP_LINE );
+		lines.addAll( getDockerVolumes( module ) );
 		lines.add( " " + getDockerImage( module ) + WRAP_LINE );
-		lines.add( "/bin/bash -c \"$1\" )" );
+		lines.add( USE_BASH + " \"$1\" )" );
 		lines.add( "echo \"Launched docker image: " + getDockerImage( module ) + "\"" );
 		lines.add( "echo \"To execute module: " + module.getClass().getSimpleName() + "\"" );
 		lines.add( "echo \"Docker container id: $" + ID_VAR + "\"" );
@@ -65,70 +67,73 @@ public class DockerUtil {
 		lines.add( "}" + Constants.RETURN );
 		return lines;
 	}
-	
-	public static boolean workerContainerStopped (final File mainStarted, final File workerScript) {
+
+	public static boolean workerContainerStopped( final File mainStarted, final File workerScript ) {
 		boolean hasStopped = false;
 		String containerId = null;
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader( new FileReader( mainStarted ));
+			reader = new BufferedReader( new FileReader( mainStarted ) );
 			String s = null;
 			String key = workerScript.getName() + ":" + DOCKER_KEY + ":";
-			while( ( s = reader.readLine() ) != null )
-			{
-				if (s.startsWith( workerScript.getName() )) containerId=s.replaceFirst( key, "" );
+			while( ( s = reader.readLine() ) != null ) {
+				if( s.startsWith( workerScript.getName() ) ) containerId = s.replaceFirst( key, "" );
 			}
 			reader.close();
 		} catch( IOException e ) {
-			Log.warn(DockerUtil.class, "Failed to extract container id from [" + mainStarted.getName() + "].");
+			Log.warn( DockerUtil.class, "Failed to extract container id from [" + mainStarted.getName() + "]." );
 			e.printStackTrace();
 		}
-		if ( containerId == null ) {
-			Log.warn(DockerUtil.class, "No container id for [" + workerScript.getName() + "].");
-		}else {
+		if( containerId == null ) {
+			Log.warn( DockerUtil.class, "No container id for [" + workerScript.getName() + "]." );
+		} else {
 			try {
-				hasStopped = ! containerIsRunning(containerId);
+				hasStopped = !containerIsRunning( containerId );
 			} catch( IOException e ) {
-				Log.warn(DockerUtil.class, "Could not determine if container [" + containerId + "] is running.");
+				Log.warn( DockerUtil.class, "Could not determine if container [" + containerId + "] is running." );
 				e.printStackTrace();
 			}
 		}
-		return(hasStopped);
+		return ( hasStopped );
 	}
-	private static boolean containerIsRunning (final String containerId) throws IOException {
+
+	private static boolean containerIsRunning( final String containerId ) throws IOException {
 		String cmd = "docker inspect -f '{{.State.Running}}' " + containerId + " 2>/dev/null";
-		final Process p = Runtime.getRuntime().exec( cmd ); 
+		final Process p = Runtime.getRuntime().exec( cmd );
 		final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
 		String s = br.readLine();
 		br.close();
-		Log.debug(DockerUtil.class, "Docker inspect result: " + s);
+		Log.debug( DockerUtil.class, "Docker inspect result: " + s );
 		return s.equals( "'true'" );
 	}
-	
+
 	private static List<String> getDockerVolumes( final BioModule module )
 		throws ConfigPathException, ConfigNotFoundException, DockerVolCreationException {
 		Log.debug( DockerUtil.class, "Assign Docker volumes for module: " + module.getClass().getSimpleName() );
 
 		final List<String> dockerVolumes = new ArrayList<>();
-		dockerVolumes.add( " -v " + DOCKER_SOCKET + ":" + DOCKER_SOCKET  + WRAP_LINE);
-		dockerVolumes.add( " -v " + deContainerizePath( Config.getPipelineDir().getParent() ) + ":" + Config.getPipelineDir().getParent() + ":delegated" + WRAP_LINE );
-		for ( String key : volumeMap.keySet() ) {
-			if ( key.equals( DOCKER_SOCKET ) ) continue;
-			if ( volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) continue;
-			String access = needsWritePermission(module, key) ? ":delegated" : ":ro" ;
+		dockerVolumes.add( " -v " + DOCKER_SOCKET + ":" + DOCKER_SOCKET + WRAP_LINE );
+		dockerVolumes.add( " -v " + deContainerizePath( Config.getPipelineDir().getParent() ) + ":" +
+			Config.getPipelineDir().getParent() + ":delegated" + WRAP_LINE );
+		for( String key: volumeMap.keySet() ) {
+			if( key.equals( DOCKER_SOCKET ) ) continue;
+			if( volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) continue;
+			String access = needsWritePermission( module, key ) ? ":delegated": ":ro";
 			dockerVolumes.add( " -v " + key + ":" + volumeMap.get( key ) + access + WRAP_LINE );
 		}
-		
+
 		Log.debug( DockerUtil.class, "Passed along volumes: " + dockerVolumes );
 		return dockerVolumes;
 	}
 
-	private static boolean needsWritePermission(BioModule module, String key) throws DockerVolCreationException, ConfigPathException {
-		if (module instanceof OutsidePipelineWriter ) {
+	private static boolean needsWritePermission( BioModule module, String key )
+		throws DockerVolCreationException, ConfigPathException {
+		if( module instanceof OutsidePipelineWriter ) {
 			OutsidePipelineWriter wopMod = (OutsidePipelineWriter) module;
 			Set<String> wopDirs = wopMod.getWriteDirs();
-			if (wopDirs.contains( volumeMap.get( key ) )) {
-				Log.info(DockerUtil.class, "The module [" + ModuleUtil.displaySignature( module ) + "] is granted write access to the folder [" + key + "]");
+			if( wopDirs.contains( volumeMap.get( key ) ) ) {
+				Log.info( DockerUtil.class, "The module [" + ModuleUtil.displaySignature( module ) +
+					"] is granted write access to the folder [" + key + "]" );
 				return true;
 			}
 		}
@@ -161,7 +166,7 @@ public class DockerUtil {
 	 * @throws ConfigNotFoundException if Docker image version is undefined
 	 */
 	public static String getDockerImage( final BioModule module ) throws ConfigNotFoundException {
-		return getDockerUser( module ) + "/" + getImageName( module ) + ":" + getImageTag(module);
+		return getDockerUser( module ) + "/" + getImageName( module ) + ":" + getImageTag( module );
 	}
 
 	/**
@@ -172,7 +177,7 @@ public class DockerUtil {
 	 */
 	private static String getDockerUser( final BioModule module ) {
 		String user = module.getDockerImageOwner();
-		if (Config.getString( module, DOCKER_HUB_USER ) != null) user = Config.getString( module, DOCKER_HUB_USER );
+		if( Config.getString( module, DOCKER_HUB_USER ) != null ) user = Config.getString( module, DOCKER_HUB_USER );
 		return user;
 	}
 
@@ -190,20 +195,22 @@ public class DockerUtil {
 
 	/**
 	 * Return the Docker Image name for the given module.<br>
-	 * This information should come from the module, but config properties can be used to override the info in the module.
+	 * This information should come from the module, but config properties can be used to override the info in the
+	 * module.
 	 * 
 	 * @param module BioModule
 	 * @return Docker Image Name in the form <owner>/<image>:<tag>
 	 */
 	private static String getImageName( final BioModule module ) {
 		String name = module.getDockerImageName();
-		if (Config.getString( module, DOCKER_IMG ) != null) name=Config.getString( module, DOCKER_IMG );
+		if( Config.getString( module, DOCKER_IMG ) != null ) name = Config.getString( module, DOCKER_IMG );
 		return name;
 	}
-	
-	private static String getImageTag(final BioModule module) {
+
+	private static String getImageTag( final BioModule module ) {
 		String tag = module.getDockerImageTag();
-		if (Config.getString( module, DOCKER_IMG_VERSION ) != null) tag = Config.getString( module, DOCKER_IMG_VERSION );
+		if( Config.getString( module, DOCKER_IMG_VERSION ) != null )
+			tag = Config.getString( module, DOCKER_IMG_VERSION );
 		return tag;
 	}
 
@@ -225,8 +232,8 @@ public class DockerUtil {
 		return DOCKER_ENV_FLAG_FILE.isFile();
 	}
 
-	private static TreeMap<String, String> volumeMap;	
-	
+	private static TreeMap<String, String> volumeMap;
+
 	private static void makeVolMap() throws DockerVolCreationException {
 		StringBuilder sb = new StringBuilder();
 		String s = null;
@@ -240,88 +247,92 @@ public class DockerUtil {
 			p.destroy();
 		} catch( IOException | InterruptedException e ) {
 			e.printStackTrace();
-			throw new DockerVolCreationException(e);
-		} 
+			throw new DockerVolCreationException( e );
+		}
 		String json = sb.toString();
 		JSONArray fullArr = new JSONArray( json );
 		JSONObject obj = fullArr.getJSONObject( 0 );
-		if ( !obj.has("Mounts") ) throw new DockerVolCreationException();
-		JSONArray arr = obj.getJSONArray("Mounts");
+		if( !obj.has( "Mounts" ) ) throw new DockerVolCreationException();
+		JSONArray arr = obj.getJSONArray( "Mounts" );
 		volumeMap = new TreeMap<>();
-		for (int i = 0; i < arr.length(); i++) {
-			JSONObject mount = arr.getJSONObject( i ) ;
-			volumeMap.put( mount.get( "Source" ).toString(), mount.get( "Destination" ).toString());
-			Log.info(DockerUtil.class, "Host directory: " + mount.get( "Source" ).toString());
-			Log.info(DockerUtil.class, "is mapped to container directory: " + mount.get( "Destination" ).toString());
+		for( int i = 0; i < arr.length(); i++ ) {
+			JSONObject mount = arr.getJSONObject( i );
+			volumeMap.put( mount.get( "Source" ).toString(), mount.get( "Destination" ).toString() );
+			Log.info( DockerUtil.class, "Host directory: " + mount.get( "Source" ).toString() );
+			Log.info( DockerUtil.class, "is mapped to container directory: " + mount.get( "Destination" ).toString() );
 		}
 		Log.info( DockerUtil.class, volumeMap.toString() );
 	}
-	
+
 	private static void writeDockerInfo() throws IOException, InterruptedException {
 		File infoFile = getInfoFile();
-		Log.info(DockerUtil.class, "Creating " + infoFile.getName() + " file.");
+		Log.info( DockerUtil.class, "Creating " + infoFile.getName() + " file." );
 		final BufferedWriter writer = new BufferedWriter( new FileWriter( infoFile ) );
 		final Process p = Runtime.getRuntime().exec( getDockerInforCmd() );
 		final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
 		StringBuilder sb = new StringBuilder();
 		String s = null;
 		while( ( s = br.readLine() ) != null ) {
-			sb.append( s ); 
-			writer.write( s + System.lineSeparator());
+			sb.append( s );
+			writer.write( s + System.lineSeparator() );
 		}
 		p.waitFor();
 		p.destroy();
 		writer.close();
-		Log.info(DockerUtil.class, "the info file " + (infoFile.exists() ? "is here:" + infoFile.getAbsolutePath() : "is not here.") );
+		Log.info( DockerUtil.class,
+			"the info file " + ( infoFile.exists() ? "is here:" + infoFile.getAbsolutePath(): "is not here." ) );
 	}
-	
-	private static String getDockerInforCmd() throws IOException{
+
+	private static String getDockerInforCmd() throws IOException {
 		return "docker inspect " + getContainerId();
-		//return "curl --unix-socket /var/run/docker.sock http:/v1.38/containers/" + getHostName() + "/json";
+		// return "curl --unix-socket /var/run/docker.sock http:/v1.38/containers/" + getHostName() + "/json";
 	}
-	
+
 	private static File getInfoFile() {
 		File parentDir = Config.getPipelineDir();
 		if( BioLockJUtil.isDirectMode() )
-			parentDir = new File((new File(Config.getPipelineDir(), RuntimeParamUtil.getDirectModuleDir())), BioModuleImpl.TEMP_DIR);
+			parentDir = new File( ( new File( Config.getPipelineDir(), RuntimeParamUtil.getDirectModuleDir() ) ),
+				BioModuleImpl.TEMP_DIR );
 		if( parentDir != null && parentDir.exists() ) {
-			Log.debug(DockerUtil.class, "path to info file: " + (new File( parentDir, DOCKER_INFO_FILE )).getAbsolutePath());
+			Log.debug( DockerUtil.class,
+				"path to info file: " + ( new File( parentDir, DOCKER_INFO_FILE ) ).getAbsolutePath() );
 			return new File( parentDir, DOCKER_INFO_FILE );
 		} else {
 			return null;
 		}
 	}
-	
-	public static String containerizePath(String path) throws DockerVolCreationException  {
-		Log.debug(DockerUtil.class, "Containerizing path: " + path);
-		if ( !DockerUtil.inDockerEnv() ) return path;
-		if (path == null || path.isEmpty()) return null;
+
+	public static String containerizePath( String path ) throws DockerVolCreationException {
+		Log.debug( DockerUtil.class, "Containerizing path: " + path );
+		if( !DockerUtil.inDockerEnv() ) return path;
+		if( path == null || path.isEmpty() ) return null;
 		String innerPath = path;
 		TreeMap<String, String> vmap = getVolumeMap();
 		String pipelineKey = null;
-		for (String key : volumeMap.keySet()) {
-			if (volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) pipelineKey = key;
-			if ( DockerUtil.inAwsEnv() && volumeMap.get( key ).equals( DOCKER_BLJ_MOUNT_DIR ) ) pipelineKey = key;
+		for( String key: volumeMap.keySet() ) {
+			if( volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) pipelineKey = key;
+			if( DockerUtil.inAwsEnv() && volumeMap.get( key ).equals( DOCKER_BLJ_MOUNT_DIR ) ) pipelineKey = key;
 		}
-		if (pipelineKey == null) throw new DockerVolCreationException("no pipeline dir !");
-		if ( pipelineKey != null && path.startsWith( pipelineKey ) ) return innerPath.replaceFirst( pipelineKey, vmap.get( pipelineKey ) );
-		
+		if( pipelineKey == null ) throw new DockerVolCreationException( "no pipeline dir !" );
+		if( pipelineKey != null && path.startsWith( pipelineKey ) )
+			return innerPath.replaceFirst( pipelineKey, vmap.get( pipelineKey ) );
+
 		String bestMatch = null;
 		int bestMatchLen = 0;
-		for (String s : vmap.keySet()) {
-			if ( path.startsWith( s ) && s.length() > bestMatchLen
-					&& (path.equals( s ) || path.charAt( s.length() ) == File.separatorChar )) {
-					bestMatch = String.valueOf( s );
-					bestMatchLen = s.length();
+		for( String s: vmap.keySet() ) {
+			if( path.startsWith( s ) && s.length() > bestMatchLen &&
+				( path.equals( s ) || path.charAt( s.length() ) == File.separatorChar ) ) {
+				bestMatch = String.valueOf( s );
+				bestMatchLen = s.length();
 			}
 		}
-		if (bestMatch != null) {
+		if( bestMatch != null ) {
 			innerPath = innerPath.replaceFirst( bestMatch, vmap.get( bestMatch ) );
 		}
 		return innerPath;
 	}
-	
-	public static String deContainerizePath(String innerPath) throws DockerVolCreationException {
+
+	public static String deContainerizePath( String innerPath ) throws DockerVolCreationException {
 		String hostPath = innerPath;
 		if( DockerUtil.inDockerEnv() ) {
 			TreeMap<String, String> vmap;
@@ -336,27 +347,27 @@ public class DockerUtil {
 		}
 		return hostPath;
 	}
-	
+
 	public static String getContainerId() throws IOException {
 		String id = null;
-		File cgroup = new File("/proc/self/cgroup");
-		BufferedReader br = new BufferedReader(new FileReader( cgroup ) );
-		String line = null; 
-		while ( (line = br.readLine()) != null) {
-			if (line.contains( "name=" )) {
+		File cgroup = new File( "/proc/self/cgroup" );
+		BufferedReader br = new BufferedReader( new FileReader( cgroup ) );
+		String line = null;
+		while( ( line = br.readLine() ) != null ) {
+			if( line.contains( "name=" ) ) {
 				id = line.substring( line.indexOf( "docker/" ) + 7 );
 			}
 		}
 		br.close();
 		return id;
 	}
-	
+
 	public static String getHostName() {
 		return Config.replaceEnvVar( "${HOSTNAME}" );
 	}
-	
+
 	public static TreeMap<String, String> getVolumeMap() throws DockerVolCreationException {
-		if ( volumeMap == null ) {
+		if( volumeMap == null ) {
 			makeVolMap();
 		}
 		return volumeMap;
@@ -364,6 +375,7 @@ public class DockerUtil {
 
 	/**
 	 * Method for diagnosing exceptions; only used by DockerVolumeException
+	 * 
 	 * @return
 	 */
 	public static TreeMap<String, String> backdoorGetVolumeMap() {
@@ -373,41 +385,137 @@ public class DockerUtil {
 	private static final String rmFlag( final BioModule module ) throws ConfigFormatException {
 		return Config.getBoolean( module, SAVE_CONTAINER_ON_EXIT ) ? "": DOCK_RM_FLAG;
 	}
-	
-	public static void checkDependencies( BioModule module ) throws ConfigNotFoundException, IOException, InterruptedException {
-		if ( inDockerEnv() ) {
-			if ( ! getInfoFile().exists() ) writeDockerInfo();
+
+	public static void checkDependencies( BioModule module )
+		throws BioLockJException, InterruptedException, IOException {
+		if( inDockerEnv() ) {
+			if( !getInfoFile().exists() ) writeDockerInfo();
 			String image = getDockerImage( module );
-			Log.info(DockerUtil.class, "The " + module.getClass().getSimpleName() + " module will use this docker image: " + image );
-			//if (Config.getBoolean( module, "docker.verifyImage" )) verifyImage(image);
-			//    TODO: some quick test to make sure the image exists 
-		}else {
-			Log.info(DockerUtil.class, "Not running in Docker.  No need to check Docker dependencies.");
+			Log.info( DockerUtil.class,
+				"The " + module.getClass().getSimpleName() + " module will use this docker image: " + image );
+			if( Config.getBoolean( module, VERIFY_IMAGE ) ) {
+				verifyImage( module, image );
+			}
+		} else {
+			Log.info( DockerUtil.class, "Not running in Docker.  No need to check Docker dependencies." );
+		}
+	}
+
+	private static void verifyImage(BioModule module, String image) throws DockerVolCreationException, InterruptedException, DockerImageException, SpecialPropertiesException {
+		Log.info(DockerUtil.class, "Verifying docker image: " + image);
+		final String cmd = Config.getExe( module, Constants.EXE_DOCKER ) + " run --rm -v " + deContainerizePath( Config.replaceEnvVar( "${BLJ}/resources/docker" ) ) + ":/testScript " 
+						+ image + " " + USE_BASH + " /testScript/testDockerImage.sh" ;
+		String result = "no response";
+		int exit = -1;
+		String label="testing::" + image;
+		Log.info( DockerUtil.class, "[ " + label + " ]: STARTING CMD --> " + cmd );
+		final ArrayList<String> returnVal = new ArrayList<>();
+		final ArrayList<String> returnErr = new ArrayList<>();
+		try {
+			final Process p = Runtime.getRuntime().exec( cmd );
+			final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
+			final BufferedReader berr = new BufferedReader( new InputStreamReader( p.getErrorStream() ) );
+			
+			String s = null;
+			while( ( s = br.readLine() ) != null ) {
+				if( !s.trim().isEmpty() ) {
+					Log.info( DockerUtil.class, "[ " + label + " ]: " + s );
+					returnVal.add( s );
+				}
+			}
+			while( ( s = berr.readLine() ) != null ) {
+				if( !s.trim().isEmpty() ) {
+					Log.info( DockerUtil.class, "[ " + label + " ] (sterr) : " + s );
+					returnErr.add( s );
+				}
+			}
+			boolean finished = p.waitFor(60, TimeUnit.SECONDS);
+			p.destroy();
+			if (finished) Log.info( DockerUtil.class, "[ " + label + " ]: COMPLETE" );
+			else {
+				Log.info( DockerUtil.class, "[ " + label + " ]: STOPPED - time elapsed." );
+				Log.info( DockerUtil.class, "If the image is large, it may be necissary to pull the image before starting the pipeline: "
+					+ System.lineSeparator() + "command --> docker pull " + image);
+			}
+			exit=p.exitValue();
+			Log.info(DockerUtil.class, "Test [ " + label + " ] returned " + returnVal.size() + " lines, and had exit status: " + exit);
+			if( !returnVal.isEmpty() ) result=summarizeReturnVal(returnVal);
+			Log.debug(DockerUtil.class, "Got result: " + result);
+		}catch(IOException ex) {
+			if ( ex.getMessage() != null ) result=ex.getMessage();
+			Log.debug(DockerUtil.class, "After IOException, result is: " + result);
+		}
+		if( ! result.equals( ALL_GOOD ) | exit != 0) {
+			StringBuilder msgBuff = new StringBuilder();
+			msgBuff.append( System.lineSeparator() + "Test command: " + cmd );
+			msgBuff.append( System.lineSeparator() + "Response: ");
+			msgBuff.append( System.lineSeparator() + result );
+			if( !returnErr.isEmpty() ) msgBuff.append( System.lineSeparator() + summarizeReturnVal(returnErr)) ;
+			msgBuff.append( System.lineSeparator() + "Exit value:" + exit );
+			msgBuff.append( System.lineSeparator() + "You can change the image using properties: [" );
+			msgBuff.append( Config.getModuleFormProp( module, DOCKER_HUB_USER ) + "], [" );
+			msgBuff.append( Config.getModuleFormProp( module, DOCKER_IMG ) + "], and [" +
+				Config.getModuleFormProp( module, DOCKER_IMG_VERSION ) + "]" );
+			msgBuff.append( System.lineSeparator() + "Or disable this check using [" +
+				Config.getModuleFormProp( module, VERIFY_IMAGE ) + "=N]" );
+			throw new DockerImageException( module, image, msgBuff.toString() ); 
+			}
+	}
+
+	private static String summarizeReturnVal( ArrayList<String> returnVal ) {
+		if( returnVal.isEmpty() ) {
+			return "";
+		} else {
+			final StringBuffer sb = new StringBuffer();
+			int cap = 5; // if the result is long, only print the first and last 'cap' lines of the returned info
+			int capTotal = 2 * cap;
+			if( returnVal.size() == 1 ) {
+				sb.append( returnVal.get( 0 ) );
+			} else if( returnVal.size() > ( capTotal + 1 ) ) {
+				for( int i = 0; i < cap; i++ ) {
+					sb.append( returnVal.get( i ) + System.lineSeparator() );
+				}
+				sb.append(
+					"   ... (ommitted " + ( returnVal.size() - capTotal ) + " lines) ..." + System.lineSeparator() );
+				for( int i = returnVal.size() - cap; i < returnVal.size(); i++ ) {
+					sb.append( returnVal.get( i ) + System.lineSeparator() );
+				}
+			} else {
+				for( int i = 0; i < returnVal.size(); i++ ) {
+					sb.append( returnVal.get( i ) + System.lineSeparator() );
+				}
+			}
+			return sb.toString();
 		}
 	}
 
 	/**
 	 * Register properties with the Properties class for API access.
-	 * @throws API_Exception 
+	 * 
+	 * @throws API_Exception
 	 */
 	public static void registerProps() throws API_Exception {
 		Properties.registerProp( DOCKER_HUB_USER, Properties.STRING_TYPE, DOCKER_HUB_USER_DESC );
 		Properties.registerProp( DOCKER_IMG, Properties.STRING_TYPE, DOCKER_IMG_DESC );
 		Properties.registerProp( DOCKER_IMG_VERSION, Properties.STRING_TYPE, DOCKER_IMG_VERSION_DESC );
 		Properties.registerProp( SAVE_CONTAINER_ON_EXIT, Properties.BOOLEAN_TYPE, SAVE_CONTAINER_ON_EXIT_DESC );
+		Properties.registerProp( VERIFY_IMAGE, Properties.BOOLEAN_TYPE, VERIFY_IMAGE_DESC );
 	}
+
 	/**
 	 * Let modules see property names.
 	 */
-	public static ArrayList<String> listProps(){
+	public static ArrayList<String> listProps() {
 		ArrayList<String> props = new ArrayList<>();
-		props.add( DOCKER_HUB_USER );
-		props.add( DOCKER_IMG );
-		props.add( DOCKER_IMG_VERSION );
 		props.add( SAVE_CONTAINER_ON_EXIT );
+		props.add( VERIFY_IMAGE );
+		// Don't include these, these properties are specifically added to the docs in the docker section.
+		// props.add( DOCKER_HUB_USER );
+		// props.add( DOCKER_IMG );
+		// props.add( DOCKER_IMG_VERSION );
 		return props;
 	}
-	
+
 	/**
 	 * Docker container dir to map HOST $HOME to save logs + find Config values using $HOME: {@value #AWS_EC2_HOME} Need
 	 * to name this dir = "/home/ec2-user" so Nextflow config is same inside + outside of container
@@ -450,8 +558,7 @@ public class DockerUtil {
 	static final String CONTAINER_BLJ_DIR = "/app/biolockj";
 
 	/**
-	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG_VERSION}
-	 * {@value #DOCKER_IMG_VERSION_DESC}
+	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG_VERSION} {@value #DOCKER_IMG_VERSION_DESC}
 	 */
 	public static final String DOCKER_IMG_VERSION = "docker.imageTag";
 	private static final String DOCKER_IMG_VERSION_DESC = "indicate specific version of Docker images";
@@ -469,12 +576,12 @@ public class DockerUtil {
 	static final String SPAWN_DOCKER_CONTAINER = "spawnDockerContainer";
 
 	/**
-	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG}
-	 * {@value #DOCKER_IMG_DESC}
+	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG} {@value #DOCKER_IMG_DESC}
 	 */
 	public static final String DOCKER_IMG = "docker.imageName";
-	private static final String DOCKER_IMG_DESC = "The name of a docker image to override whatever a module says to use.";
-	
+	private static final String DOCKER_IMG_DESC =
+		"The name of a docker image to override whatever a module says to use.";
+
 	/**
 	 * {@link biolockj.Config} String property: {@value #DOCKER_HUB_USER}<br>
 	 * {@value #DOCKER_HUB_USER_DESC}<br>
@@ -486,6 +593,12 @@ public class DockerUtil {
 	public static final String DOCKER_HUB_USER = "docker.imageOwner";
 	private static final String DOCKER_HUB_USER_DESC = "name of the Docker Hub user that owns the docker containers";
 
+	/**
+	 * {@link biolockj.Config} Boolean property: {@value #VERIFY_IMAGE} {@value #VERIFY_IMAGE_DESC}
+	 */
+	private static final String VERIFY_IMAGE = "docker.verifyImage";
+	private static final String VERIFY_IMAGE_DESC = "In check dependencies, run a test to verify the docker image.";
+
 	private static final String DOCK_RM_FLAG = "--rm";
 	private static final File DOCKER_ENV_FLAG_FILE = new File( "/.dockerenv" );
 	private static final String DOCKER_SOCKET = "/var/run/docker.sock";
@@ -496,4 +609,6 @@ public class DockerUtil {
 	private static final String SCRIPT_ID_VAR = "SCRIPT_ID";
 	private static final String DOCKER_KEY = "docker";
 	private static final String DOCKER_INFO_FILE = "dockerInfo.json";
+	private static final String ALL_GOOD = "Everything is awesome!";
+	private static final String USE_BASH = "/bin/bash -c";
 }
