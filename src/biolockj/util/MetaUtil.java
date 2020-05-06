@@ -528,7 +528,7 @@ public class MetaUtil {
 		BufferedReader reader = null;
 		try {
 			reader = BioLockJUtil.getFileReader( getMetadata() );
-			for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
+			for( String line = reader.readLine(); line != null && !line.isEmpty(); line = reader.readLine() ) {
 				if( isUpdated() ) Log.debug( MetaUtil.class, "===> Meta line: " + line );
 				final ArrayList<String> record = new ArrayList<>();
 				final String[] cells = line.split( DEFAULT_COL_DELIM, -1 );
