@@ -119,7 +119,7 @@ public class SraDownload extends SequenceReadArchive implements ApiModule, Input
 			BufferedReader reader = new BufferedReader( new FileReader( accList ) );
 			try {
 				for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
-					list.add( line );
+					if (!line.isEmpty()) list.add( line );
 				}
 			} finally {
 				reader.close();
