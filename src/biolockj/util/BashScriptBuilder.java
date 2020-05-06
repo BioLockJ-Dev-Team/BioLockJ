@@ -205,7 +205,7 @@ public class BashScriptBuilder {
 		lines.add( "# BioLockJ " + BioLockJUtil.getVersion() + ": " + mainScriptPath + RETURN );
 		lines.addAll( pathVariableVals(module) );
 		lines.add( "touch \"" + startedFlag + "\"" + RETURN );
-		lines.add( "exec 1>${tempDir}/MAIN.log" );
+		lines.add( "exec 1>${logDir}/MAIN.log" );
 		lines.add( "exec 2>&1" );
 		lines.add( "cd " + module.getScriptDir().getAbsolutePath() + RETURN );
 		if( DockerUtil.inDockerEnv() ) {
