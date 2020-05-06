@@ -1,5 +1,9 @@
 package biolockj.exception;
 
+import biolockj.Pipeline;
+import biolockj.module.BioModule;
+import biolockj.util.DockerUtil;
+
 /**
  * Some module are run as secondary instances of the BioLockJ program.
  * There are run as script modules and the main program checks for flags in the modules directory.
@@ -12,11 +16,27 @@ package biolockj.exception;
 public class DirectModuleException extends BioLockJException {
 
 	public DirectModuleException( String msg ) {
-		super( msg );
+		super( msg + addedMsg() );
 	}
 	
 	public DirectModuleException( ) {
-		super( "An error occurred during the execution of a direct module." );
+		super( "An error occurred during the execution of a direct module." + addedMsg() );
+	}
+	
+	private static String addedMsg() {
+		String msg = "";
+		BioModule module = Pipeline.exeModule();
+		if (module != null) {
+			String logsDir;
+			try {
+				logsDir = ": " + DockerUtil.deContainerizePath( module.getLogDir().getAbsolutePath() );
+			} catch( DockerVolCreationException e ) {
+				e.printStackTrace();
+				logsDir = ".";
+			}
+			msg = System.lineSeparator() + "More information may be available in the module's logs" + logsDir;
+		}
+		return msg;
 	}
 	
 	private static final long serialVersionUID = 6927852512694273571L;
