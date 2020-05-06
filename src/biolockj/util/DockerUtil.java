@@ -401,7 +401,7 @@ public class DockerUtil {
 		}
 	}
 
-	private static void verifyImage(BioModule module, String image) throws DockerVolCreationException, InterruptedException, DockerImageException, SpecialPropertiesException {
+	private static void verifyImage(BioModule module, String image) throws DockerVolCreationException, InterruptedException, DockerImageException, SpecialPropertiesException, ConfigFormatException {
 		Log.info(DockerUtil.class, "Verifying docker image: " + image);
 		final String cmd = Config.getExe( module, Constants.EXE_DOCKER ) + " run --rm -v " + deContainerizePath( Config.replaceEnvVar( "${BLJ}/resources/docker" ) ) + ":/testScript " 
 						+ image + " " + USE_BASH + " /testScript/testDockerImage.sh" ;
@@ -447,12 +447,13 @@ public class DockerUtil {
 		}
 		if( ! result.equals( ALL_GOOD ) | exit != 0) {
 			StringBuilder msgBuff = new StringBuilder();
-			msgBuff.append( System.lineSeparator() + "Test command: " + cmd );
-			msgBuff.append( System.lineSeparator() + "Response: ");
-			msgBuff.append( System.lineSeparator() + result );
-			if( !returnErr.isEmpty() ) msgBuff.append( System.lineSeparator() + summarizeReturnVal(returnErr)) ;
-			msgBuff.append( System.lineSeparator() + "Exit value:" + exit );
-			msgBuff.append( System.lineSeparator() + "You can change the image using properties: [" );
+			if( !returnErr.isEmpty() ) {
+				returnVal.addAll( returnErr );
+				msgBuff.append( System.lineSeparator() + summarizeReturnVal(returnVal)) ;
+			}else {
+				msgBuff.append( System.lineSeparator() + result );
+			}
+			msgBuff.append( System.lineSeparator() + System.lineSeparator() + "You can change the image using properties: [" );
 			msgBuff.append( Config.getModuleFormProp( module, DOCKER_HUB_USER ) + "], [" );
 			msgBuff.append( Config.getModuleFormProp( module, DOCKER_IMG ) + "], and [" +
 				Config.getModuleFormProp( module, DOCKER_IMG_VERSION ) + "]" );
