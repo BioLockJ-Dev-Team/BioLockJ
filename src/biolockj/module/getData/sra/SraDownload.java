@@ -163,6 +163,7 @@ public class SraDownload extends SequenceReadArchive implements ApiModule, Input
 		} );
 		String returnVal = "";
 		for (File file : files) {
+			if ( returnVal.length() > 0 ) returnVal += ", ";
 			returnVal += DockerUtil.deContainerizePath( file.getName() );
 		}
 		return returnVal;
