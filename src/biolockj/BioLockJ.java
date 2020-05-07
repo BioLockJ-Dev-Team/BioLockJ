@@ -207,14 +207,15 @@ public class BioLockJ {
 		MemoryUtil.reportMemoryUsage( "INTIAL MEMORY STATS" );
 		RuntimeParamUtil.registerRuntimeParameters( args );
 		Config.initialize();
+		
+		if( BioLockJUtil.isDirectMode() ) Log.initialize( getDirectLogName( RuntimeParamUtil.getDirectModuleDir() ) );
+		else Log.initialize( Config.pipelineName() );
+		
 		ValidationUtil.hasStrictValidation(true);
 		if( isPipelineComplete() ) throw new Exception( "Pipeline Cancelled!  Pipeline already contains status file: " +
 			Constants.BLJ_COMPLETE + " --> Check directory: " + Config.pipelinePath() );
 
 		MetaUtil.initialize();
-
-		if( BioLockJUtil.isDirectMode() ) Log.initialize( getDirectLogName( RuntimeParamUtil.getDirectModuleDir() ) );
-		else Log.initialize( Config.pipelineName() );
 
 		if( RuntimeParamUtil.doRestart() ) initRestart();
 
