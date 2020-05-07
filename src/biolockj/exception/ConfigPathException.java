@@ -13,6 +13,7 @@ package biolockj.exception;
 
 import java.io.File;
 import biolockj.Config;
+import biolockj.util.DockerUtil;
 
 /**
  * ConfigPathException is thrown if property is invalid file paths are encountered when processing the BioLockJ
@@ -26,7 +27,7 @@ public class ConfigPathException extends ConfigException {
 	 * @param file File or directory path
 	 */
 	public ConfigPathException( final File file ) {
-		super( "Invalid Path: " + file.getAbsolutePath() + " does not exist on the file system" );
+		super( "Invalid Path: " + showPath(file) + " does not exist on the file system" );
 	}
 
 	/**
@@ -36,7 +37,7 @@ public class ConfigPathException extends ConfigException {
 	 * @param msg Error message
 	 */
 	public ConfigPathException( final File file, final String msg ) {
-		super( "Invalid Path: " + file.getAbsolutePath() + " does not exist on the file system: " + msg );
+		super( "Invalid Path: " + showPath(file) + " does not exist on the file system: " + msg );
 	}
 
 	/**
@@ -48,6 +49,14 @@ public class ConfigPathException extends ConfigException {
 	 */
 	public ConfigPathException( final String property, final String fileType ) {
 		super( property, "Current value \"" + Config.getString( null, property ) + "\" is not a valid " + fileType );
+	}
+	
+	private static String showPath(final File file) {
+		String show = file.getAbsolutePath();
+		try {
+			show = DockerUtil.deContainerizePath( file.getAbsolutePath() );
+		}catch( DockerVolCreationException dex) {}
+		return show;
 	}
 
 	/**
