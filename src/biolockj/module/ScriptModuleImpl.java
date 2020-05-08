@@ -68,11 +68,12 @@ public abstract class ScriptModuleImpl extends BioModuleImpl implements ScriptMo
 	 */
 	@Override
 	public void checkDependencies() throws Exception {
-		isValidProp( Constants.SCRIPT_PERMISSIONS);
+		isValidProp( Constants.SCRIPT_DEFAULT_HEADER);
 		isValidProp( Constants.SCRIPT_PERMISSIONS );
 		isValidProp( Constants.SCRIPT_NUM_WORKERS );
 		isValidProp( Constants.SCRIPT_NUM_THREADS );
 		isValidProp( Constants.SCRIPT_TIMEOUT );
+		BashScriptBuilder.checkDependencies( this );
 	}
 
 	/**

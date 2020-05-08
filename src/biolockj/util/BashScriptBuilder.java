@@ -450,6 +450,14 @@ public class BashScriptBuilder {
 		return props;
 	}
 	
+	public static void checkDependencies(BioModule module) throws ConfigNotFoundException {
+		if( Config.isOnCluster() ) {
+			Config.requireString( module, CLUSTER_BATCH_COMMAND );
+			Config.requireString( module, CLUSTER_STATUS_COMMAND );
+			Config.requireString( module, SCRIPT_JOB_HEADER );
+		}
+	}
+	
 	/**
 	 * {@link biolockj.Config} String property: {@value #CLUSTER_BATCH_COMMAND}<br>
 	 * {@value #CLUSTER_BATCH_COMMAND_DESC}
