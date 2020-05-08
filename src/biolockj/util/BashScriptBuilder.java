@@ -225,7 +225,10 @@ public class BashScriptBuilder {
 		lines.add( "function " + FUNCTION_RUN_JOB + "() {" );
 		lines.add( "scriptName=$(basename $1)");
 		lines.add( "id=$(" + Config.requireString( module, CLUSTER_BATCH_COMMAND ) + " $1)" );
+		lines.add( "local status = $?" );
 		lines.add( "echo \"$scriptName:" + CLUSTER_KEY + ":$id\" >> " + startedFlag );
+		lines.add( "if [ $status -gt 0 ]; then echo $id; fi" );
+		lines.add( "return $status");
 		lines.add( "}" + RETURN );
 		return(lines);
 	}
