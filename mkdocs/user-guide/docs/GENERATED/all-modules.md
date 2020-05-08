@@ -46,7 +46,7 @@
 [RdpClassifier](biolockj.module.classifier.r16s/RdpClassifier.md) - *Classify 16s samples with [RDP](http://rdp.cme.msu.edu/classifier/classifier.jsp).*                   
 [RdpParser](biolockj.module.implicit.parser.r16s/RdpParser.md) - *Build OTU tables from [RDP](http://rdp.cme.msu.edu/classifier/classifier.jsp) reports.*                   
 [RegisterNumReads](biolockj.module.implicit/RegisterNumReads.md)                   
-[RemoveLowOtuCounts](biolockj.module.report.otu/RemoveLowOtuCounts.md)                   
+[RemoveLowOtuCounts](biolockj.module.report.otu/RemoveLowOtuCounts.md) - *Removes OTUs with counts below report.minCount.*                   
 [RemoveLowPathwayCounts](biolockj.module.report.humann2/RemoveLowPathwayCounts.md)                   
 [RemoveScarceOtuCounts](biolockj.module.report.otu/RemoveScarceOtuCounts.md)                   
 [RemoveScarcePathwayCounts](biolockj.module.report.humann2/RemoveScarcePathwayCounts.md)                   

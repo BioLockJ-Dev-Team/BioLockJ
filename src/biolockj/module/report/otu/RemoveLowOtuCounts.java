@@ -15,6 +15,7 @@ import java.io.*;
 import java.util.*;
 import org.apache.commons.io.FileUtils;
 import biolockj.*;
+import biolockj.api.ApiModule;
 import biolockj.module.implicit.parser.ParserModuleImpl;
 import biolockj.util.*;
 
@@ -24,12 +25,24 @@ import biolockj.util.*;
  * 
  * @blj.web_desc Remove Low OTU Counts
  */
-public class RemoveLowOtuCounts extends OtuCountModule {
+public class RemoveLowOtuCounts extends OtuCountModule implements ApiModule{
 
 	@Override
 	public void checkDependencies() throws Exception {
 		super.checkDependencies();
-		getMinCount();
+		isValidProp(Constants.REPORT_MIN_COUNT);
+	}
+	
+	@Override
+	public Boolean isValidProp( String property ) throws Exception {
+		Boolean isValid = super.isValidProp( property );
+		switch(property) {
+			case Constants.REPORT_MIN_COUNT:
+				getMinCount();
+				isValid = true;
+				break;
+		}
+		return isValid;
 	}
 
 	/**
@@ -179,10 +192,22 @@ public class RemoveLowOtuCounts extends OtuCountModule {
 	private Integer getMinCount() throws Exception {
 		return Config.requirePositiveInteger( this, Constants.REPORT_MIN_COUNT );
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Removes OTUs with counts below report.minCount.";
+	}
+
+	@Override
+	public String getCitationString() {
+		return "Module developed by Mike Sioda" + System.lineSeparator() 
+			+ "BioLockJ " + BioLockJUtil.getVersion();
+	}
 
 	private Map<String, File> fileMap = null;
 	private Map<String, String> hitsPerSample = new HashMap<>();
 	private final Set<String> sampleIds = new HashSet<>();
 	private long totalOtuRemoved = 0;
 	private final Set<String> uniqueOtuRemoved = new HashSet<>();
+
 }
