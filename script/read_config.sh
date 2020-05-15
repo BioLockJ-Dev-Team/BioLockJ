@@ -9,8 +9,8 @@
 # param 1 - the configFile to read from
 # param 2 - one of: upload or mount
 main(){
-	primaryConfig="$1"
-	cd $(dirname $primaryConfig)
+	cd $(dirname $1)
+	primaryConfig=$(basename $1)
 	dirList=($(dirname $(to_abs_path $primaryConfig)))
 	dockerCopyPath=$(get_host_file $primaryConfig) && primaryConfig=$dockerCopyPath
 	
