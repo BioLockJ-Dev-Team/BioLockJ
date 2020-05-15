@@ -6,12 +6,14 @@ import java.io.FileWriter;
 import java.util.List;
 
 import biolockj.Log;
+import biolockj.api.ApiModule;
 import biolockj.module.JavaModuleImpl;
 import biolockj.util.OtuWrapper;
 
-public class ShannonDiversity extends JavaModuleImpl
+public class ShannonDiversity extends JavaModuleImpl implements ApiModule
 {
 
+	
 	@Override
 	public void runModule() throws Exception
 	{
@@ -49,6 +51,18 @@ public class ShannonDiversity extends JavaModuleImpl
 			Log.debug(this.getClass(), "Finished ShannonDiversity module");
 			
 		}
+	}
+
+	@Override
+	public String getDescription()
+	{
+		return "Calculate shannon diversity as sum p(logp)";
+	}
+
+	@Override
+	public String getCitationString()
+	{	
+		return "";
 	}
 
 }
