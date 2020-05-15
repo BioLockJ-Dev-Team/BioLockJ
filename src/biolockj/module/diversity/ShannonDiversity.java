@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 
+import biolockj.Log;
 import biolockj.module.JavaModuleImpl;
 import biolockj.util.OtuWrapper;
 
@@ -14,19 +15,23 @@ public class ShannonDiversity extends JavaModuleImpl
 	@Override
 	public void runModule() throws Exception
 	{
-		System.out.println("Hello world from Shannon Diversity!!!!");
+		Log.debug(this.getClass(),"In ShannonDiversity");
 		
 		List<File> inputFiles = getInputFiles();
 		
 		for(File f : inputFiles)
 		{
-			System.out.println("Hello "+ f.getAbsolutePath());
+			Log.debug( this.getClass(), "Opening " +  f.getAbsolutePath());
 			OtuWrapper wrapper = new OtuWrapper(f);
 
-			File outFile = new File( getOutputDir() + File.separator+ 
-								f.getName().replaceAll(".tsv", "") + "_Shannon.tsv");
+			String newName = f.getName().replaceAll(".tsv", "") ;
 			
-			System.out.println("Hello out file " + outFile.getAbsolutePath());
+			newName = newName.replace("_taxaCount","");
+			
+			File outFile = new File( getOutputDir() + File.separator+ 
+								newName+  "_Shannon.tsv")	;
+			
+			Log.debug(this.getClass(), "Trying to write to " +  outFile.getAbsolutePath());
 			
 			BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
 			
@@ -41,9 +46,9 @@ public class ShannonDiversity extends JavaModuleImpl
 			
 			writer.flush(); writer.close();
 			
+			Log.debug(this.getClass(), "Finished ShannonDiversity module");
+			
 		}
-		
-		
 	}
 
 }
