@@ -62,7 +62,7 @@ public class ShannonDiversity extends JavaModuleImpl implements ApiModule
 	@Override
 	public String getCitationString()
 	{	
-		return "";
+		return "Module developed by Anthony Fodor";
 	}
 
 }
