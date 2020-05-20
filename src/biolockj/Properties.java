@@ -389,12 +389,12 @@ public class Properties extends java.util.Properties {
 					Config.getBoolean( null, property );
 					break;
 				case FILE_PATH:
-					Config.getExistingFileObject( Config.getString( null, property ) ) ;
+					Config.getExistingFileObject( null, property ) ;
 					break;
 				case FILE_PATH_LIST:
 					List<String> paths = Config.getList( null, property );
 					for (String path : paths) {
-						Config.getExistingFileObject(path);
+						Config.getExistingFileObjectFromPath(path);
 					}
 					break;
 				case LIST_TYPE:

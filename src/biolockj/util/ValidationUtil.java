@@ -343,7 +343,7 @@ public class ValidationUtil {
 	}
 
 	private static File getExpectationFile( final BioModule module ) throws ConfigException, DockerVolCreationException {
-		File expectationFileObj = Config.getExistingFileObject( Config.getString( module, EXPECTATION_FILE ) );
+		File expectationFileObj = Config.getExistingFileObject( module, EXPECTATION_FILE );
 		File expectationFile = null;
 		if( expectationFileObj != null ) {
 			if( !expectationFileObj.exists() ) throw new ConfigPathException( expectationFileObj );

@@ -151,12 +151,8 @@ public class Config {
 	 * @throws DockerVolCreationException 
 	 */
 	public static File getExistingDir( final BioModule module, final String property ) throws ConfigPathException, DockerVolCreationException {
-		final File f = getExistingFileObject( getString( module, property ) );
+		final File f = getExistingFileObject( module, property );
 		if( f != null && !f.isDirectory() ) throw new ConfigPathException( property, ConfigPathException.DIRECTORY );
-
-		// TODO: figure out why this is here and clean up, 
-		if( props != null && f != null ) Config.setFilePathProperty( getModulePropName( module, property ), f.getAbsolutePath() );
-
 		return f;
 	}
 
@@ -170,15 +166,12 @@ public class Config {
 	 * @throws DockerVolCreationException 
 	 */
 	public static File getExistingFile( final BioModule module, final String property ) throws ConfigPathException, DockerVolCreationException {
-		File f = getExistingFileObject( getString( module, property ) );
+		File f = getExistingFileObject( module, property );
 		if( f != null && !f.isFile() ) if( f.isDirectory() && f.list( HiddenFileFilter.VISIBLE ).length == 1 ) {
 			Log.warn( Config.class,
 				property + " is a directory with only 1 valid file.  Return the lone file within." );
 			f = new File( f.list( HiddenFileFilter.VISIBLE )[ 0 ] );
 		} else throw new ConfigPathException( property, ConfigPathException.FILE );
-
-		// TODO: figure out why this is here and clean up, 
-		if( props != null && f != null ) Config.setFilePathProperty( getModulePropName( module, property ), f.getAbsolutePath() );
 
 		return f;
 	}
@@ -550,7 +543,7 @@ public class Config {
 		throws ConfigPathException, ConfigNotFoundException, DockerVolCreationException {
 		final List<File> returnDirs = new ArrayList<>();
 		for( final String d: requireSet( module, property ) ) {
-			final File dir = getExistingFileObject( d );
+			final File dir = getExistingFileObject( module, property );
 			if( dir != null && !dir.isDirectory() )
 				throw new ConfigPathException( property, ConfigPathException.DIRECTORY );
 
@@ -750,7 +743,7 @@ public class Config {
 	 * @throws ConfigPathException if path is defined but is not found on the file system
 	 * @throws DockerVolCreationException 
 	 */
-	public static File getExistingFileObject( final String filePath ) throws ConfigPathException, DockerVolCreationException {
+	static File getExistingFileObjectFromPath( final String filePath ) throws ConfigPathException, DockerVolCreationException {
 		if( filePath != null ) {
 			String path = filePath;
 			if (path.startsWith(".") ) path = convertRelativePath( path );
@@ -764,6 +757,21 @@ public class Config {
 			throw new ConfigPathException( f );
 		}
 		return null;
+	}
+	
+	/**
+	 * Build File using module and property name.
+	 *
+	 * @param module A BioModule, can be null
+	 * @param property A string property name.
+	 * @return File or null
+	 * @throws ConfigPathException if path is defined but is not found on the file system
+	 * @throws DockerVolCreationException 
+	 */
+	public static File getExistingFileObject( final BioModule module, final String property ) throws ConfigPathException, DockerVolCreationException {
+		final File f = getExistingFileObjectFromPath( getString( module, property ) );
+		if( props != null && f != null ) Config.setFilePathProperty( getModulePropName( module, property ), f.getAbsolutePath() );
+		return f;
 	}
 	
 	/**

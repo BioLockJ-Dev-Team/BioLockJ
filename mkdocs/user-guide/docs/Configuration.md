@@ -70,8 +70,7 @@ biolockj --docker -e SHEP=$SHEP,DIR=/path/to/big/data/dir config.properties
 ### Relative file paths
 
 File paths can be given using relative paths.  The path should start with `./`.         
-The location `.` is interpreted as being the directory where the configuration file is.        
-
+The location `.` is interpreted as being the directory where the primary configuration file is.
 
 Example file structure:
 ```
