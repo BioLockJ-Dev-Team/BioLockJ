@@ -41,7 +41,6 @@ public class LogTransformTaxaTables extends TransformTaxaTables implements ApiMo
 	public void checkDependencies() throws Exception {
 		super.checkDependencies();
 		isValidProp(Constants.REPORT_LOG_BASE);
-    	this.logBase = Config.requireString( this, Constants.REPORT_LOG_BASE );
 	}
 	
 	@Override
@@ -49,6 +48,7 @@ public class LogTransformTaxaTables extends TransformTaxaTables implements ApiMo
 	    Boolean isValid = super.isValidProp( property );
 	    switch(property) {
 	        case Constants.REPORT_LOG_BASE:
+	        	this.logBase = Config.requireString( this, Constants.REPORT_LOG_BASE );
 	    		if( !getLogBase().equalsIgnoreCase( LOG_10 ) && !getLogBase().equalsIgnoreCase( LOG_E ) ) {
 	    			throw new ConfigFormatException( Constants.REPORT_LOG_BASE,
 	    				"Property only accepts value \"" + LOG_10 + "\" or \"" + LOG_E + "\"" );
