@@ -165,6 +165,20 @@ public interface BioModule {
 	public File getLogDir();
 
 	/**
+	 * The resource sub-direcotry contains files that the module may depend on.<br>
+	 * Unlike temp or log, these files are not created by the module.    
+	 * Unlike output, these files are not intended to be available to other modules.<br>
+	 * Examples of files that might go in resource/ include:<br>
+	 *  * library files that are used by a user-supplied script
+	 *  * files that are packaged in the jar file of a module, and copied to be available to scripts.
+	 *  * information that can be determined in the java layer, and is made available to non-java scripts.
+	 *  <br> Like all subdirs, this is deleted in incomplete modules during a re-start.
+	 *  Depending on the module, the files may be deleted upon module completion in the cleanup() method.
+	 * @return
+	 */
+	public File getResourceDir();
+	
+	/**
 	 * Initialize a new module to generate a unique ID and module directory.
 	 * 
 	 * @throws Exception if errors occur
@@ -235,7 +249,12 @@ public interface BioModule {
 	public static final String TEMP_DIR = "temp";
 	
 	/**
-	 * Name of the temporary sub-directory: {@value #TEMP_DIR}
+	 * Name of the temporary sub-directory: {@value #LOG_DIR}
 	 */
 	public static final String LOG_DIR = "log";
+	
+	/**
+	 * Name of the temporary sub-directory: {@value #RES_DIR}
+	 */
+	public static final String RES_DIR = "resources";
 }
