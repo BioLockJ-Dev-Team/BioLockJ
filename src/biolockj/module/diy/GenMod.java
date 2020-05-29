@@ -27,6 +27,7 @@ import biolockj.api.ApiModule;
 import biolockj.api.BuildDocs;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigPathException;
+import biolockj.exception.DockerVolCreationException;
 import biolockj.module.ScriptModuleImpl;
 import biolockj.module.getData.InputDataModule;
 import biolockj.util.BioLockJUtil;
@@ -43,15 +44,17 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		addNewProperty( LAUNCHER, Properties.STRING_TYPE, LAUNCHER_DESC );
 		addNewProperty( PARAM, Properties.STRING_TYPE, PARAM_DESC );
 		addNewProperty( SCRIPT, Properties.FILE_PATH, SCRIPT_DESC );
+		addNewProperty( RESOURCES, Properties.FILE_PATH_LIST, RESOURCES_DESC );
 	}
 
 	@Override
 	public List<List<String>> buildScript( final List<File> files ) throws Exception {
 		final List<List<String>> data = new ArrayList<>();
 		final ArrayList<String> lines = new ArrayList<>();
+		transferResources();
 		lines.add( getLauncher() + transferScript() + getScriptParams() );
 		data.add( lines );
-		Log.info( GenMod.class, "Command ran: " + data );
+		Log.info( GenMod.class, "Core command: " + data );
 		return data;
 	}
 
@@ -60,6 +63,7 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		isValidProp(LAUNCHER);
 		isValidProp(PARAM);
 		isValidProp(SCRIPT);
+		isValidProp(RESOURCES);
 	}
 	
 	@Override
@@ -76,6 +80,10 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	            break;
 	        case PARAM:
 	        	Config.getString(this, PARAM);
+	            isValid = true;
+	            break;
+	        case RESOURCES:
+	        	getResources();
 	            isValid = true;
 	            break;
 	    }
@@ -106,14 +114,32 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		return " " + param;
 
 	}
+	
+	protected List<File> getResources() throws ConfigFormatException, ConfigPathException, DockerVolCreationException{
+		List<File> files = new ArrayList<>();
+		if ( Config.getString( this, RESOURCES ) == null ) return files;//return empty list
+		List<String> paths = Config.getList( this, RESOURCES );
+		for (String path : paths ) {
+			File file = Config.getExistingFileObjectFromPath( path );
+			files.add(file);
+		}
+		return files;
+	}
 
 	protected String transferScript() throws ConfigPathException, IOException, Exception {
 		final File original = Config.requireExistingFile( this, SCRIPT );
-		FileUtils.copyFileToDirectory( original, getModuleDir() );
-		final File copy = new File( getModuleDir() + File.separator + original.getName() );
+		FileUtils.copyFileToDirectory( original, getResourceDir() );
+		final File copy = new File( getResourceDir() + File.separator + original.getName() );
 		copy.setExecutable( true, false );
 		Log.debug( GenMod.class, "Users script saved to: " + copy.getAbsolutePath() );
 		return copy.getAbsolutePath();
+	}
+	
+	protected void transferResources() throws ConfigPathException, IOException, Exception {
+		for (File file : getResources() ) {
+			FileUtils.copyFileToDirectory( file, getResourceDir() );
+			Log.info(this.getClass(), "Copied resource " + file.getAbsolutePath() + " to module resource folder: " + getResourceDir());
+		}
 	}
 	
 //	@Override
@@ -160,7 +186,7 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	 * {@value #PARAM_DESC}
 	 */
 	protected static final String PARAM = "genMod.param";
-	private static final String PARAM_DESC = "parameters to pass to the user's script";
+	private static final String PARAM_DESC = "arameters to pass to the user's script";
 	
 	/**
 	 * {@link biolockj.Config} property: {@value #SCRIPT}<br>
@@ -168,5 +194,12 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	 */
 	protected static final String SCRIPT = "genMod.scriptPath";
 	private static final String SCRIPT_DESC = "path to user script";
+	
+	/**
+	 * {@link biolockj.Config} property: {@value #RESOURCES}<br>
+	 * {@value #RESOURCES_DESC}
+	 */
+	protected static final String RESOURCES = "genMod.resources";
+	private static final String RESOURCES_DESC = "path to one or more files to be copied to the module resource folder.";
 
 }

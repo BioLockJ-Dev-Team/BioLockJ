@@ -743,7 +743,7 @@ public class Config {
 	 * @throws ConfigPathException if path is defined but is not found on the file system
 	 * @throws DockerVolCreationException 
 	 */
-	static File getExistingFileObjectFromPath( final String filePath ) throws ConfigPathException, DockerVolCreationException {
+	public static File getExistingFileObjectFromPath( final String filePath ) throws ConfigPathException, DockerVolCreationException {
 		if( filePath != null ) {
 			String path = filePath;
 			if (path.startsWith(".") ) path = convertRelativePath( path );
