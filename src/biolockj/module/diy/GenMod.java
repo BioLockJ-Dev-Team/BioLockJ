@@ -25,6 +25,7 @@ import biolockj.Properties;
 import biolockj.api.API_Exception;
 import biolockj.api.ApiModule;
 import biolockj.api.BuildDocs;
+import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigPathException;
 import biolockj.module.ScriptModuleImpl;
 import biolockj.module.getData.InputDataModule;
@@ -56,7 +57,29 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 
 	@Override
 	public void checkDependencies() throws Exception {
-		Config.requireExistingFile( this, SCRIPT );
+		isValidProp(LAUNCHER);
+		isValidProp(PARAM);
+		isValidProp(SCRIPT);
+	}
+	
+	@Override
+	public Boolean isValidProp( String property ) throws Exception {
+	    Boolean isValid = super.isValidProp( property );
+	    switch(property) {
+	        case LAUNCHER:
+	        	getLauncher();
+	            isValid = true;
+	            break;
+	        case SCRIPT:
+	        	Config.requireExistingFile( this, SCRIPT );
+	            isValid = true;
+	            break;
+	        case PARAM:
+	        	Config.getString(this, PARAM);
+	            isValid = true;
+	            break;
+	    }
+	    return isValid;
 	}
 
 	protected String getLauncher() throws Exception {
