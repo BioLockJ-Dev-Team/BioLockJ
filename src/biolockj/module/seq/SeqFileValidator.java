@@ -38,6 +38,34 @@ public class SeqFileValidator extends JavaModuleImpl implements SeqModule, ApiMo
 		addNewProperty( INPUT_SEQ_MIN, Properties.INTEGER_TYPE, "minimum number of bases per read" );
 		addNewProperty( REQUIRE_EUQL_NUM_PAIRS, Properties.BOOLEAN_TYPE, "Options: Y/N; require number of forward and reverse reads" );
 	}
+	
+	@Override
+	public void checkDependencies() throws Exception {
+		super.checkDependencies();
+		isValidProp(INPUT_SEQ_MAX);
+		isValidProp(INPUT_SEQ_MIN);
+		isValidProp(REQUIRE_EUQL_NUM_PAIRS);
+	}
+
+	@Override
+	public Boolean isValidProp( String property ) throws Exception {
+		Boolean isValid = super.isValidProp( property );
+	    switch(property) {
+	        case INPUT_SEQ_MAX:
+	            Config.getIntegerProp( this, INPUT_SEQ_MAX );
+	            isValid = true;
+	            break;
+	        case INPUT_SEQ_MIN:
+	            Config.getIntegerProp( this, INPUT_SEQ_MIN );
+	            isValid = true;
+	            break;
+	        case REQUIRE_EUQL_NUM_PAIRS:
+	            Config.getBoolean( this, REQUIRE_EUQL_NUM_PAIRS );
+	            isValid = true;
+	            break;
+	    }
+	    return isValid;
+	}
 
 	/**
 	 * Set {@value #NUM_VALID_READS} as the number of reads field.
