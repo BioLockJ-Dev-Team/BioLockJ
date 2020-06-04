@@ -60,6 +60,7 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 
 	@Override
 	public void checkDependencies() throws Exception {
+		super.checkDependencies();
 		isValidProp(LAUNCHER);
 		isValidProp(PARAM);
 		isValidProp(SCRIPT);
