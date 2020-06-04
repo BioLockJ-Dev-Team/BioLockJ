@@ -23,6 +23,7 @@ import biolockj.api.ApiModule;
 import biolockj.module.BioModule;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.ModuleUtil;
+import biolockj.util.RMetaUtil;
 
 /**
  * This BioModule is used to build the R script used to generate taxonomy statistics and plots.
@@ -50,6 +51,7 @@ public class R_CalculateStats extends R_Module implements ApiModule {
 		super.checkDependencies();
 		Config.requireString( this, R_ADJ_PVALS_SCOPE );
 		Config.requireString( this, R_PVAL_ADJ_METHOD );
+		RMetaUtil.classifyReportableMetadata( this );
 		Config.getPositiveDoubleVal( this, Constants.R_RARE_OTU_THRESHOLD );
 	}
 
