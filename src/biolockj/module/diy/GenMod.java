@@ -83,7 +83,7 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	            isValid = true;
 	            break;
 	        case RESOURCES:
-	        	getResources();
+	        	Config.getExistingFileList( this, RESOURCES );
 	            isValid = true;
 	            break;
 	    }
@@ -114,17 +114,6 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		return " " + param;
 
 	}
-	
-	protected List<File> getResources() throws ConfigFormatException, ConfigPathException, DockerVolCreationException{
-		List<File> files = new ArrayList<>();
-		if ( Config.getString( this, RESOURCES ) == null ) return files;//return empty list
-		List<String> paths = Config.getList( this, RESOURCES );
-		for (String path : paths ) {
-			File file = Config.getExistingFileObjectFromPath( path );
-			files.add(file);
-		}
-		return files;
-	}
 
 	protected String transferScript() throws ConfigPathException, IOException, Exception {
 		final File original = Config.requireExistingFile( this, SCRIPT );
@@ -136,9 +125,12 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	}
 	
 	protected void transferResources() throws ConfigPathException, IOException, Exception {
-		for (File file : getResources() ) {
-			FileUtils.copyFileToDirectory( file, getResourceDir() );
-			Log.info(this.getClass(), "Copied resource " + file.getAbsolutePath() + " to module resource folder: " + getResourceDir());
+		if( Config.getString( this, RESOURCES ) != null ) {
+			for( File file: Config.getExistingFileList( this, RESOURCES ) ) {
+				FileUtils.copyFileToDirectory( file, getResourceDir() );
+				Log.info( this.getClass(),
+					"Copied resource " + file.getAbsolutePath() + " to module resource folder: " + getResourceDir() );
+			}
 		}
 	}
 	

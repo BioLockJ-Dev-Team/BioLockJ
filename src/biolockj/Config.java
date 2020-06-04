@@ -670,9 +670,10 @@ public class Config {
 	 *
 	 * @param name Property name
 	 * @param data Collection of data to store using the key = property
+	 * @param module if module is not null, and the props already include a module-specific form of this property, save the new value to the module specific form.
 	 * @throws DockerVolCreationException 
 	 */
-	public static void setConfigProperty( final String name, final Collection<?> data ) throws DockerVolCreationException {
+	public static void setConfigProperty( final String name, final Collection<?> data, final BioModule module ) throws DockerVolCreationException {
 		allUsedProps.putAll( moduleUsedProps );
 		String origProp = allUsedProps.get( name );
 		origProp = origProp != null && origProp.isEmpty() ? null: origProp;
@@ -688,7 +689,7 @@ public class Config {
 			val = BioLockJUtil.getCollectionAsString( fileData );
 		} else val = BioLockJUtil.getCollectionAsString( data );
 
-		props.setProperty( name, val );
+		setConfigProperty(name, val);
 
 		final boolean hasVal = val != null && !val.isEmpty();
 		if( origProp == null && hasVal || origProp != null && !hasVal ||
@@ -697,10 +698,23 @@ public class Config {
 			moduleUsedProps.put( name, val );
 		}
 	}
+	/**
+	 * Sets a property value in the props cache as a list
+	 *
+	 * @param name Property name
+	 * @param data Collection of data to store using the key = property
+	 * @throws DockerVolCreationException 
+	 */
+	public static void setConfigProperty( final String name, final Collection<?> data ) throws DockerVolCreationException {
+		setConfigProperty(name, data, null);
+	}
 
-	public static void setFilePathProperty(final String name, String val) throws DockerVolCreationException {
-		if ( DockerUtil.inDockerEnv() ) val = DockerUtil.deContainerizePath( val );
-		setConfigProperty(name, val);
+	public static void setFilePathProperty(final String name, final String val, final BioModule module) throws DockerVolCreationException {
+		String path = DockerUtil.deContainerizePath( val );
+		setConfigProperty(name, path, module);
+	}
+	public static void setFilePathProperty(final String name, final String val) throws DockerVolCreationException {
+		setFilePathProperty(name, val, null);
 	}
 	
 	/**
@@ -708,8 +722,11 @@ public class Config {
 	 *
 	 * @param name Property name
 	 * @param val Value to assign to property
+	 * @param module if module is not null, and the props already include a module-specific form of this property, save the new value to the module specific form.
 	 */
-	public static void setConfigProperty( final String name, final String val ) {
+	public static void setConfigProperty( final String genericName, final String val, final BioModule module ) {
+		String name = getModulePropName(module, genericName);
+		if ( !genericName.equals( name )) Log.debug(Config.class, "Saving value to property [" + name + "] in place of [" + genericName + "].");
 		String origProp = allUsedProps.get( name );
 		origProp = origProp != null && origProp.isEmpty() ? null: origProp;
 		props.setProperty( name, val );
@@ -719,6 +736,15 @@ public class Config {
 			Log.info( Config.class, "Set Config property [ " + name + " ] = " + val );
 			allUsedProps.put( name, val );
 		}
+	}
+	/**
+	 * Sets a property value in the props cache
+	 *
+	 * @param name Property name
+	 * @param val Value to assign to property
+	 */
+	public static void setConfigProperty( final String name, final String val ) {
+		setConfigProperty(name, val, null);
 	}
 
 	/**
@@ -772,6 +798,18 @@ public class Config {
 		final File f = getExistingFileObjectFromPath( getString( module, property ) );
 		if( props != null && f != null ) Config.setFilePathProperty( getModulePropName( module, property ), f.getAbsolutePath() );
 		return f;
+	}
+	
+	public static List<File> getExistingFileList( final BioModule module, final String property ) throws ConfigPathException, DockerVolCreationException {
+		if ( Config.getString( module, property ) == null ) return null;
+		List<File> files = new ArrayList<>();
+		List<String> paths = getList( module, property );
+		for (String path : paths ) {
+			File file = getExistingFileObjectFromPath( path );
+			files.add(file);
+		}
+		if( props != null && !files.isEmpty() ) setConfigProperty( property, files, module );
+		return files;
 	}
 	
 	/**
