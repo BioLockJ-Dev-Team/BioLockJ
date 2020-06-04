@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import biolockj.Config;
+import biolockj.Constants;
 import biolockj.Log;
 import biolockj.Properties;
 import biolockj.api.API_Exception;
@@ -13,6 +14,7 @@ import biolockj.api.ApiModule;
 import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
 import biolockj.exception.DockerVolCreationException;
+import biolockj.exception.SpecialPropertiesException;
 import biolockj.module.ScriptModuleImpl;
 import biolockj.util.BioLockJUtil;
 
@@ -22,6 +24,7 @@ public class Rmarkdown extends ScriptModuleImpl implements ApiModule {
 		super();
 		addNewProperty( RMD_FILE, Properties.FILE_PATH, RMD_FILE_DESC );
 		addNewProperty( RESOURCES, Properties.FILE_PATH_LIST, RESOURCES_DESC );
+		addGeneralProperty( Constants.EXE_RSCRIPT );
 	}
 	
 
@@ -30,6 +33,10 @@ public class Rmarkdown extends ScriptModuleImpl implements ApiModule {
 		super.checkDependencies();
 		isValidProp(RMD_FILE);
 		isValidProp(RESOURCES);
+		isValidProp(Constants.EXE_RSCRIPT);
+		//TODO: check for Rscript
+		//TODO: check for rmarkdown package
+		//TODO: check for pandoc
 	}
 
 	@Override
@@ -42,6 +49,10 @@ public class Rmarkdown extends ScriptModuleImpl implements ApiModule {
 	            break;
 	        case RESOURCES:
 	        	Config.getExistingFileList( this, RESOURCES );
+	            isValid = true;
+	            break;
+	        case Constants.EXE_RSCRIPT:
+	        	Config.getExe( this, Constants.EXE_RSCRIPT );
 	            isValid = true;
 	            break;
 	    }
@@ -69,10 +80,10 @@ public class Rmarkdown extends ScriptModuleImpl implements ApiModule {
 		return lines;
 	}
 	
-	private String get_key_cmd() throws ConfigPathException, ConfigNotFoundException, DockerVolCreationException{
+	private String get_key_cmd() throws ConfigPathException, ConfigNotFoundException, DockerVolCreationException, SpecialPropertiesException{
 		String rmd_name = Config.requireExistingFile( this, RMD_FILE ).getName();
-		// should end up like: Rscript -e "rmarkdown::render('../resources/ReproduceFigure.Rmd', output_dir='../output')"
-		String key_cmd = "Rscript -e \"rmarkdown::render('../" + RES_DIR + "/" + rmd_name + "', output_dir='../output')\"";
+		// this should end up like: Rscript -e "rmarkdown::render('../resources/ReproduceFigure.Rmd', output_dir='../output')"
+		String key_cmd = Config.getExe( this, Constants.EXE_RSCRIPT ) + " -e \"rmarkdown::render('../" + RES_DIR + "/" + rmd_name + "', output_dir='../output')\"";
 		return key_cmd;
 	}
 	
