@@ -9,7 +9,7 @@
 # param 1 - the configFile to read from
 # param 2 - one of: upload or mount
 main(){
-	cd $(dirname $1)
+	cd $(dirname "$1")
 	primaryConfig=$(basename $1)
 	dirList=($(dirname $(to_abs_path $primaryConfig)))
 	dockerCopyPath=$(get_host_file $primaryConfig) && primaryConfig=$dockerCopyPath
@@ -136,15 +136,16 @@ find_files(){
 		processedVars=$(eval echo "$prop") && prop=$processedVars
 		if possible_file_path $prop; then
 			prop=$(echo ${prop/#..\//`cd ..; pwd`\/})
-			[ $prop == ".." ] && prop=$(`cd ..; pwd`)
+			[ "$prop" == ".." ] && prop=$(`cd ..; pwd`)
 			prop=$(echo ${prop/#.\//`pwd`\/})
-			[ $prop == "." ] && prop=`pwd`
-			if verifyDir $prop; then
-				add_to_dirList $prop
-				add_to_fileList $prop
-			elif verifyFile $prop; then
-				add_to_dirList $(dirname $prop) #add its parent to dirList()
-				add_to_fileList $prop
+			[ "$prop" == "." ] && prop=`pwd`
+			if verifyDir "$prop"; then
+				add_to_dirList "$prop"
+				add_to_fileList "$prop"
+			elif verifyFile "$prop"; then
+				if string_contains_space $prop ; then echo "WARNING: File paths that contain spaces are often problematic." >&2; fi
+				add_to_dirList $(dirname "$prop") #add its parent to dirList()
+				add_to_fileList "$prop"
 			fi
 		fi
 	done
