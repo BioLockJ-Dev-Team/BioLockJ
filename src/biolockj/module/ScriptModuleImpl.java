@@ -91,7 +91,7 @@ public abstract class ScriptModuleImpl extends BioModuleImpl implements ScriptMo
 	}
 
 	@Override
-	public String[] getJobParams() {
+	public String[] getJobParams() throws Exception {
 		if( getMainScript() == null ) return null;
 		return new String[] { getMainScript().getAbsolutePath() };
 	}

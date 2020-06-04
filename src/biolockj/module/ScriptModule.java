@@ -50,8 +50,9 @@ public interface ScriptModule extends BioModule {
 	 * Parameters typically contain the full script path and script parameters, if needed.
 	 *
 	 * @return {@link java.lang.Runtime#exec(String)} parameters
+	 * @throws Exception 
 	 */
-	public String[] getJobParams();
+	public String[] getJobParams() throws Exception;
 
 	/**
 	 * Method returns MAIN module script that calls each of the worker scripts.
