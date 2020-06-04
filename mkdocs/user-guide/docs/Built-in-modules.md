@@ -54,6 +54,7 @@ BioLockJ comes packaged with several modules for sequence pre-processing.
 ### DIY modules  
 
   * [GenMod](GENERATED/biolockj.module.diy/GenMod.md)
+  * [Rmarkdown](GENERATED/biolockj.module.diy/Rmarkdown.md)
 
 
 ## List All

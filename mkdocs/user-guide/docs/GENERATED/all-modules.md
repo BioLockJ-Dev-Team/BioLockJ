@@ -50,6 +50,7 @@
 [RemoveLowPathwayCounts](biolockj.module.report.humann2/RemoveLowPathwayCounts.md)                   
 [RemoveScarceOtuCounts](biolockj.module.report.otu/RemoveScarceOtuCounts.md)                   
 [RemoveScarcePathwayCounts](biolockj.module.report.humann2/RemoveScarcePathwayCounts.md)                   
+[Rmarkdown](biolockj.module.diy/Rmarkdown.md) - *Render a custom R markdown.*                   
 [SeqFileValidator](biolockj.module.seq/SeqFileValidator.md) - *This BioModule validates fasta/fastq file formats are valid and enforces min/max read lengths.*                   
 [ShannonDiversity](biolockj.module.diversity/ShannonDiversity.md) - *Calculate shannon diversity as sum p(logp)*                   
 [SraDownload](biolockj.module.getData.sra/SraDownload.md) - *SraDownload downloads and compresses short read archive (SRA) files to fastq.gz*                   
