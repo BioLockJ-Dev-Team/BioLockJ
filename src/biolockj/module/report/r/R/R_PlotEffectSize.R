@@ -7,7 +7,7 @@ getNormTaxaTable <- function( level ){
 	normTable = NULL
 	if( !getProperty( "r_PlotEffectSize.disableFoldChange", FALSE ) && !getProperty( "R_internal.runHumann2" ) ) {
 		normTaxa = pipelineFile( paste0( "_taxaCount_norm_", level, ".tsv$" ) )
-		logInfo( c( "Looking for normalized taxa table count table", paste0( "_taxaCount_norm_", level, ".tsv$" ) ) )
+		message( c( "Looking for normalized taxa table count table", paste0( "_taxaCount_norm_", level, ".tsv$" ) ) )
 		if( !is.null( normTaxa ) ) normTable = readBljTable( normTaxa )
 	}
     return( normTable )
@@ -16,88 +16,84 @@ getNormTaxaTable <- function( level ){
 # The main method is designed to integrate this module with BiolockJ.  
 # It handles pulling data from other modules and options from the BiolockJ properties.
 main <- function(){
-
+  
   doCohensD = !getProperty("r_PlotEffectSize.disableCohensD", FALSE)
   doRSquared = !getProperty("r_PlotEffectSize.disableRSquared", FALSE)
   
-  for( level in taxaLevels() ) {
-    
-    # get normalized taxa vals plus metadata
-    countTable = getCountTable( level )
-    metaTable = getMetaData( level )
-    if( is.null(countTable) || is.null(metaTable) ) { next }
-    if( doDebug() ) sink( getLogFile( level ) )
-    
-    # get stats
-    pvalTable = getStatsTable( level, getProperty("r_PlotEffectSize.parametricPval", FALSE), !getProperty("r_PlotEffectSize.disablePvalAdj", FALSE) )
-    if( doRSquared ) r2Table = getStatsTable( level )
+  # get normalized taxa vals plus metadata
+  countTable = getCountTable( level )
+  metaTable = getMetaData( level )
+  if( is.null(countTable) ) { stop("Stop. Counts table is null. Exiting.") }
+  if( is.null(metaTable) ) { stop("Stop. Metadata table is null. Exiting.") }
+
+  # get stats
+  pvalTable = getStatsTable( level, getProperty("r_PlotEffectSize.parametricPval", FALSE), !getProperty("r_PlotEffectSize.disablePvalAdj", FALSE) )
+  if( doRSquared ) r2Table = getStatsTable( level )
   
-    logInfo( c( "Processing level table[", level, "] has", nrow( countTable ), "rows and", ncol(countTable), "columns") )
-    logInfo( c( "Stat tables have", nrow( pvalTable ), "rows and", ncol( pvalTable ), "columns." ) )
-
-    # make a new pdf output file, specify page size
-    outFileName = getPath( getOutputDir(), paste0(level, "_EffectSizePlots.pdf") )
-    pdf(file=outFileName, paper="letter", width=7.5, height=10 )
-
-    for( field in getReportFields() ){
+  message( c( "Processing level table[", level, "] has", nrow( countTable ), "rows and", ncol(countTable), "columns") )
+  message( c( "Stat tables have", nrow( pvalTable ), "rows and", ncol( pvalTable ), "columns." ) )
+  
+  # make a new pdf output file, specify page size
+  outFileName = getPath( getOutputDir(), paste0(level, "_EffectSizePlots.pdf") )
+  pdf(file=outFileName, paper="letter", width=7.5, height=10 )
+  
+  for( field in getReportFields() ){
     
-      isBinaryAtt = field %in% getBinaryFields()
-      pvals = pvalTable[,field]
-      names(pvals) = row.names(pvalTable)
+    isBinaryAtt = field %in% getBinaryFields()
+    pvals = pvalTable[,field]
+    names(pvals) = row.names(pvalTable)
+    
+    # rSquared piggy-backs on effects size for selection and ordering, 
+    # so IF both are plotted, they are ploted in the same order.
+    # Even if it is not a binary attribute, the normalized P-values should have AT LEAST 2 tables
+    if( doCohensD || doRSquared ){ 
       
-      # rSquared piggy-backs on effects size for selection and ordering, 
-      # so IF both are plotted, they are ploted in the same order.
-      # Even if it is not a binary attribute, the normalized P-values should have AT LEAST 2 tables
-      if( doCohensD || doRSquared ){ 
- 
-	      r2vals=r2Table[,field]
-	      names(r2vals) = row.names(r2Table)
-	      normPvals = split(countTable[row.names(metaTable),], f=metaTable[,field])
-	      
-	      saveRefTable = NULL
-	      if( doCohensD && isBinaryAtt ) saveRefTable=getPath( getTempDir(), paste(level, field, "effectSize.tsv", sep="_") )
-	      type = c( "CohensD", "rSquared" )
-	      if( !doCohensD ) type = "rSquared" else if( !doRSquared ) type = "CohensD"
-	      data = calcBarSizes( type, normPvals, pvals, r2vals, saveRefTable )
-	      
-	     if( doRSquared ){ 
-	        drawPlot( data[["toPlot"]][,c("pvalue","rSquared")], field, "rSquared", "R-squared", data[["comments"]][c(1,3)] )
-	        logInfo( c("Completed r-squared plot for level:", level, "and report field:", field) )
-	     }
-	      
-	      if( doCohensD && isBinaryAtt ) {
-	        logInfo( c( "Effect size: Calling drawPlot for level:", level, ":", field ) )
-	        drawPlot( data[["toPlot"]], field, "CohensD", "Effect Size (Cohen's D)", data[["comments"]][c(1,2)], data[["xAxisLab2"]] )
-	      }
+      r2vals=r2Table[,field]
+      names(r2vals) = row.names(r2Table)
+      normPvals = split(countTable[row.names(metaTable),], f=metaTable[,field])
+      
+      saveRefTable = NULL
+      if( doCohensD && isBinaryAtt ) saveRefTable=getPath( getTempDir(), paste(level, field, "effectSize.tsv", sep="_") )
+      type = c( "CohensD", "rSquared" )
+      if( !doCohensD ) type = "rSquared" else if( !doRSquared ) type = "CohensD"
+      data = calcBarSizes( type, normPvals, pvals, r2vals, saveRefTable )
+      
+      if( doRSquared ){ 
+        drawPlot( data[["toPlot"]][,c("pvalue","rSquared")], field, "rSquared", "R-squared", data[["comments"]][c(1,3)] )
+        message( c("Completed r-squared plot for level:", level, "and report field:", field) )
       }
       
-		if( isBinaryAtt && !getProperty("r_PlotEffectSize.disableFoldChange", FALSE) ) {
-			plotFoldChange( countTable, metaTable, level, field, pvals )
-	    }
+      if( doCohensD && isBinaryAtt ) {
+        message( c( "Effect size: Calling drawPlot for level:", level, ":", field ) )
+        drawPlot( data[["toPlot"]], field, "CohensD", "Effect Size (Cohen's D)", data[["comments"]][c(1,2)], data[["xAxisLab2"]] )
+      }
     }
-    dev.off()
-    if( doDebug() ) sink()
+    
+    if( isBinaryAtt && !getProperty("r_PlotEffectSize.disableFoldChange", FALSE) ) {
+      plotFoldChange( countTable, metaTable, level, field, pvals )
+    }
   }
+  dev.off()
 }
 
 # Plot fold changes for normalized counts
 plotFoldChange <- function( countTable, metaTable, level, field, pvals ){
-  	normCountTable = getNormTaxaTable( level )
-	if( is.null( normCountTable ) ) {
-		logInfo( "Normalized data not found by analyzing file names, using same table used for other plots" )
-	 	normCountTable = countTable
-	} else {
-		logInfo( "Using normalized data for fold change plot" )
-	}
-	
-	splitRelAbund = split(normCountTable[row.names(metaTable),], f=metaTable[,field])
-	logInfo( c("Fold change: Calling calcBarSizes for level:", level, ":", field ) )
-          
-	saveRefTable=getPath( getTempDir(), paste(level, field,"foldChange.tsv", sep="_") ) 
-	data = calcBarSizes( "foldChange", splitRelAbund, pvals, saveRefTable=saveRefTable )
-          
-	logInfo( c( "Fold change: Calling drawPlot for level:", level, ":", field ) )
-	drawPlot( data[["toPlot"]], field, "foldChange", "Fold Change", data[["comments"]], data[["xAxisLab2"]] )
+  normCountTable = getNormTaxaTable( level )
+  if( is.null( normCountTable ) ) {
+    message( "Normalized data not found by analyzing file names, using same table used for other plots" )
+    normCountTable = countTable
+  } else {
+    message( "Using normalized data for fold change plot" )
+  }
+  
+  splitRelAbund = split(normCountTable[row.names(metaTable),], f=metaTable[,field])
+  message( c("Fold change: Calling calcBarSizes for level:", level, ":", field ) )
+  
+  saveRefTable=getPath( getTempDir(), paste(level, field,"foldChange.tsv", sep="_") ) 
+  data = calcBarSizes( "foldChange", splitRelAbund, pvals, saveRefTable=saveRefTable )
+  
+  message( c( "Fold change: Calling drawPlot for level:", level, ":", field ) )
+  drawPlot( data[["toPlot"]], field, "foldChange", "Fold Change", data[["comments"]], data[["xAxisLab2"]] )
 }
 
 # error handler designed for calcBarSizes and drawPlot
@@ -114,7 +110,7 @@ errorHandler1 = function(err, level, field) {
   }else{
     # pass error to biolockj to fail module
     msg = paste0(msg, "\n", origErr)
-    writeErrors( c( msg ) )
+    stop( c( msg ) )
   }
 }
 
@@ -228,7 +224,7 @@ calcBarSizes <- function( type, data, pvals, r2vals=NULL, saveRefTable=NULL ) {
     header = paste("#", header)
     writeLines(header, con=saveRefTable)
     suppressWarnings(write.table(toPrint, file=saveRefTable, quote=FALSE, sep="\t", row.names = FALSE, append = TRUE))
-    logInfo( "Saved reference table to", saveRefTable )
+    message( "Saved reference table to", saveRefTable )
   }
   
   # get rid of the rows that will not be plotted
@@ -338,7 +334,7 @@ drawPlot <- function(toPlot, title, barSizeColumn, xAxisLab, comments, xAxisLab2
 	    mais[1] = mais[1] + inchesToRemove
 	    par(mai=mais)
     }else{
-    		logInfo( c( "Not enough space in plot for", nrow(toPlot), "bars with", fixedBarHeightInches, 
+    		message( c( "Not enough space in plot for", nrow(toPlot), "bars with", fixedBarHeightInches, 
                   " for each bar. Bar widths will be set to fit the space.") )
     }
   
@@ -412,3 +408,18 @@ drawPlot <- function(toPlot, title, barSizeColumn, xAxisLab, comments, xAxisLab2
     mtext(paste0("( * ) -value <= ", pvalStar), side=3, line=0, adj=0)
   }
 }
+
+
+message("Current Working directory: ",getwd())
+
+args = commandArgs(trailingOnly = TRUE)
+message("all args: ", args)
+level = args[1]
+message("Running script for level: ", level)
+
+source("../resources/BioLockJ_Lib.R")
+
+main()
+
+sessionInfo()
+

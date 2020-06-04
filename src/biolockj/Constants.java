@@ -62,7 +62,7 @@ public class Constants {
 		Properties.registerProp( R_PCH, Properties.INTEGER_TYPE, "Sets R plot pch parameter for PDF report" );
 		Properties.registerProp( R_RARE_OTU_THRESHOLD, Properties.NUMERTIC_TYPE, "If >=1, R will filter OTUs found in fewer than this many samples. If <1, R will interperate the value as a percentage and discard OTUs not found in at least that percentage of samples" );
 		Properties.registerProp( R_SAVE_R_DATA, Properties.BOOLEAN_TYPE, "If Y, all R script generating BioModules will save R Session data to the module output directory to a file using the extension \".RData\"" );
-		Properties.registerProp( R_TIMEOUT, Properties.INTEGER_TYPE, "the # minutes before R Script will time out and fail; If undefined, no timeout is used." );
+		Properties.registerProp( R_TIMEOUT, Properties.INTEGER_TYPE, R_TIMEOUT_DESC );
 		Properties.registerProp( R_USE_UINQUE_COLORS, Properties.BOOLEAN_TYPE, "force to use a unique color for every value in every field plotted; only recommended for low numbers of metadata columns/values." );
 		
 		Properties.registerProp( SCRIPT_DEFAULT_HEADER, Properties.STRING_TYPE, SCRIPT_DEFAULT_HEADER_DESC);
@@ -832,10 +832,11 @@ public class Constants {
 	public static final String R_USE_UINQUE_COLORS = "r.useUniqueColors";
 
 	/**
-	 * {@link biolockj.Config} property {@value #R_TIMEOUT} defines the number of minutes before R script fails due to
-	 * timeout. If undefined, no timeout is used.
+	 * {@link biolockj.Config} property {@value #R_TIMEOUT}: {@value #R_TIMEOUT_DESC} 
 	 */
 	public static final String R_TIMEOUT = "r.timeout";
+	private static final String R_TIMEOUT_DESC = "defines the number of minutes before R script fails due to\n" + 
+		"	 * timeout. If set to 0, an estimate is used.";
 	
 	/**
 	 * {@link biolockj.Config} Boolean property to signal R scripts to build HumanN2 reports

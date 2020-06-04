@@ -54,6 +54,14 @@ public class R_CalculateStats extends R_Module implements ApiModule {
 		RMetaUtil.classifyReportableMetadata( this );
 		Config.getPositiveDoubleVal( this, Constants.R_RARE_OTU_THRESHOLD );
 	}
+	
+	@Override
+	protected Map<String, String> requiredRPackages() {
+		Map<String, String> packages = super.requiredRPackages();
+		packages.put("coin","https://CRAN.R-project.org");
+		packages.put("Kendall","https://CRAN.R-project.org");
+		return packages;
+	}
 
 	/**
 	 * Get the stats file for the given fileType and taxonomy level.
@@ -210,6 +218,17 @@ public class R_CalculateStats extends R_Module implements ApiModule {
 
 	@Override
 	public String getCitationString() {
-		return "BioLockJ " + BioLockJUtil.getVersion() + System.lineSeparator() + "Module developted by Mike Sioda.";
+		return "BioLockJ " + BioLockJUtil.getVersion() + System.lineSeparator() + "Module created by Mike Sioda and developed by Ivory Blakley";
 	}
+
+	@Override
+	protected String getModuleRScriptName() {
+		return "R_CalculateStats.R";
+	}
+
+	@Override
+	protected String getModulePrefix() {
+		return "r_CalculateStats";
+	}
+
 }

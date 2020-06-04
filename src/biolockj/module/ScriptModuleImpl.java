@@ -105,15 +105,11 @@ public abstract class ScriptModuleImpl extends BioModuleImpl implements ScriptMo
 	 */
 	@Override
 	public File getMainScript() {
-		final File scriptDir = new File( getModuleDir().getAbsolutePath() + File.separator + Constants.SCRIPT_DIR );
-		if( scriptDir.isDirectory() ) for( final File file: getScriptDir().listFiles() ) {
-			final String name = file.getName();
-			if( name.startsWith( MAIN_SCRIPT_PREFIX ) ) if( this instanceof R_Module && !DockerUtil.inDockerEnv() ) {
-				if( name.endsWith( Constants.R_EXT ) ) return file;
-				else if( name.endsWith( SH_EXT ) ) return file;
-			} else if( file.getName().endsWith( SH_EXT ) ) return file;
+		for( final File file: getScriptDir().listFiles() ) {
+			if (file.getName().startsWith( MAIN_SCRIPT_PREFIX ) && file.getName().endsWith( SH_EXT )) {
+				return file;
+			}
 		}
-
 		return null;
 	}
 

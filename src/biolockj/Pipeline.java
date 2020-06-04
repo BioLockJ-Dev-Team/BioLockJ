@@ -348,13 +348,7 @@ public class Pipeline {
 	}
 
 	private static IOFileFilter getWorkerScriptFilter( final ScriptModule module ) {
-		String filterString = "*" + Constants.SH_EXT;
-		if( DockerUtil.inDockerEnv() && module instanceof R_Module )
-			filterString = BioModule.MAIN_SCRIPT_PREFIX + "*" + Constants.SH_EXT;
-		else if( module instanceof R_Module ) filterString = BioModule.MAIN_SCRIPT_PREFIX + "*" + Constants.R_EXT;
-
-		return new WildcardFileFilter( filterString );
-
+		return new WildcardFileFilter("*" + Constants.SH_EXT );
 	}
 
 	private static Collection<File> getWorkerScripts( final ScriptModule module ) throws Exception {
@@ -362,7 +356,7 @@ public class Pipeline {
 			FileUtils.listFiles( module.getScriptDir(), getWorkerScriptFilter( module ), null );
 
 		final File mainScript = module.getMainScript();
-		if( !( module instanceof R_Module ) && mainScript != null ) scriptFiles.remove( mainScript );
+		if( mainScript != null ) scriptFiles.remove( mainScript );
 
 		if( !DockerUtil.inAwsEnv() ) Log.debug( Pipeline.class,
 			"mainScript = " + ( mainScript == null ? "<null>": mainScript.getAbsolutePath() ) );

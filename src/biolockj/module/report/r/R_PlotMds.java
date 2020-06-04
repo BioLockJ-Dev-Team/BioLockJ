@@ -12,6 +12,7 @@
 package biolockj.module.report.r;
 
 import java.util.List;
+import java.util.Map;
 import biolockj.Config;
 import biolockj.Constants;
 import biolockj.Properties;
@@ -26,7 +27,6 @@ import biolockj.util.MetaUtil;
  * @blj.web_desc R Plot MDS
  */
 public class R_PlotMds extends R_Module implements ApiModule {
-	
 
 	public R_PlotMds() {
 		super();
@@ -57,6 +57,13 @@ public class R_PlotMds extends R_Module implements ApiModule {
 		if( Config.requirePositiveInteger( this, R_MDS_NUM_AXIS ) < 2 )
 			throw new Exception( "Config property [" + R_MDS_NUM_AXIS + "] must be > 2" );
 	}
+	
+	@Override
+	protected Map<String, String> requiredRPackages() {
+		Map<String, String> packages = super.requiredRPackages();
+		packages.put("vegan","https://CRAN.R-project.org");
+		return packages;
+	}
 
 	/**
 	 * {@link biolockj.Config} property: {@value #R_MDS_DISTANCE} defines the distance index to use in the capscale
@@ -82,7 +89,17 @@ public class R_PlotMds extends R_Module implements ApiModule {
 
 	@Override
 	public String getCitationString() {
-		return "Module developed by Mike Sioda" + System.lineSeparator() + "BioLockJ " + BioLockJUtil.getVersion();
+		return "BioLockJ " + BioLockJUtil.getVersion() + System.lineSeparator() + "Module created by Mike Sioda and developed by Ivory Blakley";
+	}
+
+	@Override
+	protected String getModuleRScriptName() {
+		return "R_PlotMds.R";
+	}
+
+	@Override
+	protected String getModulePrefix() {
+		return "r_PlotMds";
 	}
 
 }

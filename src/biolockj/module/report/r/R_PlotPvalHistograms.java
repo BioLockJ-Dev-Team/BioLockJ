@@ -15,6 +15,7 @@ import java.util.List;
 import biolockj.Config;
 import biolockj.Constants;
 import biolockj.api.ApiModule;
+import biolockj.module.report.taxa.NormalizeTaxaTables;
 import biolockj.util.BioLockJUtil;
 
 /**
@@ -37,11 +38,14 @@ public class R_PlotPvalHistograms extends R_Module implements ApiModule {
 	}
 
 	/**
-	 * Returns {@link #getStatPreReqs()}
+	 * Returns {@link Constants#DEFAULT_STATS_MODULE} unless the pipeline input is already a stats table.
 	 */
 	@Override
 	public List<String> getPreRequisiteModules() throws Exception {
-		return getStatPreReqs();
+		List<String> preReqs = super.getPreRequisiteModules();
+		if( !BioLockJUtil.pipelineInputType( BioLockJUtil.PIPELINE_STATS_TABLE_INPUT_TYPE ) )
+			preReqs.add( Config.getString( null, Constants.DEFAULT_STATS_MODULE ) );		
+		return preReqs;
 	}
 
 	@Override
@@ -52,6 +56,16 @@ public class R_PlotPvalHistograms extends R_Module implements ApiModule {
 	@Override
 	public String getCitationString() {
 		return "Module developed by Mike Sioda" + System.lineSeparator() + "BioLockJ " + BioLockJUtil.getVersion();
+	}
+
+	@Override
+	protected String getModuleRScriptName() {
+		return "R_PlotPvalHistograms.R";
+	}
+
+	@Override
+	protected String getModulePrefix() {
+		return "plotPvalHistograms";
 	}
 
 }

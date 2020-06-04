@@ -12,18 +12,22 @@
 package biolockj.module.report.r;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import biolockj.*;
+import biolockj.Properties;
+import biolockj.exception.BioLockJException;
+import biolockj.exception.ConfigFormatException;
+import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
 import biolockj.exception.ConfigViolationException;
 import biolockj.exception.DockerVolCreationException;
+import biolockj.exception.RequiredRPackageException;
 import biolockj.exception.SpecialPropertiesException;
+import biolockj.module.BioModule;
 import biolockj.module.ScriptModuleImpl;
-import biolockj.module.report.humann2.AddMetadataToPathwayTables;
-import biolockj.module.report.taxa.AddMetadataToTaxaTables;
 import biolockj.util.*;
 
 /**
@@ -39,38 +43,7 @@ public abstract class R_Module extends ScriptModuleImpl {
 		addGeneralProperty( Constants.R_SAVE_R_DATA );
 		addGeneralProperty( Constants.R_COLOR_FILE );
 		addGeneralProperty( Constants.DEFAULT_STATS_MODULE );
-	}
-	
-	/**
-	 * Run R script in docker.
-	 * 
-	 * @return Bash script lines for the docker script
-	 */
-	public List<List<String>> buildDockerBashScript() {
-		final List<List<String>> dockerScriptLines = new ArrayList<>();
-		final List<String> innerList = new ArrayList<>();
-		innerList.add( FUNCTION_RUN_R + " " + getPrimaryScript().getAbsolutePath() );
-		dockerScriptLines.add( innerList );
-		return dockerScriptLines;
-	}
-
-	/**
-	 * Not needed for R script modules.
-	 */
-	@Override
-	public List<List<String>> buildScript( final List<File> files ) throws Exception {
-		return null;
-	}
-
-	@Override
-	public void checkDependencies() throws Exception {
-		super.checkDependencies();
-		Config.getExe( this, Constants.EXE_RSCRIPT );
-		Config.getPositiveInteger( this, Constants.R_TIMEOUT );
-		Config.getBoolean( this, Constants.R_DEBUG );
-		Config.getBoolean( this, Constants.R_SAVE_R_DATA );
-		verifyColorFileFormat();
-
+		addNewProperty( getCustomScriptProp(), Properties.FILE_PATH, "Path to a custom R script to use in place of the built-in module script." );
 	}
 
 	/**
@@ -79,208 +52,119 @@ public abstract class R_Module extends ScriptModuleImpl {
 	 */
 	@Override
 	public void executeTask() throws Exception {
-		writePrimaryScript();
-		if( DockerUtil.inDockerEnv() ) BashScriptBuilder.buildScripts( this, buildDockerBashScript() );
+		getOutputDir();
+		getTempDir();
+		getLogDir();
+		super.executeTask();
 	}
-
-	/**
-	 * If running Docker, run the Docker bash script, otherwise:<br>
-	 * Run {@link biolockj.Config}.{@value #EXE_RSCRIPT} command on the generated R Script:
-	 * {@link ScriptModuleImpl#getMainScript()}.
-	 */
+	
 	@Override
-	public String[] getJobParams() {
-		Log.info( getClass(), "Run MAIN Script: " + getMainScript().getName() );
-		if( DockerUtil.inDockerEnv() ) return super.getJobParams();
-		final String[] cmd = new String[ 2 ];
-		cmd[ 0 ] = getRscriptCmd();
-		cmd[ 1 ] = getMainScript().getAbsolutePath();
-		return cmd;
-	}
-
-	/**
-	 * Get the Module script
-	 * 
-	 * @return Module R script
-	 * @throws Exception if errors occur
-	 */
-	public File getModuleScript() throws Exception {
-		final File rFile = new File( getRTemplateDir() + getModuleScriptName() );
-		if( !rFile.isFile() ) throw new Exception( "Missing R module script: " + rFile.getAbsolutePath() );
-		return rFile;
-	}
-
-	/**
-	 * Require combined count-metadata tables as input.
-	 */
-	@Override
-	public List<String> getPreRequisiteModules() throws Exception {
-		final List<String> preReqs = new ArrayList<>();
-		if( !BioLockJUtil.pipelineInputType( BioLockJUtil.PIPELINE_R_INPUT_TYPE ) )
-			preReqs.add( getMetaMergedModule() );
-		preReqs.addAll( super.getPreRequisiteModules() );
-		return preReqs;
-	}
-
-	/**
-	 * Get the primary R script
-	 * 
-	 * @return File (R script)
-	 */
-	public File getPrimaryScript() {
-		return new File(
-			getScriptDir().getAbsolutePath() + File.separator + MAIN_SCRIPT_PREFIX + getModuleScriptName() );
-	}
-
-	/**
-	 * Produce summary file counts for each file extension in the output directory and the number of log files in the
-	 * temp directory. Any R Script errors detected during execution will also be printed. also contain details of R
-	 * script errors, if any.
-	 */
-	@Override
-	public String getSummary() throws Exception {
-		final StringBuffer sb = new StringBuffer();
-		try {
-
-			final Map<String, Integer> map = new HashMap<>();
-			for( final File file: getOutputDir().listFiles() )
-				if( !file.isFile() ) continue;
-				else if( file.getName().indexOf( "." ) > -1 ) {
-					final String ext = file.getName().substring( file.getName().lastIndexOf( "." ) + 1 );
-					if( map.get( ext ) == null ) map.put( ext, 0 );
-
-					map.put( ext, map.get( ext ) + 1 );
-				} else {
-					if( map.get( "none" ) == null ) map.put( "none", 0 );
-
-					map.put( "none", map.get( "none" ) + 1 );
-				}
-
-			final File rScript = getPrimaryScript();
-			if( DockerUtil.inAwsEnv() && ( rScript == null || !rScript.isFile() ) )
-				sb.append( "Failed to generate R Script!" + RETURN );
-			else {
-				sb.append( getClass().getSimpleName() + ( getErrors().isEmpty() ? " successful": " failed" ) + ": " +
-					rScript.getAbsolutePath() + RETURN );
-
-				for( final String ext: map.keySet() )
-					sb.append( "Generated " + map.get( ext ) + " " + ext + " files" + RETURN );
-
-				if( Config.getBoolean( this, Constants.R_DEBUG ) ) {
-					final IOFileFilter ff = new WildcardFileFilter( "*" + LOG_EXT );
-					final Collection<File> debugLogs = FileUtils.listFiles( getLogDir(), ff, null );
-					sb.append( "Generated " + debugLogs.size() + " log files" + RETURN );
-				}
-
-				sb.append( getErrors() );
-			}
-
-		} catch( final Exception ex ) {
-			final String msg = "Unable to produce " + getClass().getName() + " summary : " + ex.getMessage();
-			Log.warn( getClass(), msg );
-			sb.append( msg + RETURN );
-			ex.printStackTrace();
+	public List<List<String>> buildScript( final List<File> files ) throws Exception {
+		List<List<String>> outer = new ArrayList<>();
+		getFunctionLib();
+		for (String level : Config.getList( this, Constants.REPORT_TAXONOMY_LEVELS )) {
+			List<String> inner = new ArrayList<>();
+			inner.add( Config.getExe( this, Constants.EXE_RSCRIPT ) + " " + getModuleRScript().getAbsolutePath() + " " + level );
+			outer.add( inner );
 		}
+		return outer;
+	}
+	
+	@Override
+	public void checkDependencies() throws Exception {
+		super.checkDependencies();
+		getModuleRScript();
+		Config.getExe( this, Constants.EXE_RSCRIPT );
+		boolean its0 = Config.getString( this, Constants.R_TIMEOUT ) != null && Config.getString( this, Constants.R_TIMEOUT ).equals("0");
+		if ( ! its0 ) Config.getPositiveInteger( this, Constants.R_TIMEOUT );
+		Config.getBoolean( this, Constants.R_DEBUG );
+		Config.getBoolean( this, Constants.R_SAVE_R_DATA );
+		verifyColorFileFormat();
+		checkRPackages();
+	}
+	
+	protected Map<String, String> requiredRPackages(){
+		Map<String, String> packages = new HashMap<>();
+		//These packages are required by the current BioLockJ_Lib.R functions
+		packages.put("properties","https://CRAN.R-project.org");
+		packages.put("stringr","https://CRAN.R-project.org");
+		packages.put("ggpubr","https://CRAN.R-project.org");
+		return packages;
+	}
 
-		return sb.toString();
+	private void checkRPackages() throws SpecialPropertiesException, IOException, InterruptedException,
+		RequiredRPackageException, ConfigNotFoundException {
+		Set<String> failedPackages = new HashSet<String>();
+		for( String pack: requiredRPackages().keySet() ) {
+			if( !checkPackage( pack ) ) failedPackages.add( pack );
+		}
+		if( failedPackages.size() > 0 ) { throw new RequiredRPackageException( failedPackages, requiredRPackages() ); }
+	}
+	
+	private boolean checkPackage(String packageName) throws SpecialPropertiesException, IOException, InterruptedException, ConfigNotFoundException {
+		boolean isGood;
+		String cmd = Config.getExe( this, Constants.EXE_RSCRIPT ) + " -e 'library(" + packageName + ");packageVersion(\"" + packageName + "\")'";
+		if (Config.getString( this, Constants.PIPELINE_ENV ).equals(Constants.PIPELINE_ENV_CLUSTER)) {
+			for (String addLib : BashScriptBuilder.loadModules(this)) {
+				cmd = addLib + cmd;
+			}
+		}
+		if (DockerUtil.inDockerEnv()) {
+			//TODO: revisit this after the check exe feature is finished.
+			cmd = Config.getExe( this, Constants.EXE_DOCKER ) + " run --rm " + DockerUtil.getDockerImage( this ) + " " + cmd;
+		}
+		Process p = Runtime.getRuntime().exec( cmd );
+		final BufferedReader brOut = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
+		final BufferedReader brErr = new BufferedReader( new InputStreamReader( p.getErrorStream() ) );
+		String out = null;
+		String err = null;
+		do{
+			if (out != null) Log.info(getClass(), out);
+			if (err != null) Log.info(getClass(), err);
+			out = brOut.readLine();
+			err = brErr.readLine();
+		}while( out != null ||  err != null ) ;
+		p.waitFor();
+		p.destroy();
+		isGood = p.exitValue() == 0;
+		return isGood;
 	}
 
 	/**
 	 * The R Script should run quickly, timeout = 10 minutes appears to work well.
+	 * @throws ConfigFormatException 
 	 */
 	@Override
-	public Integer getTimeout() {
-		try {
-			return Config.getPositiveInteger( this, Constants.R_TIMEOUT );
-		} catch( final Exception ex ) {
-			Log.error( getClass(), ex.getMessage(), ex );
+	public Integer getTimeout() throws ConfigFormatException {
+		int timeout = 0;
+		if (Config.getString( this, Constants.R_TIMEOUT ) == null ||
+						Config.getIntegerProp( this, Constants.R_TIMEOUT ) == 0) {
+			Log.info(R_Module.class, Constants.R_TIMEOUT + " is set to null or 0; so the timeout time will be calcuated by the module.");
+			timeout = calcTimeout(getInputFiles());
+			Log.info(getClass(), "Using calculated timeout of " + timeout + " minutes.");
+		}else {
+			timeout = Config.getPositiveInteger( this, Constants.R_TIMEOUT );
 		}
-		return null;
+		return timeout;
 	}
-
+	
 	/**
-	 * This method generates the bash function that calls the R script: runScript.
+	 * Use this to estimate the max time needed to process a given list of inputs.
+	 * Estimate the time that the head node should wait on the module using all inputs;
+	 * Estimate the wait time for a given worker using only its assigned inputs.
+	 * @param inputs
+	 * @return
 	 */
-	@Override
-	public List<String> getWorkerScriptFunctions() throws Exception {
-		final List<String> lines = super.getWorkerScriptFunctions();
-		lines.add( "function " + FUNCTION_RUN_R + "() {" );
-		lines.add( Config.getExe( this, Constants.EXE_RSCRIPT ) + " $1" );
-		lines.add( "}" + RETURN );
-		return lines;
-	}
-
-	/**
-	 * Get correct meta-merged BioModule type for the give module. This is determined by examining previous configured
-	 * modules to see what type of raw count tables are generated.
-	 * 
-	 * @return MetaMerged BioModule
-	 * @throws Exception if errors occur
-	 */
-	protected String getMetaMergedModule() throws Exception {
-		if( PathwayUtil.useHumann2RawCount( this ) ) return AddMetadataToPathwayTables.class.getName();
-		return AddMetadataToTaxaTables.class.getName();
-	}
-
-	/**
-	 * Add {@link biolockj.module.report.r.R_CalculateStats} to standard {@link #getPreRequisiteModules()}
-	 * 
-	 * @return Statistics Module prerequisite if needed
-	 * @throws Exception if errors occur determining eligibility
-	 */
-	protected List<String> getStatPreReqs() throws Exception {
-		final List<String> preReqs = super.getPreRequisiteModules();
-		if( !BioLockJUtil.pipelineInputType( BioLockJUtil.PIPELINE_STATS_TABLE_INPUT_TYPE ) )
-			preReqs.add( Config.getString( null, Constants.DEFAULT_STATS_MODULE ) );
-		return preReqs;
-	}
-
-	/**
-	 * Initialize the R script by creating the MAIN R script that calls source on the BaseScript and adds the R code for
-	 * the runProgarm() method.
-	 *
-	 * @throws Exception if unable to build the R script stub
-	 */
-	protected void writePrimaryScript() throws Exception {
-		getOutputDir();
-		getTempDir();
-		getLogDir();
-		FileUtils.copyFile( getMainR(), getPrimaryScript() );
-		FileUtils.copyFileToDirectory( getFunctionLib(), getScriptDir() );
-		FileUtils.copyFileToDirectory( getModuleScript(), getScriptDir() );
-	}
-
-	private String getErrors() throws Exception {
-		final IOFileFilter ff = new WildcardFileFilter( "*" + Constants.SCRIPT_FAILURES );
-		final Collection<File> scriptsFailed = FileUtils.listFiles( getScriptDir(), ff, null );
-		if( scriptsFailed.isEmpty() ) return "";
-		final String rSpacer = "-------------------------------------";
-		final StringBuffer errors = new StringBuffer();
-
-		errors.append( INDENT + rSpacer + RETURN );
-		errors.append( INDENT + "R Script Errors:" + RETURN );
-		final BufferedReader reader = BioLockJUtil.getFileReader( scriptsFailed.iterator().next() );
-		try {
-			for( String line = reader.readLine(); line != null; line = reader.readLine() )
-				errors.append( INDENT + line + RETURN );
-		} finally {
-			if( reader != null ) reader.close();
+	protected int calcTimeout(final List<File> inputs ) {
+		long totalSize = 0;
+		for (File input : inputs) {
+			totalSize += input.length();
 		}
-		errors.append( INDENT + rSpacer + RETURN );
-		return errors.toString();
-	}
-
-	private String getModuleScriptName() {
-		return getClass().getSimpleName() + Constants.R_EXT;
-	}
-
-	private String getRscriptCmd() {
-		try {
-			return Config.getExe( this, Constants.EXE_RSCRIPT );
-		} catch( final SpecialPropertiesException ex ) {
-			Log.error( getClass(), Constants.EXE_RSCRIPT + " property misconfigured", ex );
-		}
-		return Constants.RSCRIPT;
+		int megabytes = ((Long) Long.divideUnsigned( totalSize, 1000000 )).intValue();
+		if (megabytes == 0) megabytes = 1;
+		// a 2-minute baseline, plus 5 minutes per megabyte of input.
+		int minutes = 2 + ( 5 * megabytes );
+		return minutes;
 	}
 
 	private void verifyColorFileFormat() throws ConfigPathException, IOException, ConfigViolationException, DockerVolCreationException {
@@ -297,82 +181,55 @@ public abstract class R_Module extends ScriptModuleImpl {
 		}
 	}
 
-	/**
-	 * Get the main R script
-	 * 
-	 * @return Main R script
-	 * @throws Exception if errors occur
-	 */
-	public static File getMainR() throws Exception {
-		final File rFile = new File( getRTemplateDir() + Constants.R_MAIN_SCRIPT );
-		if( !rFile.isFile() ) throw new Exception( "Missing R function library: " + rFile.getAbsolutePath() );
-		return rFile;
+	protected File getFunctionLib() throws IOException, BioLockJException  {
+		return getFunctionLib(this);
 	}
-
-	/**
-	 * Get the BioLockJ resource R directory.
-	 * 
-	 * @return System file path
-	 * @throws Exception if errors occur
-	 */
-	public static String getRTemplateDir() throws Exception {
-		return BioLockJUtil.getBljDir().getAbsolutePath() + File.separator + "resources" + File.separator + "R" +
-			File.separator;
+	
+	public static File getFunctionLib(BioModule module) throws IOException, BioLockJException  {
+		URL in = module.getClass().getResource( "R/" + Constants.R_FUNCTION_LIB );
+		File lib = new File(module.getResourceDir(), Constants.R_FUNCTION_LIB);
+		FileUtils.copyURLToFile(in, lib);
+		if( !lib.isFile() ) throw new BioLockJException( "Missing R function library: " + lib.getAbsolutePath() );
+		return lib;
 	}
-
-	/**
-	 * This method generates an R script with the given rCode saved to the given path.
-	 *
-	 * @param path Path to new R Script
-	 * @param rCode R script code
-	 * @throws Exception if I/O errors occur
-	 */
-	public static void writeNewScript( final String path, final String rCode ) throws Exception {
-		final BufferedWriter writer = new BufferedWriter( new FileWriter( path ) );
-		try {
-			writeScript( writer, rCode );
-		} finally {
-			writer.close();
+	
+	protected File getModuleRScript() throws IOException, BioLockJException {
+		File script;
+		File customScript = Config.getExistingFile( this, getCustomScriptProp() );
+		if (customScript != null) {
+			script = new File(getResourceDir(), customScript.getName());
+			FileUtils.copyFileToDirectory( customScript, getResourceDir() );
+		}else {
+			script = new File(getResourceDir(), getModuleRScriptName());
+			if (!script.exists()) {
+				InputStream in = this.getClass().getResourceAsStream( "R/" + getModuleRScriptName() );
+				Files.copy( in, script.toPath() );
+			}			
 		}
+		if( !script.isFile() ) throw new BioLockJException( "Missing module R script: " + script.getAbsolutePath() );
+		return script;
 	}
-
-	/**
-	 * This method formats the rCode to indent code blocks surround by curly-braces "{ }"
-	 * 
-	 * @param writer BufferedWriter writes to the file
-	 * @param rCode R code
-	 * @throws Exception if I/O errors occur
-	 */
-	protected static void writeScript( final BufferedWriter writer, final String rCode ) throws Exception {
-		int indentCount = 0;
-		final StringTokenizer st = new StringTokenizer( rCode, RETURN );
-		while( st.hasMoreTokens() ) {
-			final String line = st.nextToken();
-
-			if( line.equals( "}" ) ) indentCount--;
-
-			int i = 0;
-			while( i++ < indentCount )
-				writer.write( INDENT );
-
-			writer.write( line + RETURN );
-
-			if( line.endsWith( "{" ) ) indentCount++;
-		}
-	}
-
-	public static File getFunctionLib() throws Exception {
-		final File rFile = new File( getRTemplateDir() + Constants.R_FUNCTION_LIB );
-		if( !rFile.isFile() ) throw new Exception( "Missing R function library: " + rFile.getAbsolutePath() );
-
-		return rFile;
-	}
+	
+	protected abstract String getModuleRScriptName();
 	
 	@Override
 	public String getDockerImageName() {
 		return "r_module";
 	}
-
-	private static final String FUNCTION_RUN_R = "runScript";
-	private static final String INDENT = "   ";
+	
+	/**
+	 * @return The property name that can be used for passing a custom version of the R script used for this module.
+	 */
+	protected String getCustomScriptProp() {
+		return getModulePrefix() + "." + CUSTOM_SCRIPT_PROP_SUFFIX;
+	}
+	
+	/**
+	 * Returns that prefix to use for property names.
+	 * @return
+	 */
+	protected abstract String getModulePrefix();
+	
+	private static final String CUSTOM_SCRIPT_PROP_SUFFIX = "customScript";
+	
 }

@@ -47,17 +47,19 @@ public class R_PlotOtus extends R_Module implements ApiModule {
 		Config.getString( this, Constants.R_COLOR_PALETTE );
 		Config.getString( this, Constants.R_COLOR_POINT );
 		Config.getString( this, Constants.R_PCH );
+		Config.getPositiveInteger( this, Constants.SET_SEED );
 	}
 
 	/**
-	 * Returns {@link #getStatPreReqs()}
+	 * Returns {@link #getStatPreReqs()} unless the pipeline input is already a stats table.
 	 */
 	@Override
 	public List<String> getPreRequisiteModules() throws Exception {
-		return getStatPreReqs();
+		List<String> preReqs = super.getPreRequisiteModules();
+		if( !BioLockJUtil.pipelineInputType( BioLockJUtil.PIPELINE_STATS_TABLE_INPUT_TYPE ) )
+			preReqs.add( Config.getString( null, Constants.DEFAULT_STATS_MODULE ) );		
+		return preReqs;
 	}
-
-	private static final String R_PVAL_FORMAT = "r.pValFormat";
 
 	@Override
 	public String getDescription() {
@@ -66,6 +68,19 @@ public class R_PlotOtus extends R_Module implements ApiModule {
 
 	@Override
 	public String getCitationString() {
-		return "Module developed by Mike Sioda" + System.lineSeparator() + "BioLockJ " + BioLockJUtil.getVersion();
+		return "BioLockJ " + BioLockJUtil.getVersion() + System.lineSeparator() + "Module created by Mike Sioda and developed by Ivory Blakley";
 	}
+
+	@Override
+	protected String getModuleRScriptName() {
+		return "R_PlotOtus.R";
+	}
+
+	@Override
+	protected String getModulePrefix() {
+		return "r_PlotOtus";
+	}
+	
+	private static final String R_PVAL_FORMAT = "r.pValFormat";
+
 }

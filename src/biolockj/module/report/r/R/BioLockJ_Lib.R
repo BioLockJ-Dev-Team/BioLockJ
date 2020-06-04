@@ -96,18 +96,18 @@ getCountMetaTable <- function( level ) {
 
 	countMetaFile = pipelineFile( paste0( level, "_metaMerged.tsv$" ) )
 	if( is.null( countMetaFile )  ) {
-		logInfo( c( "BioLockJ_Lib.R getCountMetaTable(", level, ") found none!" ) )
+		message( c( "BioLockJ_Lib.R getCountMetaTable(", level, ") found none!" ) )
 		return( NULL )
 	}
 	
 	countMetaTable = readBljTable( countMetaFile )
 	if( nrow( countMetaTable ) == 0 ) {
-		logInfo( c( "BioLockJ_Lib.R getCountMetaTable(", level, ") returned an empty table with header row:", colnames( countMetaTable ) ) )
+		message( c( "BioLockJ_Lib.R getCountMetaTable(", level, ") returned an empty table with header row:", colnames( countMetaTable ) ) )
 		countMetaTable = NULL
 		return( NULL )
 	}
 	
-	logInfo( "Read count table", countMetaFile )
+	message( "Read count table", countMetaFile )
 	return( countMetaTable )
 }
 
@@ -130,10 +130,10 @@ getLogDir <- function(){
 	return( path )
 }
 
-# Return  name of the R module log file using the given name
-getLogFile <- function( name ) {
-	return( file.path( getLogDir(), paste0( moduleScriptName(), "_", name, ".log") ) )
-}
+# # Return  name of the R module log file using the given name
+# getLogFile <- function( name ) {
+# 	return( file.path( getLogDir(), paste0( moduleScriptName(), "_", name, ".log") ) )
+# }
 
 # Return the name of the BioLockJ MASTER Config file
 getMasterConfigFile <- function() {
@@ -157,13 +157,9 @@ getMetaData <- function( level=taxaLevels()[1] ){
 	return( fullTable[firstMetaCol:ncol(fullTable)] )
 }
 
-# If downloaded with scp, all files share 1 directory, so return getPipelineDir() 
-# Otherwise, script path like: piplineDir/moduleDir/script/MAIN*.R, so return moduleDir (the dir 2 levels above script)  
+# The working directory for worker scripts is always one of the module subdirectories
 getModuleDir <- function() {
-	if( getPipelineDir() == dirname( getModuleScript() ) ) {
-		return( getPipelineDir() )
-	}
-	return( dirname( dirname( getModuleScript() ) ) )
+  return( dirname( getwd() ) )
 }
 
 # Return vector of nominal fields or an empty vector
@@ -214,18 +210,18 @@ displayR2 <- function( val ) {
 getStatsTable <- function( level, parametric=NULL, adjusted=TRUE ) {
 	statsFile = pipelineFile( paste0( level, "_", statsFileSuffix( parametric, adjusted ), "$" ) )
 	if( is.null( statsFile )  ) {
-		logInfo( paste0( "BioLockJ_Lib.R function --> getStatsTable( level=", level, 
+		message( paste0( "BioLockJ_Lib.R function --> getStatsTable( level=", level, 
 										 ", parametric=", parametric, ", adjusted=", adjusted, " ) returned NULL" ) )
 		return( NULL )
 	}
 	
 	statsTable = read.table( statsFile, header=TRUE, sep="\t", row.names=1, check.names=FALSE )
 	if( nrow( statsTable ) == 0 ) {
-		logInfo( paste0( "BioLockJ_Lib.R function --> getStatsTable( level=", level, ", parametric=", parametric, ", adjusted=", adjusted, " ) returned an empty table with only the header row:", colnames( statsTable ) ) )
+		message( paste0( "BioLockJ_Lib.R function --> getStatsTable( level=", level, ", parametric=", parametric, ", adjusted=", adjusted, " ) returned an empty table with only the header row:", colnames( statsTable ) ) )
 		return( NULL )
 	}
 	
-	logInfo( "Read stats table", statsFile )
+	message( "Read stats table", statsFile )
 	return( statsTable )
 }
 
@@ -269,21 +265,7 @@ importLibs <- function( libs ) {
 	}   
 	
 	if( length( errors ) > 0 ) {
-		writeErrors( errors )
-	}
-}
-
-# Log the msg if Config property r.debug=Y, otherwise do nothing
-# Append semicolon to label, unless it already exists
-logInfo <- function( info, msg=NULL ) {
-	if( doDebug() ) {
-		if( is.null( msg ) ){
-			msg = info
-		} else {
-			if( !endsWith( trimws( info ), ":" ) ) info = paste0( trimws( info ), ":" )
-			msg = c( trimws( info ), msg )
-		}
-		cat( msg, "\n" )
+		stop( errors )
 	}
 }
 
@@ -317,10 +299,10 @@ pipelineFile <- function( pattern, dir=getPipelineDir() ) {
 				return( inputDirResults )
 			}
 		}
-		writeErrors( c( paste0( "pipelineFile(", pattern, ",", dir, ") returned NULL" ) ) )
+		stop( c( paste0( "pipelineFile(", pattern, ",", dir, ") returned NULL" ) ) )
 	}
 	
-	logInfo( c( "Search:", dir, "for input files matching pattern:", pattern ) )
+	message( c( "Search:", dir, "for input files matching pattern:", pattern ) )
 	results = list.files( dir, pattern, full.names=TRUE, recursive=TRUE )
 	if( length( results ) == 0 ) {
 		if( ! dir %in% getProperty("input.dirPaths") ) {
@@ -356,7 +338,7 @@ plotPlainText <- function(textToPrint, align="center", maxCharWidth=55, vertical
 		textToPrint = as.vector(textToPrint)
 		textToPrint = textToPrint[ nchar(textToPrint) > 0 ]
 	}
-	if (length(textToPrint) > verticalLines) { logInfo("plotPlainText", "textToPrint was truncated.") }
+	if (length(textToPrint) > verticalLines) { message("plotPlainText", "textToPrint was truncated.") }
 	plot(c(0, 1), c(0, verticalLines+1), ann = FALSE, mar = c(0,0,0,0), 
 			 bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
 	text(labels=textToPrint, adj=alignment[align], x = alignment[align], xpd=TRUE, 
@@ -391,8 +373,8 @@ taxaLevels <- function() {
 		errMsg = "No HumanN2 Pathway or Gene Family reports found"
 	} else levels = getProperty( "report.taxonomyLevels" )
 
-	logInfo( c( "Found levels --> ", levels ) )
-	if( length( levels ) == 0 ) writeErrors( c( errMsg ) )
+	message( c( "Found levels --> ", levels ) )
+	if( length( levels ) == 0 ) stop( c( errMsg ) )
 	return( levels )
 }
 
@@ -412,7 +394,7 @@ readColorFile <- function(){
 
 writeColorFile <- function(df){
   fileName = getColorFile()
-  logInfo("Updating color file: ", fileName)
+  message("Updating color file: ", fileName)
   write.table(df, file=fileName, sep = "\t", col.names = TRUE, row.names = FALSE, quote=FALSE)
 }
 
@@ -421,7 +403,7 @@ initColorFile <- function(fileName){
   premadeFile = getProperty("r.colorFile")
   if (!is.null(premadeFile) && file.exists(premadeFile) ){
     # note: the format of this file is checked in the java method: checkColorFile
-    logInfo( c("Pulling in color reference file from: ", premadeFile) )
+    message( c("Pulling in color reference file from: ", premadeFile) )
     file.copy(from=getProperty("r.colorFile"), to=getColorFile() )
   }else{
     df = data.frame(key=0, color=0)[0,]
@@ -438,7 +420,7 @@ appendColorRef <- function(metaColumn, metaTable){
   keys = paste0(metaColumn, ":", levels)
   colors = setColors( length(levels) )
   df = data.frame(key=keys, color=colors)
-  logInfo( c( "Assigning colors: ", paste(colors, "for", keys, collapse= ", ")) )
+  message( c( "Assigning colors: ", paste(colors, "for", keys, collapse= ", ")) )
   df=rbind(readColorFile(), df)
   writeColorFile(df)
   return( readColorFile() )
@@ -455,7 +437,7 @@ setColors <- function( n ) {
   }else{
     palette = getProperty("r.colorPalette", "ucscgb")
   }
-  logInfo( c("Using \"", palette , "\" for property r.colorPalette.") )
+  message( c("Using \"", palette , "\" for property r.colorPalette.") )
   colors = get_palette( palette, n )
   return( colors )
 }
@@ -471,7 +453,7 @@ getColorsByCategory <- function( metaColumn, metaTable=getMetaData()){
   colorRef = colorRef[rowsWanted,]
   colors = colorRef$color
   names(colors) = gsub(paste0(metaColumn, ":"), "", colorRef$key)
-  logInfo( c( "Using colors: ", paste(colors, "for", names(colors), collapse= ", ")) )
+  message( c( "Using colors: ", paste(colors, "for", names(colors), collapse= ", ")) )
   return(colors)
 }
 
@@ -492,13 +474,13 @@ getAllUniqueColors <- function( df ){
   categoricals = c(getBinaryFields(), getNominalFields())
   metaTable = metaTable[names(metaTable) %in% categoricals]
   if (ncol(metaTable) < 1){
-    logInfo( "No categorical metadata fields.  Returning null." )
+    message( "No categorical metadata fields.  Returning null." )
     return(NULL)
   }
   allLevels = unlist(sapply(metaTable, function(x){levels(as.factor(x))}))
   boxColors = setColors( length(allLevels) )
   levelsPerField = sapply(metaTable, function(x){length(levels(as.factor(x)))})
-  logInfo ( paste( "Selected", length(boxColors), "colors to describe", ncol(metaTable), "categorical variables." ) )
+  message ( paste( "Selected", length(boxColors), "colors to describe", ncol(metaTable), "categorical variables." ) )
   f = mapply(x=names(levelsPerField), each=levelsPerField, rep, SIMPLIFY = FALSE)
   keys = paste0(f, ":", allLevels)
   newRows = data.frame(key=keys, color=boxColors)

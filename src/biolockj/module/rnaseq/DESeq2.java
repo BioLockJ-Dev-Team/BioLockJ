@@ -51,7 +51,7 @@ public class DESeq2 extends ScriptModuleImpl implements ApiModule {
 	@Override
 	public void executeTask() throws Exception {
 		super.executeTask();
-		FileUtils.copyFileToDirectory( R_Module.getFunctionLib(), getModuleDir() );
+		FileUtils.copyFileToDirectory( R_Module.getFunctionLib(this), getModuleDir() );
 		setDesignString();
 	}
 	

@@ -176,12 +176,9 @@ public class Processor {
 	 * {@link #runModuleMainScript(ScriptModule)}
 	 *
 	 * @param module ScriptModule that is submitting its main script as a Processor
-	 * 
-	 * @throws IOException if errors occur reading the InputStream
-	 * @throws InterruptedException if the thread process is interrupted
-	 * @throws ConfigNotFoundException 
+	 * @throws Exception 
 	 */
-	public static void runModuleMainScript( final ScriptModule module ) throws IOException, InterruptedException, ConfigNotFoundException {
+	public static void runModuleMainScript( final ScriptModule module ) throws Exception {
 		new Processor().runJob( module.getJobParams(), module.getClass().getSimpleName(), module.getScriptDir(), null );
 	}
 

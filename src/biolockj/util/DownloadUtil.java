@@ -253,12 +253,12 @@ public final class DownloadUtil {
 
 		writer.write( "# Use this script to locally run R modules." + RETURN );
 
-		for( final BioModule mod: modules )
-			if( mod instanceof R_Module ) {
-				final String relPath =
-					pipeRoot.toURI().relativize( ( (R_Module) mod ).getPrimaryScript().toURI() ).toString();
-				writer.write( Constants.RSCRIPT + " " + relPath + RETURN );
-			}
+//		for( final BioModule mod: modules )
+//			if( mod instanceof R_Module ) {
+//				final String relPath =
+//					pipeRoot.toURI().relativize( ( (R_Module) mod ).getPrimaryScript().toURI() ).toString();
+//				writer.write( Constants.RSCRIPT + " " + relPath + RETURN );
+//			}
 
 		writer.close();
 

@@ -17,7 +17,7 @@ buildSummaryTables <- function( reportStats, level ) {
          names(df)[length(df)] = fields[j]
       }
       fileName = getPath( getOutputDir(), paste0( level, "_", names(reportStats)[i] ) )
-      logInfo( paste( "Saving output file", fileName ) )
+      message( paste( "Saving output file", fileName ) )
       write.table( df, file=fileName, sep="\t", row.names=FALSE )
    }
 }  
@@ -37,9 +37,9 @@ calculateStats <- function( level ) {
    rSquaredVals = vector( mode="double" )
    adjParPvals = vector( mode="double" )
    adjNonParPvals = vector( mode="double" )
-   logInfo( "binaryCols", getBinaryFields() )
-   logInfo( "nominalCols", getNominalFields() )
-   logInfo( "numericCols", getNumericFields() )
+   message( "binaryCols: ", getBinaryFields() )
+   message( "nominalCols: ", getNominalFields() )
+   message( "numericCols: ", getNumericFields() )
 
    # if r.rareOtuThreshold > 1, cutoffValue is an absolute threshold, otherwise it's a % of countTable rows
    cutoffValue = getProperty("r.rareOtuThreshold", 1)
@@ -47,12 +47,12 @@ calculateStats <- function( level ) {
    numDataCols = ncol(countTable) - ncol(metaTable);
    for( countCol in 1:numDataCols ){
       if( sum( countTable[,countCol] > 0 ) < cutoffValue ) {
-         logInfo( c( "Excluding: ", names(countTable)[countCol], "; only found in ", sum( countTable[,countCol] > 0 ), "samples.") )
+         message( c( "Excluding: ", names(countTable)[countCol], "; only found in ", sum( countTable[,countCol] > 0 ), "samples.") )
       }else{
          names[ length(names)+1 ] = names(countTable)[countCol]
          if( length( getBinaryFields() ) > 0 ) {
             for( field in getBinaryFields() ) {
-               logInfo( c( "Calculate pvalues for:", names[ length(names) ], " ~ ", field ) )
+               message( c( "Calculate pvalues for:", names[ length(names) ], " ~ ", field ) )
                att = as.factor( metaTable[,field] )
                vals = levels( att )
                if( everyGroupHasData( countTable, countCol, field, vals ) ) { 
@@ -70,7 +70,7 @@ calculateStats <- function( level ) {
 
          if( length( getNominalFields() ) > 0 ) {
             for( field in getNominalFields() ) {
-               logInfo( c( "Calculate pvalues for:", names[ length(names) ], " ~ ", field ) )
+               message( c( "Calculate pvalues for:", names[ length(names) ], " ~ ", field ) )
                att = as.factor( metaTable[,field] )
                vals = levels( att )
                if( everyGroupHasData( countTable, countCol, field, vals ) ) { 
@@ -89,7 +89,7 @@ calculateStats <- function( level ) {
          
          if( length( getNumericFields() ) > 0 ) {
             for( field in getNumericFields() ) {
-               logInfo( c( "Calculate pvalues for:", names[ length(names) ], " ~ ", field ) )
+               message( c( "Calculate pvalues for:", names[ length(names) ], " ~ ", field ) )
                att = as.numeric( metaTable[,field] )
                parametricPvals = addNamedVectorElement( parametricPvals, field, Kendall( countTable[,countCol], att)$sl[1] )
                nonParametricPvals = addNamedVectorElement( nonParametricPvals, field, cor.test( countTable[,countCol], att, na.action=na.exclude )$p.value )
@@ -100,15 +100,15 @@ calculateStats <- function( level ) {
    }
 
    if( length( names ) == 0 ) {
-      logInfo( "No OTU Names found, verify empty vector", names )
+      message( "No OTU Names found, verify empty vector", names )
       return( NULL )
    }
 
-   logInfo( "Calculate ADJUSTED P_VALS" )
+   message( "Calculate ADJUSTED P_VALS" )
    adjParDF = data.frame( vector(mode="double", length=length(names)) )
    adjNonParDF = data.frame( vector(mode="double", length=length(names)) )
    for( i in 1:length( getReportFields() ) ) {
-      logInfo( "Calculate adjusted pval for report field:", getReportFields()[i] )
+      message( "Calculate adjusted pval for report field:", getReportFields()[i] )
       parPvals = getValuesByName( parametricPvals, getReportFields()[i] )
       npPvals = getValuesByName( nonParametricPvals, getReportFields()[i] )
       adjParDF[,i] = p.adjust( parPvals, method=getProperty("r_CalculateStats.pAdjustMethod"), n=getP_AdjustLen(names) )
@@ -117,7 +117,7 @@ calculateStats <- function( level ) {
       names(adjNonParDF)[i] = getReportFields()[i]
    }
    
-   logInfo( "Convert ADJUSTED P_VALS data.frame --> named vector" )
+   message( "Convert ADJUSTED P_VALS data.frame --> named vector" )
    adjParPvals = as.vector( as.matrix(adjParDF) )
    adjNonParPvals = as.vector( as.matrix(adjNonParDF) )
    for( i in 1:length( getReportFields() ) ) {
@@ -126,9 +126,9 @@ calculateStats <- function( level ) {
       names( adjParPvals )[x:y] = rep( getReportFields()[i], length( names ) )
       names( adjNonParPvals )[x:y] = rep( getReportFields()[i], length( names ) )
    }
-   logInfo( "names", names )
-   logInfo( "adjParPvals:", adjParPvals )
-   logInfo( "adjNonParPvals:", adjNonParPvals )
+   message( "names", names )
+   message( "adjParPvals:", adjParPvals )
+   message( "adjNonParPvals:", adjNonParPvals )
    reportStats = list( names, parametricPvals, nonParametricPvals, adjParPvals, adjNonParPvals, rSquaredVals )
    names( reportStats ) = c( "OTU", statsFileSuffix( TRUE, FALSE ), statsFileSuffix( FALSE, FALSE ),
                                     statsFileSuffix( TRUE ), statsFileSuffix( FALSE ), statsFileSuffix() )
@@ -153,32 +153,13 @@ getP_AdjustLen <- function( names ) {
    } 
 }
 
-# Main function imports coin and Kendall libraries
-# Generates the reportStats list with p-value and R^2 metrics
-# Outputs summary tables for each metric at each taxonomyLevel
-main <- function() {
-   importLibs( c( "coin", "Kendall" ) )
-   for( level in taxaLevels() ) {
-      if( doDebug() ) sink( getLogFile( level ) )
-      reportStats = calculateStats( level )
-      if( is.null( reportStats ) ) {
-         logInfo( c( level, "table is empty" ) )
-      } else {
-         logInfo( "Building summary Tables ... " )
-         buildSummaryTables( reportStats, level )
-      }
-      logInfo( "Done!" )
-      if( doDebug() ) sink()
-   }
-}
-
 # Verify all groups have 2+ values to avoid statistical test failures
 everyGroupHasData <- function( countTable, countCol, field, vals )  {
    for( val in vals ) {
       hasTaxa = !is.na( countTable[, countCol] )
       hasVal = as.vector( countTable[,field] ) == val
       if( length( which( hasTaxa & hasVal == TRUE) ) < 1 ) {
-         logInfo( c( "Skip statistical test for", names(countTable)[countCol], "no data for", field, "=", val ) )
+         message( c( "Skip statistical test for", names(countTable)[countCol], "no data for", field, "=", val ) )
          return( FALSE )
       }
    }
@@ -192,3 +173,32 @@ wilcox_test.default <- function( x, y, ... ) {
    data = data.frame( values = c(x, y), group = rep( c("x", "y"), c(length(x), length(y)) ) )
    return( wilcox_test( values ~ group, data = data, ... ) )
 }
+
+# Main function imports coin and Kendall libraries
+# Generates the reportStats list with p-value and R^2 metrics
+# Outputs summary tables for each metric at each taxonomyLevel
+main <- function() {
+   reportStats = calculateStats( level )
+   if( is.null( reportStats ) ) {
+      message( c( level, "table is empty" ) )
+   } else {
+      message( "Building summary Tables ... " )
+      buildSummaryTables( reportStats, level )
+   }
+   message( "Done!" )
+}
+
+
+message("Current Working directory: ",getwd())
+
+args = commandArgs(trailingOnly = TRUE)
+message("all args: ", args)
+level = args[1]
+message("Running script for level: ", level)
+
+source("../resources/BioLockJ_Lib.R")
+importLibs( c( "coin", "Kendall" ) )
+
+main()
+
+sessionInfo()

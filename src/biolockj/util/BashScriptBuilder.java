@@ -424,7 +424,7 @@ public class BashScriptBuilder {
 	 * @param module ScriptModule
 	 * @return Bash Script lines to load cluster modules
 	 */
-	private static List<String> loadModules( final ScriptModule module ) {
+	public static List<String> loadModules( final ScriptModule module ) {
 		final List<String> lines = new ArrayList<>();
 		for( final String clusterMod: Config.getList( module, CLUSTER_MODULES ) )
 			lines.add( "module load " + clusterMod );
