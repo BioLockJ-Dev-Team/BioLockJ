@@ -243,6 +243,7 @@ public class BioLockJ {
 	private static void checkDependencies() throws Exception{
 		if( ! BioLockJUtil.isDirectMode() ) MasterConfigUtil.saveMasterConfig();
 		Pipeline.checkModuleDependencies();
+		if( ! BioLockJUtil.isDirectMode() ) MasterConfigUtil.saveMasterConfig();
 		if( ! BioLockJUtil.isDirectMode() ) Config.showUnusedProps();
 	}
 

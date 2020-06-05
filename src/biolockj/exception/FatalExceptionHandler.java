@@ -62,6 +62,7 @@ public class FatalExceptionHandler {
 		}
 
 		if( !BioLockJUtil.isDirectMode() && !RuntimeParamUtil.isPrecheckMode()) SummaryUtil.addSummaryFooterForFailedPipeline();
+		if( !BioLockJUtil.isDirectMode() ) MasterConfigUtil.saveMasterConfig();
 		logFatalException( args, ex );
 
 		if( getErrorLog() != null ) {
