@@ -334,7 +334,7 @@ public class DockerUtil {
 		return innerPath;
 	}
 
-	public static String deContainerizePath( String innerPath ) throws DockerVolCreationException {
+	public static String deContainerizePath( final String innerPath ) throws DockerVolCreationException {
 		String hostPath = innerPath;
 		if( DockerUtil.inDockerEnv() ) {
 			TreeMap<String, String> vmap;
