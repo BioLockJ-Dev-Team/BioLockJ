@@ -674,29 +674,18 @@ public class Config {
 	 * @throws DockerVolCreationException 
 	 */
 	public static void setConfigProperty( final String name, final Collection<?> data, final BioModule module ) throws DockerVolCreationException {
-		allUsedProps.putAll( moduleUsedProps );
-		String origProp = allUsedProps.get( name );
-		origProp = origProp != null && origProp.isEmpty() ? null: origProp;
-
 		String val = null;
 		if( data != null && !data.isEmpty() && data.iterator().next() instanceof File ) {
 			final Collection<String> fileData = new ArrayList<>();
 			for( final Object obj: data ) {
 				String path = ( (File) obj ).getAbsolutePath();
-				if (DockerUtil.inDockerEnv()) path = DockerUtil.deContainerizePath( path );
+				path = DockerUtil.deContainerizePath( path );
 				fileData.add( path );
 			}
 			val = BioLockJUtil.getCollectionAsString( fileData );
 		} else val = BioLockJUtil.getCollectionAsString( data );
 
-		setConfigProperty(name, val);
-
-		final boolean hasVal = val != null && !val.isEmpty();
-		if( origProp == null && hasVal || origProp != null && !hasVal ||
-			origProp != null && hasVal && !origProp.equals( val ) ) {
-			Log.info( Config.class, "Set Config property [ " + name + " ] = " + val );
-			moduleUsedProps.put( name, val );
-		}
+		setConfigProperty(name, val, module);
 	}
 	/**
 	 * Sets a property value in the props cache as a list
@@ -727,15 +716,21 @@ public class Config {
 	public static void setConfigProperty( final String genericName, final String val, final BioModule module ) {
 		String name = getModulePropName(module, genericName);
 		if ( !genericName.equals( name )) Log.debug(Config.class, "Saving value to property [" + name + "] in place of [" + genericName + "].");
-		String origProp = allUsedProps.get( name );
-		origProp = origProp != null && origProp.isEmpty() ? null: origProp;
+		
+		String origProp = (String) props.get( name );
+		if (origProp != null && origProp.isEmpty() ) origProp = null;		
+		
+		if ( origProp == null && val == null) {}
+		else if ( origProp != null && val != null && origProp.equals( val ) ) 
+			Log.debug( Config.class, "Set config property [ " + name + " ] = " + val + "; already set to this value");
+		else if ( val == null) 
+			Log.info(Config.class, "Overwriting [" + name + "=" + origProp + "] to set config property [" + name + "=]");
+		else if ( origProp != null ) 
+			Log.info(Config.class, "Overwriting [" + name + "=" + origProp + "] to set config property [" + name + "=" + val + "]");
+		else  Log.info( Config.class, "Set config property [ " + name + " ] = " + val );
+		
+		moduleUsedProps.put( name, val );
 		props.setProperty( name, val );
-		final boolean hasVal = val != null && !val.isEmpty();
-		if( origProp == null && hasVal || origProp != null && !hasVal ||
-			origProp != null && hasVal && !origProp.equals( val ) ) {
-			Log.info( Config.class, "Set Config property [ " + name + " ] = " + val );
-			allUsedProps.put( name, val );
-		}
 	}
 	/**
 	 * Sets a property value in the props cache
@@ -796,7 +791,7 @@ public class Config {
 	 */
 	public static File getExistingFileObject( final BioModule module, final String property ) throws ConfigPathException, DockerVolCreationException {
 		final File f = getExistingFileObjectFromPath( getString( module, property ) );
-		if( props != null && f != null ) Config.setFilePathProperty( getModulePropName( module, property ), f.getAbsolutePath() );
+		if( props != null && f != null ) setConfigProperty( property, f.getAbsolutePath(), module );
 		return f;
 	}
 	
