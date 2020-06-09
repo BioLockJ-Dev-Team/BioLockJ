@@ -304,9 +304,11 @@ public class SeqUtil {
 			for( final File file: files )
 				try {
 					if( isSeqFile( file ) && !isMultiplexed() && MetaUtil.exists() &&
-						!MetaUtil.getSampleIds().contains( getSampleId( file.getName() ) ) )
+						!MetaUtil.getSampleIds().contains( getSampleId( file.getName() ) ) ) {
 						seqsWithoutMetaId.add( file );
-					else seqFiles.add( file );
+						Log.info( SeqUtil.class, "The file \"" + file.getName() + "\" -> sample id [" +
+							getSampleId( file.getName() ) + "] is not in the metadata." );
+					} else seqFiles.add( file );
 				} catch( final Exception ex ) {
 					if( Config.getBoolean( null, MetaUtil.META_REQUIRED ) ) seqsWithoutMetaId.add( file );
 					else Log.warn( SeqUtil.class,
@@ -317,7 +319,9 @@ public class SeqUtil {
 			if( Config.getBoolean( null, MetaUtil.META_REQUIRED ) && !seqsWithoutMetaId.isEmpty() )
 				throw new ConfigViolationException( MetaUtil.META_REQUIRED,
 					"No metadata found for the following files: " + Constants.RETURN +
-						BioLockJUtil.printLongFormList( seqsWithoutMetaId ) );
+						BioLockJUtil.printLongFormList( seqsWithoutMetaId ) + Constants.RETURN +
+						"Current sample names in metadata: " + Constants.RETURN +
+						BioLockJUtil.printLongFormList( MetaUtil.getSampleIds() ));
 		} catch( final Exception ex ) {
 			Log.error( SeqUtil.class, "Failed to identify the sequence files from the input file collection", ex );
 			throw new SequnceFormatException( ex.getMessage() );
