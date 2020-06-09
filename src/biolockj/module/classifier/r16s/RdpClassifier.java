@@ -60,7 +60,7 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	@Override
 	public void checkDependencies() throws Exception {
 		super.checkDependencies();
-		Config.requireString( this, RDP_JAR );
+		if ( !DockerUtil.inDockerEnv() ) Config.requireExistingFile( this, RDP_JAR );
 		getRuntimeParams( getClassifierParams(), null );
 		getDbParam();
 	}
