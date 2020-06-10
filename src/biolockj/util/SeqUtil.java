@@ -238,53 +238,58 @@ public class SeqUtil {
 	 *
 	 * @param value File name or sequence header
 	 * @return Sample ID
-	 * @throws SequnceFormatException if sample ID failed to meet ID requirements
-	 * @throws MetadataException if errors occur reading SEQ columns from metadata file
-	 * @throws ConfigFormatException if Boolean Config properties have values other other "Y" or "N"
+	 * @throws ConfigFormatException 
+	 * @throws SequnceFormatException 
 	 * 
 	 */
-	public static String getSampleId( final String value )
-		throws SequnceFormatException, MetadataException, ConfigFormatException {
-		String id = value;
-		if( id.endsWith( Constants.PROCESSED ) ) return id.replace( Constants.PROCESSED, "" );
-
-		final String fwReadSuffix = Config.getString( null, Constants.INPUT_FORWARD_READ_SUFFIX );
-		final String rvReadSuffix = Config.getString( null, Constants.INPUT_REVERSE_READ_SUFFIX );
-		final String fileNameCol = Config.getString( null, MetaUtil.META_FILENAME_COLUMN );
-
-		if( !isForwardRead( id ) ) {
-			final int rvIndex = value.lastIndexOf( rvReadSuffix );
-			id = id.substring( 0, rvIndex ) + fwReadSuffix + id.substring( rvIndex + 3 );
+	public static String getSampleId( final String value ) throws ConfigFormatException, SequnceFormatException {
+		String id = null;
+		try {
+			id = MetaUtil.getSampleIdFromFileName( value );
+		} catch( Exception e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		if( id != null ) return id;
+		else {
+			id = value;
 
-		if( MetaUtil.hasColumn( fileNameCol ) && !MetaUtil.getFieldValues( fileNameCol, true ).isEmpty() ) {
-			final int ind = MetaUtil.getFieldValues( fileNameCol, false ).indexOf( id );
-			if( ind > -1 ) return MetaUtil.getSampleIds().get( ind );
-			Log.warn( SeqUtil.class, value + " not processed in pipeline - path not found in metadata column " +
-				fileNameCol + " in: " + MetaUtil.getPath() );
-			return null;
+			if( id.endsWith( Constants.PROCESSED ) ) return id.replace( Constants.PROCESSED, "" );
+
+			final String fwReadSuffix = Config.getString( null, Constants.INPUT_FORWARD_READ_SUFFIX );
+			final String rvReadSuffix = Config.getString( null, Constants.INPUT_REVERSE_READ_SUFFIX );
+
+			if( !isForwardRead( id ) ) {
+				final int rvIndex = value.lastIndexOf( rvReadSuffix );
+				id = id.substring( 0, rvIndex ) + fwReadSuffix + id.substring( rvIndex + 3 );
+			}
+
+			// trim directional suffix
+			if( !isMultiplexed() && fwReadSuffix != null && id.indexOf( fwReadSuffix ) > 0 )
+				id = id.substring( 0, id.lastIndexOf( fwReadSuffix ) );
+
+			// trim files extensions: .gz | .fasta | .fastq
+			if( isGzipped( id ) ) id = id.substring( 0, id.length() - 3 );
+			if( id.toLowerCase().endsWith( "." + Constants.FASTA ) ||
+				id.toLowerCase().endsWith( "." + Constants.FASTQ ) ) id = id.substring( 0, id.length() - 6 );
+
+			// trim user defined file prefix and/or suffix patterns
+			final String trimPrefix = Config.getString( null, Constants.INPUT_TRIM_PREFIX );
+			final String trimSuffix = Config.getString( null, Constants.INPUT_TRIM_SUFFIX );
+			if( trimPrefix != null && id.indexOf( trimPrefix ) > -1 )
+				id = id.substring( trimPrefix.length() + id.indexOf( trimPrefix ) );
+
+			if( trimSuffix != null && id.indexOf( trimSuffix ) > 0 ) id = id.substring( 0, id.indexOf( trimSuffix ) );
+
+			if( id == null || id.isEmpty() )
+				throw new SequnceFormatException( "Unable to extract a valid Sample ID from: " + value );
+			return id;
 		}
-
-		// trim directional suffix
-		if( !isMultiplexed() && fwReadSuffix != null && id.indexOf( fwReadSuffix ) > 0 )
-			id = id.substring( 0, id.lastIndexOf( fwReadSuffix ) );
-
-		// trim files extensions: .gz | .fasta | .fastq
-		if( isGzipped( id ) ) id = id.substring( 0, id.length() - 3 );
-		if( id.toLowerCase().endsWith( "." + Constants.FASTA ) || id.toLowerCase().endsWith( "." + Constants.FASTQ ) )
-			id = id.substring( 0, id.length() - 6 );
-
-		// trim user defined file prefix and/or suffix patterns
-		final String trimPrefix = Config.getString( null, Constants.INPUT_TRIM_PREFIX );
-		final String trimSuffix = Config.getString( null, Constants.INPUT_TRIM_SUFFIX );
-		if( trimPrefix != null && id.indexOf( trimPrefix ) > -1 )
-			id = id.substring( trimPrefix.length() + id.indexOf( trimPrefix ) );
-
-		if( trimSuffix != null && id.indexOf( trimSuffix ) > 0 ) id = id.substring( 0, id.indexOf( trimSuffix ) );
-
-		if( id == null || id.isEmpty() )
-			throw new SequnceFormatException( "Unable to extract a valid Sample ID from: " + value );
-		return id;
+	}
+	public static String getSampleId( final File file ) throws Exception {
+		String id = MetaUtil.getSampleId( file );
+		if( id != null ) return id;
+		return getSampleId(file.getName());
 	}
 
 	/**
@@ -376,21 +381,13 @@ public class SeqUtil {
 			registerDemuxStatus();
 			registerPairedReadStatus();
 
-			if( mapSampleIdWithMetaFileNameCol() ) {
-				final String colName = Config.requireString( null, MetaUtil.META_FILENAME_COLUMN );
-				final int numVals = MetaUtil.getFieldValues( colName, true ).size();
-				final int numUniqueVals = MetaUtil.getUniqueFieldValues( colName, true ).size();
-				if( numVals != numUniqueVals ) throw new ConfigViolationException( colName,
-					"File paths must be unique for this metadata column: " + colName + numUniqueVals +
-						" unique values found in " + numVals + " non-null records." );
-
-				DemuxUtil.clearDemuxConfig();
-				Config.setConfigProperty( Constants.INPUT_TRIM_PREFIX, "" );
-				Config.setConfigProperty( Constants.INPUT_TRIM_SUFFIX, "" );
-
-			} else Config.setConfigProperty( MetaUtil.META_FILENAME_COLUMN, "" );
+//			if( mapSampleIdWithMetaFileNameCol() ) {
+//				DemuxUtil.clearDemuxConfig();
+//				Config.setConfigProperty( Constants.INPUT_TRIM_PREFIX, "" );
+//				Config.setConfigProperty( Constants.INPUT_TRIM_SUFFIX, "" );
+//
+//			} else Config.setConfigProperty( MetaUtil.META_FILENAME_COLUMN, "" );
 		} else {
-			Config.setConfigProperty( MetaUtil.META_FILENAME_COLUMN, "" );
 			Config.setConfigProperty( Constants.INTERNAL_SEQ_TYPE, MetaUtil.getNullValue( null ) );
 		}
 	}
@@ -723,10 +720,27 @@ public class SeqUtil {
 		if( !BioLockJUtil.isDirectMode() ) Log.info( SeqUtil.class, msg );
 	}
 
-	private static boolean mapSampleIdWithMetaFileNameCol() throws Exception {
-		final String metaCol = Config.getString( null, MetaUtil.META_FILENAME_COLUMN );
-		return metaCol != null && MetaUtil.hasColumn( metaCol ) && !MetaUtil.getFieldValues( metaCol, true ).isEmpty();
-	}
+//	private static boolean mapSampleIdWithMetaFileNameCol() throws Exception {
+//		final String metaCol = Config.getString( null, MetaUtil.META_FILENAME_COLUMN );
+//		boolean useFileNameColumn = metaCol != null && MetaUtil.hasColumn( metaCol );
+//		
+//		if (useFileNameColumn) {
+//			if (MetaUtil.getFieldValues( metaCol, true ).isEmpty() ) {
+//				throw new ConfigViolationException()
+//			}
+//			
+//			
+//			final int numVals = MetaUtil.getFieldValues( metaCol, true ).size();
+//			final int numUniqueVals = MetaUtil.getUniqueFieldValues( metaCol, true ).size();
+//			if( numVals != numUniqueVals ) throw new ConfigViolationException( metaCol,
+//				"File paths must be unique for this metadata column: " + metaCol + System.lineSeparator() + "Found " +
+//					numUniqueVals + " unique values found in " + numVals + " non-null records." );
+//		}
+//
+//		
+//		//return metaCol != null && MetaUtil.hasColumn( metaCol ) && !MetaUtil.getFieldValues( metaCol, true ).isEmpty();
+//		return useFileNameColumn;
+//	}
 
 	/**
 	 * Unpaired reads must be multiplexed into a single file. Multiplexed paired reads must be contained in either 1

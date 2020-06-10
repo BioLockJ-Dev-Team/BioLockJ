@@ -16,8 +16,10 @@ import java.util.*;
 import biolockj.*;
 import biolockj.Properties;
 import biolockj.api.API_Exception;
+import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
+import biolockj.exception.ConfigViolationException;
 import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.MetadataException;
 import biolockj.module.BioModule;
@@ -362,13 +364,9 @@ public class MetaUtil {
 	 * <li>{@value #META_COMMENT_CHAR} indicates start of comment in a cell, Requires length == 1
 	 * <li>{@value #META_NULL_VALUE} indicates null cell
 	 * </ul>
-	 * 
-	 * @throws MetadataException If unable to initialize the metadata file
-	 * @throws DockerVolCreationException 
-	 * @throws ConfigNotFoundException 
-	 * @throws ConfigPathException 
+	 * @throws Exception 
 	 */
-	public static void initialize() throws MetadataException, ConfigPathException, ConfigNotFoundException, DockerVolCreationException {
+	public static void initialize() throws Exception {
 
 		Log.info( MetaUtil.class,
 			"Initialize metadata property [ " + META_NULL_VALUE + " ] = " + getNullValue( null ) );
@@ -388,8 +386,73 @@ public class MetaUtil {
 			setFile( getMetadata() );
 			refreshCache();
 		}
+		
+		getNameToSampleMap();
+		
 		Log.info( MetaUtil.class, "Metadata initialized" );
 	}
+	
+	/*
+	 * Is this pipeline configured to use one or more columns in the metadata to link files to sample id's.
+	 */
+	private static boolean hasMetaColToSampleIdMap() throws Exception {
+		final List<String> columns = Config.getList( null, META_FILENAME_COLUMN );
+		boolean useFileNameColumn = columns != null && !columns.isEmpty();
+		
+		if( useFileNameColumn ) {
+			for( String metaCol: columns ) {
+				if( !hasColumn( metaCol ) ) {
+					throw new ConfigFormatException( META_FILENAME_COLUMN, "The column [" + metaCol + "] does not exist in the metadata file." );
+				}
+
+				if( MetaUtil.getFieldValues( metaCol, true ).isEmpty() ) { 
+					throw new ConfigViolationException( META_FILENAME_COLUMN, "Empty columns are not permitted for the filename to sample id mapping."
+						+ System.lineSeparator() + "Column [" + metaCol + "] is empty."); 
+				}
+			}
+		}
+		
+		return useFileNameColumn;
+	}
+	
+	private static HashMap<String, String> getNameToSampleMap() throws Exception{
+		if (nameToSample == null) initNameToSampleMap();
+		return nameToSample;
+	}
+	
+	/*
+	 * Initialize a file-name to sample-name map using the column(s) specified in the config file.
+	 * Future methods may add to this map from other sources, but should always start with this map.
+	 */
+	private static void initNameToSampleMap() throws Exception{
+		nameToSample = new HashMap<>();
+		if ( hasMetaColToSampleIdMap() ) {
+			final List<String> columns = Config.getList( null, META_FILENAME_COLUMN );
+			for( String metaCol: columns ) {
+				for (String sample : getSampleIds()) {
+					String val = getField( sample, metaCol );
+					if (val != null) {
+						if (nameToSample.get( val ) != null && !nameToSample.get( val ).equals( sample )) {
+							throw new ConfigViolationException( META_FILENAME_COLUMN,
+								"The file name \"" + val + "\" cannot be assigned to both samples [" +
+									nameToSample.get( val ) + "] and [" + sample + "]." );
+						}else {
+							nameToSample.put(val, sample);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	static String getSampleIdFromFileName(String filename) throws Exception {
+		return getNameToSampleMap().get( filename );
+	}
+	public static String getSampleId(File file) throws Exception {
+		return getSampleIdFromFileName(file.getName());
+	}
+	
+	private static HashMap<String, String> nameToSample = null;
 
 	/**
 	 * Refresh the metadata cache.
@@ -575,7 +638,7 @@ public class MetaUtil {
 		Properties.registerProp( META_COLUMN_DELIM, Properties.STRING_TYPE, META_COLUMN_DELIM_DESC );
 		Properties.registerProp( META_COMMENT_CHAR, Properties.STRING_TYPE, META_COMMENT_CHAR_DESC );
 		Properties.registerProp( META_FILE_PATH, Properties.STRING_TYPE, META_FILE_PATH_DESC );
-		Properties.registerProp( META_FILENAME_COLUMN, Properties.STRING_TYPE, META_FILENAME_COLUMN_DESC );
+		Properties.registerProp( META_FILENAME_COLUMN, Properties.LIST_TYPE, META_FILENAME_COLUMN_DESC );
 		Properties.registerProp( META_NULL_VALUE, Properties.STRING_TYPE, META_NULL_VALUE_DESC );
 		Properties.registerProp( META_REQUIRED, Properties.BOOLEAN_TYPE, META_REQUIRED_DESC );
 		Properties.registerProp( USE_EVERY_ROW, Properties.BOOLEAN_TYPE, USE_EVERY_ROW_DESC );
@@ -614,7 +677,7 @@ public class MetaUtil {
 	 * {@value #META_FILENAME_COLUMN_DESC}
 	 */
 	public static final String META_FILENAME_COLUMN = "metadata.fileNameColumn";
-	private static final String META_FILENAME_COLUMN_DESC = "name of the metadata column with input file names";
+	private static final String META_FILENAME_COLUMN_DESC = "name of the metadata column(s) with input file names";
 
 	/**
 	 * {@link biolockj.Config} property: {@value #META_NULL_VALUE}<br>
