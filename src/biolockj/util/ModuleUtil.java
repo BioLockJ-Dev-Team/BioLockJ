@@ -23,11 +23,7 @@ import biolockj.exception.PipelineFormationException;
 import biolockj.module.BioModule;
 import biolockj.module.JavaModule;
 import biolockj.module.classifier.ClassifierModule;
-import biolockj.module.implicit.Demultiplexer;
-import biolockj.module.report.r.R_CalculateStats;
 import biolockj.module.report.r.R_Module;
-import biolockj.module.seq.AwkFastaConverter;
-import biolockj.module.seq.PearMergeReads;
 
 /**
  * This utility holds general methods useful for BioModule interaction and management.
@@ -82,12 +78,11 @@ public class ModuleUtil {
 	 * 
 	 * @param module BioModule
 	 * @return Min # samples/worker
-	 * @throws ConfigFormatException if {@value biolockj.Constants#SCRIPT_NUM_WORKERS} property is not a positive
-	 * integer
-	 * @throws ConfigNotFoundException if {@value biolockj.Constants#SCRIPT_NUM_WORKERS} property is undefined
+	 * @throws ConfigFormatException 
+	 * @throws ConfigNotFoundException 
+	 * @throws Exception 
 	 */
-	public static Integer getMinSamplesPerWorker( final BioModule module )
-		throws ConfigNotFoundException, ConfigFormatException {
+	public static Integer getMinSamplesPerWorker( final BioModule module ) throws ConfigNotFoundException, ConfigFormatException, Exception {
 		return new Double( Math.floor( (double) module.getInputFiles().size() / (double) getNumWorkers( module ) ) )
 			.intValue();
 	}
@@ -235,12 +230,10 @@ public class ModuleUtil {
 	 * 
 	 * @param module BioModule
 	 * @return Number of worker scripts that process 1 extra sequence.
-	 * @throws ConfigFormatException if {@value biolockj.Constants#SCRIPT_NUM_WORKERS} property is not a positive
-	 * integer
-	 * @throws ConfigNotFoundException if {@value biolockj.Constants#SCRIPT_NUM_WORKERS} property is undefined
+	 * @throws Exception 
 	 */
 	public static Integer getNumMaxWorkers( final BioModule module )
-		throws ConfigNotFoundException, ConfigFormatException {
+		throws Exception {
 		return module.getInputFiles().size() - getNumWorkers( module ) * getMinSamplesPerWorker( module );
 	}
 
@@ -249,15 +242,23 @@ public class ModuleUtil {
 	 * 
 	 * @param module BioModule
 	 * @return Number of worker scripts generated for a given module.
-	 * @throws ConfigFormatException if {@value biolockj.Constants#SCRIPT_NUM_WORKERS} property is not a positive
-	 * integer
-	 * @throws ConfigNotFoundException if {@value biolockj.Constants#SCRIPT_NUM_WORKERS} property is undefined
+	 * @throws ConfigFormatException 
+	 * @throws ConfigNotFoundException 
+	 * @throws Exception 
 	 */
-	public static Integer getNumWorkers( final BioModule module )
-		throws ConfigNotFoundException, ConfigFormatException {
+	public static Integer getNumWorkers( final BioModule module ) throws ConfigNotFoundException, ConfigFormatException
+		{
 		if( module instanceof JavaModule ) return 1;
 		final int count = Config.requirePositiveInteger( module, Constants.SCRIPT_NUM_WORKERS );
-		return Math.max( 1, Math.min( count, module.getInputFiles().size() ) );
+		int numFiles = count;
+		try {
+			numFiles = module.getInputFiles().size();
+		} catch( Exception e ) {
+			// if there is an issue with getting input files, 
+			// this is not the an effective place to generate the message.
+			e.printStackTrace();
+		}
+		return Math.max( 1, Math.min( count, numFiles ) );
 	}
 
 	/**

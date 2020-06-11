@@ -95,7 +95,7 @@ public class DemuxUtil {
 	/**
 	 * Determine Sample Id by examining the sequence lines.<br>
 	 * If {@value #DEMUX_STRATEGY }={@value #OPTION_ID_IN_HEADER}, extract the Sample Id from the sequence header via
-	 * {@link biolockj.util.SeqUtil#getSampleId(String)}<br>
+	 * {@link biolockj.util.SeqUtil#getSampleIdFromString(String)}<br>
 	 * If {@value #DEMUX_STRATEGY }={@value #OPTION_BARCODE_IN_HEADER} and the sequence header contains a bar-code in
 	 * the idMap, return the corresponding SampleID from the idMap.<br>
 	 * If {@value #DEMUX_STRATEGY }={@value #OPTION_BARCODE_IN_MAPPING} and the sequence header maps to a bar-code in
@@ -115,7 +115,7 @@ public class DemuxUtil {
 					barcodeInSeq() && seqLines.get( 1 ).startsWith( barCodeId ) ) return map.get( barCodeId );
 			return null;
 		}
-		return SeqUtil.getSampleId( seqLines.get( 0 ) );
+		return SeqUtil.getSampleIdFromString( seqLines.get( 0 ) );
 	}
 
 	/**

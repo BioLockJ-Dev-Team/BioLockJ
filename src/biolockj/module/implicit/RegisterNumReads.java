@@ -74,8 +74,8 @@ public class RegisterNumReads extends JavaModuleImpl implements SeqModule, ReadC
 		for( final File f: files )
 			if( SeqUtil.isForwardRead( f.getName() ) ) {
 				final long count = SeqUtil.countNumReads( f );
-				Log.debug( getClass(), "Num Reads for :[" + SeqUtil.getSampleId( f.getName() ) + "] = " + count );
-				this.readsPerSample.put( SeqUtil.getSampleId( f.getName() ), Long.toString( count ) );
+				Log.debug( getClass(), "Num Reads for :[" + SeqUtil.getSampleId( f ) + "] = " + count );
+				this.readsPerSample.put( SeqUtil.getSampleId( f ), Long.toString( count ) );
 			}
 
 		MetaUtil.addColumn( getNumReadFieldName(), this.readsPerSample, getOutputDir(), true );

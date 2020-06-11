@@ -327,7 +327,7 @@ public class Humann2Classifier extends ClassifierModuleImpl implements ApiModule
 
 	private File getMergedReadFile( final File file ) throws Exception {
 		return new File( getTempSubDir( TEMP_MERGE_READ_DIR ).getAbsoluteFile() + File.separator +
-			SeqUtil.getSampleId( file.getName() ) + BioLockJUtil.fileExt( file ) );
+			SeqUtil.getSampleId( file ) + BioLockJUtil.fileExt( file ) );
 	}
 
 	private String getNuclDbPath() throws ConfigNotFoundException, ConfigPathException, DockerVolCreationException {
@@ -341,14 +341,14 @@ public class Humann2Classifier extends ClassifierModuleImpl implements ApiModule
 	}
 
 	private String getPairedReadLine( final File file )
-		throws ConfigFormatException, SequnceFormatException, MetadataException, ConfigViolationException {
+		throws Exception {
 		return FUNCTION_CONCAT_PAIRED_READS + " " + file.getAbsolutePath() + " " +
-			getPairedReads().get( file ).getAbsolutePath() + " " + SeqUtil.getSampleId( file.getName() ) +
+			getPairedReads().get( file ).getAbsolutePath() + " " + SeqUtil.getSampleId( file ) +
 			BioLockJUtil.fileExt( file );
 	}
 
 	private Map<File, File> getPairedReads()
-		throws ConfigFormatException, ConfigViolationException, SequnceFormatException, MetadataException {
+		throws Exception {
 		if( this.pairedReads == null && SeqUtil.hasPairedReads() )
 			this.pairedReads = SeqUtil.getPairedReads( getInputFiles() );
 		return this.pairedReads;

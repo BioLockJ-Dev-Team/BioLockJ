@@ -45,7 +45,7 @@ public class Metaphlan2Parser extends ParserModuleImpl {
 			try {
 				for( String line = reader.readLine(); line != null; line = reader.readLine() )
 					if( !line.startsWith( "#" ) )
-						addOtuNode( new MetaphlanNode( SeqUtil.getSampleId( file.getName() ), line ) );
+						addOtuNode( new MetaphlanNode( SeqUtil.getSampleId( file ), line ) );
 			} finally {
 				if( reader != null ) reader.close();
 			}

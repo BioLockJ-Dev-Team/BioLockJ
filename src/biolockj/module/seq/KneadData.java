@@ -51,7 +51,7 @@ public class KneadData extends SeqModuleImpl implements DatabaseModule, ApiModul
 				lines.add( sanatize( seqFile, SeqUtil.getPairedReads( files ).get( seqFile ) ) );
 			else lines.add( sanatize( seqFile, null ) );
 
-			lines.addAll( buildScriptLinesToMoveValidSeqsToOutputDir( SeqUtil.getSampleId( seqFile.getName() ) ) );
+			lines.addAll( buildScriptLinesToMoveValidSeqsToOutputDir( SeqUtil.getSampleId( seqFile ) ) );
 
 			data.add( lines );
 		}
@@ -168,7 +168,7 @@ public class KneadData extends SeqModuleImpl implements DatabaseModule, ApiModul
 	}
 
 	private static String sanatize( final File seqFile, final File rvRead ) throws Exception {
-		return FUNCTION_SANATIZE + " " + SeqUtil.getSampleId( seqFile.getName() ) + " " + seqFile.getAbsolutePath() +
+		return FUNCTION_SANATIZE + " " + SeqUtil.getSampleId( seqFile ) + " " + seqFile.getAbsolutePath() +
 			( rvRead == null ? "": " " + rvRead.getAbsolutePath() );
 	}
 	

@@ -336,7 +336,7 @@ public class TrimPrimers extends JavaModuleImpl implements SeqModule, ApiModule,
 	}
 
 	private String getTrimFilePath( final File file ) throws Exception {
-		return getOutputDir().getAbsolutePath() + File.separator + SeqUtil.getSampleId( file.getName() ) +
+		return getOutputDir().getAbsolutePath() + File.separator + SeqUtil.getSampleId( file ) +
 			SeqUtil.getReadDirectionSuffix( file ) + "." + SeqUtil.getSeqType();
 	}
 
@@ -380,7 +380,7 @@ public class TrimPrimers extends JavaModuleImpl implements SeqModule, ApiModule,
 		if( !MetaUtil.getFieldNames().contains( NUM_TRIMMED_READS ) && this.validReadsPerSample.isEmpty() )
 			for( final File f: this.seqsWithPrimersTrimmed.keySet() )
 			if( !SeqUtil.hasPairedReads() || SeqUtil.isForwardRead( f.getName() ) ) this.validReadsPerSample
-				.put( SeqUtil.getSampleId( f.getName() ), Long.toString( this.seqsWithPrimersTrimmed.get( f ) ) );
+				.put( SeqUtil.getSampleId( f ), Long.toString( this.seqsWithPrimersTrimmed.get( f ) ) );
 		return this.validReadsPerSample;
 	}
 

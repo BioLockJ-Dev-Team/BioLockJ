@@ -33,7 +33,7 @@ public class Kraken2Parser extends KrakenParser {
 		try {
 			for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
 				if( discardOtu( line ) ) continue;
-				addOtuNode( new Kraken2Node( SeqUtil.getSampleId( file.getName() ), line ) );
+				addOtuNode( new Kraken2Node( SeqUtil.getSampleId( file ), line ) );
 			}
 		} finally {
 			if( reader != null ) reader.close();
@@ -65,7 +65,7 @@ public class Kraken2Parser extends KrakenParser {
 				setReportUnclassifiedTaxa( true );
 			}
 
-			addUnclassifiedTaxa( getParsedSample( SeqUtil.getSampleId( file.getName() ) ) );
+			addUnclassifiedTaxa( getParsedSample( SeqUtil.getSampleId( file ) ) );
 		}
 	}
 	

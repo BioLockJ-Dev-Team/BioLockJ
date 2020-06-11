@@ -56,7 +56,7 @@ public class PearMergeReads extends SeqModuleImpl implements ApiModule, ReadCoun
 
 		for( final File file: keys ) {
 			final List<String> lines = new ArrayList<>();
-			lines.add( FUNCTION_PEAR_MERGE + " " + SeqUtil.getSampleId( file.getName() ) + " " +
+			lines.add( FUNCTION_PEAR_MERGE + " " + SeqUtil.getSampleId( file ) + " " +
 				file.getAbsolutePath() + " " + map.get( file ).getAbsolutePath() + " " +
 				getTempDir().getAbsolutePath() + " " + getOutputDir().getAbsolutePath() );
 
@@ -107,8 +107,8 @@ public class PearMergeReads extends SeqModuleImpl implements ApiModule, ReadCoun
 			for( final File f: getOutputDir().listFiles() ) {
 				final long count = SeqUtil.countNumReads( f );
 				Log.info( getClass(), "Num merged Reads for File:[" + f.getName() + "] ==> ID:[" +
-					SeqUtil.getSampleId( f.getName() ) + "] = " + count );
-				this.readsPerSample.put( SeqUtil.getSampleId( f.getName() ), Long.toString( count ) );
+					SeqUtil.getSampleId( f ) + "] = " + count );
+				this.readsPerSample.put( SeqUtil.getSampleId( f ), Long.toString( count ) );
 			}
 
 			MetaUtil.addColumn( getMetaColName(), this.readsPerSample, getOutputDir(), true );

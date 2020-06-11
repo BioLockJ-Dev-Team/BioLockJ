@@ -135,7 +135,7 @@ public class RarefySeqs extends JavaModuleImpl implements SeqModule, ApiModule {
 		Log.debug( getClass(), "indexes: " + BioLockJUtil.getCollectionAsString( indexes ) );
 		final String fileExt = "." + SeqUtil.getSeqType();
 		final String name =
-			getOutputDir().getAbsolutePath() + File.separator + SeqUtil.getSampleId( input.getName() ) + fileExt;
+			getOutputDir().getAbsolutePath() + File.separator + SeqUtil.getSampleId( input ) + fileExt;
 		final File output = new File( name );
 		final BufferedReader reader = BioLockJUtil.getFileReader( input );
 		final BufferedWriter writer = new BufferedWriter( new FileWriter( output ) );
@@ -156,7 +156,7 @@ public class RarefySeqs extends JavaModuleImpl implements SeqModule, ApiModule {
 				if( ++i % SeqUtil.getNumLinesPerRead() == 0 ) index++;
 			}
 
-			this.readsPerSample.put( SeqUtil.getSampleId( input.getName() ), Integer.toString( indexes.size() ) );
+			this.readsPerSample.put( SeqUtil.getSampleId( input ), Integer.toString( indexes.size() ) );
 
 			if( !usedIndexes.containsAll( indexes ) ) {
 				indexes.removeAll( usedIndexes );
@@ -180,7 +180,7 @@ public class RarefySeqs extends JavaModuleImpl implements SeqModule, ApiModule {
 		final Integer minConfig = Config.getNonNegativeInteger( this, INPUT_RAREFYING_MIN );
 		Long max = 0L;
 		Long min = minConfig.longValue();
-		final String sampleId = SeqUtil.getSampleId( seqFile.getName() );
+		final String sampleId = SeqUtil.getSampleId( seqFile );
 		final long numReads = getCount( sampleId, RegisterNumReads.getNumReadFieldName() );
 
 		if( maxConfig != null ) max = numReads < maxConfig.longValue() ? numReads: maxConfig.longValue();

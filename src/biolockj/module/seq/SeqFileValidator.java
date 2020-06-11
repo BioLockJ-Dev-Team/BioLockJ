@@ -228,7 +228,7 @@ public class SeqFileValidator extends JavaModuleImpl implements SeqModule, ApiMo
 							" number of bases and quality scores: " + seqLines.get( 0 ) );
 					} else {
 						stats[ INDEX_NUM_VALID_READS ]++;
-						setMaxSeq( SeqUtil.getSampleId( file.getName() ), seqLen );
+						setMaxSeq( SeqUtil.getSampleId( file ), seqLen );
 						final Integer seqMax = Config.getPositiveInteger( this, INPUT_SEQ_MAX );
 						if( seqMax != null && seqMax > 0 && seqLen > seqMax ) {
 							stats[ INDEX_NUM_TRIMMED_READS ]++;
@@ -385,7 +385,7 @@ public class SeqFileValidator extends JavaModuleImpl implements SeqModule, ApiMo
 	private void populateSampleStats( final Long[] stats, final File file, final long combinedReadLen )
 		throws Exception {
 
-		final String id = SeqUtil.getSampleId( file.getName() );
+		final String id = SeqUtil.getSampleId( file );
 		setNumReads( file, stats );
 		final Long numValidReads = stats[ INDEX_NUM_VALID_READS ];
 		if( numValidReads == null || numValidReads == 0L ) return;
@@ -421,7 +421,7 @@ public class SeqFileValidator extends JavaModuleImpl implements SeqModule, ApiMo
 				Log.debug( getClass(), "Updated FW seq length = " + stats[ INDEX_AVG_FW_READ_LEN ] );
 			}
 		}
-		this.sampleStats.put( SeqUtil.getSampleId( file.getName() ), stats );
+		this.sampleStats.put( SeqUtil.getSampleId( file ), stats );
 	}
 
 	private void saveRemovedSeqsToFile( final Collection<String> badLines, final File file ) throws Exception {
@@ -453,9 +453,9 @@ public class SeqFileValidator extends JavaModuleImpl implements SeqModule, ApiMo
 	}
 
 	private void setNumReads( final File file, final Long[] stats ) throws Exception {
-		if( SeqUtil.isForwardRead( file.getName() ) ) this.readsPerSample.put( SeqUtil.getSampleId( file.getName() ),
+		if( SeqUtil.isForwardRead( file.getName() ) ) this.readsPerSample.put( SeqUtil.getSampleId( file ),
 			String.valueOf( stats[ INDEX_NUM_VALID_READS ] ) );
-		else this.rvReadsPerSample.put( SeqUtil.getSampleId( file.getName() ),
+		else this.rvReadsPerSample.put( SeqUtil.getSampleId( file ),
 			String.valueOf( stats[ INDEX_NUM_VALID_READS ] ) );
 
 	}

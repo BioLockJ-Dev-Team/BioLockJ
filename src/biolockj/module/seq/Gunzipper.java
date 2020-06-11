@@ -66,7 +66,7 @@ public class Gunzipper extends SeqModuleImpl implements ApiModule {
 
 	private String unzip( final File file ) throws Exception {
 		return FUNCTION_GUNZIP + " " + file.getAbsolutePath() + " " + getOutputDir().getAbsolutePath() +
-			File.separator + SeqUtil.getSampleId( file.getName() ) + SeqUtil.getReadDirectionSuffix( file ) + "." +
+			File.separator + SeqUtil.getSampleId( file ) + SeqUtil.getReadDirectionSuffix( file ) + "." +
 			Config.requireString( this, Constants.INTERNAL_SEQ_TYPE );
 	}
 	

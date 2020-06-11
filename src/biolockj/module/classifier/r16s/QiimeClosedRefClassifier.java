@@ -176,7 +176,7 @@ public class QiimeClosedRefClassifier extends QiimeClassifier implements ApiModu
 	}
 
 	private boolean saveBatch( final int workerNum, final int sampleCount )
-		throws ConfigNotFoundException, ConfigFormatException {
+		throws Exception {
 		final int minSamplesPerWorker = ModuleUtil.getMinSamplesPerWorker( this ); // 1
 		final int maxWorkers = ModuleUtil.getNumMaxWorkers( this ); // 8
 		return workerNum < maxWorkers && sampleCount == minSamplesPerWorker + 1 ||

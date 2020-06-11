@@ -25,13 +25,15 @@ public abstract class SeqModuleImpl extends ScriptModuleImpl implements SeqModul
 
 	/**
 	 * Return {@link #getSeqFiles(Collection)} to filter standard module input files.
+	 * @throws SequnceFormatException 
 	 */
 	@Override
 	public List<File> getInputFiles() {
 		if( getFileCache().isEmpty() ) try {
 			cacheInputFiles( getSeqFiles( findModuleInputFiles() ) );
-		} catch( final SequnceFormatException ex ) {
-			Log.error( getClass(), "Unable to find module input sequence files: " + ex.getMessage(), ex );
+		} catch( SequnceFormatException e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return getFileCache();
 	}

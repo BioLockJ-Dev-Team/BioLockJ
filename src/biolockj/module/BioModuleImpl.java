@@ -22,6 +22,7 @@ import biolockj.api.API_Exception;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.PipelineFormationException;
+import biolockj.exception.SequnceFormatException;
 import biolockj.util.*;
 
 /**

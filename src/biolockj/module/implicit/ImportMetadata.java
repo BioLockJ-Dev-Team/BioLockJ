@@ -32,10 +32,12 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 	public ImportMetadata() {
 		addGeneralProperty( MetaUtil.META_COLUMN_DELIM );
 		addGeneralProperty( MetaUtil.META_FILE_PATH );
+		addGeneralProperty( MetaUtil.USE_EVERY_ROW );
 	}
 
 	@Override
 	public void checkDependencies() throws Exception {
+		Config.getBoolean( null, MetaUtil.USE_EVERY_ROW );
 		inputDelim = Config.requireString( this, MetaUtil.META_COLUMN_DELIM );
 		if( inputDelim.equals( "\\t" ) ) inputDelim = TAB_DELIM;
 		if( SeqUtil.isMultiplexed() && !MetaUtil.exists() )
@@ -181,16 +183,13 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 	}
 
 	/**
-	 * Extract the sample IDs from the file names with {@link biolockj.util.SeqUtil#getSampleId(String)}
+	 * Extract the sample IDs from the file names with {@link biolockj.util.SeqUtil#getSampleIdFromString(String)}
 	 *
 	 * @return Ordered set of Sample IDs
-	 * @throws MetadataException if metadata file not found and cannot be assigned
-	 * @throws ConfigViolationException if forward read found without corresponding reverse read or vice versa
-	 * @throws ConfigFormatException if boolean Config properties set with value other than "N" or "Y"
-	 * @throws SequnceFormatException if sample ID cannot be extracted from the sequence file name
+	 * @throws Exception 
 	 */
 	protected TreeSet<String> getSampleIds()
-		throws ConfigFormatException, ConfigViolationException, MetadataException, SequnceFormatException {
+		throws Exception {
 		final TreeSet<String> ids = new TreeSet<>();
 		
 		Collection<File> inputFiles = BioLockJUtil.getPipelineInputFiles();
@@ -201,7 +200,7 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 		}
 
 		for( final File file: inputFiles ) {
-			final String id = SeqUtil.getSampleId( file.getName() );
+			final String id = SeqUtil.getSampleId( file );
 			if( ids.contains( id ) ) throw new SequnceFormatException(
 				"Duplicate Sample ID [ " + id + " ] returned for file: " + file.getAbsolutePath() );
 			ids.add( id );
@@ -279,7 +278,7 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 		final List<String> ids = MetaUtil.getSampleIds();
 		for( final String id: MetaUtil.getSampleIds() )
 			for( final File seq: files )
-				if( SeqUtil.isForwardRead( seq.getName() ) && SeqUtil.getSampleId( seq.getName() ).equals( id ) ) {
+				if( SeqUtil.isForwardRead( seq.getName() ) && SeqUtil.getSampleId( seq ).equals( id ) ) {
 					ids.remove( id );
 					break;
 				}

@@ -51,7 +51,7 @@ public class Kraken2Classifier extends ClassifierModuleImpl implements ApiModule
 	public List<List<String>> buildScript( final List<File> files ) throws Exception {
 		final List<List<String>> data = new ArrayList<>();
 		for( final File file: files ) {
-			final String fileId = SeqUtil.getSampleId( file.getName() );
+			final String fileId = SeqUtil.getSampleId( file );
 			final String tempFile = getTempDir().getAbsolutePath() + File.separator + fileId + KRAKEN_FILE;
 			final String krakenOutput =
 				getOutputDir().getAbsolutePath() + File.separator + fileId + Constants.PROCESSED;
@@ -79,7 +79,7 @@ public class Kraken2Classifier extends ClassifierModuleImpl implements ApiModule
 		final List<List<String>> data = new ArrayList<>();
 		final Map<File, File> map = SeqUtil.getPairedReads( files );
 		for( final File file: map.keySet() ) {
-			final String fileId = SeqUtil.getSampleId( file.getName() );
+			final String fileId = SeqUtil.getSampleId( file );
 			final String tempFile = getTempDir().getAbsolutePath() + File.separator + fileId + KRAKEN_FILE;
 			final String krakenOutput =
 				getOutputDir().getAbsolutePath() + File.separator + fileId + Constants.PROCESSED;

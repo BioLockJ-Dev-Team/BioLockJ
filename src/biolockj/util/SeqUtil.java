@@ -145,14 +145,10 @@ public class SeqUtil {
 	 *
 	 * @param files List of paired read files
 	 * @return Map with key=fwRead and val=rvRead
-	 * @throws ConfigViolationException if unpaired reads are found and
-	 * {@link biolockj.Config}.{@value Constants#INPUT_REQUIRE_COMPLETE_PAIRS} = {@value biolockj.Constants#TRUE}
-	 * @throws SequnceFormatException if input data is null or empty
-	 * @throws ConfigFormatException if Boolean Config properties assigned values other that "Y" or "N"
-	 * @throws MetadataException if errors occur reading SEQ columns from metadata file
+	 * @throws Exception 
 	 */
 	public static Map<File, File> getPairedReads( final Collection<File> files )
-		throws SequnceFormatException, ConfigFormatException, ConfigViolationException, MetadataException {
+		throws Exception {
 		Log.debug( SeqUtil.class, "Looking for paired reads in " + ( files == null ? 0: files.size() ) + " files " );
 		final Map<File, File> map = new HashMap<>();
 		final Set<String> rvReads = new HashSet<>();
@@ -168,11 +164,11 @@ public class SeqUtil {
 			}
 
 			File rvRead = null;
-			final String sampleID = getSampleId( name );
+			final String sampleID = getSampleId( fwRead );
 			Log.debug( SeqUtil.class,
 				"Search for paired read to match forward read ( " + name + " ) with sample ID: " + sampleID );
 			for( final File searchFile: files )
-				if( sampleID.equals( getSampleId( searchFile.getName() ) ) && !isForwardRead( searchFile.getName() ) ) {
+				if( sampleID.equals( getSampleId( searchFile ) ) && !isForwardRead( searchFile.getName() ) ) {
 					Log.debug( SeqUtil.class, "Matching reverse read: " + searchFile.getName() );
 					rvRead = searchFile;
 					break;
@@ -238,58 +234,50 @@ public class SeqUtil {
 	 *
 	 * @param value File name or sequence header
 	 * @return Sample ID
-	 * @throws ConfigFormatException 
-	 * @throws SequnceFormatException 
+	 * @throws Exception 
 	 * 
 	 */
-	public static String getSampleId( final String value ) throws ConfigFormatException, SequnceFormatException {
-		String id = null;
-		try {
-			id = MetaUtil.getSampleIdFromFileName( value );
-		} catch( Exception e ) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static String getSampleIdFromString( final String value ) throws Exception {
+		String id = value;
+
+		if( id.endsWith( Constants.PROCESSED ) ) return id.replace( Constants.PROCESSED, "" );
+
+		final String fwReadSuffix = Config.getString( null, Constants.INPUT_FORWARD_READ_SUFFIX );
+		final String rvReadSuffix = Config.getString( null, Constants.INPUT_REVERSE_READ_SUFFIX );
+
+		if( !isForwardRead( id ) ) {
+			final int rvIndex = value.lastIndexOf( rvReadSuffix );
+			id = id.substring( 0, rvIndex ) + fwReadSuffix + id.substring( rvIndex + 3 );
 		}
-		if( id != null ) return id;
-		else {
-			id = value;
 
-			if( id.endsWith( Constants.PROCESSED ) ) return id.replace( Constants.PROCESSED, "" );
+		// trim directional suffix
+		if( !isMultiplexed() && fwReadSuffix != null && id.indexOf( fwReadSuffix ) > 0 )
+			id = id.substring( 0, id.lastIndexOf( fwReadSuffix ) );
 
-			final String fwReadSuffix = Config.getString( null, Constants.INPUT_FORWARD_READ_SUFFIX );
-			final String rvReadSuffix = Config.getString( null, Constants.INPUT_REVERSE_READ_SUFFIX );
+		// trim files extensions: .gz | .fasta | .fastq
+		if( isGzipped( id ) ) id = id.substring( 0, id.length() - 3 );
+		if( id.toLowerCase().endsWith( "." + Constants.FASTA ) || id.toLowerCase().endsWith( "." + Constants.FASTQ ) )
+			id = id.substring( 0, id.length() - 6 );
 
-			if( !isForwardRead( id ) ) {
-				final int rvIndex = value.lastIndexOf( rvReadSuffix );
-				id = id.substring( 0, rvIndex ) + fwReadSuffix + id.substring( rvIndex + 3 );
-			}
+		// trim user defined file prefix and/or suffix patterns
+		final String trimPrefix = Config.getString( null, Constants.INPUT_TRIM_PREFIX );
+		final String trimSuffix = Config.getString( null, Constants.INPUT_TRIM_SUFFIX );
+		if( trimPrefix != null && id.indexOf( trimPrefix ) > -1 )
+			id = id.substring( trimPrefix.length() + id.indexOf( trimPrefix ) );
 
-			// trim directional suffix
-			if( !isMultiplexed() && fwReadSuffix != null && id.indexOf( fwReadSuffix ) > 0 )
-				id = id.substring( 0, id.lastIndexOf( fwReadSuffix ) );
+		if( trimSuffix != null && id.indexOf( trimSuffix ) > 0 ) id = id.substring( 0, id.indexOf( trimSuffix ) );
 
-			// trim files extensions: .gz | .fasta | .fastq
-			if( isGzipped( id ) ) id = id.substring( 0, id.length() - 3 );
-			if( id.toLowerCase().endsWith( "." + Constants.FASTA ) ||
-				id.toLowerCase().endsWith( "." + Constants.FASTQ ) ) id = id.substring( 0, id.length() - 6 );
-
-			// trim user defined file prefix and/or suffix patterns
-			final String trimPrefix = Config.getString( null, Constants.INPUT_TRIM_PREFIX );
-			final String trimSuffix = Config.getString( null, Constants.INPUT_TRIM_SUFFIX );
-			if( trimPrefix != null && id.indexOf( trimPrefix ) > -1 )
-				id = id.substring( trimPrefix.length() + id.indexOf( trimPrefix ) );
-
-			if( trimSuffix != null && id.indexOf( trimSuffix ) > 0 ) id = id.substring( 0, id.indexOf( trimSuffix ) );
-
-			if( id == null || id.isEmpty() )
-				throw new SequnceFormatException( "Unable to extract a valid Sample ID from: " + value );
-			return id;
-		}
+		if( id == null || id.isEmpty() )
+			throw new SequnceFormatException( "Unable to extract a valid Sample ID from: " + value );
+		return id;
 	}
-	public static String getSampleId( final File file ) throws Exception {
+	
+	public static String getSampleId( final File file ) throws ConfigFormatException, SequnceFormatException, Exception  {
+		Log.debug(SeqUtil.class, "Determining which sample this file belongs to: " + file.getName());
 		String id = MetaUtil.getSampleId( file );
-		if( id != null ) return id;
-		return getSampleId(file.getName());
+		if( id == null ) id = getSampleIdFromString( file.getName() );
+		Log.debug(SeqUtil.class, "The file [" + file.getName() + "] belongs to sample [" + id + "].");
+		return id;
 	}
 
 	/**
@@ -309,10 +297,10 @@ public class SeqUtil {
 			for( final File file: files )
 				try {
 					if( isSeqFile( file ) && !isMultiplexed() && MetaUtil.exists() &&
-						!MetaUtil.getSampleIds().contains( getSampleId( file.getName() ) ) ) {
+						!MetaUtil.getSampleIds().contains( getSampleId( file ) ) ) {
 						seqsWithoutMetaId.add( file );
 						Log.info( SeqUtil.class, "The file \"" + file.getName() + "\" -> sample id [" +
-							getSampleId( file.getName() ) + "] is not in the metadata." );
+							getSampleId( file ) + "] is not in the metadata." );
 					} else seqFiles.add( file );
 				} catch( final Exception ex ) {
 					if( Config.getBoolean( null, MetaUtil.META_REQUIRED ) ) seqsWithoutMetaId.add( file );

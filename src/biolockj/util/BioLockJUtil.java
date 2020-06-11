@@ -82,21 +82,22 @@ public class BioLockJUtil {
 		return Config.getBoolean( null, Constants.PIPELINE_COPY_FILES ) || hasMixedInputs;
 	}
 
-	public static void clearStatus(String dirPath) {
-		String [] allFlags = {Constants.BLJ_STARTED, Constants.BLJ_FAILED, Constants.BLJ_COMPLETE, Constants.PRECHECK_COMPLETE, Constants.PRECHECK_FAILED, Constants.PRECHECK_STARTED};
-		for (String flag : allFlags) {
-			File ff = new File(dirPath + File.separator + flag);
-			if ( ff.exists() ) ff.delete();
+	public static void clearStatus( String dirPath ) {
+		String[] allFlags = { Constants.BLJ_STARTED, Constants.BLJ_FAILED, Constants.BLJ_COMPLETE,
+			Constants.PRECHECK_COMPLETE, Constants.PRECHECK_FAILED, Constants.PRECHECK_STARTED };
+		for( String flag: allFlags ) {
+			File ff = new File( dirPath + File.separator + flag );
+			if( ff.exists() ) ff.delete();
 		}
 	}
-	
+
 	/**
 	 * Used to save status files for modules and the pipeline.
 	 * 
 	 * @param path Target dir path
 	 * @return File Created file
-	 * @throws BioLockJStatusException 
-	 * @throws IOException 
+	 * @throws BioLockJStatusException
+	 * @throws IOException
 	 * @throws Exception if errors occur attempting to save the file
 	 */
 	public static File createFile( final String path ) throws BioLockJStatusException, IOException {
@@ -106,18 +107,22 @@ public class BioLockJUtil {
 		if( !f.isFile() ) throw new BioLockJStatusException( "Unable to create status file: " + f.getAbsolutePath() );
 		return f;
 	}
-	
-	public static File markStatus( final BioModule module, final String statusFlag) throws BioLockJStatusException, IOException {
-		return( markStatus(module.getModuleDir().getAbsolutePath(), statusFlag) );
+
+	public static File markStatus( final BioModule module, final String statusFlag )
+		throws BioLockJStatusException, IOException {
+		return ( markStatus( module.getModuleDir().getAbsolutePath(), statusFlag ) );
 	}
-	public static File markStatus( final String statusFlag) throws BioLockJStatusException, IOException {
-		return( markStatus(Config.pipelinePath(), statusFlag) );
+
+	public static File markStatus( final String statusFlag ) throws BioLockJStatusException, IOException {
+		return ( markStatus( Config.pipelinePath(), statusFlag ) );
 	}
-	public static File markStatus( final String dirPath, final String statusFlag) throws BioLockJStatusException, IOException {
-		clearStatus(dirPath);
-		return( createFile( dirPath + File.separator + statusFlag ) );
+
+	public static File markStatus( final String dirPath, final String statusFlag )
+		throws BioLockJStatusException, IOException {
+		clearStatus( dirPath );
+		return ( createFile( dirPath + File.separator + statusFlag ) );
 	}
-	
+
 	/**
 	 * Return the file extension - but ignore {@value biolockj.Constants#GZIP_EXT}.
 	 * 
@@ -283,17 +288,19 @@ public class BioLockJUtil {
 	 * Get the list of input directories for the pipeline.
 	 * 
 	 * @return List of system directory file paths
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static List<File> getInputDirs() throws Exception {
 		List<File> list = new ArrayList<>();
 		try {
 			list = Config.requireExistingDirs( null, Constants.INPUT_DIRS );
 		} catch( ConfigNotFoundException ex ) {
-			if (getInputModules().size() > 0) {
-				Log.warn(BioLockJUtil.class, "Typically, a value is required for [" + Constants.INPUT_DIRS + "]; " 
-					+ "presumably the input data will be supplied by modules: " + getCollectionAsString( getInputModules() ));
-			}else{
+			if( getInputModules().size() > 0 ) {
+				Log.warn( BioLockJUtil.class,
+					"Typically, a value is required for [" + Constants.INPUT_DIRS + "]; " +
+						"presumably the input data will be supplied by modules: " +
+						getCollectionAsString( getInputModules() ) );
+			} else {
 				throw ex;
 			}
 		}
@@ -383,7 +390,7 @@ public class BioLockJUtil {
 	 * Method used to add a file to the ignore file list property.
 	 * 
 	 * @param file File to ignore
-	 * @throws DockerVolCreationException 
+	 * @throws DockerVolCreationException
 	 */
 	public static void ignoreFile( final File file ) throws DockerVolCreationException {
 		final Set<String> ignoredFileNames = Config.getSet( null, Constants.INPUT_IGNORE_FILES );
@@ -404,20 +411,61 @@ public class BioLockJUtil {
 				FileUtils.listFiles( dir, HiddenFileFilter.VISIBLE, HiddenFileFilter.VISIBLE ) ) ) );
 		}
 		Log.info( BioLockJUtil.class, "# Initial input files found: " + files.size() );
+		Log.debug( BioLockJUtil.class, "Initial input files found: " + printLongFormList( files ) );
 		files = removeIgnoredAndEmptyFiles( files );
-		inputFiles.addAll( files );
+		if (MetaUtil.hasMetaColToSampleIdMap()) {
+			Set<String> names = MetaUtil.getSampleFileList();
+			for( File file: (new HashSet<File>(files)) ) {
+				Log.debug(BioLockJUtil.class,"Assigning file: " + file.getName());
+				if( names.contains( file.getName() ) ) {
+					Log.debug(BioLockJUtil.class, "Using file [" + file.getAbsolutePath() + "] because it is specified for sample [" + MetaUtil.getSampleId( file ) + "].");
+					inputFiles.add( file );
+					names.remove( file.getName() );
+					files.remove( file );
+				}else {
+					Log.debug(BioLockJUtil.class, "No link foud for file: " + file.getAbsolutePath() + " in names:" + printLongFormList( names ));
+				}
+			}
+			if( !names.isEmpty() ) {
+				if( getInputModules().size() > 0 ) {
+					Log.warn( BioLockJUtil.class,
+						"The following input files cannot be found:" + printLongFormList( names ) +
+							"Presumably these will be supplied by module(s): " +
+							getCollectionAsString( getInputModules() ) );
+				} else {
+					throw new MetadataException( "The following files could not be found in the input directories:" +
+						Constants.RETURN + BioLockJUtil.printLongFormList( names ) );
+				}
+			}
+			if( !files.isEmpty() ) {
+				if( Config.getBoolean( null, MetaUtil.META_REQUIRED ) )
+					for(File file: files) {
+						throw new FileWithoutMetadataException( file );
+					}
+				else {
+					Log.warn( BioLockJUtil.class,
+						"The folowing files from the input dirs will be ignored because they are not listed in the metadata: " +
+							BioLockJUtil.printLongFormList( files ) + Constants.RETURN +
+							"To change this, review these properties: " + MetaUtil.META_FILENAME_COLUMN + ", " +
+							Constants.INPUT_DIRS + ", " + MetaUtil.META_REQUIRED + ", " +
+							Constants.INPUT_IGNORE_FILES );
+				}
+			}
+		}else {
+			inputFiles.addAll( files );
+		}
 		Log.info( BioLockJUtil.class, "# Initial input files after removing empty/ignored files: " + files.size() );
 		setPipelineInputFileTypes();
 	}
-	
+
 	public static List<InputDataModule> getInputModules() throws Exception {
 		List<InputDataModule> inputModules = new ArrayList<>();
 		List<String> biomoduleLines = Properties.getListedModules( RuntimeParamUtil.getConfigFile() );
-		for (String moduleLine : biomoduleLines ) {
-			String[] parts = moduleLine.split(Constants.ASSIGN_ALIAS);
-			String className = parts[0].trim();
+		for( String moduleLine: biomoduleLines ) {
+			String[] parts = moduleLine.split( Constants.ASSIGN_ALIAS );
+			String className = parts[ 0 ].trim();
 			BioModule mod = ModuleUtil.createModuleInstance( className );
-			if ( mod instanceof InputDataModule ) inputModules.add( ( InputDataModule ) mod );
+			if( mod instanceof InputDataModule ) inputModules.add( (InputDataModule) mod );
 		}
 		return inputModules;
 	}
@@ -507,10 +555,10 @@ public class BioLockJUtil {
 		boolean bool = false;
 		try {
 			bool = Config.requireSet( null, INTERNAL_PIPELINE_INPUT_TYPES ).contains( type );
-		}catch( ConfigNotFoundException ex ) {
-			throw new ConfigNotFoundException(INTERNAL_PIPELINE_INPUT_TYPES, 
-				"Check property [" + Constants.INPUT_DIRS + "]." + System.lineSeparator() + 
-				"It may be necissary to supply the input types via property [" + Constants.INPUT_TYPES + "].");
+		} catch( ConfigNotFoundException ex ) {
+			throw new ConfigNotFoundException( INTERNAL_PIPELINE_INPUT_TYPES,
+				"Check property [" + Constants.INPUT_DIRS + "]." + System.lineSeparator() +
+					"It may be necissary to supply the input types via property [" + Constants.INPUT_TYPES + "]." );
 		}
 		return bool;
 	}
@@ -590,15 +638,14 @@ public class BioLockJUtil {
 	 * 
 	 * @param args BioLockJ.java main() runtime args
 	 */
-	public static void showInfo( String[] args )
-	{
-		for (String arg : args) {
+	public static void showInfo( String[] args ) {
+		for( String arg: args ) {
 			String lowerArg = arg.replaceAll( "^--", "-" ).toLowerCase();
-			if (lowerArg.equals( Constants.VERSION ) ) {
-				System.out.println("BioLockJ " + BioLockJUtil.getVersion( true ) );
+			if( lowerArg.equals( Constants.VERSION ) ) {
+				System.out.println( "BioLockJ " + BioLockJUtil.getVersion( true ) );
 				System.exit( 0 );
 			}
-			if (lowerArg.equals( Constants.HELP ) ) {
+			if( lowerArg.equals( Constants.HELP ) ) {
 				BioLockJUtil.printHelp();
 				System.exit( 0 );
 			}
@@ -694,8 +741,11 @@ public class BioLockJUtil {
 	private static void setPipelineInputFileTypes() throws DockerVolCreationException, Exception {
 		final Set<String> fileTypes = new HashSet<>();
 		for( final File file: inputFiles ) {
-			if( SeqUtil.isSeqFile( file ) ) fileTypes.add( PIPELINE_SEQ_INPUT_TYPE );
-			else if( file.getName().endsWith( Constants.PROCESSED ) ) fileTypes.add( PIPELINE_PARSER_INPUT_TYPE );
+			String sample = MetaUtil.getSampleId( file );
+			if( SeqUtil.isSeqFile( file ) ) {
+				fileTypes.add( PIPELINE_SEQ_INPUT_TYPE );
+				sample = SeqUtil.getSampleId( file );
+			} else if( file.getName().endsWith( Constants.PROCESSED ) ) fileTypes.add( PIPELINE_PARSER_INPUT_TYPE );
 			else if( R_CalculateStats.isStatsFile( file ) ) fileTypes.add( PIPELINE_STATS_TABLE_INPUT_TYPE );
 			else if( RMetaUtil.isMetaMergeTable( file ) ) fileTypes.add( PIPELINE_R_INPUT_TYPE );
 			else if( OtuUtil.isOtuFile( file ) ) fileTypes.add( PIPELINE_OTU_COUNT_TABLE_INPUT_TYPE );
@@ -707,29 +757,38 @@ public class BioLockJUtil {
 				fileTypes.add( PIPELINE_TAXA_COUNT_TABLE_INPUT_TYPE );
 			} else if( TaxaUtil.isTaxaFile( file ) ) fileTypes.add( PIPELINE_TAXA_COUNT_TABLE_INPUT_TYPE );
 			else if( PathwayUtil.isPathwayFile( file ) ) fileTypes.add( PIPELINE_HUMANN2_COUNT_TABLE_INPUT_TYPE );
+			if( sample == null && Config.getBoolean( null, MetaUtil.META_REQUIRED ) ) {
+				throw new FileWithoutMetadataException( file );
+			}
 		}
-		
-		for (InputDataModule inMod : getInputModules() ) {
+
+		for( InputDataModule inMod: getInputModules() ) {
 			Set<String> filesFromMod = inMod.getInputDataTypes();
-			Log.info(BioLockJUtil.class, "The module [" + inMod.getClass().getSimpleName() + "] brings filetype(s): " + getCollectionAsString(filesFromMod) );
+			Log.info( BioLockJUtil.class, "The module [" + inMod.getClass().getSimpleName() + "] brings filetype(s): " +
+				getCollectionAsString( filesFromMod ) );
 			fileTypes.addAll( filesFromMod );
 		}
-			
-		if ( Config.getList( null, Constants.INPUT_TYPES ).size() > 0 ) {
+
+		if( Config.getList( null, Constants.INPUT_TYPES ).size() > 0 ) {
 			List<String> manualTypes = Config.getList( null, Constants.INPUT_TYPES );
-			Log.warn(BioLockJUtil.class, "The property [" + Constants.INPUT_TYPES + "] overrides automatic file type detection.");
-			Log.warn(BioLockJUtil.class, "Without property [" + Constants.INPUT_TYPES + "], the file types would be to: " + getCollectionAsString( fileTypes ));
-			Log.warn(BioLockJUtil.class, "Instead, the value of [" + INTERNAL_PIPELINE_INPUT_TYPES + "] will be set to: " + getCollectionAsString( manualTypes ) );
+			Log.warn( BioLockJUtil.class,
+				"The property [" + Constants.INPUT_TYPES + "] overrides automatic file type detection." );
+			Log.warn( BioLockJUtil.class, "Without property [" + Constants.INPUT_TYPES +
+				"], the file types would be to: " + getCollectionAsString( fileTypes ) );
+			Log.warn( BioLockJUtil.class, "Instead, the value of [" + INTERNAL_PIPELINE_INPUT_TYPES +
+				"] will be set to: " + getCollectionAsString( manualTypes ) );
 			fileTypes.clear();
 			fileTypes.addAll( manualTypes );
 		}
-		
+
 		Config.setConfigProperty( INTERNAL_PIPELINE_INPUT_TYPES, fileTypes );
-		if (fileTypes.isEmpty()) {
-			Log.warn(BioLockJUtil.class, "No input types.");
-			if ( ! getInputModules().isEmpty() ) {
-				Log.warn(BioLockJUtil.class, "This pipeline contains InputData modules:  " + getCollectionAsString( getInputModules() ) );
-				Log.warn(BioLockJUtil.class, "It may be necissary to supply the input types via property [" + Constants.INPUT_TYPES + "].");
+		if( fileTypes.isEmpty() ) {
+			Log.warn( BioLockJUtil.class, "No input types." );
+			if( !getInputModules().isEmpty() ) {
+				Log.warn( BioLockJUtil.class,
+					"This pipeline contains InputData modules:  " + getCollectionAsString( getInputModules() ) );
+				Log.warn( BioLockJUtil.class,
+					"It may be necissary to supply the input types via property [" + Constants.INPUT_TYPES + "]." );
 			}
 		}
 	}

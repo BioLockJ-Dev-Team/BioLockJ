@@ -95,7 +95,7 @@ public class BuildQiimeMapping extends SeqModuleImpl {
 
 		for( final File f: getInputFiles() )
 			for( final String key: metaLines.keySet() ) {
-				if( !SeqUtil.getSampleId( f.getName() ).equals( key ) ) continue;
+				if( !SeqUtil.getSampleId( f ).equals( key ) ) continue;
 
 				writer.write( key + TAB_DELIM );
 				if( !hasQm1 ) writer.write( MetaUtil.getNullValue( this ) + TAB_DELIM );

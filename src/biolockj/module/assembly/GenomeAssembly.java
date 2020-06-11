@@ -48,7 +48,7 @@ public class GenomeAssembly extends SeqModuleImpl implements ApiModule {
 		final List<List<String>> data = new ArrayList<>();
 		final Map<File, File> map = SeqUtil.getPairedReads( files );
 		for( final File file: map.keySet() ) {
-			final String fileId = SeqUtil.getSampleId( file.getName() );
+			final String fileId = SeqUtil.getSampleId( file );
 			final String outputDir = getOutputDir().getAbsolutePath() + File.separator + fileId + "_assembly";
 			final ArrayList<String> lines = new ArrayList<>();
 			lines.add( FUNCTION_ASSEMBLY + " " + file.getAbsolutePath() + " " + map.get( file ).getAbsolutePath() +

@@ -16,8 +16,8 @@ import java.util.*;
 import biolockj.*;
 import biolockj.Properties;
 import biolockj.api.API_Exception;
+import biolockj.exception.BioLockJException;
 import biolockj.exception.ConfigFormatException;
-import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
 import biolockj.exception.ConfigViolationException;
 import biolockj.exception.DockerVolCreationException;
@@ -388,6 +388,7 @@ public class MetaUtil {
 		}
 		
 		getNameToSampleMap();
+		Config.getBoolean( null, META_REQUIRED );
 		
 		Log.info( MetaUtil.class, "Metadata initialized" );
 	}
@@ -395,7 +396,7 @@ public class MetaUtil {
 	/*
 	 * Is this pipeline configured to use one or more columns in the metadata to link files to sample id's.
 	 */
-	private static boolean hasMetaColToSampleIdMap() throws Exception {
+	public static boolean hasMetaColToSampleIdMap() throws Exception {
 		final List<String> columns = Config.getList( null, META_FILENAME_COLUMN );
 		boolean useFileNameColumn = columns != null && !columns.isEmpty();
 		
@@ -430,14 +431,15 @@ public class MetaUtil {
 			final List<String> columns = Config.getList( null, META_FILENAME_COLUMN );
 			for( String metaCol: columns ) {
 				for (String sample : getSampleIds()) {
-					String val = getField( sample, metaCol );
-					if (val != null) {
-						if (nameToSample.get( val ) != null && !nameToSample.get( val ).equals( sample )) {
+					String fileName = getField( sample, metaCol );
+					if (fileName != null) {
+						if (nameToSample.get( fileName ) != null && !nameToSample.get( fileName ).equals( sample )) {
 							throw new ConfigViolationException( META_FILENAME_COLUMN,
-								"The file name \"" + val + "\" cannot be assigned to both samples [" +
-									nameToSample.get( val ) + "] and [" + sample + "]." );
+								"The file name \"" + fileName + "\" cannot be assigned to both samples [" +
+									nameToSample.get( fileName ) + "] and [" + sample + "]." );
 						}else {
-							nameToSample.put(val, sample);
+							nameToSample.put(fileName, sample);
+							Log.info(MetaUtil.class, "Filename [" + fileName + "] has been associated to sample [" + sample + "].");
 						}
 					}
 				}
@@ -445,14 +447,21 @@ public class MetaUtil {
 		}
 	}
 	
-	static String getSampleIdFromFileName(String filename) throws Exception {
-		return getNameToSampleMap().get( filename );
+	private static String getSampleIdFromFileName(String filename) throws Exception {
+		Log.debug(MetaUtil.class, "Checking metadata for file name: " + filename);
+		String id = getNameToSampleMap().get( filename );
+		Log.debug(MetaUtil.class, "Map has keys: " + BioLockJUtil.getCollectionAsString( getNameToSampleMap().keySet() ));
+		String msg = id == null ? "File is not given in the metadata." : "Linked " + filename + " to sample [" + id + "].";
+		if (getNameToSampleMap().size() > 0 && id==null ) Log.debug( MetaUtil.class, "Files in metadata include: " + BioLockJUtil.printLongFormList( getNameToSampleMap().keySet() ) );
+		Log.debug(MetaUtil.class, msg);
+		return id;
 	}
 	public static String getSampleId(File file) throws Exception {
 		return getSampleIdFromFileName(file.getName());
 	}
-	
-	private static HashMap<String, String> nameToSample = null;
+	public static Set<String> getSampleFileList() throws Exception{
+		return new HashSet<String>(getNameToSampleMap().keySet());
+	}
 
 	/**
 	 * Refresh the metadata cache.
@@ -561,7 +570,7 @@ public class MetaUtil {
 			final String dirs = Config.requireString( null, Constants.INPUT_DIRS );
 			if( SeqUtil.piplineHasSeqInput() ) {
 				for( final File seqFile: BioLockJUtil.getPipelineInputFiles() ) {
-					final String seqId = SeqUtil.getSampleId( seqFile.getName() );
+					final String seqId = SeqUtil.getSampleId( seqFile );
 					if( seqId != null && seqId.equals( id ) )
 						return msg + "No valid seqs remain in: " + seqFile.getName();
 				}
@@ -644,6 +653,11 @@ public class MetaUtil {
 		Properties.registerProp( USE_EVERY_ROW, Properties.BOOLEAN_TYPE, USE_EVERY_ROW_DESC );
 	}
 
+	/*
+	 * Key string is a file name, value string is a sample id from the metadata.
+	 */
+	private static HashMap<String, String> nameToSample = null;
+	
 	/**
 	 * {@link biolockj.Config} property {@value #META_BARCODE_COLUMN}
 	 * {@value #META_BARCODE_COLUMN_DESC} 

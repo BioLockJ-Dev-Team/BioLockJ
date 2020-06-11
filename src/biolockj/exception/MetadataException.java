@@ -11,6 +11,7 @@
  */
 package biolockj.exception;
 
+import biolockj.Constants;
 import biolockj.util.MetaUtil;
 
 /**
@@ -26,6 +27,10 @@ public class MetadataException extends BioLockJException {
 	public MetadataException( final String msg ) {
 		super( ( MetaUtil.exists() ? "Error in metadata file [ " + MetaUtil.getPath() + " ] " + RETURN: "" ) + msg );
 	}
+	
+	protected static final String howToLinkMetaWithFile = Constants.RETURN + "File to sample associations can be controlled using [" +
+					Constants.INPUT_TRIM_PREFIX + "] and [" + Constants.INPUT_TRIM_SUFFIX +
+					"] for sequence files and [" + MetaUtil.META_FILENAME_COLUMN + "] for any file type.";
 
 	private static final long serialVersionUID = 2815907364437447934L;
 }

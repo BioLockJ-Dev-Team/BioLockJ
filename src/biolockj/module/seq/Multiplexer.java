@@ -134,7 +134,7 @@ public class Multiplexer extends JavaModuleImpl implements SeqModule, ApiModule 
 	protected String getHeader( final File file, final List<String> seqLines ) throws Exception {
 		final String header = seqLines.get( 0 ).trim();
 		final String headerChar = header.substring( 0, 1 );
-		final String sampleId = SeqUtil.getSampleId( file.getName() );
+		final String sampleId = SeqUtil.getSampleId( file );
 		final long numReads = incrementNumReads( file );
 
 		if( DemuxUtil.barcodeInHeader() ) return header;

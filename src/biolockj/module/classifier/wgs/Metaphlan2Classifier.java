@@ -48,7 +48,7 @@ public class Metaphlan2Classifier extends ClassifierModuleImpl implements ApiMod
 	public List<List<String>> buildScript( final List<File> files ) throws Exception {
 		final List<List<String>> data = new ArrayList<>();
 		for( final File file: files ) {
-			final String fileId = SeqUtil.getSampleId( file.getName() );
+			final String fileId = SeqUtil.getSampleId( file );
 			final String outputFile = getOutputDir().getAbsolutePath() + File.separator + fileId + Constants.PROCESSED;
 			final String bowtie2Out = getTempDir().getAbsolutePath() + File.separator + fileId + BOWTIE_EXT;
 			final ArrayList<String> lines = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Metaphlan2Classifier extends ClassifierModuleImpl implements ApiMod
 		final List<List<String>> data = new ArrayList<>();
 		final Map<File, File> map = SeqUtil.getPairedReads( files );
 		for( final File file: map.keySet() ) {
-			final String fileId = SeqUtil.getSampleId( file.getName() );
+			final String fileId = SeqUtil.getSampleId( file );
 			final String outputFile = getOutputDir().getAbsolutePath() + File.separator + fileId + Constants.PROCESSED;
 			final String bowtie2Out = getTempDir().getAbsolutePath() + File.separator + fileId + BOWTIE_EXT;
 			final ArrayList<String> lines = new ArrayList<>();

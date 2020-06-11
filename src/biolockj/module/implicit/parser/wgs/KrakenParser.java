@@ -70,7 +70,7 @@ public class KrakenParser extends ParserModuleImpl implements ApiModule {
 		final BufferedReader reader = BioLockJUtil.getFileReader( file );
 		try {
 			for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
-				final OtuNode node = new KrakenNode( SeqUtil.getSampleId( file.getName() ), line );
+				final OtuNode node = new KrakenNode( SeqUtil.getSampleId( file ), line );
 				if( node.getTaxaMap() == null || node.getTaxaMap().get( TaxaUtil.topTaxaLevel() ) == null ) {
 					Log.debug( getClass(), "Skip OTU missing top taxa level: " + line );
 					continue;

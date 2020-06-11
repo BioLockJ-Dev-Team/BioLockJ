@@ -53,7 +53,7 @@ public class RdpParser extends ParserModuleImpl implements ApiModule{
 			final BufferedReader reader = BioLockJUtil.getFileReader( file );
 			try {
 				for( String line = reader.readLine(); line != null; line = reader.readLine() )
-					addOtuNode( new RdpNode( SeqUtil.getSampleId( file.getName() ), line ) );
+					addOtuNode( new RdpNode( SeqUtil.getSampleId( file ), line ) );
 			} finally {
 				if( reader != null ) reader.close();
 			}

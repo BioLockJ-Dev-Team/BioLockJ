@@ -48,7 +48,7 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 		final List<List<String>> data = new ArrayList<>();
 		for( final File file: files ) {
 			final String outputFile = getOutputDir().getAbsolutePath() + File.separator +
-				SeqUtil.getSampleId( file.getName() ) + Constants.PROCESSED;
+				SeqUtil.getSampleId( file ) + Constants.PROCESSED;
 			final ArrayList<String> lines = new ArrayList<>();
 			lines.add( FUNCTION_RDP + " " + file.getAbsolutePath() + " " + outputFile );
 			data.add( lines );

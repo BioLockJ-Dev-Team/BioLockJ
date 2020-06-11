@@ -42,7 +42,7 @@ public class AwkFastaConverter extends SeqModuleImpl implements ApiModule {
 
 		for( final File f: files ) {
 			final ArrayList<String> lines = new ArrayList<>();
-			final String fileId = SeqUtil.getSampleId( f.getName() );
+			final String fileId = SeqUtil.getSampleId( f );
 			final String dirExt = SeqUtil.getReadDirectionSuffix( f );
 
 			String filePath = f.getAbsolutePath();
