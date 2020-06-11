@@ -31,6 +31,7 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 		super();
 		addNewProperty( RDP_DB, Properties.FILE_PATH, "File path used to define an alternate RDP database" );
 		addNewProperty( RDP_JAR, Properties.FILE_PATH, "File path for RDP java executable JAR" );
+		addNewProperty( RDP_DOCKER_JAR, Properties.STRING_TYPE, "File path for RDP java executable JAR in docker." );
 		addNewProperty( RDP_PARAMS, Properties.LIST_TYPE, "parameters to use when running rdp. (must include \"-f fixrank\")" );
 		addNewProperty( JAVA_PARAMS, Properties.LIST_TYPE, "the parameters to java when running rdp." );
 		addGeneralProperty( Constants.DEFAULT_MOD_SEQ_MERGER );
@@ -127,7 +128,13 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	}
 
 	private String getJar() throws Exception {
-		return Config.requireString( this, RDP_JAR );
+		String path;
+		if ( DockerUtil.inDockerEnv() ) {
+			path = Config.requireString( this, RDP_DOCKER_JAR );
+		}else {
+			path = Config.requireExistingFile( this, RDP_JAR ).getAbsolutePath();
+		}
+		return path;
 	}
 
 	private String getJavaParams() throws Exception {
@@ -148,6 +155,12 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	 * {@link biolockj.Config} File property used to define an alternate RDP database file: {@value #RDP_DB}
 	 */
 	protected static final String RDP_DB = "rdp.db";
+	
+	/**
+	 * {@link biolockj.Config} File property for RDP java executable jar WHEN RUNNING IN DOCKER: {@value #RDP_DOCKER_JAR}
+	 * This is the path in the default docker container.
+	 */
+	protected static final String RDP_DOCKER_JAR = "rdp.containerJar";
 
 	/**
 	 * {@link biolockj.Config} File property for RDP java executable JAR: {@value #RDP_JAR}
