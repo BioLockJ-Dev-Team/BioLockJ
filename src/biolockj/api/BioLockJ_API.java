@@ -3,6 +3,7 @@ package biolockj.api;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,6 +21,11 @@ import biolockj.util.ModuleUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 public class BioLockJ_API {
 
@@ -224,6 +230,7 @@ public class BioLockJ_API {
 		Reflections reflections = supressStdOut_createReflections(prefix);
 		
 		Set<Class<? extends BioModule>> subTypes = reflections.getSubTypesOf( BioModule.class );
+		
 		for (Class<? extends BioModule> st : subTypes ) {
 			try {
 				BioModule tmp = (BioModule) Class.forName( st.getName() ).newInstance();
@@ -255,7 +262,19 @@ public class BioLockJ_API {
 				}));
 		}
 		
-		Reflections reflections = new Reflections(prefix);
+		
+		//example code modified from https://www.codota.com/code/java/classes/org.reflections.util.ConfigurationBuilder
+		  Set<URL> classpath = new HashSet<>();
+		  classpath.addAll(ClasspathHelper.forClassLoader());
+		  classpath.addAll(ClasspathHelper.forJavaClassPath());
+		  classpath.addAll(ClasspathHelper.forManifest());
+		  classpath.addAll(ClasspathHelper.forPackage(""));
+		  Reflections reflections = new Reflections(new ConfigurationBuilder()
+		      .setUrls(classpath)
+		      .useParallelExecutor()
+		      .filterInputsBy(FilterBuilder.parsePackages("-java, -javax, -sun, -com.sun"))
+		      .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner()));
+		
 
 		System.setOut(classicOut);
 		System.setErr(classicErr);
