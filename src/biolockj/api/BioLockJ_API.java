@@ -263,18 +263,30 @@ public class BioLockJ_API {
 		}
 		
 		
-		//example code modified from https://www.codota.com/code/java/classes/org.reflections.util.ConfigurationBuilder
-		  Set<URL> classpath = new HashSet<>();
-		  classpath.addAll(ClasspathHelper.forClassLoader());
-		  classpath.addAll(ClasspathHelper.forJavaClassPath());
-		  classpath.addAll(ClasspathHelper.forManifest());
-		  classpath.addAll(ClasspathHelper.forPackage(""));
-		  Reflections reflections = new Reflections(new ConfigurationBuilder()
-		      .setUrls(classpath)
-		      .useParallelExecutor()
-		      .filterInputsBy(FilterBuilder.parsePackages("-java, -javax, -sun, -com.sun"))
-		      .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner()));
-		
+		  Reflections reflections = null;
+		  
+		  if( prefix.trim().length() == 0)
+		  {
+			  
+			//example code modified from https://www.codota.com/code/java/classes/org.reflections.util.ConfigurationBuilder
+			  Set<URL> classpath = new HashSet<>();
+			  classpath.addAll(ClasspathHelper.forClassLoader());
+			  classpath.addAll(ClasspathHelper.forJavaClassPath());
+			  classpath.addAll(ClasspathHelper.forManifest());
+			  classpath.addAll(ClasspathHelper.forPackage(""));
+			
+			  reflections = new Reflections(new ConfigurationBuilder()
+			      .setUrls(classpath)
+			      .useParallelExecutor()
+			      .filterInputsBy(FilterBuilder.parsePackages("-java, -javax, -sun, -com.sun"))
+			      .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner()));
+			
+		  }
+		  else
+		  {
+			  reflections = new Reflections(prefix);
+		  }
+		  
 
 		System.setOut(classicOut);
 		System.setErr(classicErr);
