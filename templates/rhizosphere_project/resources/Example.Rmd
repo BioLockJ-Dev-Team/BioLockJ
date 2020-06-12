@@ -1,0 +1,74 @@
+---
+title: "Example"
+author: "Ivory Blakley"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Access the earlier pipeline outputs
+
+The metadata is in the output folder of the "ImportMetadata" module.
+```{r}
+pipeRoot="../.."
+metaModule=dir(path=pipeRoot, pattern="ImportMetadata", full.names = TRUE, include.dirs = TRUE)
+metaDir=dir(path=metaModule, pattern="output", full.names = TRUE, include.dirs = TRUE)
+metaFile=dir(path=metaDir, full.names = TRUE, include.dirs = FALSE)
+meta = read.delim(metaFile, row.names = 1)
+metaFile
+meta
+```
+
+The counts tables that have been normalized and log-scaled are in the "LogTransformTaxaTables" module.
+```{r}
+countsMod=dir(path=pipeRoot, pattern="LogTransformTaxaTables", full.names = TRUE, include.dirs = TRUE)
+countsDir=dir(path=countsMod, pattern="output", full.names = TRUE, include.dirs = TRUE)
+file=dir(path=countsDir, pattern="phylum.tsv", full.names = TRUE, include.dirs = FALSE)
+file
+```
+
+Now you can use this information in customized ways, as appropriate for a specific project.
+```{r}
+level = gsub("[^?]*_taxaCount_norm_Log10_|.tsv", "", file)
+table = read.table(file,
+                   header = TRUE,
+                   row.names = 1,
+                   sep = "\t")
+merged = merge(meta, table, by = 0)
+sp = split(merged[names(table)], f=merged$Soil.Type)
+df = sapply(sp, colMeans)
+plot(df, main = "Mean normalized counts", pch=19, xlim=c(0,max(df)), ylim=c(0,max(df)))
+abline(0,1)
+text(df, labels=row.names(df), pos=4, xpd=TRUE)
+```
+
+
+
+## Including Images
+
+When rendering the output to html, you can use standard html to insert images as part of your document.
+
+<img src="sheep17.jpg" alt="a pre-existing plot or image">
+

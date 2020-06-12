@@ -15,3 +15,6 @@ BioLockJ.jar
 /mkdocs/user-guide/site/*
 /**/__*__
 /javadocs/*
+/templates/**/seq/*
+/templates/local.properties
+
