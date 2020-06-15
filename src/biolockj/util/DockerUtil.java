@@ -18,8 +18,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.FileSystem;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import biolockj.*;
@@ -347,6 +349,9 @@ public class DockerUtil {
 		}
 		return hostPath;
 	}
+	public static File deContainerizePath( File innerFile ) throws DockerVolCreationException {
+		return new File( deContainerizePath(innerFile.getAbsolutePath()) );
+	}
 
 	public static String getContainerId() throws IOException {
 		String id = null;
@@ -401,10 +406,14 @@ public class DockerUtil {
 		}
 	}
 
-	private static void verifyImage(BioModule module, String image) throws DockerVolCreationException, InterruptedException, DockerImageException, SpecialPropertiesException, ConfigFormatException {
+	private static void verifyImage(BioModule module, String image) throws DockerVolCreationException, InterruptedException, DockerImageException, SpecialPropertiesException, ConfigFormatException, IOException {
 		Log.info(DockerUtil.class, "Verifying docker image: " + image);
-		final String cmd = Config.getExe( module, Constants.EXE_DOCKER ) + " run --rm -v " + deContainerizePath( Config.replaceEnvVar( "${BLJ}/resources/docker" ) ) + ":/testScript " 
-						+ image + " " + USE_BASH + " /testScript/testDockerImage.sh" ;
+		final File script = new File( Config.replaceEnvVar( "${BLJ}/resources/docker/" + TEST_SCRIPT) );
+		final File copy = new File(Config.getPipelineDir(), TEST_SCRIPT);
+		if ( ! copy.exists() ) FileUtils.copyFileToDirectory( script, Config.getPipelineDir() );
+		copy.setExecutable( true );
+		final String cmd = Config.getExe( module, Constants.EXE_DOCKER ) + " run --rm -v " + deContainerizePath( Config.getPipelineDir() ) + ":/testScript " 
+						+ image + " " + USE_BASH + " /testScript/" + TEST_SCRIPT ;
 		String result = "no response";
 		int exit = -1;
 		String label="testing::" + image;
@@ -612,4 +621,5 @@ public class DockerUtil {
 	private static final String DOCKER_INFO_FILE = "dockerInfo.json";
 	private static final String ALL_GOOD = "Everything is awesome!";
 	private static final String USE_BASH = "/bin/bash -c";
+	private static final String TEST_SCRIPT = "testDockerImage.sh";
 }
