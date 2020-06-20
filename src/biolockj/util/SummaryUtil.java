@@ -683,8 +683,7 @@ public class SummaryUtil {
 		String host = null;
 		try {
 			host = Processor.submitQuery( "hostname", "Query Host" );
-			parentHost = Config.isOnCluster() ? Config.requireString( null, Constants.CLUSTER_HOST ):
-				DockerUtil.inDockerEnv() ? RuntimeParamUtil.getDockerHostName(): null;
+			if (Config.isOnCluster() ) parentHost = Config.getString( null, Constants.CLUSTER_HOST );
 		} catch( final Exception ex ) {
 			Log.error( SummaryUtil.class, "Failed to determine runtime environment host", ex );
 		}

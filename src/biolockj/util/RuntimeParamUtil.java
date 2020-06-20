@@ -114,15 +114,6 @@ public class RuntimeParamUtil {
 	}
 
 	/**
-	 * Return host on which Docker container is running
-	 * 
-	 * @return Host name
-	 */
-	public static String getDockerHostName() {
-		return params.get( HOSTNAME );
-	}
-
-	/**
 	 * For cluster env, runtime params that need be forward to detached cluster Java modules. For Docker env, return
 	 * line with BLJ_OPTIONS in Docker java_module scripts.
 	 * 
@@ -387,11 +378,6 @@ public class RuntimeParamUtil {
 	protected static final String HOME_DIR = "-homeDir";
 
 	/**
-	 * Automatically added $(hostname) by biolockj/dockblj script: {@value #HOSTNAME}
-	 */
-	protected static final String HOSTNAME = "-hostname";
-
-	/**
 	 * Change password runtime parameter switch: {@value #PASSWORD}
 	 */
 	protected static final String PASSWORD = "-password";
@@ -419,7 +405,7 @@ public class RuntimeParamUtil {
 	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG, UNUSED_PROPS_FLAG );
 	private static final List<String> DIR_ARGS = Arrays.asList( BLJ_PROJ_DIR, RESTART_DIR );
 	private static final List<String> extraParams = new ArrayList<>();
-	private static final List<String> NAMED_ARGS = Arrays.asList( CONFIG_FILE, DIRECT_MODE, HOSTNAME, PASSWORD );
+	private static final List<String> NAMED_ARGS = Arrays.asList( CONFIG_FILE, DIRECT_MODE, PASSWORD );
 	private static final List<String> REQUIRED_ARGS = Arrays.asList(CONFIG_FILE, RESTART_DIR, DIRECT_MODE);
 	private static final Map<String, String> params = new HashMap<>();
 	private static String runtimeArgs = "";
