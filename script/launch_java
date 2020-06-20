@@ -72,7 +72,7 @@ java_cmd_core(){
 
 # Put together the arguments to pass to the java program
 assemble_args(){
-	args="-projectDir ${BLJ_PROJ} -homeDir ${HOME}"
+	args="-projectDir ${BLJ_PROJ}"
 	ifArgUsed $PASSWORD_ARG && args="${args} -password $(get_arg_value $PASSWORD_ARG)" 
 	ifArgUsed $RESTART_ARG && args="${args} -restartDir ${restartDir}"
 	ifArgUsed $PRECHECK && args="${args} -precheck"

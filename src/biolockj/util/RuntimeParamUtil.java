@@ -123,21 +123,6 @@ public class RuntimeParamUtil {
 	}
 
 	/**
-	 * Runtime property getter for Docker host $USER $HOME dir
-	 * 
-	 * @return Host {@value #HOST_HOME_DIR} directory
-	 * @throws DockerVolCreationException 
-	 */
-	public static File getHomeDir() throws DockerVolCreationException {
-		return getHomeDir( true );
-	}
-	//TODO: cut down on usage of home dir
-	public static File getHomeDir(boolean dockerize) throws DockerVolCreationException {
-		if (dockerize && DockerUtil.inDockerEnv()) return new File(DockerUtil.AWS_EC2_HOME);
-		return getFileParam( HOME_DIR, dockerize );
-	}
-
-	/**
 	 * For cluster env, runtime params that need be forward to detached cluster Java modules. For Docker env, return
 	 * line with BLJ_OPTIONS in Docker java_module scripts.
 	 * 
@@ -336,7 +321,6 @@ public class RuntimeParamUtil {
 	private static String getJavaComputeNodeArgs( final JavaModule module ) throws DockerVolCreationException {
 		Log.info( RuntimeParamUtil.class, "Building java args for compute nodes  -->" );
 		return BLJ_PROJ_DIR + " " + get_BLJ_PROJ(false).getAbsolutePath() + " " 
-			 + HOME_DIR + " " + getHomeDir(false).getAbsolutePath() + " " 
 			 + DIRECT_MODE + " " + Config.pipelineName() + ":" + module.getModuleDir().getName();
 	}
 
@@ -358,12 +342,8 @@ public class RuntimeParamUtil {
 	}
 
 	private static void validateParams() throws RuntimeParamException, DockerVolCreationException {
-		if( getHomeDir() == null )
-			throw new RuntimeParamException( HOME_DIR, "", "$HOME directory required, but not found" );
 		if( getConfigFile() == null )
 			throw new RuntimeParamException( CONFIG_FILE, "", "Config file required, but not found" );
-		if( !getHomeDir().isDirectory() ) throw new RuntimeParamException( HOME_DIR, getHomeDir().getAbsolutePath(),
-			"System directory-path not found" );
 		if( !getConfigFile().isFile() ) throw new RuntimeParamException( CONFIG_FILE, getConfigFile().getAbsolutePath(),
 			"System file-path not found" );
 	}
@@ -437,7 +417,7 @@ public class RuntimeParamUtil {
 	protected static final String UNUSED_PROPS_FLAG = "-unusedProps";
 
 	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG, UNUSED_PROPS_FLAG );
-	private static final List<String> DIR_ARGS = Arrays.asList( BLJ_PROJ_DIR, HOME_DIR, RESTART_DIR );
+	private static final List<String> DIR_ARGS = Arrays.asList( BLJ_PROJ_DIR, RESTART_DIR );
 	private static final List<String> extraParams = new ArrayList<>();
 	private static final List<String> NAMED_ARGS = Arrays.asList( CONFIG_FILE, DIRECT_MODE, HOSTNAME, PASSWORD );
 	private static final List<String> REQUIRED_ARGS = Arrays.asList(CONFIG_FILE, RESTART_DIR, DIRECT_MODE);

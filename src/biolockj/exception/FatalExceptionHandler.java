@@ -70,7 +70,7 @@ public class FatalExceptionHandler {
 				"Local file-system error log path: " + getErrorLog().getAbsolutePath() );
 			if( DockerUtil.inDockerEnv() ) try {
 				Log.info( FatalExceptionHandler.class, "Host file-system error log path: " +
-					RuntimeParamUtil.getHomeDir( false ) + File.separator + getErrorLog().getName() );
+					DockerUtil.deContainerizePath( getErrorLog().getAbsolutePath() ) );
 			} catch( DockerVolCreationException docEx ) {
 				// well, then, don't do that.
 			}
@@ -121,7 +121,6 @@ public class FatalExceptionHandler {
 			dir = RuntimeParamUtil.get_BLJ_PROJ();
 			if( dir == null || !dir.isDirectory() ) {
 				if( DockerUtil.inDockerEnv() ) dir = new File( DockerUtil.AWS_EC2_HOME );
-				else dir = RuntimeParamUtil.getHomeDir();
 			}
 		} catch( DockerVolCreationException docEx ) {
 			// well then don't do that.

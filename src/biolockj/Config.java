@@ -911,8 +911,6 @@ public class Config {
 				if( dir != null && dir.isDirectory() ) {
 					bashVal =  dir.getAbsolutePath();
 				}
-			}else if( stripBashMarkUp( bashVar ).equals( "HOME" ) ) {
-				bashVal =  RuntimeParamUtil.getHomeDir().getAbsolutePath();
 			}else {
 				bashVal = Processor.getBashVar( bashVar );
 			}

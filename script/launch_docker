@@ -113,7 +113,7 @@ blj_options() {
 	if in_docker_env && [ ${#BLJ_OPTIONS} -gt 0 ]; then # in docker container 
 		options="${BLJ_OPTIONS}"
 	else # on host machine
-		options="-homeDir ${HOME} -projectDir ${BLJ_PROJ} -hostname $(hostname)"
+		options="-projectDir ${BLJ_PROJ} -hostname $(hostname)"
 		ifArgUsed $GUI_ARG && echo "${options}" && return
 	fi	
 	ifDefined $restartDir && options="${options} -restartDir $restartDir"

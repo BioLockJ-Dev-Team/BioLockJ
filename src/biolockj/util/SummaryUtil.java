@@ -681,8 +681,6 @@ public class SummaryUtil {
 		if( runtimeEnv != null ) return runtimeEnv;
 		String parentHost = null;
 		String host = null;
-		String user = RuntimeParamUtil.getHomeDir(false).getAbsolutePath();
-		user = user.substring( user.lastIndexOf( File.separator ) + 1 );
 		try {
 			host = Processor.submitQuery( "hostname", "Query Host" );
 			parentHost = Config.isOnCluster() ? Config.requireString( null, Constants.CLUSTER_HOST ):
@@ -694,10 +692,10 @@ public class SummaryUtil {
 		if( host == null ) host = "localhost";
 
 		if( DockerUtil.inAwsEnv() || DockerUtil.inDockerEnv() )
-			runtimeEnv = ( DockerUtil.inAwsEnv() ? "AWS ": "" ) + "Host [ " + user + "@" + parentHost +
-				" ] --> Docker Container [ " + DockerUtil.ROOT_HOME.substring( 1 ) + "@" + host + " ]";
-		else if( Config.isOnCluster() ) runtimeEnv = "Cluster [ " + user + "@" + parentHost + " ]";
-		else runtimeEnv = "Localhost [ " + user + "@" + host + " ]";
+			runtimeEnv = ( DockerUtil.inAwsEnv() ? "AWS ": "" ) 
+			+ "--> Docker Container [ " + DockerUtil.ROOT_HOME.substring( 1 ) + "@" + host + " ]";
+		else if( Config.isOnCluster() ) runtimeEnv = "Cluster";
+		else runtimeEnv = "Localhost";
 		return runtimeEnv;
 	}
 
