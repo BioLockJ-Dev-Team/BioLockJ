@@ -40,9 +40,11 @@ RUN DOCK_URL="https://download.docker.com/linux/static/stable/x86_64/${DOCKER_CL
 ENV BLJ="/app/biolockj" 
 ENV BLJ_MODS="/app/external_modules"
 RUN mkdir -p "${BLJ}" && \
+	mkdir -p "${BLJ}/pipelines" && \
 	mkdir -p "${BLJ_MODS}"
 COPY --from=builder /blj/dist/BioLockJ.jar $BLJ/dist/BioLockJ.jar
 COPY --from=builder /blj/resources $BLJ/resources
+COPY --from=builder /blj/pipelines/README $BLJ/pipelines/README
 COPY --from=builder /blj/script $BLJ/script
 COPY --from=builder /blj/templates $BLJ/templates
 COPY --from=builder /blj/.version /blj/install $BLJ/

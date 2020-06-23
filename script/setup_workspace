@@ -1,0 +1,144 @@
+#!/bin/bash
+
+###################################################################
+##                                                               ##
+##  This script is designed for users who want to use the        ##
+##  "pure docker" approach.  It sets ups a collections of        ##
+##  sub-dirs in the "workspace" directory, and copies some       ## 
+##  files into that space from the container.                    ##
+##                                                               ##
+###################################################################
+
+
+# maybe verify that workspace is mapped ?
+
+main(){
+
+	echo ""
+	PIPELINES=pipelines
+	if [ -d /workspace/$PIPELINES ]; then
+		echo "Found $PIPELINES folder."
+	else
+		echo "Creating $PIPELINES folder..."
+		cp -r $BLJ/$PIPELINES /workspace/.
+	fi
+	HOST_BLJ_PROJ=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil /workspace/$PIPELINES)
+	echo "BioLockJ will create pipelines under this folder:"
+	echo '    '"$HOST_BLJ_PROJ"
+	echo ""
+
+
+	# ARCHIVE=archive
+	# if [ -d /workspace/$ARCHIVE ]; then
+	# 	echo "Found $ARCHIVE folder."
+	# else
+	# 	echo "Creating $ARCHIVE folder..."
+	# 	mkdir /workspace/$ARCHIVE	
+	# fi
+
+
+	EXTRA_MODS=extra_modules
+	if [ -d /workspace/$EXTRA_MODS ]; then
+		echo "Found $EXTRA_MODS folder."
+	else
+		echo "Creating $EXTRA_MODS folder..."
+		mkdir /workspace/$EXTRA_MODS
+	fi
+	HOST_EXT_MODS=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil /workspace/$EXTRA_MODS)
+	echo "To use third-party modules, add the module jar file to this folder:"
+	echo '    '"$HOST_EXT_MODS"
+	echo ""
+
+
+	SOURCE=source
+	if [ -d /workspace/$SOURCE ]; then
+		echo "Found $SOURCE folder."
+	else
+		echo "Creating $SOURCE folder..."
+		mkdir /workspace/$SOURCE
+		echo "Adding example projects to help you get started..."
+		cp -r $BLJ/templates/* /workspace/source/.
+		mv /workspace/source/COPY_ME_local.properties /workspace/source/local.properties
+	fi
+	HOST_SOURCE=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil /workspace/$SOURCE)
+	echo "A project includes a configuration file and any project-specific files it references."
+	echo "Store projects under this folder:"
+	echo '    '"$HOST_SOURCE"
+	echo ""
+
+
+	HOST_WORKSPACE=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil /workspace)
+	VER=$(cat ${BLJ}/.version)
+	TAG=${VER//-*}
+	if [ ${#TAG} -eq 0 ]; then
+		local TAG=latest
+	fi
+
+
+	ifDefined $HOST_OS_SCRIPT && [ $HOST_OS_SCRIPT == bash ] && build_bash_wrapper
+	! ifDefined $HOST_OS_SCRIPT && build_bash_wrapper
+
+	ifDefined $HOST_OS_SCRIPT && [ $HOST_OS_SCRIPT == ps1 ] && build_power_shell_wrapper
+	! ifDefined $HOST_OS_SCRIPT && build_power_shell_wrapper
+
+
+	echo "Your workspace is all set up!"
+	echo ""
+
+}
+
+. ${BLJ}/script/blj_functions
+
+build_bash_wrapper(){
+	if ifDefined $HOST_OS_SCRIPT && [ $HOST_OS_SCRIPT==bash ] ; then
+		BASH_LAUNCHER=/workspace/$SOURCE/docker-biolockj
+	else
+		BASH_LAUNCHER=/workspace/$SOURCE/docker-biolockj.bash
+	fi
+	if [ -f $BASH_LAUNCHER ] ; then
+		echo "Updating $BASH_LAUNCHER ..."
+	else
+		echo "Building $BASH_LAUNCHER ..."
+	fi
+	echo "#!/bin/bash" > $BASH_LAUNCHER
+	echo "" >> $BASH_LAUNCHER
+	echo 'docker run --rm \' >> $BASH_LAUNCHER
+	echo '   -v /var/run/docker.sock:/var/run/docker.sock \' >> $BASH_LAUNCHER
+	echo '   -v '"$HOST_WORKSPACE"':/workspace \'  >> $BASH_LAUNCHER
+	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' \' >> $BASH_LAUNCHER
+	echo '   biolockj --docker \' >> $BASH_LAUNCHER
+	echo '   --external-modules '"$HOST_EXT_MODS"' \' >> $BASH_LAUNCHER
+	echo '   --blj_proj '"$HOST_BLJ_PROJ"' \' >> $BASH_LAUNCHER
+	echo '${@}' >> $BASH_LAUNCHER
+	echo "" >> $BASH_LAUNCHER
+	chmod a+rwx $BASH_LAUNCHER
+	echo "Try printing the help menu:"
+	echo "$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $BASH_LAUNCHER) --help" 
+	echo ""
+}
+
+build_power_shell_wrapper(){
+	POWER_SHELL_LAUNCHER=/workspace/$SOURCE/docker-biolockj.ps1
+	if [ -f $POWER_SHELL_LAUNCHER ] ; then
+		echo "Updating $POWER_SHELL_LAUNCHER ..."
+	else
+		echo "Building $POWER_SHELL_LAUNCHER ..."
+	fi
+	#echo "#!/bin/bash" > $POWER_SHELL_LAUNCHER
+	echo "" > $POWER_SHELL_LAUNCHER
+	echo 'docker run --rm `' >> $POWER_SHELL_LAUNCHER
+	echo '   -v /var/run/docker.sock:/var/run/docker.sock `' >> $POWER_SHELL_LAUNCHER
+	echo '   -v '"$HOST_WORKSPACE"':/workspace `' >> $POWER_SHELL_LAUNCHER
+	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' `' >> $POWER_SHELL_LAUNCHER
+	echo '   biolockj --docker `' >> $POWER_SHELL_LAUNCHER
+	echo '   --external-modules '"$HOST_EXT_MODS"' `' >> $POWER_SHELL_LAUNCHER
+	echo '   --blj_proj '"$HOST_BLJ_PROJ"' `' >> $POWER_SHELL_LAUNCHER
+	echo '$args' >> $POWER_SHELL_LAUNCHER
+	echo "" >> $POWER_SHELL_LAUNCHER
+	chmod a+rwx $POWER_SHELL_LAUNCHER
+	echo "Try printing the help menu:"
+	echo "$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $POWER_SHELL_LAUNCHER) --help" 
+	echo ""
+}
+
+main $@
