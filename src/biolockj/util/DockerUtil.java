@@ -305,6 +305,7 @@ public class DockerUtil {
 	}
 
 	public static String containerizePath( String path ) throws DockerVolCreationException {
+		System.out.println("Containerizing path: " + path);//TODO
 		Log.debug( DockerUtil.class, "Containerizing path: " + path );
 		if( !DockerUtil.inDockerEnv() ) return path;
 		if( path == null || path.isEmpty() ) return null;
@@ -314,8 +315,12 @@ public class DockerUtil {
 		for( String key: volumeMap.keySet() ) {
 			if( volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) pipelineKey = key;
 			if( DockerUtil.inAwsEnv() && volumeMap.get( key ).equals( DOCKER_BLJ_MOUNT_DIR ) ) pipelineKey = key;
+			// if the config file is null; we must not be running a pipeline; this is the API calling, and all mounts are under the workspace getting set up.
+			if( RuntimeParamUtil.getConfigFile(false) == null && volumeMap.get( key ).equals( PURE_DOCKER_PIPELINE_DIR ) ) pipelineKey = key;
 		}
-		if( pipelineKey == null ) throw new DockerVolCreationException( "no pipeline dir !" );
+		if( pipelineKey == null && Config.getPipelineDir() != null ) {
+			throw new DockerVolCreationException( "no pipeline dir !" );
+		}
 		if( pipelineKey != null && path.startsWith( pipelineKey ) )
 			return innerPath.replaceFirst( pipelineKey, vmap.get( pipelineKey ) );
 
@@ -351,6 +356,9 @@ public class DockerUtil {
 	}
 	public static File deContainerizePath( File innerFile ) throws DockerVolCreationException {
 		return new File( deContainerizePath(innerFile.getAbsolutePath()) );
+	}
+	public static void main(String[] args) throws DockerVolCreationException {
+		System.out.println( deContainerizePath( args[0] ) );
 	}
 
 	public static String getContainerId() throws IOException {
@@ -551,6 +559,11 @@ public class DockerUtil {
 	 * All containers mount {@value biolockj.Constants#INTERNAL_PIPELINE_DIR} to the container volume: /mnt/efs/output
 	 */
 	public static final String DOCKER_PIPELINE_DIR = DOCKER_BLJ_MOUNT_DIR + "/pipelines";
+	
+	/**
+	 * When running in pure docker to do the initial setup, use this pipelines dir: {@value PURE_DOCKER_PIPELINE_DIR}
+	 */
+	public static final String PURE_DOCKER_PIPELINE_DIR = "/workspace/pipelines";
 
 	/**
 	 * Docker container default $USER: {@value #DOCKER_USER}

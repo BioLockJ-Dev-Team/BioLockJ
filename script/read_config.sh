@@ -12,7 +12,7 @@ main(){
 	cd $(dirname "$1")
 	primaryConfig=$(basename $1)
 	dirList=($(dirname $(to_abs_path $primaryConfig)))
-	dockerCopyPath=$(get_host_file $primaryConfig) && primaryConfig=$dockerCopyPath
+	#dockerCopyPath=$(get_host_file $primaryConfig) && primaryConfig=$dockerCopyPath
 	
 	check_args $@
 	
@@ -140,12 +140,12 @@ find_files(){
 			prop=$(echo ${prop/#.\//`pwd`\/})
 			[ "$prop" == "." ] && prop=`pwd`
 			if verifyDir "$prop"; then
-				add_to_dirList "$prop"
-				add_to_fileList "$prop"
+				add_to_dirList $(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil "$prop")
+				add_to_fileList $(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil "$prop")
 			elif verifyFile "$prop"; then
 				if string_contains_space $prop ; then echo "WARNING: File paths that contain spaces are often problematic." >&2; fi
-				add_to_dirList $(dirname "$prop") #add its parent to dirList()
-				add_to_fileList "$prop"
+				add_to_dirList $(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $(dirname "$prop"))
+				add_to_fileList $(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil "$prop")
 			fi
 		fi
 	done
