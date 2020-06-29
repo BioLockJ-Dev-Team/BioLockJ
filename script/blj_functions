@@ -266,7 +266,7 @@ exit_with_message(){
 ### verify files and directories
 
 verifyDir(){
-	if in_docker_env ; then
+	if in_docker_env && [ ! -d "$1" ]; then
 		local isValid=$(verifyHostDir $1 2> /dev/null) 
 		[ $isValid == "yes" ]
 	else
@@ -275,7 +275,7 @@ verifyDir(){
 }
 
 verifyFile(){
-	if in_docker_env ; then
+	if in_docker_env && [ ! -f "$1" ]; then
 		local isValid=$(verifyHostFile $1 2> /dev/null) 
 		[ $isValid == "yes" ]
 	else
