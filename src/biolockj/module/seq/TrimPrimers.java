@@ -51,8 +51,8 @@ public class TrimPrimers extends JavaModuleImpl implements SeqModule, ApiModule,
 	@Override
 	public void checkDependencies() throws Exception {
 		super.checkDependencies();
-		if( DockerUtil.inDockerEnv() ) Config.requireString( null, INPUT_TRIM_SEQ_FILE );
-		else Config.requireExistingFile( null, INPUT_TRIM_SEQ_FILE );
+		if( DockerUtil.inDockerEnv() ) Config.requireString( this, INPUT_TRIM_SEQ_FILE );
+		else Config.requireExistingFile( this, INPUT_TRIM_SEQ_FILE );
 	}
 
 	/**
@@ -553,8 +553,8 @@ public class TrimPrimers extends JavaModuleImpl implements SeqModule, ApiModule,
 	 * @throws ConfigNotFoundException if primer property is undefined
 	 * @throws DockerVolCreationException 
 	 */
-	public static File getSeqPrimerFile() throws ConfigNotFoundException, ConfigPathException, DockerVolCreationException {
-		return Config.requireExistingFile( null, INPUT_TRIM_SEQ_FILE );
+	private File getSeqPrimerFile() throws ConfigNotFoundException, ConfigPathException, DockerVolCreationException {
+		return Config.requireExistingFile( this, INPUT_TRIM_SEQ_FILE );
 	}
 
 	private final DecimalFormat df = new DecimalFormat( "##.##" );
