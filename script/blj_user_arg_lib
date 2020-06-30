@@ -218,9 +218,13 @@ get_arg_value(){
 
 # Tell the user how to examine the pipeline they just launched
 print_action_options(){
-	echo "cd-blj       -> Move to pipeline output directory"
-	echo "blj_log      -> Tail pipeline log (accepts tail runtime parameters)"
-	echo "blj_summary  -> View module execution summary"
+	if [ in_docker_env ] ; then
+		echo "After an initial status check, all pipeline updates will be in the pipeline folder."
+	else
+		echo "cd-blj       -> Move to pipeline output directory"
+		echo "blj_log      -> Tail pipeline log (accepts tail runtime parameters)"
+		echo "blj_summary  -> View module execution summary"
+	fi
 }
 
 # Tell the user if/when the pipeline has finished checking dependencies.

@@ -112,6 +112,19 @@ build_bash_wrapper(){
 	echo '${@}' >> $BASH_LAUNCHER
 	echo "" >> $BASH_LAUNCHER
 	chmod a+rwx $BASH_LAUNCHER
+	
+	BASH_API_LAUNCHER=${BASH_LAUNCHER/biolockj/biolockj-api}
+	echo "#!/bin/bash" > $BASH_API_LAUNCHER
+	echo "" >> $BASH_API_LAUNCHER
+	echo 'docker run --rm \' >> $BASH_API_LAUNCHER
+	echo '   -v /var/run/docker.sock:/var/run/docker.sock \' >> $BASH_API_LAUNCHER
+	echo '   -v '"$HOST_WORKSPACE"':/workspace \'  >> $BASH_API_LAUNCHER
+	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' \' >> $BASH_API_LAUNCHER
+	echo '   biolockj-api \' >> $BASH_API_LAUNCHER
+	echo '${@}' >> $BASH_API_LAUNCHER
+	echo "" >> $BASH_API_LAUNCHER
+	chmod a+rwx $BASH_API_LAUNCHER
+	
 	echo "Try printing the help menu:"
 	echo "$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $BASH_LAUNCHER) --help" 
 	echo ""
@@ -136,6 +149,19 @@ build_power_shell_wrapper(){
 	echo '$args' >> $POWER_SHELL_LAUNCHER
 	echo "" >> $POWER_SHELL_LAUNCHER
 	chmod a+rwx $POWER_SHELL_LAUNCHER
+	
+	PS_API_LAUNCHER=${POWER_SHELL_LAUNCHER/biolockj/biolockj-api}
+	echo "#!/bin/bash" > $PS_API_LAUNCHER
+	echo "" >> $PS_API_LAUNCHER
+	echo 'docker run --rm \' >> $PS_API_LAUNCHER
+	echo '   -v /var/run/docker.sock:/var/run/docker.sock \' >> $PS_API_LAUNCHER
+	echo '   -v '"$HOST_WORKSPACE"':/workspace \'  >> $PS_API_LAUNCHER
+	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' \' >> $PS_API_LAUNCHER
+	echo '   biolockj-api ' >> $PS_API_LAUNCHER
+	echo '${@}' >> $PS_API_LAUNCHER
+	echo "" >> $PS_API_LAUNCHER
+	chmod a+rwx $PS_API_LAUNCHER
+	
 	echo "Try printing the help menu:"
 	echo "$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $POWER_SHELL_LAUNCHER) --help" 
 	echo ""

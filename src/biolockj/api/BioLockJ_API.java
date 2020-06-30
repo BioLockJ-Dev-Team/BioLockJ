@@ -526,16 +526,18 @@ public class BioLockJ_API {
 		return modsArray; //return json; convert to string in switch case.
 	}
 	
-	private static List<String> listFilesFromConfig(String config, String mountOrUpload) throws Exception {
+	private static List<String> listFilesFromConfig(final String config, final String mountOrUpload) throws Exception {		
+		String configPath = Config.convertWindowsPathForDocker(config); 
+		configPath = DockerUtil.containerizePath( configPath ); 
 		
-		File configFile = new File(config);
+		File configFile = new File(configPath);
 		Set<String> mounts = new HashSet<>();
 		Set<String> uploads = new HashSet<>();
 		
 		if ( configFile.exists() ) {
 			mounts.add( DockerUtil.deContainerizePath(configFile).getParentFile().getAbsolutePath() );
 			uploads.add( DockerUtil.deContainerizePath(configFile).getAbsolutePath() );
-			initConfig(config);
+			initConfig(configFile.getAbsolutePath());
 			Map<String, String> props = Config.getProperties();
 			Set<String> keys = props.keySet();
 			Set<String> vals = new HashSet<>();
@@ -574,6 +576,7 @@ public class BioLockJ_API {
 			if ( (new File(target)).exists() ) throw new API_Exception( "Avoid inf loop: don't launch a new container in the current one already has " + target );
 			String cmd = "docker run --rm --mount type=bind,source=" + configFile.getParentFile().getAbsolutePath() 
 							+ ",target=" + target + " " + container + " " + query + " --" + CONFIG_ARG + " " +  target + "/" + configFile.getName();
+			System.err.println("subcommand: " + cmd);
 			final Process p = Runtime.getRuntime().exec( cmd );
 			final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
 			String s = null;
@@ -605,8 +608,11 @@ public class BioLockJ_API {
 		try {
 			String YES = "yes";
 			String cmd = "docker run --rm --mount type=bind,source=" + testFile.getParentFile().getAbsolutePath() 
-							+ ",target=/tmpTest ubuntu [ -f tmpTest/" + testFile.getName() + " ] && echo " + YES + " || echo no ";
-			//System.err.println("test command: " + cmd);
+							+ ",target=/tmpTest ubuntu [ -f /tmpTest/" + testFile.getName() + " ] || [ -d /tmpTest/" 
+							+ testFile.getName() + " ] && echo " + YES + " || echo no ";
+//			String cmd = "docker run --rm --mount type=bind,source=" + testFile.getParentFile().getAbsolutePath() 
+//							+ ",target=/tmpTest ubuntu [ -f tmpTest/" + testFile.getName() + " ] && echo " + YES + " || echo no ";
+			System.err.println("test command: " + cmd);
 			final Process p = Runtime.getRuntime().exec( cmd );
 			final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
 			String returnVal = null;
@@ -618,8 +624,11 @@ public class BioLockJ_API {
 			p.waitFor();
 			p.destroy();
 			answer = returnVal.equals( YES );
+			System.err.println("answer: " + answer);
 		}catch(Exception ex){
-			//System.err.println("Encountered an error while testing to see if file exists on host: " + testFile.getName());
+			System.err.println("Encountered an error while testing to see if file exists on host: " + testFile.getName());
+			System.err.println(ex.getMessage());
+			ex.getSuppressed();
 		}
 		return answer;
 	}

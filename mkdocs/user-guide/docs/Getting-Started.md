@@ -1,15 +1,15 @@
 
 ## Installation and test
 
+
+
 ### Basic installation
 
-The basic installation assumes a unix-like environment and a **bash** shell.
-To see what shell you currently using, run `echo $0`.
-**If** you are not in a bash shell, you can change your current session to a bash shell, run `chsh -s /bin/bash`.
+The basic installation assumes you have java 1.8+ and a unix-like environment.  Some features assume a bash shell, see [Notes about environments](#notes-about-environments).
 
 #### 1. Download the [latest release](https://github.com/BioLockJ-Dev-Team/BioLockJ/releases/latest) & unpack the tarball.
 ```bash
-tar -zxf BioLockJ-v1.2.8.tar.gz
+tar -zxf BioLockJ-v*.tar.gz
 ```
 Save the folder wherever you like to keep executables.
 **If** you choose to download the source code, you will need to compile it by running `ant` with the `build.xml` file in the `resources` folder. 
@@ -18,7 +18,7 @@ Save the folder wherever you like to keep executables.
 The `install` script updates the $USER bash profile to call **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**.  See **[Commands](../Commands)** for a full description of **[blj_config](https://github.com/msioda/BioLockJ/blob/master/script/blj_config?raw=true)**
 
 ```bash
-cd BioLockJ*
+cd BioLockJ
 ./install
 #     Saved backup:  /users/joe/.bash_profile~
 #     Saved profile:  /users/joe/.bash_profile
@@ -61,6 +61,8 @@ You should take a moment to [review your first pipeline](../Getting-Started#revi
 
 
 ### Docker installation
+
+This install runs the launch process on your host machine, and the main program and all modules are run in docker. To run even the launch process in docker, see [Working in Pure Docker](Pure-Docker.md).
 
 #### 1. Install docker
 See the current instructions for installing docker on your system: https://docs.docker.com/get-started/
@@ -168,14 +170,17 @@ A recommended practice is to make a subset of your data, and use that to develop
 
 BioLockJ is a pipeline manager, desigend to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed **OR** run through docker using the docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.
 
+BioLockJ will shut down appropriately on its own when a pipeline either completes or fails.  _Sometimes_, it is necessary to shut down the program pre-maturely. See the [FAQ page](../FAQ) for more details.
+
 ### Notes about environments
 
 The main BioLockJ program can be used in these environments: 
 
 * a local machine with a unix-like system
-* any machine running docker *
+* a local machine with a unix-like system running docker *
 * a cluster, running a scheduler such as torque
 * AWS cloud computing *
+* any machine running docker (see [Working in Pure Docker](Pure-Docker.md))
 
 (* The launch scripts will still be run from your local machine.)
 
@@ -183,9 +188,7 @@ The launch process requires a unix-like environment.  This includes linux, macOS
 
 If using **docker**, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run within the biolockj_controller container.
 
-If using **AWS**, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run on AWS.
-
-AWS is currently experimental. To ty it, see [Working in Pure Docker](Pure-Docker.md)
+If using **AWS**, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run on AWS. This is still experimental.
 
 If you are using BioLockJ on a shared system where another user has already installed BioLockJ, **you will need to run the install script** to create the required variables in your own user profile.
 
@@ -193,36 +196,7 @@ There is also the option to run purely in docker, without installing even the la
 
 For more information about the how/why to use each environment, see [Supported Environments](Supported-Environments.md)
 
+The helper commands (such as `cd-blj`) assume a bash shell, though others also work.
+To see what shell you currently using, run `echo $0`.
+**If** you are not in a bash shell, you can change your current session to a bash shell, run `chsh -s /bin/bash`.
 
-### Shutting down a pipeline
-
-BioLockJ will shut down appropriately on its own when a pipeline either completes or fails.  
-
-_Sometimes_, it is necessary to shut down the program pre-maturely.
-
-This is not an ideal exit and the steps depend on your environment.  The main program is terminated by killing the java process.  Any worker-processes that are still in progress will need to be shut down directly (or allowed to time out).
-
-To kill the BioLockJ program on a local system, get the id of the java process and kill it:
-```bash
-ps
-#  PID TTY          TIME CMD
-#   1776 pts/0    00:00:00 bash
-#   1728 pts/0    00:00:00 ps
-#   4437 pts/0    00:00:00 java
-kill 4437
-```
-On a local system, workers are under the main program.
-
-To kill the BioLockJ program running in docker, get the ID of the docker container and use `docker stop`.
-```bash
-docker ps
-# CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-# f55a39311eb5        ubuntu              "/bin/bash"         16 minutes ago      Up 16 minutes                           brave_cori
-docker stop f55a39311eb5
-```
-In a docker pipeline, the container IDs for workers will also appear under ps.
-If you need to distinguish the BioLockJ containers from other docker containers running on your machine, you see a list of them in the current modules script directory in a file named `MAIN*.sh_Started`.
-
-To kill the BioLockJ program that is run in the foreground (ie, the `-f` arg was used), then killing the current process will kill the program.  This is usually done with `ctrl`+`c` .
-
-To kill the BioLockJ program on a cluster environment, use `kill` just like the local case to stop a process on the head node, and use `qdel` (or the equivilent on your scheduler) to terminate workers running on compute nodes.

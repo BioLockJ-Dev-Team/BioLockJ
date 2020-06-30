@@ -50,7 +50,7 @@ Modules that are added by other modules are called _pre-requisite modules_.  Mod
 ---
 **Answer:** Use `-u`.
 
-This is often the result of a typo somewhere.  Generally, BioLockJ runs a check-dependencies protocol on each module, and all required properties should be checked during that process, and it stops when it first finds a problem.  With the `--unused-props` or `-u` option, biolockj will check dependencies for all modules, even after one fails, and any properties that were never used will be printed to the screen.  This often highlights typos in property names, or properties that are not used by the currenlty configured moudles.  Keep in mind, this only reports properties in your primary config file, not in any of your defaultProps files.
+This is often the result of a typo somewhere.  Generally, BioLockJ runs a check-dependencies protocol on each module, and all required properties should be checked during that process, and it stops when it first finds a problem.  With the `--unused-props` or `-u` option, biolockj will check dependencies for all modules, even after one fails, and any properties that were never used will be printed to the screen.  This often highlights typos in property names, or properties that are not used by the currenlty configured modules.  Keep in mind, this only reports properties in your primary config file, not in any of your defaultProps files.
 
 
 ---
@@ -89,4 +89,43 @@ BioLockJ launches jobs using `qsub <script>`. For ONLY the SraDownload module, t
 OR 
 
 **Answer2:** BioLockJ can connect the sample id to the file name given in one or more columns in the metadata; see [Metadata](../GENERATED/Metadata/).
+
+
+---
+### Question: Shutting down a pipeline.  How do I stop a pipeline that is running?
+---
+**Answer:** Use `kill`, `docker stop` and possibly scheduler commands such as `qdel`.
+
+BioLockJ will shut down appropriately on its own when a pipeline either completes or fails.  
+
+_Sometimes_, it is necessary to shut down the program pre-maturely.
+
+This is not an ideal exit and the steps depend on your environment.  The main program is terminated by killing the java process.  Any worker-processes that are still in progress will need to be shut down directly (or allowed to time out). _If you are allowing worker-processess to time, you must NOT delete the pipeline folder. Those processes will write to that pipeline folder, and any new pipeline you make will get a new folder as long as the original still exists._
+
+To kill the BioLockJ program on a local system, get the id of the java process and kill it:
+```bash
+ps
+#  PID TTY          TIME CMD
+#   1776 pts/0    00:00:00 bash
+#   1728 pts/0    00:00:00 ps
+#   4437 pts/0    00:00:00 java
+kill 4437
+```
+On a local system, workers are under the main program, so they will also be terminated. 
+
+To kill the BioLockJ program running in docker, get the ID of the docker container and use `docker stop`.
+```bash
+docker ps
+# CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+# f55a39311eb5        ubuntu              "/bin/bash"         16 minutes ago      Up 16 minutes                           brave_cori
+docker stop f55a39311eb5
+```
+In a docker pipeline, the container IDs for workers will also appear under ps.
+If you need to distinguish the BioLockJ containers from other docker containers running on your machine, you can see a list of them in the current modules script directory in a file named `MAIN*.sh_Started`.
+
+To kill the BioLockJ program that is run in the foreground (ie, the `-f` arg was used), then killing the current process will kill the program.  This is usually done with `ctrl`+`c` .
+
+To kill the BioLockJ program on a cluster environment, use `kill` just like the local case to stop a process on the head node, and use `qdel` (or the equivilent on your scheduler) to terminate workers running on compute nodes.
+
+
 
