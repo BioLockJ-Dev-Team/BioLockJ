@@ -11,7 +11,8 @@
 main(){
 	cd $(dirname "$1")
 	primaryConfig=$(basename $1)
-	dirList=($(dirname $(to_abs_path $primaryConfig)))
+	configPath=$(dirname $(to_abs_path $primaryConfig))
+	dirList=($(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil "$configPath"))
 	#dockerCopyPath=$(get_host_file $primaryConfig) && primaryConfig=$dockerCopyPath
 	
 	check_args $@
