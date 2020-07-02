@@ -1,6 +1,8 @@
 package biolockj.api;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URL;
@@ -10,13 +12,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import biolockj.Config;
+import biolockj.Constants;
+import biolockj.Log;
 import biolockj.Properties;
 import biolockj.exception.BioLockJException;
 import biolockj.exception.ConfigException;
+import biolockj.exception.ConfigNotFoundException;
+import biolockj.exception.ConfigPathException;
 import biolockj.module.BioModule;
 import biolockj.util.BioLockJUtil;
+import biolockj.util.DockerUtil;
 import biolockj.util.ModuleUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +51,9 @@ public class BioLockJ_API {
 	private static final String PROP_DESC = "describeProp";
 	private static final String PROP_INFO = "propInfo";
 	private static final String MODULE_INFO = "moduleInfo";
+	private static final String LIST_MOUNTS = "listMounts";
+	private static final String MOUNT_KEY = "mount";
+	private static final String LIST_UPLOADS = "listUploads";
 	private static final String HELP = "help";
 
 	//options
@@ -146,6 +157,16 @@ public class BioLockJ_API {
 				case MODULE_INFO:
 					unsupportedOption(query, options, new String[0]);
 					reply = moduleInfo().toString(2);
+					break;
+				case LIST_MOUNTS:
+					unsupportedOption(query, options, new String[] {CONFIG_ARG} );
+					requiredOption(query, options, new String[] {CONFIG_ARG} );
+					reply = listToString( listMounts(options.get( CONFIG_ARG )) );
+					break;
+				case LIST_UPLOADS:
+					unsupportedOption(query, options, new String[] {CONFIG_ARG} );
+					requiredOption(query, options, new String[] {CONFIG_ARG} );
+					reply = listToString( listUploads(options.get( CONFIG_ARG )) );
 					break;
 				case HELP:
 					reply = getHelp();
@@ -505,6 +526,104 @@ public class BioLockJ_API {
 		return modsArray; //return json; convert to string in switch case.
 	}
 	
+	private static List<String> listFilesFromConfig(String config, String mountOrUpload) throws Exception {
+		
+		File configFile = new File(config);
+		Set<String> mounts = new HashSet<>();
+		Set<String> uploads = new HashSet<>();
+		
+		if ( configFile.exists() ) {
+			mounts.add( DockerUtil.deContainerizePath(configFile).getParentFile().getAbsolutePath() );
+			uploads.add( DockerUtil.deContainerizePath(configFile).getAbsolutePath() );
+			initConfig(config);
+			Map<String, String> props = Config.getProperties();
+			Set<String> keys = props.keySet();
+			Set<String> vals = new HashSet<>();
+			for (String key : keys) {
+				vals.addAll( Config.getList( null, key ) ); //this converts any $VAR refs
+			}
+			//System.err.println("Reviewing " + vals.size() + " property values to see if any are files on the local system.");
+			for (String val : vals ) {
+				//System.err.println("Consider the value: " + val );
+				val = Config.convertWindowsPathForDocker(val); 
+				val = Config.convertRelativePath( val, configFile.getParent() );
+				val = DockerUtil.containerizePath( val ); 
+				//The built-in default config files will be available wherever BioLockJ is running.
+				if (val.equals( Config.replaceEnvVar( Constants.STANDARD_CONFIG_PATH) ) 
+								|| val.equals( Config.replaceEnvVar( Constants.DOCKER_CONFIG_PATH )) ) continue;
+				File testFile = new File(val);
+				boolean fileExists = testFile.exists();
+				if (!fileExists && DockerUtil.inDockerEnv()) fileExists = existsOnHost(testFile);
+				if (fileExists) {
+					//System.err.println("This exists: " + val);
+					File hostForm = DockerUtil.deContainerizePath( testFile );
+					if (testFile.isDirectory()) {
+						mounts.add( hostForm.getAbsolutePath() );
+						uploads.add( hostForm.getAbsolutePath() );
+					}else {
+						mounts.add( hostForm.getParentFile().getAbsolutePath() );
+						uploads.add( hostForm.getAbsolutePath() );
+					}
+				}
+			}
+		}else if (DockerUtil.inDockerEnv() && existsOnHost(configFile) ) {
+			System.err.println("The file " + configFile.getName() + " exists on the host, but not in the container.");
+			String container = DockerUtil.getDockerImage( null );
+			String query = mountOrUpload.equals( MOUNT_KEY ) ? LIST_MOUNTS : LIST_UPLOADS;
+			String target = "/mnt/tmpConfigDirForApi";
+			if ( (new File(target)).exists() ) throw new API_Exception( "Avoid inf loop: don't launch a new container in the current one already has " + target );
+			String cmd = "docker run --rm --mount type=bind,source=" + configFile.getParentFile().getAbsolutePath() 
+							+ ",target=" + target + " " + container + " " + query + " --" + CONFIG_ARG + " " +  target + "/" + configFile.getName();
+			final Process p = Runtime.getRuntime().exec( cmd );
+			final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
+			String s = null;
+			while( ( s = br.readLine() ) != null )
+				if( !s.trim().isEmpty() ) {
+					mounts.add(s);
+					uploads.add( s );
+				}
+			p.waitFor();
+			p.destroy();
+		}else {
+			throw new ConfigPathException( configFile );
+		}
+		List<String> returnList = new ArrayList<>();
+		if (mountOrUpload.equals( MOUNT_KEY ) ) returnList.addAll( mounts );
+		else returnList.addAll( uploads );
+		Collections.sort(returnList);
+		return returnList;
+		
+	}
+	public static List<String> listMounts(String config) throws Exception {
+		return listFilesFromConfig(config, MOUNT_KEY);
+	}
+	public static List<String> listUploads(String config) throws Exception {
+		return listFilesFromConfig(config, "upload");
+	}
+	private static boolean existsOnHost(File testFile) {
+		boolean answer = false;
+		try {
+			String YES = "yes";
+			String cmd = "docker run --rm --mount type=bind,source=" + testFile.getParentFile().getAbsolutePath() 
+							+ ",target=/tmpTest ubuntu [ -f tmpTest/" + testFile.getName() + " ] && echo " + YES + " || echo no ";
+			//System.err.println("test command: " + cmd);
+			final Process p = Runtime.getRuntime().exec( cmd );
+			final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
+			String returnVal = null;
+			String s = null;
+			while( ( s = br.readLine() ) != null )
+				if( !s.trim().isEmpty() ) {
+					if( returnVal == null ) returnVal = s;
+				}
+			p.waitFor();
+			p.destroy();
+			answer = returnVal.equals( YES );
+		}catch(Exception ex){
+			//System.err.println("Encountered an error while testing to see if file exists on host: " + testFile.getName());
+		}
+		return answer;
+	}
+	
 	/**
 	 * Print the help menu explaining how to use this tool.
 	 * @return
@@ -589,6 +708,14 @@ public class BioLockJ_API {
 		sb.append( "        Returns a json formatted list of all modules and for each module that " +System.lineSeparator() );
 		sb.append( "        implements the ApiModule interface, it lists the props used by the module," +System.lineSeparator() );
 		sb.append( "        and for each prop the type, descrption and default." +System.lineSeparator() );
+		sb.append( System.lineSeparator() );
+		sb.append( "  " + LIST_MOUNTS + " " + CONFIG_OPTION + "" +System.lineSeparator() );
+		sb.append( "        Returns a list of directories that would need to be mounted in order for " +System.lineSeparator() );
+		sb.append( "        the files listed in the config file to be available to a pipeline running in docker." +System.lineSeparator());
+		sb.append( System.lineSeparator() );
+		sb.append( "  " + LIST_UPLOADS + " " + CONFIG_OPTION + "" +System.lineSeparator() );
+		sb.append( "        Returns a list of file and directories that would need to be uploaded in order for " +System.lineSeparator() );
+		sb.append( "        the files listed in the config file to be available to a pipeline running in the cloud." +System.lineSeparator());
 		sb.append( System.lineSeparator() );
 		sb.append( "  " + HELP + "  (or no args)" +System.lineSeparator() );
 		sb.append( "        Print help menu." +System.lineSeparator() );
