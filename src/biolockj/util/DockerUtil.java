@@ -168,6 +168,11 @@ public class DockerUtil {
 	 * @throws ConfigNotFoundException if Docker image version is undefined
 	 */
 	public static String getDockerImage( final BioModule module ) throws ConfigNotFoundException {
+		if ( module == null ) {
+			return Constants.MAIN_DOCKER_OWNER
+							+ "/" + Constants.MAIN_DOCKER_IMAGE
+							+ ":" + getDefaultImageTag();
+		}
 		return getDockerUser( module ) + "/" + getImageName( module ) + ":" + getImageTag( module );
 	}
 
@@ -213,6 +218,18 @@ public class DockerUtil {
 		String tag = module.getDockerImageTag();
 		if( Config.getString( module, DOCKER_IMG_VERSION ) != null )
 			tag = Config.getString( module, DOCKER_IMG_VERSION );
+		return tag;
+	}
+	
+	public static String getDefaultImageTag() {
+		String tag;
+		if( Config.getString( null, DOCKER_IMG_VERSION ) != null ) {
+			tag = Config.getString( null, DOCKER_IMG_VERSION );
+		}else if (BioLockJUtil.getVersion().contains( "-" )) {
+			tag = BioLockJUtil.getVersion().substring( 0, BioLockJUtil.getVersion().indexOf( "-" ) );
+		}else {
+			tag = BioLockJUtil.getVersion();
+		}
 		return tag;
 	}
 
@@ -305,7 +322,6 @@ public class DockerUtil {
 	}
 
 	public static String containerizePath( String path ) throws DockerVolCreationException {
-		System.out.println("Containerizing path: " + path);//TODO
 		Log.debug( DockerUtil.class, "Containerizing path: " + path );
 		if( !DockerUtil.inDockerEnv() ) return path;
 		if( path == null || path.isEmpty() ) return null;

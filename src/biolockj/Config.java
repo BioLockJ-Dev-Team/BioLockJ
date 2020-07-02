@@ -767,7 +767,8 @@ public class Config {
 	public static File getExistingFileObjectFromPath( final String filePath ) throws ConfigPathException, DockerVolCreationException {
 		if( filePath != null ) {
 			String path = filePath;
-			if (path.startsWith(".") ) path = convertRelativePath( path );
+			path = convertRelativePath( path );
+			path = convertWindowsPathForDocker(path); 
 			if ( DockerUtil.inDockerEnv() ) {
 				Log.debug(Config.class, "The file path \"" + filePath + "\" has been interpreted as host file: " + path );
 				path = DockerUtil.containerizePath( path );
@@ -807,6 +808,19 @@ public class Config {
 		return files;
 	}
 	
+	public static String convertWindowsPathForDocker(final String path) {
+		String newpath;
+		if (DockerUtil.inDockerEnv()
+						&& Character.isUpperCase(path.charAt(0)) 
+						&& path.startsWith( ":", 1 ) 
+						&& path.contains( "\\" ) ) {
+			newpath = "/host_mnt/" + Character.toLowerCase( path.charAt( 0 ) ) + path.substring( 2 ).replace( "\\", "/" );
+		}else {
+			newpath = path;
+		}
+		return newpath;
+	}
+	
 	/**
 	 * Given a relative path (ie, one that starts with "."), get the absolute path---even when runnig in docker.
 	 * In the config file, users can use ./ to reference files in the same directory as the config file.
@@ -817,16 +831,20 @@ public class Config {
 	 * @return
 	 * @throws DockerVolCreationException
 	 */
-	private static String convertRelativePath(final String filePath) throws DockerVolCreationException {
+	public static String convertRelativePath(final String filePath, final String CONFIG_DOT) throws DockerVolCreationException {
 		String path = filePath;
-		final String CONFIG_DOT=DockerUtil.deContainerizePath( RuntimeParamUtil.getConfigFile().getParent() );
-		final String CONFIG_DOT_DOT=(new File(CONFIG_DOT)).getParent();
-		
-		if ( path.startsWith( ".." + File.separator ) ) path = path.replaceFirst( "..", CONFIG_DOT_DOT);
-		if ( path.equals( ".." ) ) path = CONFIG_DOT_DOT;
-		if ( path.startsWith( "." + File.separator ) ) path = path.replaceFirst( ".", CONFIG_DOT);
-		if ( path.equals( "." ) ) path = CONFIG_DOT;
+		if ( path.startsWith(".") ) {
+			final String CONFIG_DOT_DOT=(new File(CONFIG_DOT)).getParent();
+			if ( path.startsWith( ".." + File.separator ) ) path = path.replaceFirst( "..", CONFIG_DOT_DOT);
+			if ( path.equals( ".." ) ) path = CONFIG_DOT_DOT;
+			if ( path.startsWith( "." + File.separator ) ) path = path.replaceFirst( ".", CONFIG_DOT);
+			if ( path.equals( "." ) ) path = CONFIG_DOT;
+		}
 		return path;
+	}
+	private static String convertRelativePath(final String filePath) throws DockerVolCreationException {
+		final String CONFIG_DOT=DockerUtil.deContainerizePath( RuntimeParamUtil.getConfigFile().getParent() );
+		return convertRelativePath(filePath, CONFIG_DOT);
 	}
 
 	/**

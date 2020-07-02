@@ -526,6 +526,11 @@ public class Constants {
 	public static final String MAIN_DOCKER_IMAGE = "biolockj_controller";
 	
 	/**
+	 * Docker hub account that owns the .  Also used as a simple default for some modules.
+	 */
+	public static final String MAIN_DOCKER_OWNER = "biolockjdevteam";
+	
+	/**
 	 * When writing mark down files, use this as a new line to start a new paragraph.
 	 */
 	public static final String markDownReturn = "                   " + System.lineSeparator();
