@@ -33,7 +33,7 @@ nav:
         - Configuration: Configuration.md
         - General Properties: GENERATED/General-Properties.md
         - Modules: Built-in-modules.md
-        - Metadata: The-Metadata-File.md
+        - Metadata: GENERATED/Metadata.md
         - Dependencies: Dependencies.md
         - Configuration Details:
             - cluster: GENERATED/Cluster.md

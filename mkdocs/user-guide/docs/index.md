@@ -22,7 +22,7 @@
      * [the config file](Configuration.md)
         * Properties
         * [Modules](Built-in-modules.md) 
-     * [the metadata](The-Metadata-File)
+     * [the metadata](GENERATED/Metadata)
      * input files
      * [Dependencies](Dependencies.md)
  * Features
