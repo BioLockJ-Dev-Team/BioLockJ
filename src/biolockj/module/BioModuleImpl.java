@@ -64,20 +64,24 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 	
 	protected final void addGeneralProperty(String prop) {
 		try {
-			addGeneralProperty(prop, Properties.getDescription( prop ));
+			addNewProperty(prop, Properties.getPropertyType( prop ), Properties.getDescription( prop ));
 		}catch(API_Exception ex) {
 			addNewProperty(prop, "", "");
 		}
 	}
-	protected final void addGeneralProperty(String prop, String desc) {
+	protected final void addGeneralProperty(String prop, String additionalDescription) {
 		try {
-			addGeneralProperty(prop, Properties.getPropertyType( prop ), desc);
+			addGeneralProperty(prop, Properties.getPropertyType( prop ), additionalDescription);
 		}catch(API_Exception ex) {
-			addNewProperty(prop, "", desc);
+			addNewProperty(prop, "", "See general property; " + additionalDescription);
 		}
 	}
-	protected final void addGeneralProperty(String prop, String type, String desc) {
-		addNewProperty(prop, type, desc);
+	protected final void addGeneralProperty(String prop, String type, String additionalDescription) {
+		try {
+			addNewProperty(prop, type, Properties.getDescription( prop ) + " -> " + additionalDescription);
+		}catch(API_Exception ex) {
+			addNewProperty(prop, type, "See general property; " + additionalDescription);
+		}
 	}
 	
 	public final String getPropDefault(String prop) {

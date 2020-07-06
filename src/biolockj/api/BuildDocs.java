@@ -47,7 +47,7 @@ public class BuildDocs {
 	public static void main( String[] args ) throws Exception {
 		
 		if (args.length == 0) {
-			throw new API_Exception( "At least one argument is required - the output directory where .md files shoudl bed saved" 
+			throw new API_Exception( "At least one argument is required - the output directory where .md files should be saved." 
 							+ System.lineSeparator() + "Try: mkdocs/user-guide/docs/GENERATED");
 		}
 		// set the base directory for the .md outputs
