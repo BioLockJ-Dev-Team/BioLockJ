@@ -405,14 +405,14 @@ public class Constants {
 	 * {@value #INPUT_TRIM_PREFIX_DESC}
 	 */
 	public static final String INPUT_TRIM_PREFIX = "input.trimPrefix";
-	private static final String INPUT_TRIM_PREFIX_DESC = "prefix to trim from sequence file names or headers to obtain Sample ID";
+	private static final String INPUT_TRIM_PREFIX_DESC = "Prefix to trim from sequence file names or headers to obtain Sample ID; this string can appear anywhere in the filename and all text before it will be removed.";
 
 	/**
 	 * {@link biolockj.Config} String property: {@value #INPUT_TRIM_SUFFIX}<br>
 	 * {@value #INPUT_TRIM_SUFFIX_DESC}
 	 */
 	public static final String INPUT_TRIM_SUFFIX = "input.trimSuffix";
-	private static final String INPUT_TRIM_SUFFIX_DESC = "suffix to trim from sequence file names or headers to obtain Sample ID";
+	private static final String INPUT_TRIM_SUFFIX_DESC = "Suffix to trim from sequence file names or headers to obtain Sample ID; this string can appear anywhere in the filename and all text after it will be removed.";
 	
 	/**
 	 * {@link biolockj.Config} List property: {@value #INPUT_TYPES}<br>

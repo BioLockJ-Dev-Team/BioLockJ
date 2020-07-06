@@ -9,6 +9,13 @@
 | *cluster.prologue* | _string_ <br>To run at the start of every script after loading cluster modules (if any)<br>*default:*  *null* |
 | *cluster.statusCommand* | _string_ <br>Terminal command used to check the status of jobs on the cluster<br>*default:*  *null* |
 
+### demultiplexer                   
+| Property| Description |
+| :--- | :--- |
+| *demultiplexer.barcodeCutoff* | _numeric_ <br>Options: (0.0 - 1.0); if defined, pipeline will fail if the percentage of reads with a barcode is less than this cutoff.<br>*default:*  0.05 |
+| *demultiplexer.barcodeRevComp* | _boolean_ <br>Options: Y/N. Use reverse compliment of metadata.barcodeColumn if demultimplexer.strategy = barcode_in_header or barcode_in_seq.<br>*default:*  *null* |
+| *demultiplexer.strategy* | _string_ <br>Options: barcode_in_header, barcode_in_seq, id_in_header, do_not_demux.If using barcodes, they must be provided in the metadata file within column defined by _metadata.barcodeColumn_.<br>*default:*  *null* |
+
 ### [docker](Docker.md)                    
 | Property| Description |
 | :--- | :--- |
@@ -43,8 +50,8 @@
 | *input.requireCompletePairs* | _boolean_ <br>Require all sequence input files have matching paired reads<br>*default:*  Y |
 | *input.suffixFw* | _regex_ <br>file suffix used to identify forward reads ininput.dirPaths<br>*default:*  _R1 |
 | *input.suffixRv* | _regex_ <br>file suffix used to identify reverse reads ininput.dirPaths<br>*default:*  _R2 |
-| *input.trimPrefix* | _string_ <br>prefix to trim from sequence file names or headers to obtain Sample ID<br>*default:*  *null* |
-| *input.trimSuffix* | _string_ <br>suffix to trim from sequence file names or headers to obtain Sample ID<br>*default:*  *null* |
+| *input.trimPrefix* | _string_ <br>Prefix to trim from sequence file names or headers to obtain Sample ID; this string can appear anywhere in the filename and all text before it will be removed.<br>*default:*  *null* |
+| *input.trimSuffix* | _string_ <br>Suffix to trim from sequence file names or headers to obtain Sample ID; this string can appear anywhere in the filename and all text after it will be removed.<br>*default:*  *null* |
 
 ### [metadata](Metadata.md)                    
 | Property| Description |

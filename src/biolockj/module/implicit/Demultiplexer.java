@@ -14,7 +14,10 @@ package biolockj.module.implicit;
 import java.io.*;
 import java.util.*;
 import biolockj.*;
+import biolockj.Properties;
+import biolockj.api.API_Exception;
 import biolockj.api.ApiModule;
+import biolockj.api.BuildDocs;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.SequnceFormatException;
 import biolockj.module.JavaModuleImpl;
@@ -43,12 +46,14 @@ import biolockj.util.*;
  */
 public class Demultiplexer extends JavaModuleImpl implements SeqModule, ApiModule {
 	
-	public Demultiplexer() {
+	public Demultiplexer() throws API_Exception {
 		super();
-		addGeneralProperty( MetaUtil.META_BARCODE_COLUMN );
-		addGeneralProperty( DemuxUtil.BARCODE_CUTOFF );
-		addGeneralProperty( DemuxUtil.BARCODE_USE_REV_COMP );
-		addGeneralProperty( DemuxUtil.DEMUX_STRATEGY );
+		addGeneralProperty( MetaUtil.META_BARCODE_COLUMN, "Values must be unique." );
+		addGeneralProperty( MetaUtil.META_FILE_PATH, "Used for matching sample id to barcodes." );
+		addGeneralProperty( DemuxUtil.BARCODE_CUTOFF, "(DeuxUtil)"  );
+		addGeneralProperty( DemuxUtil.BARCODE_USE_REV_COMP, "(DeuxUtil)" );
+		addGeneralProperty( DemuxUtil.DEMUX_STRATEGY, "(DeuxUtil)"  );
+		addGeneralProperty( Constants.DEFAULT_MOD_DEMUX );
 	}
 
 	/**
@@ -621,6 +626,11 @@ public class Demultiplexer extends JavaModuleImpl implements SeqModule, ApiModul
 	@Override
 	public String getDescription() {
 		return "Demultiplex samples into separate files for each sample.";
+	}
+	
+	@Override
+	public String getDetails() throws API_Exception {
+		return BuildDocs.copyFromModuleResource( this, "DemultiplexerDetails.md" );
 	}
 
 	@Override

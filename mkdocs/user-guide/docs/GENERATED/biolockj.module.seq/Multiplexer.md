@@ -11,8 +11,8 @@ Multiplex samples into a single file, or two files (one with forward reads, one 
 ### Multiplexer properties: 
 | Property| Description |
 | :--- | :--- |
-| *metadata.barcodeColumn* | _string_ <br>metadata column with identifying barcodes to use.<br>*default:*  BarcodeSequence |
-| *multiplexer.gzip* | _boolean_ <br>if enabled the multiplexed output will be gzipped<br>*default:*  Y |
+| *metadata.barcodeColumn* | _string_ <br>metadata column with identifying barcodes -> Values should be unique.<br>*default:*  BarcodeSequence |
+| *multiplexer.gzip* | _boolean_ <br>If enabled, the multiplexed output will be gzipped<br>*default:*  Y |
 
 ### General properties applicable to this module: 
 | Property| Description |
@@ -24,7 +24,7 @@ Multiplex samples into a single file, or two files (one with forward reads, one 
 | *cluster.statusCommand* | _string_ <br>Terminal command used to check the status of jobs on the cluster<br>*default:*  *null* |
 | *docker.saveContainerOnExit* | _boolean_ <br>If Y, docker run command will NOT include the --rm flag<br>*default:*  *null* |
 | *docker.verifyImage* | _boolean_ <br>In check dependencies, run a test to verify the docker image.<br>*default:*  *null* |
-| *metadata.barcodeColumn* | _string_ <br>metadata column with identifying barcodes to use.<br>*default:*  BarcodeSequence |
+| *metadata.barcodeColumn* | _string_ <br>metadata column with identifying barcodes -> Values should be unique.<br>*default:*  BarcodeSequence |
 | *script.defaultHeader* | _string_ <br>Store default script header for MAIN script and locally run WORKER scripts.<br>*default:*  #!/bin/bash |
 | *script.numThreads* | _integer_ <br>Used to reserve cluster resources and passed to any external application call that accepts a numThreads parameter.<br>*default:*  8 |
 | *script.numWorkers* | _integer_ <br>Set number of samples to process per script (if parallel processing)<br>*default:*  1 |

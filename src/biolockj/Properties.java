@@ -21,9 +21,11 @@ import biolockj.module.BioModule;
 import biolockj.module.getData.sra.SequenceReadArchive;
 import biolockj.module.getData.sra.SraDownload;
 import biolockj.module.getData.sra.SraMetaDB;
+import biolockj.module.implicit.Demultiplexer;
 import biolockj.module.report.r.R_Module;
 import biolockj.util.BashScriptBuilder;
 import biolockj.util.BioLockJUtil;
+import biolockj.util.DemuxUtil;
 import biolockj.util.DockerUtil;
 import biolockj.util.MetaUtil;
 import biolockj.util.NextflowUtil;
@@ -259,6 +261,7 @@ public class Properties extends java.util.Properties {
 		DockerUtil.registerProps();
 		RMetaUtil.registerProps();
 		ValidationUtil.registerProps();
+		DemuxUtil.registerProps();
 		
 		//These aws* properties are only used in the bash layer, there is no java class that owns these.
 		addToPropMaps( "aws.ec2InstanceID", STRING_TYPE, "ID of an existing ec2 instance to use as the head node" );//TODO: bash property descriptions

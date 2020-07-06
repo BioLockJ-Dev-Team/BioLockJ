@@ -54,7 +54,7 @@ This is often the result of a typo somewhere.  Generally, BioLockJ runs a check-
 
 
 ---
-### **Question:** On a cluster system, I want one module to run on the head node.
+### **Question:** On a cluster system, I need a particular module to run on the head node.
 ---
 **Answer:** Use module-specific properties to control the cluster properties for that module.
 
@@ -76,99 +76,17 @@ BioLockJ launches jobs using `qsub <script>`. For ONLY the SraDownload module, t
 
 
 ---
-### Q: How should I configure *input properties* for a demultiplexed dataset?
+### Question: How do I configure my pipeline for multiplexed data?
 ---
-**A:** Name the sequence files using the Sample IDs listed in your metadata file.  Sequence file names containing a prefix or suffix (in addition the Sample ID) can be used as long as there is a unique character string that can be used to identify the boundary between the Sample ID and its prefix or suffix.  These values can be set via the *input.trimPrefix* & *input.trimSuffix* properties.
+**Answer:** See the [Demultiplexer module Details](../GENERATED/biolockj.module.implicit/Demultiplexer/#details).
 
-1. Set *input.trimPrefix* to a character string that precedes the sample ID **for all samples**
-1. Set *input.trimSuffix* to a character string that comes after the sample ID **for all samples**
-
-If a single prefix or suffix identifier cannot be used for all samples, the file names must be updated so that a universal prefix or suffix identifier can be used.
-
-## Example
-
-**Sample IDs** = mbs1, mbs2, mbs3, mbs4
-
-**Example File names**
-+ gut_mbs1.fq.gz
-+ gut_mbs2.fq.gz
-+ oral_mbs3.fq
-+ oral_mbs4.fq
-
-**Config Properties**
-+ *input.trimPrefix*=_
-+ *input.trimSuffix*=.fq
-
-All characters before (and including) the 1st "_" in the file name are trimmed
-
-All characters after (and including) the 1st ".fq" in the file name are trimmed
-
-BioLockJ automatically trims extensions ".fasta" and ".fastq" as if configured in *input.trimSuffix*.
 
 ---
-### Q: How do I configure my pipeline for multiplexed data?
+### Question: How should I configure my properties for a dataset that is one-sample-per-file (ie not multiplexed)?
 ---
-**A:** BioLockJ automatically adds the [Demultiplexer](../module/implicit/module.implicit#demultiplexer) as the 2nd module - after [ImportMetadata](../module/implicit/module.implicit#importmetadata) - when processing multiplexed data.  The [Demultiplexer](../module/implicit/module.implicit#demultiplexer) requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.
+**Answer1:** BioLockJ can extract the sample name from the filename; see [ Input](../GENERATED/Input/).
 
-#### If samples are not identified by sample ID in the sequence headers:
-1. Set *demux.strategy*=id_in_header
-1. Set *input.trimPrefix* to a character string that precedes the sample ID **for all samples**.
-1. Set *input.trimSuffix* to a character string that comes after the sample ID **for all samples**.
+OR 
 
-**Sample IDs** = mbs1, mbs2, mbs3, mbs4
+**Answer2:** BioLockJ can connect the sample id to the file name given in one or more columns in the metadata; see [Metadata](../GENERATED/Metadata/).
 
-**Scenario 1: Your multiplexed files include Sample IDs in the fastq sequence headers** 
-
-	@mbs1_134_M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0
-	@mbs2_12_M02825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0
-	@mbs3_551_M03825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0
-	@mbs4_1234_M04825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0
-
-**Required Config**
-+ *input.trimPrefix*=@
-+ *input.trimSuffix*=_
-
-All characters before (and including) the 1st "@" in the sequence header are trimmed
-
-All characters after (and including) the 1st "_" in the sequence header are trimmed
-
-#### If samples are identified by barcode (in the header or sequence): 
-1. Set *demux.strategy*=barcode_in_header or *demux.strategy*=barcode_in_seq
-1. Set *metadata.filePath* to metadata file path.
-1. Set *metadata.barcodeColumn* to the barcode column name.
-1. If the metadata barcodes are listed as reverse compliments, set *demux.barcodeUseReverseCompliment*=Y.
-
-The metadata file must be prepared by adding a unique sequence barcode in the *metadata.barcodeColumn* column.  This information is often available in a mapping file provided by the sequencing center that produced the raw data.
-
-**Metadata file** 
-
-| ID | BarcodeColumn |
-| :-- | :-- |
-| mbs1 | GAGGCATGACTGGATA |
-| mbs2 | NAGGCATATTTGCACA |
-| mbs3 | GACCCATGACTGCATA |
-| mbs4 | TACCCAGCACCGCTTA |
-
-**Scenario 2: Your multiplexed files include a barcode in the headers**
-
-	@M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:GAGGCATGACTGGATA
-	@M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:NAGGCATATTTGCACA
-	@M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0:GACCCATGACTGCATA
-	@M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA 
-
-**Required Config**
-+ *demux.strategy*=barcode_in_header
-+ *metadata.barcodeColumn*=BarcodeColumn
-+ *metadata.filePath*=<path to metadata file>
-
-**Scenario 3: Your multiplexed files include a barcode in the sequences**
-
-	>M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:
-        GAGGCATGACTGGATATATACATACTGAGGCATGACTACTTACTATAAGGCTTACTGACTGGTTACTGACTGGGAGGCATGACTACTTACTATAA
-	>M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:
-        CAGGCATATTTGCACACTAGAGGCAAGTTACTGACTGGATATACTGAGGCATGGGAGGCATGACTCTATAAGGCTTACTGACTGGTTACTGACTG
-	>M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0: CCATGAGACCTGCATA
-        CCATGAGACCTGCATACACTGTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGGCT
-	>M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA 
-        TACCCAGCACCGCTTCCTTGACTTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGG
-     

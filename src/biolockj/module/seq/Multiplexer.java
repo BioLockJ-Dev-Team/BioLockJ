@@ -34,8 +34,8 @@ public class Multiplexer extends JavaModuleImpl implements SeqModule, ApiModule 
 
 	public Multiplexer() {
 		super();
-		addNewProperty( DO_GZIP, Properties.BOOLEAN_TYPE, "if enabled the multiplexed output will be gzipped" );
-		addGeneralProperty( MetaUtil.META_BARCODE_COLUMN, "metadata column with identifying barcodes to use." );
+		addNewProperty( DO_GZIP, Properties.BOOLEAN_TYPE, "If enabled, the multiplexed output will be gzipped" );
+		addGeneralProperty( MetaUtil.META_BARCODE_COLUMN, "Values should be unique." );
 	}
 
 	/**
