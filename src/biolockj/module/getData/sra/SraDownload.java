@@ -194,6 +194,7 @@ public class SraDownload extends SequenceReadArchive implements ApiModule, Input
 
 	@Override
 	public void checkDependencies() throws Exception {
+		super.checkDependencies();
 		Config.getExistingFile(null, MetaUtil.META_FILE_PATH);
 		isValidProp(METADATA_SRA_ID_COL_NAME);
 		isValidProp(DEST_DIR);

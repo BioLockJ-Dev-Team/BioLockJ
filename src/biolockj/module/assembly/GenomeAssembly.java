@@ -64,6 +64,7 @@ public class GenomeAssembly extends SeqModuleImpl implements ApiModule {
 	 */
 	@Override
 	public void checkDependencies() throws Exception {
+		super.checkDependencies();
 		if( !hasPairedReadInput() ) throw new BioLockJException( ERR_MSG );
 		getWorkerScriptFunctions();
 	}

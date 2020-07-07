@@ -61,10 +61,9 @@ public class KneadData extends SeqModuleImpl implements DatabaseModule, ApiModul
 
 	@Override
 	public void checkDependencies() throws Exception {
+		super.checkDependencies();
 		if( !SeqUtil.isFastQ() ) throw new Exception( getClass().getName() + " requires FASTQ format!" );
-
 		getParams();
-
 	}
 
 	@Override

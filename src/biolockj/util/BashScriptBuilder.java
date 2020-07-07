@@ -455,6 +455,8 @@ public class BashScriptBuilder {
 			Config.requireString( module, CLUSTER_BATCH_COMMAND );
 			Config.getString( module, CLUSTER_STATUS_COMMAND );
 			Config.requireString( module, SCRIPT_JOB_HEADER );
+			Config.getList( module, CLUSTER_MODULES );
+			Config.getString(  module, CLUSTER_PROLOGUE );
 		}
 	}
 	
