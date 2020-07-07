@@ -11,7 +11,10 @@
  */
 package biolockj.exception;
 
+import biolockj.module.BioModule;
 import biolockj.module.ScriptModule;
+import biolockj.util.BioLockJUtil;
+import biolockj.util.MetaUtil;
 
 /**
  * PipelineScriptException is thrown by {@link biolockj.util.BashScriptBuilder} if errors occur writing MASTER & WORKER
@@ -28,7 +31,7 @@ public class PipelineScriptException extends BioLockJException {
 	 */
 	public PipelineScriptException( final ScriptModule module, final boolean isWorker, final String msg ) {
 		super( "Error writing " + ( isWorker ? "WORKER": "MAIN" ) + " script for: " + module.getClass().getName() +
-			" --> " + msg );
+			" --> " + msg + showCommonCauses(module) );
 	}
 
 	/**
@@ -38,7 +41,7 @@ public class PipelineScriptException extends BioLockJException {
 	 * @param msg Exception message details
 	 */
 	public PipelineScriptException( final ScriptModule module, final String msg ) {
-		super( "Error writing script for: " + module.getClass().getName() + " --> " + msg );
+		super( "Error writing script for: " + module.getClass().getName() + " --> " + msg  + showCommonCauses(module));
 	}
 
 	/**
@@ -47,8 +50,24 @@ public class PipelineScriptException extends BioLockJException {
 	 * @param msg Exception message details
 	 */
 	public PipelineScriptException( final String msg ) {
-		super( msg );
+		super( msg  + System.lineSeparator() + COMMON_CAUSES);
 	}
+	
+	private static final String showCommonCauses( final BioModule module ) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			sb.append( System.lineSeparator() + COMMON_CAUSES );
+			sb.append( System.lineSeparator() + System.lineSeparator() );
+			sb.append( "Module input files: " + System.lineSeparator() );
+			sb.append( BioLockJUtil.getCollectionAsString( module.getInputFiles() ) );
+			sb.append( System.lineSeparator() );
+			sb.append( "Current metadata samples:" + System.lineSeparator() );
+			sb.append( BioLockJUtil.getCollectionAsString( MetaUtil.getSampleIds() ) );
+		} catch( Exception ex ) {}
+		return sb.toString();
+	}
+	
+	public static final String COMMON_CAUSES = "Most often, this means there is not valid input for this module; this results from an upstream error, or a mis-match between the data and the metadata.";
 
 	private static final long serialVersionUID = 3153279611111591414L;
 
