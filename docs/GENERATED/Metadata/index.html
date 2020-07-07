@@ -222,17 +222,49 @@
                 <h1 id="metadata">Metadata<a class="headerlink" href="#metadata" title="Permanent link">#</a></h1>
 <p>Any information that is given on a per-sample basis is metadata.                   </p>
 <p>BioLockJ pipelines do not separate biological information from technical information.                   </p>
-<p>Specify the path to the metadata table using <code>metadata.filePath</code> .                 <br />
-| Property| Description |
-| :--- | :--- |
-| <em>metadata.barcodeColumn</em> | <em>string</em> <br>metadata column with identifying barcodes<br><em>default:</em>  BarcodeSequence |
-| <em>metadata.columnDelim</em> | <em>string</em> <br>defines how metadata columns are separated; Typically files are tab or comma separated.<br><em>default:</em>  \t |
-| <em>metadata.commentChar</em> | <em>string</em> <br>metadata file comment indicator; Empty string is a valid option indicating no comments in metadata file.<br><em>default:</em>  <em>null</em> |
-| <em>metadata.fileNameColumn</em> | <em>list</em> <br>name of the metadata column(s) with input file names<br><em>default:</em>  <em>null</em> |
-| <em>metadata.filePath</em> | <em>string</em> <br>If absolute file path, use file as metadata.<br>If directory path, must find exactly 1 file within, to use as metadata.<br><em>default:</em>  <em>null</em> |
-| <em>metadata.nullValue</em> | <em>string</em> <br>metadata cells with this value will be treated as empty<br><em>default:</em>  NA |
-| <em>metadata.required</em> | <em>boolean</em> <br>If Y, require metadata row for each sample with sequence data in input dirs; If N, samples without metadata are ignored.<br><em>default:</em>  N |
-| <em>metadata.useEveryRow</em> | <em>boolean</em> <br>If Y, require a sequence file for every SampleID (every row) in metadata file; If N, metadata can include extraneous SampleIDs.<br><em>default:</em>  <em>null</em> |</p>
+<p>Specify the path to the metadata table using <code>metadata.filePath</code> .                   </p>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>metadata.barcodeColumn</em></td>
+<td align="left"><em>string</em> <br>metadata column with identifying barcodes<br><em>default:</em>  BarcodeSequence</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.columnDelim</em></td>
+<td align="left"><em>string</em> <br>defines how metadata columns are separated; Typically files are tab or comma separated.<br><em>default:</em>  \t</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.commentChar</em></td>
+<td align="left"><em>string</em> <br>metadata file comment indicator; Empty string is a valid option indicating no comments in metadata file.<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>metadata.fileNameColumn</em></td>
+<td align="left"><em>list</em> <br>name of the metadata column(s) with input file names<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>metadata.filePath</em></td>
+<td align="left"><em>string</em> <br>If absolute file path, use file as metadata.<br>If directory path, must find exactly 1 file within, to use as metadata.<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>metadata.nullValue</em></td>
+<td align="left"><em>string</em> <br>metadata cells with this value will be treated as empty<br><em>default:</em>  NA</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.required</em></td>
+<td align="left"><em>boolean</em> <br>If Y, require metadata row for each sample with sequence data in input dirs; If N, samples without metadata are ignored.<br><em>default:</em>  N</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.useEveryRow</em></td>
+<td align="left"><em>boolean</em> <br>If Y, require a sequence file for every SampleID (every row) in metadata file; If N, metadata can include extraneous SampleIDs.<br><em>default:</em>  <em>null</em></td>
+</tr>
+</tbody>
+</table>
 <p>The first row in the metadata file is assumed to be column names.                   </p>
 <p>The first column (regardless of its name) is assumed to be the sample names.                   </p>
 <p>If no metadata table is supplied to the pipeline, then the <strong><a href="../biolockj.module.implicit/ImportMetadata">ImportMetaData</a></strong> module will look at the input samples and create an empty metadata file.  This module is implicitly added to all pipelines.                    </p>

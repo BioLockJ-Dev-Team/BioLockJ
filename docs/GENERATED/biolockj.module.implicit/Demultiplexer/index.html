@@ -76,7 +76,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../The-Metadata-File/">Metadata</a>
+    <a class="" href="../../Metadata/">Metadata</a>
                 </li>
                 <li class="">
                     
@@ -223,15 +223,23 @@
 <tbody>
 <tr>
 <td align="left"><em>demultiplexer.barcodeCutoff</em></td>
-<td align="left"><em>null</em> <br>null<br><em>default:</em>  0.05</td>
+<td align="left"><em>numeric</em> <br>Options: (0.0 - 1.0); if defined, pipeline will fail if the percentage of reads with a barcode is less than this cutoff. -&gt; (DeuxUtil)<br><em>default:</em>  0.05</td>
 </tr>
 <tr>
 <td align="left"><em>demultiplexer.barcodeRevComp</em></td>
-<td align="left"><em>null</em> <br>null<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>boolean</em> <br>Options: Y/N. Use reverse compliment of metadata.barcodeColumn if demultimplexer.strategy = barcode_in_header or barcode_in_seq. -&gt; (DeuxUtil)<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>demultiplexer.strategy</em></td>
-<td align="left"><em>null</em> <br>null<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>string</em> <br>Options: barcode_in_header, barcode_in_seq, id_in_header, do_not_demux.If using barcodes, they must be provided in the metadata file within column defined by <em>metadata.barcodeColumn</em>. -&gt; (DeuxUtil)<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>metadata.barcodeColumn</em></td>
+<td align="left"><em>string</em> <br>metadata column with identifying barcodes -&gt; Values must be unique.<br><em>default:</em>  BarcodeSequence</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.filePath</em></td>
+<td align="left"><em>string</em> <br>If absolute file path, use file as metadata.<br>If directory path, must find exactly 1 file within, to use as metadata. -&gt; Used for matching sample id to barcodes.<br><em>default:</em>  <em>null</em></td>
 </tr>
 </tbody>
 </table>
@@ -265,6 +273,18 @@
 <td align="left"><em>string</em> <br>Terminal command used to check the status of jobs on the cluster<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
+<td align="left"><em>demultiplexer.barcodeCutoff</em></td>
+<td align="left"><em>numeric</em> <br>Options: (0.0 - 1.0); if defined, pipeline will fail if the percentage of reads with a barcode is less than this cutoff. -&gt; (DeuxUtil)<br><em>default:</em>  0.05</td>
+</tr>
+<tr>
+<td align="left"><em>demultiplexer.barcodeRevComp</em></td>
+<td align="left"><em>boolean</em> <br>Options: Y/N. Use reverse compliment of metadata.barcodeColumn if demultimplexer.strategy = barcode_in_header or barcode_in_seq. -&gt; (DeuxUtil)<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>demultiplexer.strategy</em></td>
+<td align="left"><em>string</em> <br>Options: barcode_in_header, barcode_in_seq, id_in_header, do_not_demux.If using barcodes, they must be provided in the metadata file within column defined by <em>metadata.barcodeColumn</em>. -&gt; (DeuxUtil)<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
 <td align="left"><em>docker.saveContainerOnExit</em></td>
 <td align="left"><em>boolean</em> <br>If Y, docker run command will NOT include the --rm flag<br><em>default:</em>  <em>null</em></td>
 </tr>
@@ -274,7 +294,15 @@
 </tr>
 <tr>
 <td align="left"><em>metadata.barcodeColumn</em></td>
-<td align="left"><em>string</em> <br>metadata column with identifying barcodes<br><em>default:</em>  BarcodeSequence</td>
+<td align="left"><em>string</em> <br>metadata column with identifying barcodes -&gt; Values must be unique.<br><em>default:</em>  BarcodeSequence</td>
+</tr>
+<tr>
+<td align="left"><em>metadata.filePath</em></td>
+<td align="left"><em>string</em> <br>If absolute file path, use file as metadata.<br>If directory path, must find exactly 1 file within, to use as metadata. -&gt; Used for matching sample id to barcodes.<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>pipeline.defaultDemultiplexer</em></td>
+<td align="left"><em>string</em> <br>Java class name for default module used to demultiplex data<br><em>default:</em>  biolockj.module.implicit.Demultiplexer</td>
 </tr>
 <tr>
 <td align="left"><em>script.defaultHeader</em></td>
@@ -299,7 +327,81 @@
 </tbody>
 </table>
 <h2 id="details">Details<a class="headerlink" href="#details" title="Permanent link">#</a></h2>
-<p><em>none</em></p>
+<p>When BioLockJ detects that the input is multiplexed data, BioLockJ automatically adds a Demultiplexer as the 2nd module, using the class path supplied via the <code>pipeline.defaultDemultiplexer</code> property. (<a href="../biolockj.module.implicit/ImportMetadata">ImportMetadata</a> is added as the first module.)                   </p>
+<p>This Demultiplexer requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.                   </p>
+<h4 id="if-samples-are-not-identified-by-sample-id-in-the-sequence-headers">If samples are not identified by sample ID in the sequence headers:<a class="headerlink" href="#if-samples-are-not-identified-by-sample-id-in-the-sequence-headers" title="Permanent link">#</a></h4>
+<ol>
+<li>Set <em>demux.strategy</em>=id_in_header                   </li>
+<li>Set <em>input.trimPrefix</em> to a character string that precedes the sample ID <strong>for all samples</strong>.                   </li>
+<li>Set <em>input.trimSuffix</em> to a character string that comes after the sample ID <strong>for all samples</strong>.                   </li>
+</ol>
+<p><strong>Sample IDs</strong> = mbs1, mbs2, mbs3, mbs4                   </p>
+<p><strong>Scenario 1: Your multiplexed files include Sample IDs in the fastq sequence headers</strong>                    </p>
+<pre><code>@mbs1_134_M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0                   
+@mbs2_12_M02825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0                   
+@mbs3_551_M03825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0                   
+@mbs4_1234_M04825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0
+</code></pre>
+<p><strong>Required Config</strong>                 <br />
++ <em>input.trimPrefix</em>=@                 <br />
++ <em>input.trimSuffix</em>=_                   </p>
+<p>All characters before (and including) the 1st "@" in the sequence header are trimmed                   </p>
+<p>All characters after (and including) the 1st "_" in the sequence header are trimmed                   </p>
+<h4 id="if-samples-are-identified-by-barcode-in-the-header-or-sequence">If samples are identified by barcode (in the header or sequence):<a class="headerlink" href="#if-samples-are-identified-by-barcode-in-the-header-or-sequence" title="Permanent link">#</a></h4>
+<ol>
+<li>Set <em>demux.strategy</em>=barcode_in_header or <em>demux.strategy</em>=barcode_in_seq                   </li>
+<li>Set <em>metadata.filePath</em> to metadata file path.                   </li>
+<li>Set <em>metadata.barcodeColumn</em> to the barcode column name.                   </li>
+<li>If the metadata barcodes are listed as reverse compliments, set <em>demultiplexer.barcodeRevComp</em>=Y.                   </li>
+</ol>
+<p>The metadata file must be prepared by adding a unique sequence barcode in the <em>metadata.barcodeColumn</em> column.  This information is often available in a mapping file provided by the sequencing center that produced the raw data.                   </p>
+<p><strong>Metadata file</strong>                    </p>
+<table>
+<thead>
+<tr>
+<th align="left">ID</th>
+<th align="left">BarcodeColumn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">mbs1</td>
+<td align="left">GAGGCATGACTGGATA</td>
+</tr>
+<tr>
+<td align="left">mbs2</td>
+<td align="left">NAGGCATATTTGCACA</td>
+</tr>
+<tr>
+<td align="left">mbs3</td>
+<td align="left">GACCCATGACTGCATA</td>
+</tr>
+<tr>
+<td align="left">mbs4</td>
+<td align="left">TACCCAGCACCGCTTA</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Scenario 2: Your multiplexed files include a barcode in the headers</strong>                   </p>
+<pre><code>@M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:GAGGCATGACTGGATA                   
+@M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:NAGGCATATTTGCACA                   
+@M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0:GACCCATGACTGCATA                   
+@M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA
+</code></pre>
+<p><strong>Required Config</strong>                 <br />
++ <em>demux.strategy</em>=barcode_in_header                 <br />
++ <em>metadata.barcodeColumn</em>=BarcodeColumn                 <br />
++ <em>metadata.filePath</em>=<path to metadata file>                   </p>
+<p><strong>Scenario 3: Your multiplexed files include a barcode in the sequences</strong>                   </p>
+<pre><code>&gt;M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:                   
+    GAGGCATGACTGGATATATACATACTGAGGCATGACTACTTACTATAAGGCTTACTGACTGGTTACTGACTGGGAGGCATGACTACTTACTATAA                   
+&gt;M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:                   
+    CAGGCATATTTGCACACTAGAGGCAAGTTACTGACTGGATATACTGAGGCATGGGAGGCATGACTCTATAAGGCTTACTGACTGGTTACTGACTG                   
+&gt;M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0: CCATGAGACCTGCATA                   
+    CCATGAGACCTGCATACACTGTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGGCT                   
+&gt;M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA                    
+    TACCCAGCACCGCTTCCTTGACTTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGG
+</code></pre>
 <h2 id="adds-modules">Adds modules<a class="headerlink" href="#adds-modules" title="Permanent link">#</a></h2>
 <p><strong>pre-requisite modules</strong>                  <br />
 <em>none found</em>                 <br />
@@ -307,7 +409,7 @@
 <em>none found</em>                   </p>
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">#</a></h2>
 <p>If running in docker, this module will run in a docker container from this image:<br></p>
-<pre><code>biolockjdevteam/biolockj_controller:v1.3.5
+<pre><code>biolockjdevteam/biolockj_controller:v1.3.6
 </code></pre>
 
 <p>This can be modified using the following properties:<br>
@@ -316,7 +418,7 @@
 <code>Demultiplexer.imageTag</code><br></p>
 <h2 id="citation">Citation<a class="headerlink" href="#citation" title="Permanent link">#</a></h2>
 <p>Module developed by Mike Sioda                 <br />
-BioLockJ v1.3.5</p>
+BioLockJ v1.3.6</p>
               
             </div>
           </div>

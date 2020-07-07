@@ -43,7 +43,7 @@ biolockj.module.getData.sra.SraMetaDB
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/pysradb:v1.3.5
+biolockjdevteam/pysradb:v1.3.6
 ```
 This can be modified using the following properties:<br>
 `SraMetaData.imageOwner`<br>
@@ -52,5 +52,5 @@ This can be modified using the following properties:<br>
 
 ## Citation 
 Module developed by Malcolm Zapatas and Ivory Blakley                   
-BioLockJ v1.3.5
+BioLockJ v1.3.6
 

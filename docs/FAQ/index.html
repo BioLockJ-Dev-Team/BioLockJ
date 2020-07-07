@@ -76,7 +76,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../The-Metadata-File/">Metadata</a>
+    <a class="" href="../GENERATED/Metadata/">Metadata</a>
                 </li>
                 <li class="">
                     
@@ -173,17 +173,23 @@
     <a class="current" href="./">FAQ</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#q-if-biolockj-indicates-that-my-pipeline-started-successfully-but-the-pipeline-root-directory-is-not-created-how-do-i-debug-the-root-cause-of-the-failure">Q: If biolockj indicates that my pipeline started successfully, but the pipeline root directory is not created, how do I debug the root cause of the failure?</a></li>
-    
-
-    <li class="toctree-l2"><a href="#q-how-should-i-configure-input-properties-for-a-demultiplexed-dataset">Q: How should I configure input properties for a demultiplexed dataset?</a></li>
-    
-
-    <li class="toctree-l2"><a href="#example">Example</a></li>
+    <li class="toctree-l2"><a href="#faq-troublshooting-and-special-cases">FAQ, Troublshooting and Special Cases</a></li>
     
         <ul>
         
-            <li><a class="toctree-l3" href="#q-how-do-i-configure-my-pipeline-for-multiplexed-data">Q: How do I configure my pipeline for multiplexed data?</a></li>
+            <li><a class="toctree-l3" href="#question-how-much-does-it-cost-to-use-biolockj">Question: How much does it cost to use BioLockJ ?</a></li>
+        
+            <li><a class="toctree-l3" href="#question-what-are-the-system-requirements-for-running-biolockj">Question: What are the system requirements for running BioLockJ ?</a></li>
+        
+            <li><a class="toctree-l3" href="#question-if-biolockj-indicates-that-my-pipeline-may-have-failed-to-start-how-do-i-debug-the-root-cause-of-the-failure">Question: If biolockj indicates that my pipeline may have failed to start, how do I debug the root cause of the failure?</a></li>
+        
+            <li><a class="toctree-l3" href="#question-sometimes-biolockj-adds-modules-to-my-pipeline-how-can-i-tell-what-modules-will-be-added">Question: Sometimes BioLockJ adds modules to my pipeline.  How can I tell what modules will be added?</a></li>
+        
+            <li><a class="toctree-l3" href="#question-i-get-an-error-message-about-a-property-but-i-have-that-property-configured-correctly-what-gives">Question: I get an error message about a property, but I have that property configured correctly.  What gives?</a></li>
+        
+            <li><a class="toctree-l3" href="#question-on-a-cluster-system-i-need-a-particular-module-to-run-on-the-head-node">Question: On a cluster system, I need a particular module to run on the head node.</a></li>
+        
+            <li><a class="toctree-l3" href="#example">Example:</a></li>
         
         </ul>
     
@@ -223,123 +229,64 @@
           <div role="main">
             <div class="section">
               
-                <hr />
-<h3 id="q-if-biolockj-indicates-that-my-pipeline-started-successfully-but-the-pipeline-root-directory-is-not-created-how-do-i-debug-the-root-cause-of-the-failure">Q: If biolockj indicates that my pipeline started successfully, but the pipeline root directory is not created, how do I debug the root cause of the failure?<a class="headerlink" href="#q-if-biolockj-indicates-that-my-pipeline-started-successfully-but-the-pipeline-root-directory-is-not-created-how-do-i-debug-the-root-cause-of-the-failure" title="Permanent link">#</a></h3>
+                <h1 id="faq-troublshooting-and-special-cases">FAQ, Troublshooting and Special Cases<a class="headerlink" href="#faq-troublshooting-and-special-cases" title="Permanent link">#</a></h1>
 <hr />
-<p><strong>A:</strong> Generally, errors are output to the pipeline log file and documented in the notification email, but  invalid configuration settings may cause a fatal error to occur before the pipeline directory is created.  In this scenario, look in your $HOME directory for a file name that starts with "biolockj_FATAL_ERROR_".  </p>
-<ul>
-<li>
-<p>Verify you are running Java 1.8+</p>
-<pre><code>java -version
+<h3 id="question-how-much-does-it-cost-to-use-biolockj"><strong>Question:</strong> How much does it cost to use BioLockJ ?<a class="headerlink" href="#question-how-much-does-it-cost-to-use-biolockj" title="Permanent link">#</a></h3>
+<hr />
+<p><strong>Answer:</strong> BioLockJ itself free and open-source.</p>
+<p>BioLockJ is designed for large data sets; and it is often necissary to purchase computational resources to handle large datasets and to run the processes that BioLockJ will manage.  This cost often comes in the form of buying an effective computer, subscribing to a cluster, or purchasing cloud computeing power.</p>
+<hr />
+<h3 id="question-what-are-the-system-requirements-for-running-biolockj"><strong>Question:</strong> What are the system requirements for running BioLockJ ?<a class="headerlink" href="#question-what-are-the-system-requirements-for-running-biolockj" title="Permanent link">#</a></h3>
+<hr />
+<p><strong>Answer:</strong> Either unix-and-java or docker, details below.</p>
+<p>Easy mode: you have a unix system and you can run docker.  You're covered.  BioLockJ requires java, but if you can run docker, then all of the java-components can run inside the docker container.</p>
+<p>Easy-ish mode: no unix, but you can run docker.  See <a href="../Pure-Docker">Pure-Docker</a>.</p>
+<p>Local host mode: No docker.  You need to have a unix-like system and java 1.8 or later.  The launch process for BioLockJ will be easy, but the majority of modules have essential dependencies and you will have to install each of those dependencies on your own system.  See <a href="../Dependencies/">Dependencies</a>.</p>
+<p>In terms of memory, ram and cpus; the amount required really depends on the size of the data you are processing and the needs of the algorithms you are running.  </p>
+<p><em><strong>In general,</strong></em> processing sequence data requires a computer cluster or a cloud-computing system (more than a typical individual-user machine). After sequence data have been summarized as tables, all subsequent steps are orders of magnetude smaller and can usually run on a laptop within a matter of minutes.  </p>
+<p>Most datasets can be dramatically sub-sampled to allow a laptop user to run a test of the pipeline; this does not produce usable results, but allows the user to test and troubleshoot the pipeline in a convenient setting before moving it to a bigger system.</p>
+<hr />
+<h3 id="question-if-biolockj-indicates-that-my-pipeline-may-have-failed-to-start-how-do-i-debug-the-root-cause-of-the-failure"><strong>Question:</strong> If biolockj indicates that my pipeline may have failed to start, how do I debug the root cause of the failure?<a class="headerlink" href="#question-if-biolockj-indicates-that-my-pipeline-may-have-failed-to-start-how-do-i-debug-the-root-cause-of-the-failure" title="Permanent link">#</a></h3>
+<hr />
+<p><strong>Answer:</strong> Use <code>-f</code>.</p>
+<p>By default, BioLockJ runs the java component in the background, and only a minimal, helpful message is printed on the screen.  If there was some problem in getting that short, helpful message to the screen, you can use the <code>--foreground</code> or <code>-f</code> option to force biolockj to run in the foreground, thus printing everything to the screen.  Often the print-out ends shortly after a helpful message.</p>
+<hr />
+<h3 id="question-sometimes-biolockj-adds-modules-to-my-pipeline-how-can-i-tell-what-modules-will-be-added"><strong>Question:</strong> Sometimes BioLockJ adds modules to my pipeline.  How can I tell what modules will be added?<a class="headerlink" href="#question-sometimes-biolockj-adds-modules-to-my-pipeline-how-can-i-tell-what-modules-will-be-added" title="Permanent link">#</a></h3>
+<hr />
+<p><strong>Answer:</strong> Read the docs; or use <code>-p</code></p>
+<p>With the <code>--precheck-only</code> or <code>-p</code> option, BioLockJ will create the pipeline and go through the check-dependencies phase for each module, but even without finding errors it will not actually run the pipeline.  This allows you see what modules will be run, see the pipeline folder layout, and see if any errors will prevent the pipeline from starting.  This is also ideal when you know you want to change more options or add more modules before you run the pipeline; but you want to check if there anything that needs to be fixed in what you have so far.</p>
+<p>In the documentation for each module, there is a section called "Adds modules".  A module may give the class path of another module that it adds before or after itself.  Many modules say <em>"none found"</em> to indicate that this module does not add any other modules before or after itself.  Sometimes this section will say <em>"pipeline-dependent"</em> and more details are given in the "Details" section to explain which other modules might be added and when / why.</p>
+<p>Modules that are added by other modules are called <em>pre-requisite modules</em>.  Modules that are added by the BioLockJ backbone are called <em>implicit modules</em>.  These can be disabled with the properties <code>pipeline.disableAddPreReqModules</code> and <code>pipeline.disableAddImplicitModules</code>, respectively.</p>
+<hr />
+<h3 id="question-i-get-an-error-message-about-a-property-but-i-have-that-property-configured-correctly-what-gives"><strong>Question:</strong> I get an error message about a property, but I have that property configured correctly.  What gives?<a class="headerlink" href="#question-i-get-an-error-message-about-a-property-but-i-have-that-property-configured-correctly-what-gives" title="Permanent link">#</a></h3>
+<hr />
+<p><strong>Answer:</strong> Use <code>-u</code>.</p>
+<p>This is often the result of a typo somewhere.  Generally, BioLockJ runs a check-dependencies protocol on each module, and all required properties should be checked during that process, and it stops when it first finds a problem.  With the <code>--unused-props</code> or <code>-u</code> option, biolockj will check dependencies for all modules, even after one fails, and any properties that were never used will be printed to the screen.  This often highlights typos in property names, or properties that are not used by the currenlty configured moudles.  Keep in mind, this only reports properties in your primary config file, not in any of your defaultProps files.</p>
+<hr />
+<h3 id="question-on-a-cluster-system-i-need-a-particular-module-to-run-on-the-head-node"><strong>Question:</strong> On a cluster system, I need a particular module to run on the head node.<a class="headerlink" href="#question-on-a-cluster-system-i-need-a-particular-module-to-run-on-the-head-node" title="Permanent link">#</a></h3>
+<hr />
+<p><strong>Answer:</strong> Use module-specific properties to control the cluster properties for that module.</p>
+<p>See <a href="../Configuration/#module-specific-forms">the Configuration page</a> for more details about module-specific forms of general properties.</p>
+<h2 id="example">Example:<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
+<p>On this cluster, the compute nodes do not have internet access, only the head node does. The first module in the pipeline is the SraDownload module to get the data, which requries internet access.</p>
+<p>All pipelines run on this cluster include a reference to the properties set up specifically for this cluster:               <br />
+<code>pipeline.defaultProps=${BLJ}/ourCluster.properties</code></p>
+<p>This group chose to store their system configurations in the BioLockJ folder, which they reference using the fully dressed ${BLJ} variable.  In this file, they have configurations for launching jobs:</p>
+<pre><code>cluster.batchCommand = qsub
+SraDownload.batchCommand = /bin/bash
 </code></pre>
-</li>
-<li>
-<p>Look in the error message found in $HOME/biolockj_FATAL_ERROR_* for a reference to one of your Config file parameters, the most common culprit is:  </p>
-</li>
-<li>
-<p><em>pipeline.defaultProps</em></p>
-</li>
-<li>$BLJ_PROJ misconfigured in /script/blj_config</li>
-</ul>
+
+<p>BioLockJ launches jobs using <code>qsub &lt;script&gt;</code>. For ONLY the SraDownload module, the property <code>SraDownload.batchCommand</code> overrides <code>cluster.batchCommand</code>; so for only this module, the jobs will be launched using <code>/bin/bash</code> which runs on the current node rather than launching a compute node.  All config files that reference this file and launch on the head node, will run the SraDownload modude on the head node.</p>
 <hr />
-<h3 id="q-how-should-i-configure-input-properties-for-a-demultiplexed-dataset">Q: How should I configure <em>input properties</em> for a demultiplexed dataset?<a class="headerlink" href="#q-how-should-i-configure-input-properties-for-a-demultiplexed-dataset" title="Permanent link">#</a></h3>
+<h3 id="question-how-do-i-configure-my-pipeline-for-multiplexed-data">Question: How do I configure my pipeline for multiplexed data?<a class="headerlink" href="#question-how-do-i-configure-my-pipeline-for-multiplexed-data" title="Permanent link">#</a></h3>
 <hr />
-<p><strong>A:</strong> Name the sequence files using the Sample IDs listed in your metadata file.  Sequence file names containing a prefix or suffix (in addition the Sample ID) can be used as long as there is a unique character string that can be used to identify the boundary between the Sample ID and its prefix or suffix.  These values can be set via the <em>input.trimPrefix</em> &amp; <em>input.trimSuffix</em> properties.</p>
-<ol>
-<li>Set <em>input.trimPrefix</em> to a character string that precedes the sample ID <strong>for all samples</strong></li>
-<li>Set <em>input.trimSuffix</em> to a character string that comes after the sample ID <strong>for all samples</strong></li>
-</ol>
-<p>If a single prefix or suffix identifier cannot be used for all samples, the file names must be updated so that a universal prefix or suffix identifier can be used.</p>
-<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
-<p><strong>Sample IDs</strong> = mbs1, mbs2, mbs3, mbs4</p>
-<p><strong>Example File names</strong>
-+ gut_mbs1.fq.gz
-+ gut_mbs2.fq.gz
-+ oral_mbs3.fq
-+ oral_mbs4.fq</p>
-<p><strong>Config Properties</strong>
-+ <em>input.trimPrefix</em>=_
-+ <em>input.trimSuffix</em>=.fq</p>
-<p>All characters before (and including) the 1st "_" in the file name are trimmed</p>
-<p>All characters after (and including) the 1st ".fq" in the file name are trimmed</p>
-<p>BioLockJ automatically trims extensions ".fasta" and ".fastq" as if configured in <em>input.trimSuffix</em>.</p>
+<p><strong>Answer:</strong> See the <a href="../GENERATED/biolockj.module.implicit/Demultiplexer/#details">Demultiplexer module Details</a>.</p>
 <hr />
-<h3 id="q-how-do-i-configure-my-pipeline-for-multiplexed-data">Q: How do I configure my pipeline for multiplexed data?<a class="headerlink" href="#q-how-do-i-configure-my-pipeline-for-multiplexed-data" title="Permanent link">#</a></h3>
+<h3 id="question-how-should-i-configure-my-properties-for-a-dataset-that-is-one-sample-per-file-ie-not-multiplexed">Question: How should I configure my properties for a dataset that is one-sample-per-file (ie not multiplexed)?<a class="headerlink" href="#question-how-should-i-configure-my-properties-for-a-dataset-that-is-one-sample-per-file-ie-not-multiplexed" title="Permanent link">#</a></h3>
 <hr />
-<p><strong>A:</strong> BioLockJ automatically adds the <a href="../module/implicit/module.implicit#demultiplexer">Demultiplexer</a> as the 2nd module - after <a href="../module/implicit/module.implicit#importmetadata">ImportMetadata</a> - when processing multiplexed data.  The <a href="../module/implicit/module.implicit#demultiplexer">Demultiplexer</a> requires that the sequence headers contain either the Sample ID or an identifying barcode.  Optionally, the barcode can be contained in the sequence itself.  If your data does not conform to one of the following scenarios you will need to pre-process your sequence data to conform to a valid format.</p>
-<h4 id="if-samples-are-not-identified-by-sample-id-in-the-sequence-headers">If samples are not identified by sample ID in the sequence headers:<a class="headerlink" href="#if-samples-are-not-identified-by-sample-id-in-the-sequence-headers" title="Permanent link">#</a></h4>
-<ol>
-<li>Set <em>demux.strategy</em>=id_in_header</li>
-<li>Set <em>input.trimPrefix</em> to a character string that precedes the sample ID <strong>for all samples</strong>.</li>
-<li>Set <em>input.trimSuffix</em> to a character string that comes after the sample ID <strong>for all samples</strong>.</li>
-</ol>
-<p><strong>Sample IDs</strong> = mbs1, mbs2, mbs3, mbs4</p>
-<p><strong>Scenario 1: Your multiplexed files include Sample IDs in the fastq sequence headers</strong> </p>
-<pre><code>@mbs1_134_M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0
-@mbs2_12_M02825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0
-@mbs3_551_M03825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0
-@mbs4_1234_M04825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0
-</code></pre>
-<p><strong>Required Config</strong>
-+ <em>input.trimPrefix</em>=@
-+ <em>input.trimSuffix</em>=_</p>
-<p>All characters before (and including) the 1st "@" in the sequence header are trimmed</p>
-<p>All characters after (and including) the 1st "_" in the sequence header are trimmed</p>
-<h4 id="if-samples-are-identified-by-barcode-in-the-header-or-sequence">If samples are identified by barcode (in the header or sequence):<a class="headerlink" href="#if-samples-are-identified-by-barcode-in-the-header-or-sequence" title="Permanent link">#</a></h4>
-<ol>
-<li>Set <em>demux.strategy</em>=barcode_in_header or <em>demux.strategy</em>=barcode_in_seq</li>
-<li>Set <em>metadata.filePath</em> to metadata file path.</li>
-<li>Set <em>metadata.barcodeColumn</em> to the barcode column name.</li>
-<li>If the metadata barcodes are listed as reverse compliments, set <em>demux.barcodeUseReverseCompliment</em>=Y.</li>
-</ol>
-<p>The metadata file must be prepared by adding a unique sequence barcode in the <em>metadata.barcodeColumn</em> column.  This information is often available in a mapping file provided by the sequencing center that produced the raw data.</p>
-<p><strong>Metadata file</strong> </p>
-<table>
-<thead>
-<tr>
-<th align="left">ID</th>
-<th align="left">BarcodeColumn</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">mbs1</td>
-<td align="left">GAGGCATGACTGGATA</td>
-</tr>
-<tr>
-<td align="left">mbs2</td>
-<td align="left">NAGGCATATTTGCACA</td>
-</tr>
-<tr>
-<td align="left">mbs3</td>
-<td align="left">GACCCATGACTGCATA</td>
-</tr>
-<tr>
-<td align="left">mbs4</td>
-<td align="left">TACCCAGCACCGCTTA</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Scenario 2: Your multiplexed files include a barcode in the headers</strong></p>
-<pre><code>@M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:GAGGCATGACTGGATA
-@M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:NAGGCATATTTGCACA
-@M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0:GACCCATGACTGCATA
-@M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA
-</code></pre>
-<p><strong>Required Config</strong>
-+ <em>demux.strategy</em>=barcode_in_header
-+ <em>metadata.barcodeColumn</em>=BarcodeColumn
-+ <em>metadata.filePath</em>=<path to metadata file></p>
-<p><strong>Scenario 3: Your multiplexed files include a barcode in the sequences</strong></p>
-<pre><code>&gt;M01825:384:000000000-BCYPK:1:2106:23543:1336 1:N:0:
-    GAGGCATGACTGGATATATACATACTGAGGCATGACTACTTACTATAAGGCTTACTGACTGGTTACTGACTGGGAGGCATGACTACTTACTATAA
-&gt;M01825:384:000000000-BCYPK:1:1322:23543:1336 1:N:0:
-    CAGGCATATTTGCACACTAGAGGCAAGTTACTGACTGGATATACTGAGGCATGGGAGGCATGACTCTATAAGGCTTACTGACTGGTTACTGACTG
-&gt;M01825:384:000000000-BCYPK:1:1123:23543:1336 1:N:0: CCATGAGACCTGCATA
-    CCATGAGACCTGCATACACTGTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGGCT
-&gt;M01825:384:000000000-BCYPK:1:9872:23543:1336 1:N:0:TACCCAGCACCGCTTA 
-    TACCCAGCACCGCTTCCTTGACTTGGGAGGCATGACTCACTATAAACTACTACTGACTGGATATACTGAGGCATACTGACTGGTTACTTATAAGG
-</code></pre>
+<p><strong>Answer1:</strong> BioLockJ can extract the sample name from the filename; see <a href="../GENERATED/Input/"> Input</a>.</p>
+<p>OR </p>
+<p><strong>Answer2:</strong> BioLockJ can connect the sample id to the file name given in one or more columns in the metadata; see <a href="../GENERATED/Metadata/">Metadata</a>.</p>
               
             </div>
           </div>

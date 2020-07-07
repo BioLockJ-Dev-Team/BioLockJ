@@ -74,6 +74,9 @@
     <li class="toctree-l3"><a href="#cluster">cluster</a></li>
     
 
+    <li class="toctree-l3"><a href="#demultiplexer">demultiplexer</a></li>
+    
+
     <li class="toctree-l3"><a href="#docker">docker</a></li>
     
 
@@ -121,7 +124,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../../The-Metadata-File/">Metadata</a>
+    <a class="" href="../Metadata/">Metadata</a>
                 </li>
                 <li class="">
                     
@@ -284,8 +287,35 @@
 <td align="left"><em>string</em> <br>To run at the start of every script after loading cluster modules (if any)<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
+<td align="left"><em>cluster.returnsBatchIds</em></td>
+<td align="left"><em>boolean</em> <br>Options Y/N.  Does the cluster.batchCommand return a job id.  If Y, if a job is submitted and no id is returned, that will be treated as a failure and the pipeline will stop.<br><em>default:</em>  Y</td>
+</tr>
+<tr>
 <td align="left"><em>cluster.statusCommand</em></td>
 <td align="left"><em>string</em> <br>Terminal command used to check the status of jobs on the cluster<br><em>default:</em>  <em>null</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="demultiplexer">demultiplexer<a class="headerlink" href="#demultiplexer" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><em>demultiplexer.barcodeCutoff</em></td>
+<td align="left"><em>numeric</em> <br>Options: (0.0 - 1.0); if defined, pipeline will fail if the percentage of reads with a barcode is less than this cutoff.<br><em>default:</em>  0.05</td>
+</tr>
+<tr>
+<td align="left"><em>demultiplexer.barcodeRevComp</em></td>
+<td align="left"><em>boolean</em> <br>Options: Y/N. Use reverse compliment of metadata.barcodeColumn if demultimplexer.strategy = barcode_in_header or barcode_in_seq.<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>demultiplexer.strategy</em></td>
+<td align="left"><em>string</em> <br>Options: barcode_in_header, barcode_in_seq, id_in_header, do_not_demux.If using barcodes, they must be provided in the metadata file within column defined by <em>metadata.barcodeColumn</em>.<br><em>default:</em>  <em>null</em></td>
 </tr>
 </tbody>
 </table>
@@ -409,11 +439,11 @@
 </tr>
 <tr>
 <td align="left"><em>input.trimPrefix</em></td>
-<td align="left"><em>string</em> <br>prefix to trim from sequence file names or headers to obtain Sample ID<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>string</em> <br>Prefix to trim from sequence file names or headers to obtain Sample ID; this string can appear anywhere in the filename and all text before it will be removed.<br><em>default:</em>  <em>null</em></td>
 </tr>
 <tr>
 <td align="left"><em>input.trimSuffix</em></td>
-<td align="left"><em>string</em> <br>suffix to trim from sequence file names or headers to obtain Sample ID<br><em>default:</em>  <em>null</em></td>
+<td align="left"><em>string</em> <br>Suffix to trim from sequence file names or headers to obtain Sample ID; this string can appear anywhere in the filename and all text after it will be removed.<br><em>default:</em>  <em>null</em></td>
 </tr>
 </tbody>
 </table>
@@ -452,7 +482,7 @@
 </tr>
 <tr>
 <td align="left"><em>metadata.required</em></td>
-<td align="left"><em>boolean</em> <br>If Y, require metadata row for each sample with sequence data in input dirs; If N, samples without metadata are ignored.<br><em>default:</em>  Y</td>
+<td align="left"><em>boolean</em> <br>If Y, require metadata row for each sample with sequence data in input dirs; If N, samples without metadata are ignored.<br><em>default:</em>  N</td>
 </tr>
 <tr>
 <td align="left"><em>metadata.useEveryRow</em></td>

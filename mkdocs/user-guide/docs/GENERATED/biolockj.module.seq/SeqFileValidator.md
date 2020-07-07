@@ -43,7 +43,7 @@ This BioModule validates fasta/fastq file formats are valid and enforces min/max
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/biolockj_controller:v1.3.5
+biolockjdevteam/biolockj_controller:v1.3.6
 ```
 This can be modified using the following properties:<br>
 `SeqFileValidator.imageOwner`<br>
@@ -52,5 +52,5 @@ This can be modified using the following properties:<br>
 
 ## Citation 
 Module developed by Mike Sioda                   
-BioLockJ v1.3.5
+BioLockJ v1.3.6
 

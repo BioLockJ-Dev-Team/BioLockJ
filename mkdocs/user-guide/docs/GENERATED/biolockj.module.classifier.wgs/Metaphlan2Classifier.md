@@ -44,7 +44,7 @@ biolockj.module.implicit.parser.wgs.Metaphlan2Parser
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/metaphlan2_classifier:v1.3.5
+biolockjdevteam/metaphlan2_classifier:v1.3.6
 ```
 This can be modified using the following properties:<br>
 `Metaphlan2Classifier.imageOwner`<br>

@@ -15,7 +15,7 @@ Add to module run order:
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/biolockj_controller:v1.3.5
+biolockjdevteam/biolockj_controller:v1.3.6
 ```
 This can be modified using the following properties:<br>
 `QiimeParser.imageOwner`<br>

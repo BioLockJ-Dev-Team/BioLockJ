@@ -76,7 +76,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../../The-Metadata-File/">Metadata</a>
+    <a class="" href="../Metadata/">Metadata</a>
                 </li>
                 <li class="">
                     
@@ -250,6 +250,10 @@
 <tr>
 <td align="left"><em>cluster.prologue</em></td>
 <td align="left"><em>string</em> <br>To run at the start of every script after loading cluster modules (if any)<br><em>default:</em>  <em>null</em></td>
+</tr>
+<tr>
+<td align="left"><em>cluster.returnsBatchIds</em></td>
+<td align="left"><em>boolean</em> <br>Options Y/N.  Does the cluster.batchCommand return a job id.  If Y, if a job is submitted and no id is returned, that will be treated as a failure and the pipeline will stop.<br><em>default:</em>  Y</td>
 </tr>
 <tr>
 <td align="left"><em>cluster.statusCommand</em></td>

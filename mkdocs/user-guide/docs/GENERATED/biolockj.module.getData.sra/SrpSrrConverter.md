@@ -54,5 +54,5 @@ This can be modified using the following properties:<br>
 
 ## Citation 
 Module developed by Malcolm Zapatas and Ivory Blakley                   
-BioLockJ v1.3.5
+BioLockJ v1.3.6
 

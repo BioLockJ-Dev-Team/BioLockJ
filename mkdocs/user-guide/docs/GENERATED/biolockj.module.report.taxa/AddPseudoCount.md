@@ -40,7 +40,7 @@ Add a pseudocount (+1) to each value in each taxa table.
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/biolockj_controller:v1.3.5
+biolockjdevteam/biolockj_controller:v1.3.6
 ```
 This can be modified using the following properties:<br>
 `AddPseudoCount.imageOwner`<br>
@@ -48,5 +48,5 @@ This can be modified using the following properties:<br>
 `AddPseudoCount.imageTag`<br>
 
 ## Citation 
-BioLockJ v1.3.5
+BioLockJ v1.3.6
 

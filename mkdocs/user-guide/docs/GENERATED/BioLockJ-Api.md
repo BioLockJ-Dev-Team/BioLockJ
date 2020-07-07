@@ -8,7 +8,7 @@ For the most up-to-date information about how to use the API, see the help menu:
 `biolockj-api help`                   
                    
 ```                   
-BioLockJ API v1.3.5 - UNCC Fodor Lab                   
+BioLockJ API v1.3.6 - UNCC Fodor Lab                   
                    
 Usage:                   
 biolockj-api <query> [options...]                   
