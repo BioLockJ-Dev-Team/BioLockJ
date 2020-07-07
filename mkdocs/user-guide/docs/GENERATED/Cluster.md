@@ -14,6 +14,7 @@ We recomend [chaining configuration properties](../../Configuration/#chaining-co
 | *cluster.jobHeader* | _string_ <br>Header written at top of worker scripts<br>*default:*  *null* |
 | *cluster.modules* | _list_ <br>List of cluster modules to load at start of worker scripts<br>*default:*  *null* |
 | *cluster.prologue* | _string_ <br>To run at the start of every script after loading cluster modules (if any)<br>*default:*  *null* |
+| *cluster.returnsBatchIds* | _boolean_ <br>Options Y/N.  Does the cluster.batchCommand return a job id.  If Y, if a job is submitted and no id is returned, that will be treated as a failure and the pipeline will stop.<br>*default:*  Y |
 | *cluster.statusCommand* | _string_ <br>Terminal command used to check the status of jobs on the cluster<br>*default:*  *null* |
                    
                    

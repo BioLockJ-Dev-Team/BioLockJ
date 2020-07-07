@@ -218,7 +218,7 @@ public class BashScriptBuilder {
 		return lines;
 	}
 	
-	private static List<String> buildRunClusterJobFunction( ScriptModule module ) throws ConfigNotFoundException{
+	private static List<String> buildRunClusterJobFunction( ScriptModule module ) throws ConfigNotFoundException, ConfigFormatException{
 		List<String> lines = new ArrayList<>();
 		String startedFlag = getMainScriptPath( module ) + "_" + Constants.SCRIPT_STARTED;
 		lines.add( "# Submit job script" );
@@ -227,6 +227,10 @@ public class BashScriptBuilder {
 		lines.add( "id=$(" + Config.requireString( module, CLUSTER_BATCH_COMMAND ) + " $1)" );
 		lines.add( "local status = $?" );
 		lines.add( "echo \"$scriptName:" + CLUSTER_KEY + ":$id\" >> " + startedFlag );
+		if ( Config.requireBoolean( module, CLUSTER_HAS_BATCH_IDS ) ) {
+			lines.add( "[ $status -eq 0 ] && [ ${#id} -eq 0] && status=1 && echo \"No job id was returned from " 
+							+ Config.requireString( module, CLUSTER_BATCH_COMMAND ) + " command.\" " );
+		}
 		lines.add( "if [ $status -gt 0 ]; then echo $id; fi" );
 		lines.add( "return $status");
 		lines.add( "}" + RETURN );
@@ -436,6 +440,7 @@ public class BashScriptBuilder {
 		Properties.registerProp(CLUSTER_MODULES, Properties.LIST_TYPE, CLUSTER_MODULES_DESC);
 		Properties.registerProp(CLUSTER_PROLOGUE, Properties.STRING_TYPE, CLUSTER_PROLOGUE_DESC);
 		Properties.registerProp(SCRIPT_JOB_HEADER, Properties.STRING_TYPE, SCRIPT_JOB_HEADER_DESC);
+		Properties.registerProp(CLUSTER_HAS_BATCH_IDS, Properties.BOOLEAN_TYPE, CLUSTER_HAS_BATCH_IDS_DESC);
 	}
 	/**
 	 * Let modules see property names.
@@ -447,16 +452,18 @@ public class BashScriptBuilder {
 		props.add( CLUSTER_MODULES );
 		props.add( CLUSTER_PROLOGUE );
 		props.add( SCRIPT_JOB_HEADER );
+		//props.add( CLUSTER_HAS_BATCH_IDS );
 		return props;
 	}
 	
-	public static void checkDependencies(BioModule module) throws ConfigNotFoundException {
+	public static void checkDependencies(BioModule module) throws ConfigNotFoundException, ConfigFormatException {
 		if( Config.isOnCluster() ) {
 			Config.requireString( module, CLUSTER_BATCH_COMMAND );
 			Config.getString( module, CLUSTER_STATUS_COMMAND );
 			Config.requireString( module, SCRIPT_JOB_HEADER );
 			Config.getList( module, CLUSTER_MODULES );
 			Config.getString(  module, CLUSTER_PROLOGUE );
+			Config.requireBoolean( module, CLUSTER_HAS_BATCH_IDS );
 		}
 	}
 	
@@ -466,6 +473,13 @@ public class BashScriptBuilder {
 	 */
 	protected static final String CLUSTER_BATCH_COMMAND = "cluster.batchCommand";
 	private static final String CLUSTER_BATCH_COMMAND_DESC = "Terminal command used to submit jobs on the cluster";
+	
+	/**
+	 * {@link biolockj.Config} Boolean property: {@value #CLUSTER_HAS_BATCH_IDS}<br>
+	 * {@value #CLUSTER_HAS_BATCH_IDS_DESC}
+	 */
+	protected static final String CLUSTER_HAS_BATCH_IDS = "cluster.returnsBatchIds";
+	private static final String CLUSTER_HAS_BATCH_IDS_DESC = "Options Y/N.  Does the cluster.batchCommand return a job id.  If Y, if a job is submitted and no id is returned, that will be treated as a failure and the pipeline will stop.";
 	
 	/**
 	 * {@link biolockj.Config} String property: {@value #CLUSTER_STATUS_COMMAND}<br>
