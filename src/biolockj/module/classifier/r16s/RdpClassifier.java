@@ -31,7 +31,7 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 		super();
 		addNewProperty( RDP_DB, Properties.FILE_PATH, "File path used to define an alternate RDP database" );
 		addNewProperty( RDP_JAR, Properties.FILE_PATH, "File path for RDP java executable JAR" );
-		addNewProperty( RDP_DOCKER_JAR, Properties.STRING_TYPE, "File path for RDP java executable JAR in docker." );
+		addNewProperty( RDP_DOCKER_JAR, Properties.STRING_TYPE, "File path for RDP java executable JAR in docker.", "/app/classifier.jar" );
 		addNewProperty( RDP_PARAMS, Properties.LIST_TYPE, "parameters to use when running rdp. (must include \"-f fixrank\")" );
 		addNewProperty( JAVA_PARAMS, Properties.LIST_TYPE, "the parameters to java when running rdp." );
 		addGeneralProperty( Constants.DEFAULT_MOD_SEQ_MERGER );

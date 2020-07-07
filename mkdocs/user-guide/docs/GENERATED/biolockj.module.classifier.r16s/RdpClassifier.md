@@ -11,7 +11,7 @@ Classify 16s samples with [RDP](http://rdp.cme.msu.edu/classifier/classifier.jsp
 ### RdpClassifier properties: 
 | Property| Description |
 | :--- | :--- |
-| *rdp.containerJar* | _string_ <br>File path for RDP java executable JAR in docker.<br>*default:*  *null* |
+| *rdp.containerJar* | _string_ <br>File path for RDP java executable JAR in docker.<br>*default:*  /app/classifier.jar |
 | *rdp.db* | _file path_ <br>File path used to define an alternate RDP database<br>*default:*  *null* |
 | *rdp.jar* | _file path_ <br>File path for RDP java executable JAR<br>*default:*  *null* |
 | *rdp.javaParams* | _list_ <br>the parameters to java when running rdp.<br>*default:*  *null* |
