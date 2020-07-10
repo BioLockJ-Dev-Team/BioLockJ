@@ -165,6 +165,7 @@ export_env_vars(){
 		len=$((${#BLJ_PROJ}-1))
 		BLJ_PROJ="${BLJ_PROJ:0:len}"
 	fi
+	in_docker_env && BLJ_PROJ=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil ${BLJ_PROJ} target)
 	export BLJ_PROJ
 	if [ ${#configFile} -gt 0 ]; then
 		cd $(dirname $configFile)

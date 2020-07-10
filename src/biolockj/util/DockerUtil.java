@@ -374,7 +374,8 @@ public class DockerUtil {
 		return new File( deContainerizePath(innerFile.getAbsolutePath()) );
 	}
 	public static void main(String[] args) throws DockerVolCreationException {
-		System.out.println( deContainerizePath( args[0] ) );
+		if (args.length > 1 && args[1].equals("target") ) System.out.println( containerizePath( args[0] ) );
+		else System.out.println( deContainerizePath( args[0] ) );
 	}
 
 	public static String getContainerId() throws IOException {

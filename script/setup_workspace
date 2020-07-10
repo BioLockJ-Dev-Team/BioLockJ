@@ -14,7 +14,20 @@
 
 main(){
 
+	SOURCE=plans
+	if [ -d /workspace/$SOURCE ]; then
+		echo "Found $SOURCE folder."
+	else
+		echo "Creating $SOURCE folder..."
+		mkdir /workspace/$SOURCE
+	fi
+	HOST_SOURCE=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil /workspace/$SOURCE)
+	echo "A project plan includes a 'properties' file and any project-specific files it references."
+	echo "Store plans under this folder:"
+	echo '    '"$HOST_SOURCE"
 	echo ""
+	
+	
 	PIPELINES=pipelines
 	if [ -d /workspace/$PIPELINES ]; then
 		echo "Found $PIPELINES folder."
@@ -28,6 +41,21 @@ main(){
 	echo ""
 
 
+    TEMPLATE=templates
+    [ ! -d /workspace/$TEMPLATE ] && mkdir /workspace/$TEMPLATE
+    echo "Adding example project plans to help you get started...see /workspace/$TEMPLATE"
+    echo "The /workspace/$TEMPLATE folder is updated anytime you run the setup_workspace command."
+	cp -r $BLJ/templates/* /workspace/$TEMPLATE/.
+	echo ""
+	
+	LOCAL_PROPS=/workspace/local.properties
+	HOST_LOCAL_PROPS=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $LOCAL_PROPS)
+	[ ! -f $LOCAL_PROPS ] && echo "Creating $HOST_LOCAL_PROPS file." && cp /workspace/$TEMPLATE/COPY_ME_local.properties $LOCAL_PROPS
+	echo "Property files can reference this file using the full path:"
+	echo '    pipeline.defaultProps='"$HOST_LOCAL_PROPS"
+	echo ""
+
+		
 	# ARCHIVE=archive
 	# if [ -d /workspace/$ARCHIVE ]; then
 	# 	echo "Found $ARCHIVE folder."
@@ -36,7 +64,7 @@ main(){
 	# 	mkdir /workspace/$ARCHIVE	
 	# fi
 
-
+	
 	EXTRA_MODS=extra_modules
 	if [ -d /workspace/$EXTRA_MODS ]; then
 		echo "Found $EXTRA_MODS folder."
@@ -49,22 +77,9 @@ main(){
 	echo '    '"$HOST_EXT_MODS"
 	echo ""
 
-
-	SOURCE=source
-	if [ -d /workspace/$SOURCE ]; then
-		echo "Found $SOURCE folder."
-	else
-		echo "Creating $SOURCE folder..."
-		mkdir /workspace/$SOURCE
-		echo "Adding example projects to help you get started..."
-		cp -r $BLJ/templates/* /workspace/source/.
-		mv /workspace/source/COPY_ME_local.properties /workspace/source/local.properties
-	fi
-	HOST_SOURCE=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil /workspace/$SOURCE)
-	echo "A project includes a configuration file and any project-specific files it references."
-	echo "Store projects under this folder:"
-	echo '    '"$HOST_SOURCE"
-	echo ""
+	
+	SCRIPT=script
+	[ ! -d /workspace/$SCRIPT ] && mkdir /workspace/$SCRIPT
 
 
 	HOST_WORKSPACE=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil /workspace)
@@ -81,8 +96,9 @@ main(){
 	ifDefined $HOST_OS_SCRIPT && [ $HOST_OS_SCRIPT == ps1 ] && build_power_shell_wrapper
 	! ifDefined $HOST_OS_SCRIPT && build_power_shell_wrapper
 
-
-	echo "Your workspace is all set up!"
+	echo ""
+	echo "Your workspace is all set up! Step 1 of 3 is done!"
+	echo "See user guide for more details about the pure-docker approach."
 	echo ""
 
 }
@@ -90,11 +106,7 @@ main(){
 . ${BLJ}/script/blj_functions
 
 build_bash_wrapper(){
-	if ifDefined $HOST_OS_SCRIPT && [ $HOST_OS_SCRIPT==bash ] ; then
-		BASH_LAUNCHER=/workspace/$SOURCE/docker-biolockj
-	else
-		BASH_LAUNCHER=/workspace/$SOURCE/docker-biolockj.bash
-	fi
+	BASH_LAUNCHER=/workspace/$SCRIPT/docker-biolockj
 	if [ -f $BASH_LAUNCHER ] ; then
 		echo "Updating $BASH_LAUNCHER ..."
 	else
@@ -125,13 +137,19 @@ build_bash_wrapper(){
 	echo "" >> $BASH_API_LAUNCHER
 	chmod a+rwx $BASH_API_LAUNCHER
 	
+	local host_launcher=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $BASH_LAUNCHER)
 	echo "Try printing the help menu:"
-	echo "$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $BASH_LAUNCHER) --help" 
+	echo "$host_launcher --help" 
+	echo ""
+	
+	echo "Recommended setup commands for bash systems:"
+	echo "echo 'export PATH=$(dirname $host_launcher)"':$PATH'"' >"'> ~/.bash_profile'
+	echo '. ~/.bash_profile'
 	echo ""
 }
 
 build_power_shell_wrapper(){
-	POWER_SHELL_LAUNCHER=/workspace/$SOURCE/docker-biolockj.ps1
+	POWER_SHELL_LAUNCHER=/workspace/$SCRIPT/docker-biolockj.ps1
 	if [ -f $POWER_SHELL_LAUNCHER ] ; then
 		echo "Updating $POWER_SHELL_LAUNCHER ..."
 	else
@@ -153,18 +171,28 @@ build_power_shell_wrapper(){
 	PS_API_LAUNCHER=${POWER_SHELL_LAUNCHER/biolockj/biolockj-api}
 	echo "#!/bin/bash" > $PS_API_LAUNCHER
 	echo "" >> $PS_API_LAUNCHER
-	echo 'docker run --rm \' >> $PS_API_LAUNCHER
-	echo '   -v /var/run/docker.sock:/var/run/docker.sock \' >> $PS_API_LAUNCHER
-	echo '   -v '"$HOST_WORKSPACE"':/workspace \'  >> $PS_API_LAUNCHER
-	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' \' >> $PS_API_LAUNCHER
-	echo '   biolockj-api ' >> $PS_API_LAUNCHER
-	echo '${@}' >> $PS_API_LAUNCHER
+	echo 'docker run --rm `' >> $PS_API_LAUNCHER
+	echo '   -v /var/run/docker.sock:/var/run/docker.sock `' >> $PS_API_LAUNCHER
+	echo '   -v '"$HOST_WORKSPACE"':/workspace `'  >> $PS_API_LAUNCHER
+	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' `' >> $PS_API_LAUNCHER
+	echo '   biolockj-api `' >> $PS_API_LAUNCHER
+	echo '$args' >> $PS_API_LAUNCHER
 	echo "" >> $PS_API_LAUNCHER
 	chmod a+rwx $PS_API_LAUNCHER
 	
+	local host_launcher=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $POWER_SHELL_LAUNCHER)
 	echo "Try printing the help menu:"
-	echo "$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $POWER_SHELL_LAUNCHER) --help" 
+	echo "$host_launcher --help" 
 	echo ""
+		
+	echo 'Recommended setup commands for powershell:'
+	echo 'Set-ExecutionPolicy RemoteSigned'
+	echo 'Set-Alias -Name docker-biolockj -Value $PWD\workspace\script\docker-biolockj.ps1'
+	echo 'Set-Alias -Name docker-biolockj-api -Value $PWD\workspace\script\docker-biolockj-api.ps1'
+	#echo 'Add-Content $profile "Set-Alias -Name docker-biolockj -Value $PWD\workspace\source\docker-biolockj.ps1"'
+	#echo 'Add-Content $profile "Set-Alias -Name docker-biolockj-api -Value $PWD\workspace\source\docker-biolockj-api.ps1"'
+	echo ""
+	
 }
 
 main $@

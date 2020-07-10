@@ -612,7 +612,7 @@ public class BioLockJ_API {
 							+ testFile.getName() + " ] && echo " + YES + " || echo no ";
 //			String cmd = "docker run --rm --mount type=bind,source=" + testFile.getParentFile().getAbsolutePath() 
 //							+ ",target=/tmpTest ubuntu [ -f tmpTest/" + testFile.getName() + " ] && echo " + YES + " || echo no ";
-			System.err.println("test command: " + cmd);
+			//System.err.println("test command: " + cmd);
 			final Process p = Runtime.getRuntime().exec( cmd );
 			final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
 			String returnVal = null;
@@ -624,10 +624,10 @@ public class BioLockJ_API {
 			p.waitFor();
 			p.destroy();
 			answer = returnVal.equals( YES );
-			System.err.println("answer: " + answer);
+			//System.err.println("answer: " + answer);
 		}catch(Exception ex){
-			System.err.println("Encountered an error while testing to see if file exists on host: " + testFile.getName());
-			System.err.println(ex.getMessage());
+			//System.err.println("Encountered an error while testing to see if file exists on host: " + testFile.getName());
+			//System.err.println(ex.getMessage());
 			ex.getSuppressed();
 		}
 		return answer;

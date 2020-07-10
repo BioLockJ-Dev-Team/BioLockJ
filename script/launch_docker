@@ -34,7 +34,7 @@ main(){
 	volumns=$(get_volumes) || exit_with_message "${volumns[@]}"
 	CMD="docker run $(docker_args) -e \"BLJ_OPTIONS=$(blj_options)\" $volumns $(args_for_gui) $(get_docker_img) $(cmd_for_gui)"
 		
-	build_clone_script "${CMD}"
+	! in_docker_env && build_clone_script "${CMD}"
 	
 	before_docker_start
 	
@@ -69,21 +69,23 @@ scan_script_and_env_args() {
 # Verify paths are valid
 # Paths provided by config file are verified as they are collected, not here.
 verify_inputs() {
-	verify_dir $BLJ_PROJ
-	ifDefined $restartDir && verify_dir $restartDir
-	ifDefined $configFile && verify_file $configFile
+	verifyDir $BLJ_PROJ
+	ifDefined $restartDir && verifyRestartDir
+	ifDefined $configFile && verifyConfig
 }
 
 # Verify host directory exists, if launch_docker is not deployed inside a Docker container
 # Param 1 - System path
-verify_dir() {
- 	[ ! -d "${1}" ] && exit_script "Error [ launch_docker.verify_dir ]: Parameter \"${1}\" not found"
+verifyRestartDir() {
+ 	[ ! -d $restartDir ] && restartDir=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $restartDir target)
+ 	[ ! -d $restartDir ] && exit_script "Error [ launch_docker ]: The restart dir \"$restartDir\" is not accessible."
 }
 
 # Verify host file exists, if launch_docker is not deployed inside a Docker container
 # Param 1 - System path
-verify_file() {
-	[ ! -f "${1}" ] && exit_script "Error [ launch_docker.verify_file ]: Parameter \"${1}\" not found"
+verifyConfig() {
+	[ ! -f $configFile ] && configFile=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $configFile target)
+ 	[ ! -f $configFile ] && exit_script "Error [ launch_docker ]: The properties file \"$configFile\" is not accessible."
 }
 
 docker_args(){
@@ -110,12 +112,6 @@ flags_for_run(){
 # In AWS mode, add a indicator, otherwise include the Host path for pipeline input. 
 # These paths are used by biolockj_controller to map Docker volumes for java_module containers
 blj_options() {
-#	if in_docker_env && [ ${#BLJ_OPTIONS} -gt 0 ]; then # in docker container 
-#		options="${BLJ_OPTIONS}"
-#	else # on host machine
-#		options="-projectDir ${BLJ_PROJ}"
-#		ifArgUsed $GUI_ARG && echo "${options}" && return
-#	fi	
     if in_docker_env ; then
         options="-projectDir $(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil ${BLJ_PROJ})"
         ifDefined $restartDir && options="${options} -restartDir $(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil $(to_abs_path $restartDir))"
@@ -141,35 +137,29 @@ blj_options() {
 # TODO use mount instead of volumes
 get_volumes() {
 	vols="-v ${DOCK_SOCK}:${DOCK_SOCK}"
-	ifArgUsed $BLJ_ARG && vols="${vols} -v ${BLJ}:/app/biolockj:ro"
-	ifArgUsed $EXT_MODS_ARG && vols="${vols} -v ${extMods}:/app/external_modules:ro"
+	ifArgUsed $BLJ_ARG && vols="${vols} --mount type=bind,source=${BLJ},target=/app/biolockj"
+	ifArgUsed $EXT_MODS_ARG && vols="${vols} --mount type=bind,source=${extMods},target=/app/external_modules"
 	if ifArgUsed $AWS_ARG ; then
 		#TODO - replace this; docker mounts will done the same way on aws or local machine
 		vols="${vols} -v ${EFS}:${EFS}:delegated" 
 	else
-		vols="${vols} -v ${BLJ_PROJ}:${EFS_PROJ}:delegated"
+	    if in_docker_env ; then
+	       local HOST_BLJ_PROJ=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil ${BLJ_PROJ})
+	       vols="${vols} --mount type=bind,source=${HOST_BLJ_PROJ},target=${EFS_PROJ}"
+	    else
+		   vols="${vols} --mount type=bind,source=${BLJ_PROJ},target=${EFS_PROJ}"
+		fi
 		if ifArgUsed $GUI_ARG; then 
 			# TODO - use aws cli in container, don't map in user's
-			vols="${vols} -v ${BLJ}/resources/config/gui:${BLJ_CONFIG}:delegated"
+			vols="${vols} -v ${BLJ}/resources/config/gui:${BLJ_CONFIG}"
 			[ -f "$(which aws)" ] && [ -d "$(dirname $(which aws))" ] && vols="${vols} -v $(dirname $(which aws)):${APP_BIN}"
 		else 
 			local i=1
 			readableConfig=$(get_readable_config)
-			# collect the output of read_config.  IFF that call has a non-0 exit, print any collected error messages.
-			#
-			#
 			configuredDirs=$(${BLJ}/script/biolockj-api listMounts --config $readableConfig)
 			[ ! $? -eq 0 ] && echo "${configuredDirs[@]}" && exit 1 #this is called in subshell, failures have to get passed up the chain
-			#
-			#if in_docker_env ; then
-			#    configuredDirs=$(${BLJ}/script/biolockj-api listMounts --config $readableConfig)
-			#    [ ! $? -eq 0 ] && echo "Need to set up listMounts: ${configuredDirs[@]}" && exit 1 #this is called in subshell, failures have to get passed up the chain
-			#else
-			#	configuredDirs=$(${BLJ}/script/read_config.sh "$readableConfig" "mount")
-			#	[ ! $? -eq 0 ] && echo "${configuredDirs[@]}" && exit 1 #this is called in subshell, failures have to get passed up the chain
-			#fi
 			for dir in ${configuredDirs[@]}; do
-				vols="${vols} -v ${dir}:${EFS}/vol_${i}:ro" 
+				vols="${vols} --mount type=bind,source=${dir},target=${EFS}/vol_${i}" 
 				i=$(( i + 1 ))
 			done
 		fi
@@ -181,6 +171,7 @@ get_readable_config(){
 	if ifArgUsed $RESTART_ARG && ! ifDefined $configFile ; then
 		echo $(ls ${restartDir}/MASTER*properties )
 	elif ifDefined $configFile; then
+	    verifyConfig 
 		echo $configFile
 	else
 		exit_with_message "Could not get a readable config file."
@@ -291,6 +282,7 @@ is_container_running(){
 }
 
 print_info(){
+    showPipeDir=$(java -cp $BLJ/dist/BioLockJ.jar biolockj.util.DockerUtil ${pipeDir})
 	if ! is_container_running && ! restartDir_has_status_flag && [ "${initDir}" == "${pipeDir}" ] ; then
 		if [ $verifiedDockerLaunch == "true" ]; then
 			echo "Docker started; but the pipeline did not."
@@ -298,11 +290,11 @@ print_info(){
 			echo "Failed to start docker container."
 		fi
 	elif restartDir_has_status_flag; then 
-		echo "Restarting pipeline:  ${pipeDir}"
+		echo "Restarting pipeline:  ${showPipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 600
 	elif [ "${initDir}" != "${pipeDir}" ] ; then 
-		echo "Building pipeline:  ${pipeDir}"
+		echo "Building pipeline:  ${showPipeDir}"
 		print_action_options
 		print_pipeline_status_and_exit ${pipeDir} 600
 	else
