@@ -15,17 +15,24 @@ COPY resources/docker/docker_build_scripts/imageForBioLockJ.sh /root/.
 #3.) Build Standard Directories and varibles and assumed software
 RUN . /root/imageForBioLockJ.sh ~/.bashrc
 
-#4.) Install R Packages
-RUN REPO="http://cran.us.r-project.org" && \
-	Rscript -e "install.packages('Kendall', dependencies=TRUE, repos='$REPO')" && \
-	Rscript -e "install.packages('coin', dependencies=TRUE, repos='$REPO')" && \
-	Rscript -e "install.packages('vegan', dependencies=TRUE, repos='$REPO')" && \
-	Rscript -e "install.packages('ggpubr', dependencies=TRUE, repos='$REPO')" && \
-	Rscript -e "install.packages('properties', dependencies=TRUE, repos='$REPO')" && \
-	Rscript -e "install.packages('htmltools', dependencies=TRUE, repos='$REPO')" && \
-	Rscript -e "install.packages('stringr', dependencies=TRUE, repos='$REPO')"
+#4.1) Install R Packages that are usually good
+RUN Rscript -e "install.packages('Kendall', dependencies=TRUE)" && \
+	Rscript -e "install.packages('coin', dependencies=TRUE)" && \
+	Rscript -e "install.packages('vegan', dependencies=TRUE)" && \
+	Rscript -e "install.packages('properties', dependencies=TRUE)"
+	
+#4.2) Install R Packages packages that got warnings
+RUN Rscript -e "install.packages('htmltools', dependencies=TRUE)"
+	
+#4.3) Install R Packages that have failed
+RUN Rscript -e "install.packages('ggplot2', dependencies=TRUE)" && \
+	Rscript -e "install.packages('ggpubr', dependencies=TRUE)" && \
+	Rscript -e "install.packages('stringr', dependencies=TRUE)"
 
-#5.) Cleanup
+#5.) check that packages installed
+RUN Rscript -e "library('Kendall'); library('coin'); library('vegan'); library('ggpubr'); library('properties'); library('htmltools'); library('stringr')"
+
+#6.) Cleanup
 RUN	apt-get clean && \
 	find / -name *python* | xargs rm -rf && \
 	rm -rf /tmp/* && \
