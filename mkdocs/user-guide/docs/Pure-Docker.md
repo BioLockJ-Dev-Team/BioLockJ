@@ -11,7 +11,9 @@ Double check that docker is working on your system:
 docker run hello-world
 ```
 
-Notice that many of these commands require a full path.  Here we use **$PWD** so that the commands in code blocks can be copy/pasted.  Be mindful of your current working directory.
+For Windows systems, you will need to run PowerShell **as administrator**.
+
+For all systems, notice that many of these commands require a full path.  Here we use **$PWD** so that the commands in code blocks can be copy/pasted.  Be mindful of your current working directory.
 
 ## Step 1: 
 In powershell or terminal, navigate to a directory where you would like to store all of your BioLockJ materials, and enter the command below.
