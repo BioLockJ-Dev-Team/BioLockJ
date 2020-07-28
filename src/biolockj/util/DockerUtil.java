@@ -283,7 +283,7 @@ public class DockerUtil {
 		Log.info( DockerUtil.class, volumeMap.toString() );
 	}
 
-	private static void writeDockerInfo() throws IOException, InterruptedException {
+	private static void writeDockerInfo() throws IOException, InterruptedException, DockerVolCreationException {
 		File infoFile = getInfoFile();
 		Log.info( DockerUtil.class, "Creating " + infoFile.getName() + " file." );
 		final BufferedWriter writer = new BufferedWriter( new FileWriter( infoFile ) );
@@ -302,7 +302,7 @@ public class DockerUtil {
 			"the info file " + ( infoFile.exists() ? "is here:" + infoFile.getAbsolutePath(): "is not here." ) );
 	}
 
-	private static String getDockerInforCmd() throws IOException {
+	private static String getDockerInforCmd() throws IOException, DockerVolCreationException {
 		return "docker inspect " + getContainerId();
 		// return "curl --unix-socket /var/run/docker.sock http:/v1.38/containers/" + getHostName() + "/json";
 	}
@@ -378,16 +378,17 @@ public class DockerUtil {
 		else System.out.println( deContainerizePath( args[0] ) );
 	}
 
-	public static String getContainerId() throws IOException {
+	public static String getContainerId() throws IOException, DockerVolCreationException {
 		String id = null;
 		File cgroup = new File( "/proc/self/cgroup" );
 		BufferedReader br = new BufferedReader( new FileReader( cgroup ) );
 		String line = null;
-		while( ( line = br.readLine() ) != null ) {
-			if( line.contains( "name=" ) ) {
+		while( ( line = br.readLine() ) != null && id == null ) {
+			if( line.contains( ":/docker/" ) ) {
 				id = line.substring( line.indexOf( "docker/" ) + 7 );
 			}
 		}
+		if (id==null) throw new DockerVolCreationException( "Failed to determine the id of the current container." );
 		br.close();
 		return id;
 	}
