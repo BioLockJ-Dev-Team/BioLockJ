@@ -156,7 +156,7 @@ get_volumes() {
 		else 
 			local i=1
 			readableConfig=$(get_readable_config)
-			configuredDirs=$(${BLJ}/script/biolockj-api listMounts --config $readableConfig)
+			configuredDirs=$(BIOLOCKJ_TEST_MODE=""; ${BLJ}/script/biolockj-api listMounts --config $readableConfig)
 			[ ! $? -eq 0 ] && echo "${configuredDirs[@]}" && exit 1 #this is called in subshell, failures have to get passed up the chain
 			for dir in ${configuredDirs[@]}; do
 				vols="${vols} --mount type=bind,source=${dir},target=${EFS}/vol_${i}" 
