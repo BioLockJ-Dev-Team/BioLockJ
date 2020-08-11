@@ -12,11 +12,12 @@
 package biolockj;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import org.apache.commons.io.FileUtils;
+import biolockj.exception.ConfigPathException;
 import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.FatalExceptionHandler;
+import biolockj.exception.InvalidPipelineException;
 import biolockj.module.BioModule;
 import biolockj.module.report.Email;
 import biolockj.util.*;
@@ -29,6 +30,10 @@ import biolockj.util.*;
  * indicator file in the pipeline root directory.<br>
  */
 public class BioLockJ {
+	
+	private static File pipelineDir = null;
+	private static String pipelineName = null;
+	private static String pipelineInstanceId = null;
 	
 	private BioLockJ() {}
 
@@ -133,8 +138,30 @@ public class BioLockJ {
 		}
 	}
 
+	
+	private static void setPipelineRootDir() throws DockerVolCreationException, InvalidPipelineException {
+		String pipeType;
+		if( RuntimeParamUtil.doRestart() ) {
+			pipelineDir = RuntimeParamUtil.getRestartDir();
+			pipelineName = PipelineUtil.getProjectName( pipelineDir );
+			pipelineInstanceId = PipelineUtil.getPipelineId( pipelineDir );
+			pipeType = "RESTART_DIR";
+		} else if( BioLockJUtil.isDirectMode() ) {
+			pipelineDir = RuntimeParamUtil.getDirectPipelineDir();
+			pipelineName = PipelineUtil.getProjectName( pipelineDir );
+			pipelineInstanceId = PipelineUtil.getPipelineId( pipelineDir );
+			pipeType = "DIRECT";
+		} else {
+			pipelineName = PipelineUtil.getProjectNameFromPropFile(RuntimeParamUtil.getConfigFile());
+			createPipelineDirectory();
+			pipeType = "NEW";
+		}
+		String printPathOnScreen = DockerUtil.deContainerizePath( pipelineDir.getAbsolutePath() );
+		System.out.println( Constants.PIPELINE_LOCATION_KEY + printPathOnScreen);
+		Log.info( BioLockJ.class, "Assign " + pipeType + " pipeline root directory: " + printPathOnScreen );
+	}
 	/**
-	 * Create the pipeline root directory under $DOCKER_PROJ and save the path to
+	 * Create the pipeline root directory under $BLJ_PROJ and save the path to
 	 * {@link biolockj.Config}.{@value biolockj.Constants#INTERNAL_PIPELINE_DIR}.
 	 * <p>
 	 * For example, the following {@link biolockj.Config} settings will create:
@@ -148,42 +175,19 @@ public class BioLockJ {
 	 * @return Pipeline root directory
 	 * @throws DockerVolCreationException 
 	 */
-	protected static File createPipelineDirectory() throws DockerVolCreationException {
-		final String year = String.valueOf( new GregorianCalendar().get( Calendar.YEAR ) );
-		final String month = new GregorianCalendar().getDisplayName( Calendar.MONTH, Calendar.SHORT, Locale.ENGLISH );
-		final String day = BioLockJUtil.formatDigits( new GregorianCalendar().get( Calendar.DATE ), 2 );
-		final String baseString =
-			RuntimeParamUtil.get_BLJ_PROJ().getAbsolutePath() + File.separator + RuntimeParamUtil.getProjectName();
-		final String dateString = "_" + year + month + day;
-		File projectDir = new File( baseString + dateString );
+	private static void createPipelineDirectory() throws DockerVolCreationException {
+		final String dateString = BioLockJUtil.getDateString();
+		pipelineInstanceId = getProjectName() + "_" + dateString;
+		pipelineDir = new File( RuntimeParamUtil.get_BLJ_PROJ().getAbsolutePath(), pipelineInstanceId);
 		int i = 2;
-		while( !isNameAvailable(projectDir) )
-			projectDir = new File( baseString + "_" + i++ + dateString ); //TODO: dateString before i; or no date string
-		projectDir.mkdirs();
-		return projectDir;
-	}
-	
-	/*
-	 * If a directory exists with this pipeline name, but it is marked as a precheck pipeline,
-	 * then it is ok to delete it the file.  Precheck pipelines do not need to be preserved.
-	 */
-	private static boolean isNameAvailable(File dir) {
-		if ( ! dir.isDirectory() ) return true;
-		boolean isPrecheck = false;
-		String[] precheckDoneFlags = {Constants.PRECHECK_COMPLETE, Constants.PRECHECK_FAILED };
-		for (String str : precheckDoneFlags ) {
-			File flag = new File(dir, str);
-			if (flag.exists()) {
-				Log.info(BioLockJ.class, "Removing precheck pipeline: " + dir.getAbsolutePath());
-				try {
-					FileUtils.forceDelete(dir.getAbsoluteFile());
-					if ( ! flag.exists()) isPrecheck = true;
-				} catch( IOException e ) {
-					//e.printStackTrace();
-				}
-			}
-		}
-		return isPrecheck;
+		while( pipelineDir.exists() ) {
+			//TODO: dateString before i; or no date string
+			pipelineInstanceId = getProjectName() + "_" + i++ + "_" + dateString;
+			pipelineDir = new File( RuntimeParamUtil.get_BLJ_PROJ().getAbsolutePath(), pipelineInstanceId ); 
+			
+		}	
+		pipelineDir.mkdirs();
+		
 	}
 
 	/**
@@ -206,6 +210,7 @@ public class BioLockJ {
 		Log.debug( BioLockJ.class, "APP_START_TIME (millis): " + Constants.APP_START_TIME );
 		MemoryUtil.reportMemoryUsage( "INTIAL MEMORY STATS" );
 		RuntimeParamUtil.registerRuntimeParameters( args );
+		setPipelineRootDir();
 		Config.initialize();
 		
 		if( BioLockJUtil.isDirectMode() ) Log.initialize( getDirectLogName( RuntimeParamUtil.getDirectModuleDir() ) );
@@ -233,7 +238,7 @@ public class BioLockJ {
 		if( RuntimeParamUtil.doChangePassword() ) {
 			Log.info( BioLockJ.class, "Save encrypted password to: " + Config.getConfigFilePath() );
 			Email.encryptAndStoreEmailPassword();
-			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
+			PipelineUtil.markStatus( Constants.BLJ_COMPLETE );
 			return;
 		}
 		
@@ -271,7 +276,7 @@ public class BioLockJ {
 		if( NextflowUtil.getMainNf().isFile() ) NextflowUtil.getMainNf().delete();
 		//if( DockerUtil.getInfoFile().exists() ) DockerUtil.getInfoFile().delete();
 
-		BioLockJUtil.markStatus( Constants.BLJ_STARTED );
+		PipelineUtil.markStatus( Constants.BLJ_STARTED );
 	}
 
 	private static void pipelineShutDown() {
@@ -337,7 +342,7 @@ public class BioLockJ {
 			
 			if( Config.getBoolean( null, Constants.RM_TEMP_FILES ) ) removeTempFiles();
 			
-			BioLockJUtil.markStatus( Constants.BLJ_COMPLETE );
+			PipelineUtil.markStatus( Constants.BLJ_COMPLETE );
 		}
 	}
 
@@ -372,4 +377,23 @@ public class BioLockJ {
 	}
 
 	private static final String RETURN = Constants.RETURN;
+
+	/**
+	 * Extract the project name from the Config file.
+	 * 
+	 * @return Project name
+	 * @throws DockerVolCreationException 
+	 */
+	public static String getProjectName() throws DockerVolCreationException {
+		return pipelineName;
+	}
+	
+	public static File getPipelineDir() {
+		return pipelineDir;
+	}
+	
+	public static String getPipelineId() {
+		return pipelineInstanceId;
+	}
+
 }

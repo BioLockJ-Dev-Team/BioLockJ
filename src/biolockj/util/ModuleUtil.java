@@ -381,7 +381,7 @@ public class ModuleUtil {
 	 * @throws Exception if unable to create {@value biolockj.Constants#BLJ_COMPLETE} file
 	 */
 	public static void markComplete( final BioModule module ) throws BioLockJStatusException, IOException{
-		BioLockJUtil.markStatus( module, Constants.BLJ_COMPLETE );
+		PipelineUtil.markStatus( module, Constants.BLJ_COMPLETE );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 		Log.info( ModuleUtil.class,
 			"FINISHED [ " + ModuleUtil.displaySignature( module ) + " ] " );
@@ -399,7 +399,7 @@ public class ModuleUtil {
 	 * @throws Exception if unable to create {@value biolockj.Constants#BLJ_STARTED} file
 	 */
 	public static void markStarted( final BioModule module ) throws BioLockJStatusException, IOException{
-		BioLockJUtil.markStatus( module, Constants.BLJ_STARTED );
+		PipelineUtil.markStatus( module, Constants.BLJ_STARTED );
 		Log.info( ModuleUtil.class, Constants.LOG_SPACER );
 		Log.info( ModuleUtil.class,
 			"STARTING [ " + ModuleUtil.displaySignature( module ) + " ] " );

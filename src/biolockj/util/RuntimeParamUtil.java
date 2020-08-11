@@ -130,24 +130,10 @@ public class RuntimeParamUtil {
 	 * Extract the project name from the Config file.
 	 * 
 	 * @return Project name
-	 * @throws DockerVolCreationException 
+	 * @deprecated Use {@link BioLockJ#getProjectName()} instead
 	 */
-	public static String getProjectName() throws DockerVolCreationException {
-		final String configName = getConfigFile().getName();
-		String name = configName;
-		final String[] exts = { ".ascii", ".asc", ".plain", ".rft", ".tab", ".text", ".tsv", ".txt",
-			Constants.PROPS_EXT, ".prop", ".props", ".config" };
-
-		for( final String ext: exts )
-			if( name.toLowerCase().endsWith( ext ) ) name = name.substring( 0, name.length() - ext.length() );
-
-		final int i = name.indexOf( "." );
-		if( name.equals( configName ) && i > -1 && name.length() > i + 1 ) name = name.substring( i + 1 );
-
-		if( name.length() > Constants.MASTER_PREFIX.length() && name.startsWith( Constants.MASTER_PREFIX ) )
-			name = name.replace( Constants.MASTER_PREFIX, "" );
-
-		return name;
+	public static String getProjectName() throws Exception {
+		return BioLockJ.getProjectName();
 	}
 
 	/**
@@ -205,7 +191,7 @@ public class RuntimeParamUtil {
 	 */
 	public static void printArgsDescriptions() {
 		final String sep = ", ";
-		System.err.println( "Usage: java -jar BioLockJ.jar <args>");
+		System.err.println( "Usage: java -cp BioLockJ.jar biolockj.BioLockJ <args>");
 		System.err.println( "To run the program, args MUST include one of: ");
 		System.err.println( String.join( sep, REQUIRED_ARGS ));
 		System.err.println( "Arguments"); 
@@ -354,17 +340,17 @@ public class RuntimeParamUtil {
 	/**
 	 * Automatically added $BLJ_PROJ by biolockj script: {@value #BLJ_PROJ_DIR}
 	 */
-	protected static final String BLJ_PROJ_DIR = "-projectDir";
+	public static final String BLJ_PROJ_DIR = "-projectDir";
 
 	/**
 	 * {@link biolockj.Config} file path runtime parameter switch: {@value #CONFIG_FILE}
 	 */
-	protected static final String CONFIG_FILE = "-config";
+	public static final String CONFIG_FILE = "-config";
 
 	/**
 	 * Direct mode runtime parameter switch: {@value #DIRECT_MODE}
 	 */
-	protected static final String DIRECT_MODE = "-direct";
+	public static final String DIRECT_MODE = "-direct";
 	
 	/**
 	 * Used internally when in direct mode, 
@@ -380,12 +366,12 @@ public class RuntimeParamUtil {
 	/**
 	 * Change password runtime parameter switch: {@value #PASSWORD}
 	 */
-	protected static final String PASSWORD = "-password";
+	public static final String PASSWORD = "-password";
 
 	/**
 	 * Restart pipeline runtime parameter switch: {@value #RESTART_DIR}
 	 */
-	protected static final String RESTART_DIR = "-restartDir";
+	public static final String RESTART_DIR = "-restartDir";
 
 	/**
 	 * Log to System.out instead of Log for debug early runtime errors with switch: {@value #SYSTEM_OUT_FLAG}
@@ -393,14 +379,14 @@ public class RuntimeParamUtil {
 	protected static final String SYSTEM_OUT_FLAG = "-systemOut";
 	
 	/**
-	 * Flag argument; if present, BioLockJ will stop after checkDependencies step. flag: {@value #SYSTEM_OUT_FLAG}
+	 * Flag argument; if present, BioLockJ will stop after checkDependencies step. flag: {@value #PRECHECK_FLAG}
 	 */
-	protected static final String PRECHECK_FLAG = "-precheck";
+	public static final String PRECHECK_FLAG = "-precheck";
 	
 	/**
 	 * Flag argument; if presetn, BioLockJ will run check dependencies for ALL modules to determine unused properties from the primary config.
 	 */
-	protected static final String UNUSED_PROPS_FLAG = "-unusedProps";
+	public static final String UNUSED_PROPS_FLAG = "-unusedProps";
 
 	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG, UNUSED_PROPS_FLAG );
 	private static final List<String> DIR_ARGS = Arrays.asList( BLJ_PROJ_DIR, RESTART_DIR );

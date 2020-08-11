@@ -60,7 +60,7 @@ public class ValidationUtil {
 		}
 
 		public int compareToExpected( final FileSummary other, final Collection<String> comparisons,
-			final BioModule module ) throws Exception {
+			final BioModule module ) throws ConfigFormatException, DockerVolCreationException  {
 			if( other == null ) {
 				Log.warn( this.getClass(), "Cannot compare against a null." );
 				this.validationStatus = ValidationUtil.FAIL;
@@ -133,7 +133,7 @@ public class ValidationUtil {
 			this.md5 = md5sum;
 		}
 
-		protected String getAtt( final String col ) throws DockerVolCreationException {
+		protected String getAtt( final String col ) throws DockerVolCreationException  {
 			switch( col ) {
 				case NAME:
 					return fileNameToKey( getName() );
@@ -303,16 +303,13 @@ public class ValidationUtil {
 	 * @throws DockerVolCreationException 
 	 */
 	private static String fileNameToKey( final String fileName ) throws DockerVolCreationException {
-		final String pipePrefix = RuntimeParamUtil.getProjectName();
+		String pipePrefix = BioLockJ.getProjectName();
 		final String PIPE_DATE = "PIPELINE_DATE";
 		String key;
-		if( BioLockJUtil.isDirectMode() ) {
-			key = fileName.replaceAll( pipePrefix, PIPE_DATE );
-		} else {
-			key = fileName.replaceAll( pipePrefix + "_[0-9]+_[0-9]{4}[A-Za-z]{3}[0-9]{2}", PIPE_DATE );
-			if( key.equals( fileName ) )
-				key = fileName.replaceAll( pipePrefix + "_[0-9]{4}[A-Za-z]{3}[0-9]{2}", PIPE_DATE );
-		}
+		key = fileName.replaceAll( BioLockJ.getPipelineId(), PIPE_DATE );
+		if( key.equals( fileName ) ) key = fileName.replaceAll( pipePrefix + "_[0-9]+_[0-9]{4}[A-Za-z]{3}[0-9]{2}", PIPE_DATE );
+		if( key.equals( fileName ) ) key = fileName.replaceAll( pipePrefix + "_[0-9]{4}[A-Za-z]{3}[0-9]{2}", PIPE_DATE );
+		if( key.equals( fileName ) ) key = fileName.replaceAll( pipePrefix, PIPE_DATE );
 		
 		Log.debug( ValidationUtil.class, "Using [" + key + "] as the key based on [" + fileName + "]." );
 		return key;
@@ -384,7 +381,7 @@ public class ValidationUtil {
 		return ModuleUtil.displaySignature( module ) + OUTPUT_FILE_SUFFIX;
 	}
 
-	private static HashMap<String, FileSummary> getPrevSummaries( final BioModule module ) throws BioLockJException {
+	private static HashMap<String, FileSummary> getPrevSummaries( final BioModule module ) throws BioLockJException  {
 		final HashMap<String, FileSummary> prevOutput = new HashMap<>();
 		final List<String> headers = getHeaders( module );
 		final List<List<String>> table = parseTableFile( module );
@@ -409,7 +406,7 @@ public class ValidationUtil {
 		return prevOutput;
 	}
 
-	private static ArrayList<String> getReportSet( final BioModule module ) throws Exception {
+	private static ArrayList<String> getReportSet( final BioModule module ) throws ConfigViolationException  {
 		final ArrayList<String> reportFeatures = new ArrayList<>( Config.getSet( module, REPORT_ON ) );
 		if( reportFeatures.isEmpty() ) reportFeatures.addAll( getValidationAttributes() );
 		else if( !getValidationAttributes().containsAll( reportFeatures ) ) {
@@ -440,7 +437,7 @@ public class ValidationUtil {
 		return d.doubleValue();
 	}
 
-	private static boolean hasExp( final BioModule module ) throws Exception {
+	private static boolean hasExp( final BioModule module ) throws DockerVolCreationException, ConfigException  {
 		return getExpectationFile( module ) != null;
 	}
 
@@ -472,7 +469,7 @@ public class ValidationUtil {
 		return data;
 	}
 
-	private static void writeRow( final BufferedWriter writer, final ArrayList<String> row ) throws Exception {
+	private static void writeRow( final BufferedWriter writer, final ArrayList<String> row ) throws IOException {
 		try {
 			writer.write( String.join( Constants.TAB_DELIM, row ) + Constants.RETURN );
 		} catch( final Exception e ) {

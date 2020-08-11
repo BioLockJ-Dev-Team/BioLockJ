@@ -264,14 +264,10 @@ public class Config {
 	 * Get the pipeline directory if it is a valid directory on the file system.
 	 * 
 	 * @return Pipeline directory (if it exists)
+	 * @deprecated Use {@link BioLockJ#getPipelineDir()} instead
 	 */
 	public static File getPipelineDir() {
-		if( pipelineDir == null && props != null && props.getProperty( Constants.INTERNAL_PIPELINE_DIR ) != null ) try {
-			pipelineDir = requireExistingDir( null, Constants.INTERNAL_PIPELINE_DIR );
-		} catch( final Exception ex ) {
-			Log.error( Config.class, "Pipeline directory does not exist", ex );
-		}
-		return pipelineDir;
+		return BioLockJ.getPipelineDir();
 	}
 
 	/**
@@ -391,11 +387,12 @@ public class Config {
 	public static void initialize() throws Exception {
 		configFile = RuntimeParamUtil.getConfigFile();
 		Log.info( Config.class, "Initialize Config: " + configFile.getAbsolutePath() );
-		setPipelineRootDir();
 		props = replaceEnvVars( Properties.loadProperties( configFile ) );
-		setFilePathProperty( Constants.INTERNAL_PIPELINE_DIR, pipelineDir.getAbsolutePath() );
-		if( !BioLockJUtil.isDirectMode() && !FileUtils.directoryContains( getPipelineDir(), configFile ) )
-			FileUtils.copyFileToDirectory( configFile, getPipelineDir() );
+		setFilePathProperty( Constants.INTERNAL_PIPELINE_DIR, BioLockJ.getPipelineDir().getAbsolutePath() );
+		setConfigProperty( Constants.INTERNAL_PIPELINE_NAME, BioLockJ.getProjectName() );
+		setConfigProperty( Constants.INTERNAL_PIPELINE_ID, BioLockJ.getPipelineId() );
+		if( !BioLockJUtil.isDirectMode() && !FileUtils.directoryContains( BioLockJ.getPipelineDir(), configFile ) )
+			FileUtils.copyFileToDirectory( configFile, BioLockJ.getPipelineDir() );
 		Log.info( Config.class, "Total # initial properties: " + props.size() );
 		unmodifiedInputProps.putAll( props );
 		TaxaUtil.initTaxaLevels();
@@ -431,8 +428,8 @@ public class Config {
 	 * @return Pipeline name
 	 */
 	public static String pipelineName() {
-		if( getPipelineDir() == null ) return null;
-		return getPipelineDir().getName();
+		if( BioLockJ.getPipelineDir() == null ) return null;
+		return BioLockJ.getPipelineDir().getName();
 	}
 
 	/**
@@ -441,8 +438,8 @@ public class Config {
 	 * @return Pipeline directory path
 	 */
 	public static String pipelinePath() {
-		if ( getPipelineDir() == null ) return null;
-		return getPipelineDir().getAbsolutePath();
+		if ( BioLockJ.getPipelineDir() == null ) return null;
+		return BioLockJ.getPipelineDir().getAbsolutePath();
 	}
 
 	/**
@@ -743,20 +740,6 @@ public class Config {
 	}
 
 	/**
-	 * Set the root pipeline directory path
-	 * 
-	 * @param dir Pipeline directory path
-	 * @throws DockerVolCreationException 
-	 */
-	public static void setPipelineDir( final File dir ) throws DockerVolCreationException {
-		// Set this after the props are initialized. Dir is formed FIRST in case of errors while initializing props.
-		//setFilePathProperty( Constants.INTERNAL_PIPELINE_DIR, dir.getAbsolutePath() );
-		pipelineDir = dir;
-		String printPathOnScreen = DockerUtil.inDockerEnv() ? DockerUtil.deContainerizePath( pipelineDir.getAbsolutePath() ) : pipelineDir.getAbsolutePath();
-		System.out.println( Constants.PIPELINE_LOCATION_KEY + printPathOnScreen);
-	}
-
-	/**
 	 * Build File using filePath.
 	 *
 	 * @param filePath File path
@@ -874,27 +857,6 @@ public class Config {
 		}
 		Log.debug( Config.class, " --------------------------------------------------------------------" );
 		return convertedProps;
-	}
-
-	/**
-	 * Set {@value Constants#INTERNAL_PIPELINE_DIR} Create a pipeline root directory if the pipeline is new.
-	 * 
-	 * @throws Exception if any errors occur
-	 */
-	protected static void setPipelineRootDir() throws Exception {
-		if( RuntimeParamUtil.doRestart() ) {
-			setPipelineDir( RuntimeParamUtil.getRestartDir() );
-			Log.info( Config.class, "Assign RESTART_DIR pipeline root directory: " + Config.pipelinePath() );
-		} else if( BioLockJUtil.isDirectMode() ) {
-			setPipelineDir( RuntimeParamUtil.getDirectPipelineDir() );
-			Log.info( Config.class, "Assign DIRECT pipeline root directory: " + Config.pipelinePath() );
-		} else {
-			setPipelineDir( BioLockJ.createPipelineDirectory() );
-			Log.info( Config.class, "Assign NEW pipeline root directory: " + Config.pipelinePath() );
-		}
-
-		if( !Config.getPipelineDir().isDirectory() )
-			throw new ConfigPathException( Constants.INTERNAL_PIPELINE_DIR, ConfigPathException.DIRECTORY );
 	}
 
 	private static TreeMap<String, String> convertToMap( final Properties bljProps ) {
@@ -1023,7 +985,7 @@ public class Config {
 		}
 		if( !primaryProps.isEmpty() ) {
 			BufferedWriter writer =
-				new BufferedWriter( new FileWriter( new File( pipelineDir, UNVERIFIED_PROPS_FILE ) ) );
+				new BufferedWriter( new FileWriter( new File( BioLockJ.getPipelineDir(), Constants.UNVERIFIED_PROPS_FILE ) ) );
 			try {
 				String msg = "Properties from the PRIMARY config file that were NOT USED during check-dependencies:";
 				Log.warn( Config.class, msg );
@@ -1042,26 +1004,27 @@ public class Config {
 		}
 	}
 
+	public static final String BLJ_BASH_SIMPLE_VAR = "BLJ";
 	/**
 	 * Bash variable with path to BioLockJ directory: {@value #BLJ_BASH_VAR}
 	 */
-	public static final String BLJ_BASH_VAR = "${BLJ}";
+	public static final String BLJ_BASH_VAR = "${" + BLJ_BASH_SIMPLE_VAR + "}";
 	
+	public static final String BLJ_PROJ_SIMPLE_VAR = "BLJ_PROJ";
 	/**
 	 * Bash variable with path to projects directory: {@value #BLJ_PROJ_VAR}
 	 */
-	public static final String BLJ_PROJ_VAR = "${BLJ_PROJ}";
+	public static final String BLJ_PROJ_VAR = "${" + BLJ_PROJ_SIMPLE_VAR + "}";
+	
 	
 	private static final Map<String, String> bashVarMap = new HashMap<>();
 	private static File configFile = null;
-	private static File pipelineDir = null;
-	private static Properties props = null;
+	static Properties props = null;
 	private static Properties unmodifiedInputProps = new Properties();
 	private static final Map<String, String> allUsedProps = new HashMap<>();
 	private static final Map<String, String> moduleUsedProps = new HashMap<>();
 	private static final String USED_PROPS_SUFFIX = "_used.properties";
 	private static final String UNUSED_PROPS_FILE = "unused.properties";
-	private static final String UNVERIFIED_PROPS_FILE = "unverified.properties";
 	
 }
 

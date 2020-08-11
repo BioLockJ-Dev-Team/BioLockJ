@@ -23,6 +23,7 @@ import org.apache.commons.io.filefilter.HiddenFileFilter;
 import biolockj.*;
 import biolockj.Properties;
 import biolockj.exception.*;
+import biolockj.launch.Launcher;
 import biolockj.module.BioModule;
 import biolockj.module.getData.InputDataModule;
 import biolockj.module.report.r.R_CalculateStats;
@@ -82,15 +83,6 @@ public class BioLockJUtil {
 		return Config.getBoolean( null, Constants.PIPELINE_COPY_FILES ) || hasMixedInputs;
 	}
 
-	public static void clearStatus( String dirPath ) {
-		String[] allFlags = { Constants.BLJ_STARTED, Constants.BLJ_FAILED, Constants.BLJ_COMPLETE,
-			Constants.PRECHECK_COMPLETE, Constants.PRECHECK_FAILED, Constants.PRECHECK_STARTED };
-		for( String flag: allFlags ) {
-			File ff = new File( dirPath + File.separator + flag );
-			if( ff.exists() ) ff.delete();
-		}
-	}
-
 	/**
 	 * Used to save status files for modules and the pipeline.
 	 * 
@@ -106,21 +98,6 @@ public class BioLockJUtil {
 		writer.close();
 		if( !f.isFile() ) throw new BioLockJStatusException( "Unable to create status file: " + f.getAbsolutePath() );
 		return f;
-	}
-
-	public static File markStatus( final BioModule module, final String statusFlag )
-		throws BioLockJStatusException, IOException {
-		return ( markStatus( module.getModuleDir().getAbsolutePath(), statusFlag ) );
-	}
-
-	public static File markStatus( final String statusFlag ) throws BioLockJStatusException, IOException {
-		return ( markStatus( Config.pipelinePath(), statusFlag ) );
-	}
-
-	public static File markStatus( final String dirPath, final String statusFlag )
-		throws BioLockJStatusException, IOException {
-		clearStatus( dirPath );
-		return ( createFile( dirPath + File.separator + statusFlag ) );
 	}
 
 	/**
@@ -562,6 +539,17 @@ public class BioLockJUtil {
 		}
 		return bool;
 	}
+	
+	/**
+	 * Get todays date represented as YEARmonDA.
+	 * @return
+	 */
+	public static String getDateString() {
+		final String year = String.valueOf( new GregorianCalendar().get( Calendar.YEAR ) );
+		final String month = new GregorianCalendar().getDisplayName( Calendar.MONTH, Calendar.SHORT, Locale.ENGLISH );
+		final String day = BioLockJUtil.formatDigits( new GregorianCalendar().get( Calendar.DATE ), 2 );
+		return year + month + day;
+	}
 
 	/**
 	 * Return the pipeline input directory
@@ -688,7 +676,9 @@ public class BioLockJUtil {
 			while( resources.hasMoreElements() ) {
 				final Manifest manifest = new Manifest( resources.nextElement().openStream() );
 				final String mainClass = manifest.getMainAttributes().getValue( "Main-Class" );
-				if( mainClass != null && mainClass.equals( BioLockJ.class.getName() ) ) {
+				if( mainClass != null 
+								&& ( mainClass.equals( BioLockJ.class.getName() ) 
+								|| mainClass.equals( Launcher.class.getName() ) ) ) {
 					version = manifest.getMainAttributes().getValue( "Version" );
 					final String gitRev = manifest.getMainAttributes().getValue( "Implementation-Version" );
 					if( gitRev != null && getBuildId ) version = version + " Build: " + gitRev;
@@ -730,8 +720,8 @@ public class BioLockJUtil {
 
 	private static void printHelp() {
 		System.err.println( RETURN + "BioLockJ " + getVersion() + " java help menu:" );
-		System.err.println( "The BioLockJ.jar file is not intended to be called directly," + RETURN +
-			"it should be called through the biolockj shell command." );
+		System.err.println( "The biolockj.BioLockJ entry point is not intended to be called directly," + RETURN +
+			"it should be called through the biolockj shell command, or the biolockj.launch.Launcher entry point." );
 		System.err.println( RETURN + "Developers: " );
 		RuntimeParamUtil.printArgsDescriptions();
 		System.err.println( RETURN + "Users:" + RETURN + "please use the biolockj command." );

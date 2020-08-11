@@ -134,13 +134,13 @@ public class Pipeline {
 	 */
 	public static void runPipeline() throws Exception {
 		if (RuntimeParamUtil.isPrecheckMode() ) throw new StopAfterPrecheck();
-		BioLockJUtil.markStatus( Constants.BLJ_STARTED );
+		PipelineUtil.markStatus( Constants.BLJ_STARTED );
 		try {
 			executeModules();
 			SummaryUtil.reportSuccess( null );
 		} catch( final Exception ex ) {
 			try {
-				BioLockJUtil.markStatus( currentModule, Constants.BLJ_FAILED );
+				PipelineUtil.markStatus( currentModule, Constants.BLJ_FAILED );
 				Log.error( Pipeline.class, "Pipeline failed! " + ex.getMessage(), ex );
 				pipelineException = ex;
 				SummaryUtil.reportFailure( ex );
@@ -251,7 +251,7 @@ public class Pipeline {
 			new File( path ).mkdirs();
 		}
 
-		if( RuntimeParamUtil.isPrecheckMode() ) BioLockJUtil.markStatus( module, Constants.PRECHECK_STARTED );
+		if( RuntimeParamUtil.isPrecheckMode() ) PipelineUtil.markStatus( module, Constants.PRECHECK_STARTED );
 		info( "Check dependencies for: " + module.getClass().getName() );
 		module.checkDependencies();
 		ValidationUtil.checkDependencies( module );
@@ -262,7 +262,7 @@ public class Pipeline {
 			if( !BioLockJUtil.isDirectMode() ) ValidationUtil.validateModule( module );
 			refreshRCacheIfNeeded();
 		} else {
-			BioLockJUtil.markStatus( module, Constants.PRECHECK_COMPLETE );
+			PipelineUtil.markStatus( module, Constants.PRECHECK_COMPLETE );
 		}
 	}
 

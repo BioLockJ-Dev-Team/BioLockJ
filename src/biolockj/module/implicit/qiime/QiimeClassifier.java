@@ -464,7 +464,7 @@ public class QiimeClassifier extends ClassifierModuleImpl {
 					if( paramFile.getAbsolutePath().startsWith( Config.pipelinePath() ) ) return;
 					if( !paramFile.isFile() ) throw new ConfigPathException( paramFile,
 						"Property \"" + QIIME_PARAMS + "\" contains an invalid file path for -p parameter" );
-					FileUtils.copyFileToDirectory( paramFile, Config.getPipelineDir() );
+					FileUtils.copyFileToDirectory( paramFile, BioLockJ.getPipelineDir() );
 					final String newParams = Config.requireString( null, QIIME_PARAMS ).replace(
 						paramFile.getAbsolutePath(), Config.pipelinePath() + File.separator + paramFile.getName() );
 					Config.setConfigProperty( QIIME_PARAMS, newParams );

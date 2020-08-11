@@ -181,7 +181,7 @@ public class NextflowUtil {
 	public static void saveNextflowSuccessFlag() {
 		try {
 			final File f = BioLockJUtil.createFile(
-				DockerUtil.AWS_EC2_HOME + File.separator + RuntimeParamUtil.getProjectName() + "-success" );
+				DockerUtil.AWS_EC2_HOME + File.separator + BioLockJ.getProjectName() + "-success" );
 			if( f.isFile() ) Log.info( NextflowUtil.class, "Created pipeline success file: " + f.getAbsolutePath() );
 			else Log.warn( NextflowUtil.class, "Failed to generate pipeline success file: " + f.getAbsolutePath() );
 		} catch( final Exception ex ) {

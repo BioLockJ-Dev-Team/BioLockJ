@@ -191,8 +191,8 @@ public class FatalExceptionHandler {
 	private static File getExistingFailFlag() {
 		boolean fileExists = false;
 		File failFlag = null;
-		if( Config.getPipelineDir() != null ) {
-			failFlag = new File( Config.getPipelineDir() + File.separator + Constants.BLJ_FAILED );
+		if( BioLockJ.getPipelineDir() != null ) {
+			failFlag = new File( BioLockJ.getPipelineDir() + File.separator + Constants.BLJ_FAILED );
 			fileExists = failFlag.exists();
 		}
 		if (fileExists) return failFlag;
@@ -202,7 +202,7 @@ public class FatalExceptionHandler {
 	private static void setFailedStatus(Exception fetalEx) {
 		if (fetalEx instanceof StopAfterPrecheck) {
 			try {
-				BioLockJUtil.markStatus( Constants.PRECHECK_COMPLETE );
+				PipelineUtil.markStatus( Constants.PRECHECK_COMPLETE );
 			} catch( BioLockJStatusException | IOException e ) {
 				Log.error( FatalExceptionHandler.class,
 					"Pipeline root directory not found - unable to save Pipeline Status File: " + Constants.PRECHECK_COMPLETE +
@@ -212,11 +212,11 @@ public class FatalExceptionHandler {
 			try {
 				File failFlagPath;
 				if (RuntimeParamUtil.isPrecheckMode()) {
-					failFlagPath = BioLockJUtil.markStatus( Constants.PRECHECK_FAILED );
+					failFlagPath = PipelineUtil.markStatus( Constants.PRECHECK_FAILED );
 				}else {
-					failFlagPath = BioLockJUtil.markStatus( Constants.BLJ_FAILED );
+					failFlagPath = PipelineUtil.markStatus( Constants.BLJ_FAILED );
 				}
-				if( Config.getPipelineDir() != null ) {
+				if( BioLockJ.getPipelineDir() != null ) {
 					if( fetalEx != null ) {
 						final FileWriter writer = new FileWriter( failFlagPath );
 						writer.write( ERROR_TYPE + fetalEx.getClass().getSimpleName() + System.lineSeparator() );

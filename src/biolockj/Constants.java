@@ -469,6 +469,22 @@ public class Constants {
 	 * Stores the path of the pipeline root directory path set by the application runtime code.
 	 */
 	public static final String INTERNAL_PIPELINE_DIR = "internal.pipelineDir";
+	
+	/**
+	 * {@link biolockj.Config} String property: {@value #INTERNAL_PIPELINE_NAME}<br>
+	 * Stores the name of the pipeline. This is distinct from the pipeline instance id, see {@link}
+	 */
+	public static final String INTERNAL_PIPELINE_NAME = "internal.pipelineName";
+	
+	/**
+	 * {@link biolockj.Config} String property: {@value #INTERNAL_PIPELINE_ID}<br>
+	 * The pipeline instance id is generally formed from the pipeline name, 
+	 * the date the pipeline started and sometimes an additional integer to ensure an unique folder name.
+	 * The pipeline instance id is used as the folder name for the pipeline.  
+	 * The master properties file is named:
+	 * {@value Constants#MASTER_PREFIX} + instance id + {@value Constants#PROPS_EXT}
+	 */
+	public static final String INTERNAL_PIPELINE_ID = "internal.pipelineInstanceId";
 
 	/**
 	 * {@link biolockj.Config} property: {@value #INTERNAL_SEQ_HEADER_CHAR}<br>
@@ -1002,5 +1018,7 @@ public class Constants {
 	 * String used by sheepdog_testing_suite to assert that validation is enabled: {@value #VALIDATION_ENABLED}.
 	 */
 	public static final String VALIDATION_ENABLED = "This pipeline has validation enabled.";
+
+	public static final String UNVERIFIED_PROPS_FILE = "unverified.properties";
 
 }

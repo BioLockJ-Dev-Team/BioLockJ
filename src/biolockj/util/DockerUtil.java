@@ -115,8 +115,8 @@ public class DockerUtil {
 
 		final List<String> dockerVolumes = new ArrayList<>();
 		dockerVolumes.add( " -v " + DOCKER_SOCKET + ":" + DOCKER_SOCKET + WRAP_LINE );
-		dockerVolumes.add( " -v " + deContainerizePath( Config.getPipelineDir().getParent() ) + ":" +
-			Config.getPipelineDir().getParent() + ":delegated" + WRAP_LINE );
+		dockerVolumes.add( " -v " + deContainerizePath( BioLockJ.getPipelineDir().getParent() ) + ":" +
+			BioLockJ.getPipelineDir().getParent() + ":delegated" + WRAP_LINE );
 		for( String key: volumeMap.keySet() ) {
 			if( key.equals( DOCKER_SOCKET ) ) continue;
 			if( volumeMap.get( key ).equals( DOCKER_PIPELINE_DIR ) ) continue;
@@ -308,9 +308,9 @@ public class DockerUtil {
 	}
 
 	private static File getInfoFile() {
-		File parentDir = Config.getPipelineDir();
+		File parentDir = BioLockJ.getPipelineDir();
 		if( BioLockJUtil.isDirectMode() )
-			parentDir = new File( ( new File( Config.getPipelineDir(), RuntimeParamUtil.getDirectModuleDir() ) ),
+			parentDir = new File( ( new File( BioLockJ.getPipelineDir(), RuntimeParamUtil.getDirectModuleDir() ) ),
 				BioModuleImpl.TEMP_DIR );
 		if( parentDir != null && parentDir.exists() ) {
 			Log.debug( DockerUtil.class,
@@ -334,7 +334,7 @@ public class DockerUtil {
 			// if the config file is null; we must not be running a pipeline; this is the API calling, and all mounts are under the workspace getting set up.
 			if( RuntimeParamUtil.getConfigFile(false) == null && volumeMap.get( key ).equals( PURE_DOCKER_PIPELINE_DIR ) ) pipelineKey = key;
 		}
-		if( pipelineKey == null && Config.getPipelineDir() != null ) {
+		if( pipelineKey == null && BioLockJ.getPipelineDir() != null ) {
 			throw new DockerVolCreationException( "no pipeline dir !" );
 		}
 		if( pipelineKey != null && path.startsWith( pipelineKey ) )
@@ -354,6 +354,9 @@ public class DockerUtil {
 		}
 		return innerPath;
 	}
+	public static File containerizePath(final File file) throws DockerVolCreationException {
+		return new File(containerizePath(file.getAbsolutePath()));
+	}
 
 	public static String deContainerizePath( final String innerPath ) throws DockerVolCreationException {
 		String hostPath = innerPath;
@@ -370,11 +373,12 @@ public class DockerUtil {
 		}
 		return hostPath;
 	}
-	public static File deContainerizePath( File innerFile ) throws DockerVolCreationException {
+	public static File deContainerizePath( final File innerFile ) throws DockerVolCreationException {
 		return new File( deContainerizePath(innerFile.getAbsolutePath()) );
 	}
 	public static void main(String[] args) throws DockerVolCreationException {
 		if (args.length > 1 && args[1].equals("target") ) System.out.println( containerizePath( args[0] ) );
+		else if (args.length > 1 && args[1].equals("source") ) System.out.println( deContainerizePath( args[0] ) );
 		else System.out.println( deContainerizePath( args[0] ) );
 	}
 
@@ -435,10 +439,10 @@ public class DockerUtil {
 	private static void verifyImage(BioModule module, String image) throws DockerVolCreationException, InterruptedException, DockerImageException, SpecialPropertiesException, ConfigFormatException, IOException {
 		Log.info(DockerUtil.class, "Verifying docker image: " + image);
 		final File script = new File( Config.replaceEnvVar( "${BLJ}/resources/docker/" + TEST_SCRIPT) );
-		final File copy = new File(Config.getPipelineDir(), TEST_SCRIPT);
-		if ( ! copy.exists() ) FileUtils.copyFileToDirectory( script, Config.getPipelineDir() );
+		final File copy = new File(BioLockJ.getPipelineDir(), TEST_SCRIPT);
+		if ( ! copy.exists() ) FileUtils.copyFileToDirectory( script, BioLockJ.getPipelineDir() );
 		copy.setExecutable( true );
-		final String cmd = Config.getExe( module, Constants.EXE_DOCKER ) + " run --rm -v " + deContainerizePath( Config.getPipelineDir() ) + ":/testScript " 
+		final String cmd = Config.getExe( module, Constants.EXE_DOCKER ) + " run --rm -v " + deContainerizePath( BioLockJ.getPipelineDir() ) + ":/testScript " 
 						+ image + " " + USE_BASH + " /testScript/" + TEST_SCRIPT ;
 		String result = "no response";
 		int exit = -1;
@@ -596,7 +600,7 @@ public class DockerUtil {
 	/**
 	 * Docker container blj dir: {@value #CONTAINER_BLJ_DIR}
 	 */
-	static final String CONTAINER_BLJ_DIR = "/app/biolockj";
+	public static final String CONTAINER_BLJ_DIR = "/app/biolockj";
 
 	/**
 	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG_VERSION} {@value #DOCKER_IMG_VERSION_DESC}
