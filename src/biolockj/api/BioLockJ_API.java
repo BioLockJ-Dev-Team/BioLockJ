@@ -649,7 +649,11 @@ public class BioLockJ_API {
 		sb.append( "BioLockJ API " + BioLockJUtil.getVersion( ) + " - UNCC Fodor Lab" +System.lineSeparator() );
 		sb.append( System.lineSeparator() );
 		sb.append( "Usage:" +System.lineSeparator() );
+		sb.append( "(bash)" +System.lineSeparator() );
 		sb.append( BASH_ENTRY + " <query> [options...]" +System.lineSeparator() );
+		sb.append( System.lineSeparator() );
+		sb.append( "(java)" +System.lineSeparator() );
+		sb.append( "java -cp /path/to/BioLockJ.jar[:<external-modules-dir>] biolockj.api.BioLockJ_API <query> [options...]" +System.lineSeparator() );
 		sb.append( System.lineSeparator() );
 		sb.append( "For some uses, redirecting stderr is recommended:" +System.lineSeparator() );
 		sb.append( BASH_ENTRY + " <query> [options...]  2> /dev/null" +System.lineSeparator() );

@@ -73,7 +73,7 @@
 				<attribute name="Implementation-Version" value="${git.revision}"/>
 				<attribute name="Implementation-Vendor" value="UNCC Fodor Lab"/>
 				<attribute name="Version" value="${blj_version}"/>
-				<attribute name="Main-Class" value="biolockj.BioLockJ"/>
+				<attribute name="Main-Class" value="biolockj.launch.Launcher"/>
 			</manifest>
 		</jar>
 	</target>

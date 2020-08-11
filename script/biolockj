@@ -1,51 +1,5 @@
 #!/bin/bash
-##########################################################################
-##                                                                      ##
-##  This script is the user entry point for the BioLockJ program.       ##
-##                                                                      ##
-##  See help menu; it should look like this:                            ##
-###                                                           ############
-##  BioLockJ v1.2 - UNCC Fodor Lab July 2018
-##  Usage:
-##    biolockj [options] <config|pipeline>
-##  
-##  Options:
-##    -v  --version                 Show version
-##    -h  --help                    Show help menu
-##    -r  --restart                 Resume an existing pipeline
-##    -c  --config-override <file>  New config file (if restarting a pipeline)
-##    -p  --password <password>     Encrypt password
-##    -d  --docker                  Run in docker
-##    -a  --aws                     Run on aws
-##    -g  --gui                     Start the BioLockJ GUI
-##    -f  --foreground              Run the java process in the foreground without nohup
-##        --external-modules <dir>  Directory with compiled java code giving additional modules
-##        --blj                     Map $BLJ folder into the docker container;
-##                                  this replaces BioLockJ packaged in a docker container with the local copy.
-##  
 
-
-. ${BLJ}/script/blj_functions
-. ${BLJ}/script/blj_user_arg_lib
-
-# Before anything else, check to see if the user just wants help or version info.
-containsElement "--help" "$@" || containsElement "-h" "$@" && display_help && exit 0
-containsElement "--version" "$@" || containsElement "-v" "$@" && display_version && exit 0
-
-# Make sure there is at least one argument
-[ $# -eq 0 ] && exit_with_message "biolockj requires at least one argument."
-
-[ ${#BIOLOCKJ_TEST_MODE} -gt 0 ] && printf "\n ---------> Execute CMD [  biolockj $(echo ${@})  ]\n"
-
-take_standard_biolockj_args "$@"
-
-if ifArgUsed $AWS_ARG ; then
-	exit_after_command "launch_aws ${@}"
-elif ifArgUsed $DOCKER_ARG ; then
-	exit_after_command "launch_docker ${@}"
-elif ifArgUsed $GUI_ARG ; then
-	echo "The BioLockJ GUI runs in a docker container." # TODO - add link to wiki page with more instructions
-	exit_after_command "launch_docker ${@}"
-else
-	exit_after_command "launch_java ${@}"
-fi
+BLJ_JAR=${BLJ}/dist/BioLockJ.jar
+[ ! -f "${BLJ_JAR}" ] && exit_script "Error [ biolockj ]: BioLockJ Jar file \"${BLJ_JAR}\" not found."
+java -jar ${BLJ_JAR} ${@}
