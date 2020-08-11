@@ -118,7 +118,8 @@ build_bash_wrapper(){
 	echo '   -v /var/run/docker.sock:/var/run/docker.sock \' >> $BASH_LAUNCHER
 	echo '   -v '"$HOST_WORKSPACE"':/workspace \'  >> $BASH_LAUNCHER
 	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' \' >> $BASH_LAUNCHER
-	echo '   biolockj --docker \' >> $BASH_LAUNCHER
+	echo '   java -cp /app/biolockj/dist/BioLockJ.jar biolockj.launch.Launcher \' >> $BASH_LAUNCHER
+	echo '   --docker \' >> $BASH_LAUNCHER
 	echo '   --external-modules '"$HOST_EXT_MODS"' \' >> $BASH_LAUNCHER
 	echo '   --blj_proj '"$HOST_BLJ_PROJ"' \' >> $BASH_LAUNCHER
 	echo '${@}' >> $BASH_LAUNCHER
@@ -132,7 +133,7 @@ build_bash_wrapper(){
 	echo '   -v /var/run/docker.sock:/var/run/docker.sock \' >> $BASH_API_LAUNCHER
 	echo '   -v '"$HOST_WORKSPACE"':/workspace \'  >> $BASH_API_LAUNCHER
 	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' \' >> $BASH_API_LAUNCHER
-	echo '   biolockj-api \' >> $BASH_API_LAUNCHER
+	echo '   java -cp /app/biolockj/dist/BioLockJ.jar biolockj.api.BioLockJ_API \' >> $BASH_API_LAUNCHER
 	echo '${@}' >> $BASH_API_LAUNCHER
 	echo "" >> $BASH_API_LAUNCHER
 	chmod a+rwx $BASH_API_LAUNCHER
@@ -161,7 +162,8 @@ build_power_shell_wrapper(){
 	echo '   -v /var/run/docker.sock:/var/run/docker.sock `' >> $POWER_SHELL_LAUNCHER
 	echo '   -v '"$HOST_WORKSPACE"':/workspace `' >> $POWER_SHELL_LAUNCHER
 	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' `' >> $POWER_SHELL_LAUNCHER
-	echo '   biolockj --docker `' >> $POWER_SHELL_LAUNCHER
+	echo '   java -cp /app/biolockj/dist/BioLockJ.jar biolockj.launch.Launcher \' >> $POWER_SHELL_LAUNCHER
+	echo '   --docker \' >> $POWER_SHELL_LAUNCHER
 	echo '   --external-modules '"$HOST_EXT_MODS"' `' >> $POWER_SHELL_LAUNCHER
 	echo '   --blj_proj '"$HOST_BLJ_PROJ"' `' >> $POWER_SHELL_LAUNCHER
 	echo '$args' >> $POWER_SHELL_LAUNCHER
@@ -175,7 +177,7 @@ build_power_shell_wrapper(){
 	echo '   -v /var/run/docker.sock:/var/run/docker.sock `' >> $PS_API_LAUNCHER
 	echo '   -v '"$HOST_WORKSPACE"':/workspace `'  >> $PS_API_LAUNCHER
 	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' `' >> $PS_API_LAUNCHER
-	echo '   biolockj-api `' >> $PS_API_LAUNCHER
+	echo '   java -cp /app/biolockj/dist/BioLockJ.jar biolockj.api.BioLockJ_API `' >> $PS_API_LAUNCHER
 	echo '$args' >> $PS_API_LAUNCHER
 	echo "" >> $PS_API_LAUNCHER
 	chmod a+rwx $PS_API_LAUNCHER
