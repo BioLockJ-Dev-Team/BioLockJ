@@ -28,7 +28,7 @@ docker run --rm \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -v $PWD/workspace:/workspace \
 -e HOST_OS_SCRIPT=bash \
-biolockjdevteam/biolockj_controller:v1.3.7 setup_workspace
+biolockjdevteam/biolockj_controller:latest setup_workspace
 ```
 
 **PowerShell**                          
@@ -38,7 +38,7 @@ docker run --rm `
 -v /var/run/docker.sock:/var/run/docker.sock `
 -v $PWD\workspace:/workspace `
 -e HOST_OS_SCRIPT=ps1 `
-biolockjdevteam/biolockj_controller:v1.3.7 setup_workspace
+biolockjdevteam/biolockj_controller:latest setup_workspace
 ```
 
 This will create your docker preamble command.  
