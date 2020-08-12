@@ -162,8 +162,8 @@ build_power_shell_wrapper(){
 	echo '   -v /var/run/docker.sock:/var/run/docker.sock `' >> $POWER_SHELL_LAUNCHER
 	echo '   -v '"$HOST_WORKSPACE"':/workspace `' >> $POWER_SHELL_LAUNCHER
 	echo '   biolockjdevteam/biolockj_controller:'"$TAG"' `' >> $POWER_SHELL_LAUNCHER
-	echo '   java -cp /app/biolockj/dist/BioLockJ.jar biolockj.launch.Launcher \' >> $POWER_SHELL_LAUNCHER
-	echo '   --docker \' >> $POWER_SHELL_LAUNCHER
+	echo '   java -cp /app/biolockj/dist/BioLockJ.jar biolockj.launch.Launcher `' >> $POWER_SHELL_LAUNCHER
+	echo '   --docker `' >> $POWER_SHELL_LAUNCHER
 	echo '   --external-modules '"$HOST_EXT_MODS"' `' >> $POWER_SHELL_LAUNCHER
 	echo '   --blj_proj '"$HOST_BLJ_PROJ"' `' >> $POWER_SHELL_LAUNCHER
 	echo '$args' >> $POWER_SHELL_LAUNCHER
