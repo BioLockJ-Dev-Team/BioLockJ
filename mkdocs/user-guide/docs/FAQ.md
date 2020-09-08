@@ -25,8 +25,21 @@ _**In general,**_ processing sequence data requires a computer cluster or a clou
 
 Most datasets can be dramatically sub-sampled to allow a laptop user to run a test of the pipeline; this does not produce usable results, but allows the user to test and troubleshoot the pipeline in a convenient setting before moving it to a bigger system.
 
+
 ---
-### **Question:** If biolockj indicates that my pipeline may have failed to start, how do I debug the root cause of the failure?
+### **Question:** BioLockJ says that my pipeline is running...now what?
+---
+**Answer:** Check on your pipeline's progress.
+
+If you are using a unix-like system, you can use the `cd-blj` alias to jump to the most recent pipeline.  On any system, the path to the new pipeline is printed during the launch process, it will be folder immediatly under your **$BLJ_PROJ** folder.  Look in that directory.  When I pipeline forms it creates the "precheckStarted" flag and then replaces that with the "precheckComplete" flag when all dependencies/settings are confirmed.  Then the pipeline starts the first module, and the flag is replaced with "biolockjStarted".  This generally takes a few seconds or less.  The subfolder for the current module will also have the "biolockjStarted" flag.  When a module is finished, the module flag is replaced with "biolockjComplete".  When the last module is finished, the pipeline flag is finally changed to "biolockjComplete".  From the pipeline folder, `ls 0*` is a quick way to see the current progress, becuase that will show the flag files and subfolders for each of the first ten modules. (That's "LS zero star", or "LS one star" if you have more than ten modules.)
+
+If any module encounters an error, and cannot complete, then that module is marked with the "biolockjFailed" flag, the pipeline shuts down, and the pipeline is also marked with "biolockjFailed".  Extensive information is available in the pipeline's log file.  A more concise message describing the error, and sometimes solutions, is written to the biolockjFailed flag.
+
+If your pipeline fails, use `cat biolockjFailed` to see the error message.
+
+
+---
+### **Question:** If biolockj indicates that my pipeline may have failed to start, how do I determine the cause of the failure?
 ---
 **Answer:** Use `-f`.
 
@@ -70,7 +83,7 @@ Variables from your local envirnment must be explicitly passed into the module e
 
 See [the Configuration page](../Configuration/#module-specific-forms) for more details about module-specific forms of general properties.
 
-## Example:
+#### Example:
 On this cluster, the compute nodes do not have internet access, only the head node does. The first module in the pipeline is the SraDownload module to get the data, which requries internet access.
 
 All pipelines run on this cluster include a reference to the properties set up specifically for this cluster:                 
@@ -86,13 +99,13 @@ BioLockJ launches jobs using `qsub <script>`. For ONLY the SraDownload module, t
 
 
 ---
-### Question: How do I configure my pipeline for multiplexed data?
+### **Question:** How do I configure my pipeline for multiplexed data?
 ---
 **Answer:** See the [Demultiplexer module Details](../GENERATED/biolockj.module.implicit/Demultiplexer/#details).
 
 
 ---
-### Question: How should I configure my properties for a dataset that is one-sample-per-file (ie not multiplexed)?
+### **Question:** How should I configure my properties for a dataset that is one-sample-per-file (ie not multiplexed)?
 ---
 **Answer1:** BioLockJ can extract the sample name from the filename; see [ Input](../GENERATED/Input/).
 
@@ -102,7 +115,7 @@ OR
 
 
 ---
-### Question: Shutting down a pipeline.  How do I stop a pipeline that is running?
+### **Question:** Shutting down a pipeline.  How do I stop a pipeline that is running?
 ---
 **Answer:** Use `kill`, `docker stop` and possibly scheduler commands such as `qdel`.
 
