@@ -128,7 +128,7 @@ cat myFirstPipeline.properties
 
 Notice that modules are specified in the config using the keyword `#BioModule`.  Each module in the pipeline creates a folder in the pipeline directory.  Notice that an additional module "00_ImportMetaData" was added automatically.
 
-At the top level of the pipeline we see an empty **flag** file "biolockjComplete" which indicates that the pipeline finished successfully. While the pipeline is still in progress, the flag is "biolockjStarted"; and if the pipeline stopps due to an error, the flag is "biolockjFailed".
+At the top level of the pipeline we see an empty **flag** file "biolockjComplete" which indicates that the pipeline finished successfully. While the pipeline is still in progress, the flag is "biolockjStarted"; and if the pipeline stops due to an error, the flag is "biolockjFailed".
 
 The `summary.txt` file is a summary of each module as it ran during pipeline execution.  This is the best place to start when reviewing a pipeline.
 
@@ -136,7 +136,7 @@ The file `"MASTER_myFirstPipeline_<DATE>.properties"` is the complete list of al
 
 If the pipeline was run using docker, a file named `dockerInfo.json` will show the container information.
 
-The pipeline log file `"myFirstPipeline_<DATE>.log"` is an excellend resource for troubleshooting.
+The pipeline log file `"myFirstPipeline_<DATE>.log"` is an excellent resource for troubleshooting.
 
 The `validation` has tables recording the MD5 sum for each output from each module.  If the pipeline is run again, this folder can be used to determine if the results in the new run are an exact match for this run.
 
