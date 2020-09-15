@@ -1137,6 +1137,7 @@ public class Config {
 	
 	public static void checkDependencies( BioModule module ) throws ConfigNotFoundException, ConfigFormatException   {
 		getBoolean( module, Constants.PIPELINE_USE_EVARS );
+		Config.getPositiveInteger( module, Constants.SCRIPT_DELAY_FOR_FILE_UPDATES );
 		getEnvVarMap();
 	}
 

@@ -52,6 +52,7 @@ public class Pipeline {
 		if( runDetached ) MasterConfigUtil.saveMasterConfig();
 		if( hasScripts && !DockerUtil.inAwsEnv() ) Processor.runModuleMainScript( (ScriptModule) exeModule() );
 		if( hasScripts ) waitForModuleScripts();
+		Thread.sleep( Config.getPositiveInteger( exeModule(), Constants.SCRIPT_DELAY_FOR_FILE_UPDATES ) * 1000 );
 		exeModule().cleanUp();
 		ValidationUtil.validateModule( exeModule() );
 		if( !runDetached ) SummaryUtil.reportSuccess( exeModule() );

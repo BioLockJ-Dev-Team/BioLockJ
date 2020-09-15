@@ -66,6 +66,7 @@ public class Constants {
 		Properties.registerProp( R_USE_UINQUE_COLORS, Properties.BOOLEAN_TYPE, "force to use a unique color for every value in every field plotted; only recommended for low numbers of metadata columns/values." );
 		
 		Properties.registerProp( SCRIPT_DEFAULT_HEADER, Properties.STRING_TYPE, SCRIPT_DEFAULT_HEADER_DESC);
+		Properties.registerProp( SCRIPT_DELAY_FOR_FILE_UPDATES, Properties.INTEGER_TYPE, SCRIPT_DELAY_FOR_FILE_UPDATES_DESC );
 		Properties.registerProp( SCRIPT_NUM_WORKERS, Properties.INTEGER_TYPE, SCRIPT_NUM_WORKERS_DESC);
 		Properties.registerProp( SCRIPT_NUM_THREADS, Properties.INTEGER_TYPE, SCRIPT_NUM_THREADS_DESC);
 		Properties.registerProp( SCRIPT_PERMISSIONS, Properties.STRING_TYPE, SCRIPT_PERMISSIONS_DESC);
@@ -922,6 +923,16 @@ public class Constants {
 	public static final String SCRIPT_DEFAULT_HEADER = "script.defaultHeader";
 	public static final String SCRIPT_DEFAULT_HEADER_DESC = "Store default script header for MAIN script and locally run WORKER scripts.";
 
+	/**
+	 * {@link biolockj.Config} List property: {@value #SCRIPT_DELAY_FOR_FILE_UPDATES}<br>
+	 * {@value SCRIPT_DELAY_FOR_FILE_UPDATES_DESC}
+	 * In some cases, especially with virtualization, there may be delays between before the program is able to register
+	 * file system changes made by another container/node/host. After module scripts have completed, wait this many
+	 * seconds before taking any action.  This allows the file system to reflect all changes.
+	 */
+	public static final String SCRIPT_DELAY_FOR_FILE_UPDATES = "script.fileRefreshDelay";
+	private static final String SCRIPT_DELAY_FOR_FILE_UPDATES_DESC = "delay this many seconds after scripts complete to allow the file system to reflect changes from a worker node/container/virtual machine.";
+	
 	/**
 	 * Name of the script sub-directory: {@value #SCRIPT_DIR}
 	 */
