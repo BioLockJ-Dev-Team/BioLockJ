@@ -349,6 +349,8 @@ public class ValidationUtil {
 				if( !expectationFile.exists() )
 					throw new ConfigPathException( expectationFile, "Could not find file: " +
 						getOutputFileName( module ) + " in directory " + Config.getString( module, EXPECTATION_FILE ) );
+			}else {
+				expectationFile = expectationFileObj;
 			}
 		}
 		return expectationFile;
