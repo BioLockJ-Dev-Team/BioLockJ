@@ -187,8 +187,9 @@ getPath <- function( rootDir, name ) {
 }
 
 # Return the pipeline root directory
+# This assumes that the working directory is one of the subdirectories of the current module
 getPipelineDir <- function() {
-	return( dirname( getMasterConfigFile() ) )
+	return( dirname( dirname(getwd())) )
 }
 
 # Return property value from MASTER Config file, otherwise return the defaultVal

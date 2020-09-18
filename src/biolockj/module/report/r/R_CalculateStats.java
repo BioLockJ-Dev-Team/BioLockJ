@@ -34,6 +34,7 @@ public class R_CalculateStats extends R_Module implements ApiModule {
 	
 	public R_CalculateStats() {
 		super();
+		addGeneralProperty( Constants.R_RARE_OTU_THRESHOLD );
 		addNewProperty( R_ADJ_PVALS_SCOPE, Properties.STRING_TYPE, "defines R p.adjust( n ) parameter is calculated. Options:  GLOBAL, LOCAL, TAXA, ATTRIBUTE" );
 		addNewProperty( R_PVAL_ADJ_METHOD, Properties.STRING_TYPE, "the p.adjust \"method\" parameter" );
 	}
