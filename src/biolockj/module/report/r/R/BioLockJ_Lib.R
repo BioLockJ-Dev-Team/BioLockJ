@@ -1,12 +1,5 @@
 # BioLockJ_Lib.R contains the library of functions shared by multiple BioLockJ R script modules. 
 
-# Add value to vector v and assign name 
-addNamedVectorElement <- function( v, name, value ) {
-	v[length(v) + 1] = value
-	names(v)[length(v)] = name
-	return( v )
-}
-
 # Add a page number in the lower right corner of the page
 addPageNumber <- function( pageNum ){
 	mtext (pageNum, side=1, outer=TRUE, adj=1 )
@@ -30,25 +23,9 @@ displayCalc <- function( pval ) {
 	return( paste( sprintf(getProperty("r.pValFormat", "%1.2g"), pval) ) )
 }
 
-# Return TRUE if BioLock property r.debug=Y, otherwise return FALSE
-doDebug <- function() {
-	return( getProperty( "r.debug", FALSE ) )
-}
-
 # Return vector of binary fields or an empty vector
 getBinaryFields <- function() {
 	return( getProperty("R_internal.binaryFields", vector( mode="character" ) ) )
-}
-
-# Return countTable column indexes for the given colNames
-getColIndexes <- function( countTable, colNames ) {
-	cols = vector( mode="integer" )
-	if( length(colNames) > 0 ) {
-		for( i in 1:length(colNames) ) {
-			cols[i] = grep(TRUE, colnames(countTable)==colNames[i])
-		}
-	}
-	return( cols )
 }
 
 # Parse MASTER config for property value, if undefined return default defaultVal
@@ -130,21 +107,15 @@ getLogDir <- function(){
 	return( path )
 }
 
-# # Return  name of the R module log file using the given name
-# getLogFile <- function( name ) {
-# 	return( file.path( getLogDir(), paste0( moduleScriptName(), "_", name, ".log") ) )
-# }
-
 # Return the name of the BioLockJ MASTER Config file
 getMasterConfigFile <- function() {
-	testDir = dirname( getwd() )
 	propFile = vector( mode="character" )
-	while( length( propFile ) == 0 && testDir != "/" ) {
-		propFile = list.files( testDir, "MASTER.*.properties", full.names=TRUE )
-		testDir = dirname( testDir )
-	}
+	propFile = list.files(getPipelineDir(), pattern="MASTER.*.properties", full.names=TRUE )
 	if( length( propFile ) == 0 ) {
 		stop( "MASTER property file not found!" )
+	}
+	if( length( propFile ) > 1 ) {
+	  stop( c("MASTER property file not found; ambiguous file choices: ", paste(propFile, sep=", ")))
 	}
 	return( propFile )
 }
@@ -194,7 +165,10 @@ getPipelineDir <- function() {
 
 # Return property value from MASTER Config file, otherwise return the defaultVal
 getProperty <- function( name, defaultVal=NULL ) {
-	return ( suppressWarnings( getConfig( name, defaultVal ) ) )
+  val = suppressWarnings( getConfig( name, defaultVal ) )
+  writeValForm = paste(val, collapse = ", ")
+  message("USED_PROPERTY: ", name, " = ", writeValForm)
+	return ( val )
 }
 
 # Return vector that includs all binary, nominal, and numeric fields or an empty vector
@@ -249,11 +223,6 @@ getTestName <- function( field=NULL, isParametric=TRUE ) {
    if( field %in% getNominalFields() && !isParametric ) return( tests[4] )
    if( field %in% getNumericFields() && isParametric ) return( tests[5] )
    if( field %in% getNumericFields() && !isParametric ) return( tests[6] )
-}
-
-# Return named vector values for the given name
-getValuesByName <- function( vals, name ) {
-	return( as.vector( vals[names(vals)==name] ) )
 }
 
 # Import libraries and abort program with descriptive error

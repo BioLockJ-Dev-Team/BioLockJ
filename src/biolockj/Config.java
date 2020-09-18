@@ -1051,7 +1051,10 @@ public class Config {
 		BufferedWriter writer = new BufferedWriter( new FileWriter( modConfig ) );
 		try {
 			writer.write( "# Properties used during the execution of module: " + ModuleUtil.displaySignature( module ) + Constants.RETURN);
-			for( final String key: moduleUsedProps.keySet() )
+			List<String> names = new ArrayList<>();
+			names.addAll( moduleUsedProps.keySet() );
+			Collections.sort(names);
+			for( final String key: names )
 				if (moduleUsedProps.get( key ) != null) {
 					writer.write( key + "=" + moduleUsedProps.get( key ) + Constants.RETURN );
 				}

@@ -231,5 +231,34 @@ public abstract class R_Module extends ScriptModuleImpl {
 	protected abstract String getModulePrefix();
 	
 	private static final String CUSTOM_SCRIPT_PROP_SUFFIX = "customScript";
+
+	@Override
+	public void cleanUp() throws Exception {
+		super.cleanUp();
+		grapRUsedProps();
+	}
+	
+	protected void grapRUsedProps() throws Exception {
+		for (File log : getLogDir().listFiles()) {
+			BufferedReader reader = new BufferedReader( new FileReader( log ) );
+			String line;
+			while( (line = reader.readLine()) != null ) {
+				int i1 = line.indexOf( "=" );
+				if (line.startsWith( R_USED_PROP_KEY ) && i1 > -1) {
+					line = line.replaceFirst( R_USED_PROP_KEY, "" );
+					int i = line.indexOf( "=" );
+					String name = line.substring( 0, i ).trim();
+					String val = line.substring( i + 1 ).trim();
+					Config.setConfigProperty( name, val );
+				}
+			}
+			reader.close();
+		}
+	}
+	
+	/**
+	 * Key string that is also hard-coded in the BioLockJ_Lib.R
+	 */
+	private static final String R_USED_PROP_KEY = "USED_PROPERTY: ";
 	
 }
