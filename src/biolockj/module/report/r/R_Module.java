@@ -104,11 +104,12 @@ public abstract class R_Module extends ScriptModuleImpl {
 	private boolean checkPackage(String packageName) throws SpecialPropertiesException, IOException, InterruptedException, ConfigNotFoundException {
 		boolean isGood;
 		String cmd = Config.getExe( this, Constants.EXE_RSCRIPT ) + " -e 'library(" + packageName + ");packageVersion(\"" + packageName + "\")'";
-		if (Config.getString( this, Constants.PIPELINE_ENV ).equals(Constants.PIPELINE_ENV_CLUSTER)) {
-			for (String addLib : BashScriptBuilder.loadModules(this)) {
-				cmd = addLib + cmd;
-			}
-		}
+		//TODO: revisit this after the check exe feature is finished.
+//		if (Config.getString( this, Constants.PIPELINE_ENV ).equals(Constants.PIPELINE_ENV_CLUSTER)) {
+//			for (String addLib : BashScriptBuilder.loadModules(this)) {
+//				cmd = addLib + "; " + cmd;
+//			}
+//		}
 		if (DockerUtil.inDockerEnv()) {
 			//TODO: revisit this after the check exe feature is finished.
 			cmd = Config.getExe( this, Constants.EXE_DOCKER ) + " run --rm " + DockerUtil.getDockerImage( this ) + " " + cmd;
