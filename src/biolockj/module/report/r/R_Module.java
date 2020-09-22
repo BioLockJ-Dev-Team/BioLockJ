@@ -113,6 +113,7 @@ public abstract class R_Module extends ScriptModuleImpl {
 			//TODO: revisit this after the check exe feature is finished.
 			cmd = Config.getExe( this, Constants.EXE_DOCKER ) + " run --rm " + DockerUtil.getDockerImage( this ) + " " + cmd;
 		}
+		Log.info(R_Module.class, "Checking for R package [" + packageName + "] using command: " + cmd);
 		Process p = Runtime.getRuntime().exec( cmd );
 		final BufferedReader brOut = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
 		final BufferedReader brErr = new BufferedReader( new InputStreamReader( p.getErrorStream() ) );
