@@ -24,6 +24,7 @@ public class Constants {
 	 */
 	static final void registerProps() throws API_Exception {
 		Properties.registerProp( AWS_S3_XFER_TIMEOUT, Properties.INTEGER_TYPE, AWS_S3_XFER_TIMEOUT_DESC );
+		Properties.registerProp( BLJ_VERSION_PROP, Properties.STRING_TYPE, BLJ_VERSION_PROP_DESC );
 		Properties.registerProp( CLUSTER_HOST, Properties.STRING_TYPE, CLUSTER_HOST_DESC);
 		Properties.registerProp( DEFAULT_MOD_DEMUX, Properties.STRING_TYPE, DEFAULT_MOD_DEMUX_DESC );
 		Properties.registerProp( DEFAULT_MOD_FASTA_CONV, Properties.STRING_TYPE, DEFAULT_MOD_FASTA_CONV_DESC );
@@ -141,6 +142,13 @@ public class Constants {
 	 * Name of the file created in the BioModule root directory to indicate execution has started: {@value #BLJ_STARTED}
 	 */
 	public static final String BLJ_STARTED = "biolockjStarted";
+	
+	/**
+	 * {@link biolockj.Config} property: {@value #BLJ_VERSION_PROP}<br>
+	 * {@value #BLJ_VERSION_PROP_DESC}
+	 */
+	public static final String BLJ_VERSION_PROP = "biolockj.version";
+	public static final String BLJ_VERSION_PROP_DESC = "Property giving the biolockj version that was used to generate the config file.";
 
 	/**
 	 * URL to the BioLockJ WIKI

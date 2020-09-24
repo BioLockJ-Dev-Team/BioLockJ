@@ -351,6 +351,19 @@ public class BioLockJUtil {
 		}
 	}
 
+	public static void checkVersion() {
+		Log.info( BioLockJUtil.class, "Currently running BioLockJ version: " + getVersion() );
+		String configuredVersion = Config.getString( null, Constants.BLJ_VERSION_PROP, getVersion());
+		//TODO: be a little more sophisticated here.
+		//TODO: determine which version is new, and if the difference is a major, minor or patch.
+		if ( ! getVersion().equals( configuredVersion )) {
+			Log.warn( BioLockJUtil.class, "This config file calls for version: " + configuredVersion 
+				+ System.lineSeparator() + "But the version of BioLockJ currently runnign is " + getVersion()
+				+ System.lineSeparator() + "This has the potential to produce differences in results.");
+			Config.setConfigProperty( Constants.BLJ_VERSION_PROP, getVersion() );
+		}
+	}
+	
 	/**
 	 * Check collection vals for null or empty toString() values
 	 * 
