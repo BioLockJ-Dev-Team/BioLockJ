@@ -179,7 +179,7 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	 * {@value #PARAM_DESC}
 	 */
 	protected static final String PARAM = "genMod.param";
-	private static final String PARAM_DESC = "arameters to pass to the user's script";
+	private static final String PARAM_DESC = "parameters to pass to the user's script";
 	
 	/**
 	 * {@link biolockj.Config} property: {@value #SCRIPT}<br>
