@@ -188,7 +188,7 @@ public abstract class R_Module extends ScriptModuleImpl {
 	}
 	
 	public static File getFunctionLib(BioModule module) throws IOException, BioLockJException  {
-		URL in = module.getClass().getResource( "R/" + Constants.R_FUNCTION_LIB );
+		URL in = R_Module.class.getResource( "R/" + Constants.R_FUNCTION_LIB );
 		File lib = new File(module.getResourceDir(), Constants.R_FUNCTION_LIB);
 		FileUtils.copyURLToFile(in, lib);
 		if( !lib.isFile() ) throw new BioLockJException( "Missing R function library: " + lib.getAbsolutePath() );
