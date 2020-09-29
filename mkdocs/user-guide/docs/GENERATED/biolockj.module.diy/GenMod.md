@@ -12,7 +12,7 @@ Allows user to add their own scripts into the BioLockJ pipeline.
 | Property| Description |
 | :--- | :--- |
 | *genMod.launcher* | _string_ <br>Define executable language command if it is not included in your $PATH<br>*default:*  *null* |
-| *genMod.param* | _string_ <br>arameters to pass to the user's script<br>*default:*  *null* |
+| *genMod.param* | _string_ <br>parameters to pass to the user's script<br>*default:*  *null* |
 | *genMod.resources* | _list of file paths_ <br>path to one or more files to be copied to the module resource folder.<br>*default:*  *null* |
 | *genMod.scriptPath* | _file path_ <br>path to user script<br>*default:*  *null* |
 
@@ -75,7 +75,7 @@ With this, `script.py` will be run using python.  Then other modules will run. T
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/blj_basic:v1.3.14
+biolockjdevteam/blj_basic:v1.3.15
 ```
 This can be modified using the following properties:<br>
 `GenMod.imageOwner`<br>
@@ -83,5 +83,5 @@ This can be modified using the following properties:<br>
 `GenMod.imageTag`<br>
 
 ## Citation 
-BioLockJ v1.3.14
+BioLockJ v1.3.15-dev
 
