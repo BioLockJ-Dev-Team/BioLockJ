@@ -172,9 +172,10 @@ public class PipelineUtil {
 	 * @return
 	 */
 	public static boolean isPrecheckPipeline(final File pipelineDir) {
-		String flagName = PipelineUtil.getPipelineStatusFlag(pipelineDir).getName();
-		if ( flagName.contentEquals( Constants.PRECHECK_COMPLETE ) 
-						|| flagName.contentEquals( Constants.PRECHECK_FAILED) ) {
+		File flagFile = PipelineUtil.getPipelineStatusFlag(pipelineDir);
+		if ( flagFile == null ) return false;
+		else if ( flagFile.getName().contentEquals( Constants.PRECHECK_COMPLETE ) 
+						|| flagFile.getName().contentEquals( Constants.PRECHECK_FAILED) ) {
 			return true;
 		}else {
 			return false;	
