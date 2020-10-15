@@ -119,13 +119,16 @@ public class DockerUtil {
 		Log.debug( DockerUtil.class, "Docker inspect result: " + s );
 		return s.equals( "'true'" );
 	}
-
+	
 	private static List<String> getDockerVolumes( final BioModule module )
-		throws ConfigPathException, ConfigNotFoundException, DockerVolCreationException {
+		throws ConfigPathException, ConfigNotFoundException, DockerVolCreationException, ConfigFormatException {
 		Log.debug( DockerUtil.class, "Assign Docker volumes for module: " + module.getClass().getSimpleName() );
-
 		final List<String> dockerVolumes = new ArrayList<>();
-		dockerVolumes.add( " -v " + DOCKER_SOCKET + ":" + DOCKER_SOCKET + WRAP_LINE );
+		if (Config.getBoolean( module, DOCKER_MOUNT_SOCK )) {
+			dockerVolumes.add( " -v " + DOCKER_SOCKET + ":" + DOCKER_SOCKET + WRAP_LINE );
+		}
+		Log.debug( DockerUtil.class, "The docker socket [" + DOCKER_SOCKET + "] will " + (Config.getBoolean( module, DOCKER_MOUNT_SOCK ) ? "be " : "not be ") 
+			+ "mounted for worker containers for module " + module.getClass().getSimpleName() );
 		dockerVolumes.add( " -v " + deContainerizePath( BioLockJ.getPipelineDir().getParent() ) + ":" +
 			BioLockJ.getPipelineDir().getParent() + ":delegated" + WRAP_LINE );
 		for( String key: volumeMap.keySet() ) {
@@ -287,9 +290,11 @@ public class DockerUtil {
 		volumeMap = new TreeMap<>();
 		for( int i = 0; i < arr.length(); i++ ) {
 			JSONObject mount = arr.getJSONObject( i );
-			volumeMap.put( mount.get( "Source" ).toString(), mount.get( "Destination" ).toString() );
-			Log.info( DockerUtil.class, "Host directory: " + mount.get( "Source" ).toString() );
-			Log.info( DockerUtil.class, "is mapped to container directory: " + mount.get( "Destination" ).toString() );
+			String source = convertMacPath(mount.get( "Source" ).toString());
+			String destination = mount.get( "Destination" ).toString();
+			volumeMap.put( source, destination );
+			Log.info( DockerUtil.class, "Host directory: " + source );
+			Log.info( DockerUtil.class, "is mapped to container directory: " + destination );
 		}
 		Log.info( DockerUtil.class, volumeMap.toString() );
 	}
@@ -404,6 +409,11 @@ public class DockerUtil {
 						&& FilenameUtils.separatorsToWindows(path).equals(path));
 	}
 	
+	private static String convertMacPath(final String path) {
+		if (path.startsWith( "/host_mnt/" )) return path.replaceFirst( "/host_mnt/", "/" );
+		else return path ;
+	}
+	
 	private static String convertWindowsPath(final String path) {
 		String drive = path.substring( 0, path.indexOf( ":" ) ).toLowerCase();
 		String dirPath = path.substring( path.indexOf( ":" ) + 1 );
@@ -461,6 +471,7 @@ public class DockerUtil {
 			if( Config.getBoolean( module, VERIFY_IMAGE ) ) {
 				verifyImage( module, image );
 			}
+			Config.getBoolean( module, DOCKER_MOUNT_SOCK );
 		} else {
 			Log.info( DockerUtil.class, "Not running in Docker.  No need to check Docker dependencies." );
 		}
@@ -570,6 +581,7 @@ public class DockerUtil {
 		Properties.registerProp( DOCKER_IMG_VERSION, Properties.STRING_TYPE, DOCKER_IMG_VERSION_DESC );
 		Properties.registerProp( SAVE_CONTAINER_ON_EXIT, Properties.BOOLEAN_TYPE, SAVE_CONTAINER_ON_EXIT_DESC );
 		Properties.registerProp( VERIFY_IMAGE, Properties.BOOLEAN_TYPE, VERIFY_IMAGE_DESC );
+		Properties.registerProp( DOCKER_MOUNT_SOCK, Properties.BOOLEAN_TYPE, DOCKER_MOUNT_SOCK_DESC );
 	}
 
 	/**
@@ -637,6 +649,12 @@ public class DockerUtil {
 	 */
 	public static final String DOCKER_IMG_VERSION = "docker.imageTag";
 	private static final String DOCKER_IMG_VERSION_DESC = "indicate specific version of Docker images";
+	
+	/**
+	 * {@link biolockj.Config} Boolean property: {@value #DOCKER_MOUNT_SOCK} {@value #DOCKER_MOUNT_SOCK_DESC}
+	 */
+	public static final String DOCKER_MOUNT_SOCK = "docker.mountSock";
+	private static final String DOCKER_MOUNT_SOCK_DESC = "should /var/docker/docker.sock be mounted for modules.";
 
 	/**
 	 * {@link biolockj.Config} Boolean property: {@value #SAVE_CONTAINER_ON_EXIT}<br>
