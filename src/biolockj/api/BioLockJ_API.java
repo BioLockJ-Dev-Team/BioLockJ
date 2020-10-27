@@ -647,9 +647,7 @@ public class BioLockJ_API {
 		List<String> returnList = new ArrayList<>();
 		if (mountOrUpload.equals( MOUNT_KEY ) ) returnList.addAll( mounts );
 		else returnList.addAll( uploads );
-		Collections.sort(returnList);
-		return returnList;
-		
+		return removeSubdirs(returnList);
 	}
 	public static List<String> listMounts(String config) throws Exception {
 		return listFilesFromConfig(config, MOUNT_KEY);
@@ -664,8 +662,6 @@ public class BioLockJ_API {
 			String cmd = "docker run --rm --mount type=bind,source=" + testFile.getParentFile().getAbsolutePath() 
 							+ ",target=/tmpTest ubuntu [ -f /tmpTest/" + testFile.getName() + " ] || [ -d /tmpTest/" 
 							+ testFile.getName() + " ] && echo " + YES + " || echo no ";
-//			String cmd = "docker run --rm --mount type=bind,source=" + testFile.getParentFile().getAbsolutePath() 
-//							+ ",target=/tmpTest ubuntu [ -f tmpTest/" + testFile.getName() + " ] && echo " + YES + " || echo no ";
 			//System.err.println("test command: " + cmd);
 			final Process p = Runtime.getRuntime().exec( cmd );
 			final BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
@@ -685,6 +681,25 @@ public class BioLockJ_API {
 			ex.getSuppressed();
 		}
 		return answer;
+	}
+	
+	private static List<String> removeSubdirs(final List<String> dirs){
+		Collections.sort(dirs);
+		List<String> newList = new ArrayList<>();
+		newList.add( dirs.get( 0 ) );
+		for (String d : dirs) {
+			boolean alreadyHaveParentDir = false;
+			for (String parent : newList) {
+				if (d.equals( parent )) alreadyHaveParentDir = true;
+				if ( d.startsWith( parent ) && 
+					d.length() > parent.length() &&
+					d.charAt( parent.length() )==File.separatorChar ) {
+					alreadyHaveParentDir = true;
+				}
+			}
+			if (!alreadyHaveParentDir) newList.add( d );
+		}
+		return newList;
 	}
 	
 	/**
