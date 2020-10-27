@@ -356,15 +356,14 @@ public class DockerUtil {
 		if( pipelineKey == null && BioLockJ.getPipelineDir() != null ) {
 			throw new DockerVolCreationException( "no pipeline dir !" );
 		}
-		if( pipelineKey != null && hostPath.startsWith( pipelineKey ) )
+		if( pipelineKey != null && isParentDir(pipelineKey, hostPath) )
 			return hostPath.replaceFirst( pipelineKey, vmap.get( pipelineKey ) );
 		
 		String innerPath = path;
 		String bestMatch = null;
 		int bestMatchLen = 0;
 		for( String s: vmap.keySet() ) {
-			if( hostPath.startsWith( s ) && s.length() > bestMatchLen &&
-				( hostPath.equals( s ) || hostPath.charAt( s.length() ) == File.separatorChar ) ) {
+			if( isParentDir(s, hostPath) && s.length() > bestMatchLen ) {
 				bestMatch = String.valueOf( s );
 				bestMatchLen = s.length();
 			}
@@ -385,7 +384,7 @@ public class DockerUtil {
 			TreeMap<String, String> vmap;
 			vmap = getVolumeMap();
 			for( String s: vmap.keySet() ) {
-				if( innerPath.startsWith( vmap.get( s ) ) ) {
+				if (isParentDir(vmap.get( s ), innerPath)) {
 					hostPath = hostPath.replaceFirst( vmap.get( s ), s );
 					break;
 				}
@@ -401,6 +400,18 @@ public class DockerUtil {
 		if (args.length > 1 && args[1].equals("target") ) System.out.println( containerizePath( args[0] ) );
 		else if (args.length > 1 && args[1].equals("source") ) System.out.println( deContainerizePath( args[0] ) );
 		else System.out.println( deContainerizePath( args[0] ) );
+	}
+	
+	private static boolean isParentDir(String parent, String child){
+		if( child.equals( parent ) ) {
+			return true;
+		}
+		if( child.startsWith( parent ) 
+						&& child.length() > parent.length() 
+						&& child.charAt( parent.length() )==File.separatorChar) {
+			return true;
+		}
+		return false;
 	}
 	
 	private static boolean isWindowsHostPath(final String path) {
