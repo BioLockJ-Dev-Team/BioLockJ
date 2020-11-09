@@ -42,6 +42,7 @@ public class Constants {
 		Properties.registerProp( HN2_DISABLE_GENE_FAMILIES, Properties.BOOLEAN_TYPE, HN2_DISABLE_GENE_FAMILIES_DESC );
 		Properties.registerProp( HN2_DISABLE_PATH_ABUNDANCE, Properties.BOOLEAN_TYPE, HN2_DISABLE_PATH_ABUNDANCE_DESC );
 		Properties.registerProp( HN2_DISABLE_PATH_COVERAGE, Properties.BOOLEAN_TYPE, HN2_DISABLE_PATH_COVERAGE_DESC );
+		Properties.registerProp( INPUT_ALLOW_DUPS, Properties.BOOLEAN_TYPE, INPUT_ALLOW_DUPS_DESC );
 		Properties.registerProp( INPUT_DIRS, Properties.FILE_PATH_LIST, INPUT_DIRS_DESC );
 		Properties.registerProp( INPUT_FORWARD_READ_SUFFIX, "regex", "file suffix used to identify forward reads in" + INPUT_DIRS );
 		Properties.registerProp( INPUT_IGNORE_FILES, Properties.LIST_TYPE, INPUT_IGNORE_FILES_DESC );
@@ -383,7 +384,13 @@ public class Constants {
 	 * Standard indent = 4 spaces.
 	 */
 	public static final String INDENT = "    ";
-
+	
+	/**
+	 * {@link biolockj.Config} boolean property: {@value #INPUT_ALLOW_DUPS_DESC}
+	 */
+	public static final String INPUT_ALLOW_DUPS = "input.allowDuplicateNames";
+	private static final String INPUT_ALLOW_DUPS_DESC = "Should files with the same name be permitted in inputs. File names are used to link data to metadata, and duplicated names create ambiguity.  However in some pipelines, duplicates are appropriate.";
+	
 	/**
 	 * {@link biolockj.Config} List property: {@value #INPUT_DIRS}<br>
 	 * {@value #INPUT_DIRS_DESC}

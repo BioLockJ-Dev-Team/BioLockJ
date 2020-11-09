@@ -397,8 +397,10 @@ public class BioLockJUtil {
 		Collection<File> files = new HashSet<>();
 		for( final File dir: getInputDirs() ) {
 			Log.info( BioLockJUtil.class, "Found pipeline input dir " + dir.getAbsolutePath() );
-			files.addAll( findDups( files, removeIgnoredAndEmptyFiles(
-				FileUtils.listFiles( dir, HiddenFileFilter.VISIBLE, HiddenFileFilter.VISIBLE ) ) ) );
+			Collection<File> dirFiles = removeIgnoredAndEmptyFiles(
+				FileUtils.listFiles( dir, HiddenFileFilter.VISIBLE, HiddenFileFilter.VISIBLE ) );
+			if ( ! Config.requireBoolean( null, Constants.INPUT_ALLOW_DUPS )) findDups( files, dirFiles );
+			files.addAll( dirFiles );
 		}
 		Log.info( BioLockJUtil.class, "# Initial input files found: " + files.size() );
 		Log.debug( BioLockJUtil.class, "Initial input files found: " + printLongFormList( files ) );
@@ -653,7 +655,7 @@ public class BioLockJUtil {
 		}
 	}
 
-	private static Collection<File> findDups( final Collection<File> files, final Collection<File> newFiles )
+	private static void findDups( final Collection<File> files, final Collection<File> newFiles )
 		throws ConfigViolationException {
 		final Map<String, String> names = new HashMap<>();
 		for( final File f: files )
@@ -664,7 +666,6 @@ public class BioLockJUtil {
 					f.getAbsolutePath() + " ] has the same file name as [ " + names.get( f.getName() ) + " ]" );
 			names.put( f.getName(), f.getAbsolutePath() );
 		}
-		return newFiles;
 	}
 
 	private static File getProfile( final String path ) {
