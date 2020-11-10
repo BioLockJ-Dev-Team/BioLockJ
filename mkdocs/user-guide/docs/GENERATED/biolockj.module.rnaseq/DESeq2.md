@@ -46,7 +46,7 @@ Advanced users may want to make more advanced modifications to the call to the D
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/r_deseq2:v1.3.12
+biolockjdevteam/r_deseq2:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `DESeq2.imageOwner`<br>
@@ -58,5 +58,5 @@ R Core Team (2019). R: A language and environment for statistical computing. R F
 Love, M.I., Huber, W., Anders, S. (2014) Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15:550. 10.1186/s13059-014-0550-8                   
                    
 Module developed by Ivory, Ke and Rosh                   
-BioLockJ v1.3.12
+BioLockJ v1.3.13
 

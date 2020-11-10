@@ -46,7 +46,7 @@ The output of this module will have a row for each sample (just like the metadat
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/biolockj_controller:v1.3.12
+biolockjdevteam/biolockj_controller:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `AddMetadataToTaxaTables.imageOwner`<br>
@@ -55,5 +55,5 @@ This can be modified using the following properties:<br>
 
 ## Citation 
 Module developed by Mike Sioda and Anthony Fodor                   
-BioLockJ v1.3.12
+BioLockJ v1.3.13
 

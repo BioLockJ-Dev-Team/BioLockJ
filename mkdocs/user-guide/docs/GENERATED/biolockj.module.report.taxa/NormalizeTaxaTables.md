@@ -64,7 +64,7 @@ biolockj.module.report.taxa.LogTransformTaxaTables
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/biolockj_controller:v1.3.12
+biolockjdevteam/biolockj_controller:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `NormalizeTaxaTables.imageOwner`<br>
@@ -74,5 +74,5 @@ This can be modified using the following properties:<br>
 ## Citation 
 ["Stochastic changes over time and not founder effects drive cage effects in microbial community assembly in a mouse model"](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3806260/)                   
 Module developed by Mike Sioda                   
-BioLockJ v1.3.12
+BioLockJ v1.3.13
 

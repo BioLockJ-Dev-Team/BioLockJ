@@ -46,7 +46,7 @@ biolockj.module.implicit.parser.wgs.Humann2Parser
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/humann2_classifier:v1.3.12
+biolockjdevteam/humann2_classifier:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `Humann2Classifier.imageOwner`<br>

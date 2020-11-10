@@ -4,6 +4,7 @@ Specify the input data for the pipeline by providing the path to one or more dir
                    
 | Property| Description |
 | :--- | :--- |
+| *input.allowDuplicateNames* | _boolean_ <br>Should files with the same name be permitted in inputs. File names are used to link data to metadata, and duplicated names create ambiguity.  However in some pipelines, duplicates are appropriate.<br>*default:*  N |
 | *input.dirPaths* | _list of file paths_ <br>List of one or more directories containing the pipeline input data.<br>*default:*  *null* |
 | *input.ignoreFiles* | _list_ <br>file names to ignore if found in input directories<br>*default:*  *null* |
 | *input.requireCompletePairs* | _boolean_ <br>Require all sequence input files have matching paired reads<br>*default:*  Y |

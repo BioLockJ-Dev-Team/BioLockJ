@@ -43,7 +43,7 @@ Run the Biobakery [KneadData](https://bitbucket.org/biobakery/kneaddata/wiki/Hom
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/kraken_classifier:v1.3.12
+biolockjdevteam/kraken_classifier:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `KneadData.imageOwner`<br>

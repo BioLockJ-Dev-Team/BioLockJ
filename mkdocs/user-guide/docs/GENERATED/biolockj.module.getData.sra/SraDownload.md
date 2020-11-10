@@ -50,7 +50,7 @@ Typically, BioLockJ will automatically determine modules to add to the pipeline 
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/sratoolkit:v1.3.12
+biolockjdevteam/sratoolkit:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `SraDownload.imageOwner`<br>
@@ -60,5 +60,5 @@ This can be modified using the following properties:<br>
 ## Citation 
 [sra-tools](https://github.com/ncbi/sra-tools)                   
 Module developed by Philip Badzuh                   
-BioLockJ v1.3.12
+BioLockJ v1.3.13
 

@@ -40,7 +40,7 @@ Decompress gzipped files.
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/blj_basic:v1.3.12
+biolockjdevteam/blj_basic:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `Gunzipper.imageOwner`<br>
@@ -48,6 +48,6 @@ This can be modified using the following properties:<br>
 `Gunzipper.imageTag`<br>
 
 ## Citation 
-BioLockJ v1.3.12                   
+BioLockJ v1.3.13                   
 Module developed by Mike Sioda
 

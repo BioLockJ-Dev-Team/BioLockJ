@@ -44,7 +44,7 @@ biolockj.module.implicit.parser.wgs.KrakenParser
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/kraken_classifier:v1.3.12
+biolockjdevteam/kraken_classifier:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `KrakenClassifier.imageOwner`<br>

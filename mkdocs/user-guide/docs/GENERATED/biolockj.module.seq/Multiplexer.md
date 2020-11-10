@@ -43,7 +43,7 @@ Multiplex samples into a single file, or two files (one with forward reads, one 
 ## Docker 
 If running in docker, this module will run in a docker container from this image:<br>
 ```
-biolockjdevteam/biolockj_controller:v1.3.12
+biolockjdevteam/biolockj_controller:v1.3.13
 ```
 This can be modified using the following properties:<br>
 `Multiplexer.imageOwner`<br>
@@ -52,5 +52,5 @@ This can be modified using the following properties:<br>
 
 ## Citation 
 Module developed by Mike Sioda                   
-BioLockJ v1.3.12
+BioLockJ v1.3.13
 
