@@ -209,11 +209,11 @@ public class TaxaUtil {
 	 * @param level Taxonomy level
 	 * @param suffix File suffix
 	 * @return Taxonomy Table File
-	 * @throws Exception if errors occur
+	 * @throws BioLockJException if level is null
 	 */
-	public static File getTaxonomyTableFile( final File dir, final String level, final String suffix )
-		throws Exception { // Replace Exception with new TaxaTableException
-		if( level == null ) throw new Exception( "Level is required to build a taonomy table" );
+	public static File getTaxonomyTableFile( final File dir, final String level, final String suffix ) throws BioLockJException
+		 { // Replace Exception with new TaxaTableException
+		if( level == null ) throw new BioLockJException( "Level is required to build a taxonomy table" );
 		String mySuffix = suffix;
 		if( mySuffix != null && !mySuffix.endsWith( "_" ) ) mySuffix += "_";
 		if( mySuffix != null && !mySuffix.startsWith( "_" ) ) mySuffix = "_" + mySuffix;

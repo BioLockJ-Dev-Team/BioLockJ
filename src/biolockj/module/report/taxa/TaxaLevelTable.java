@@ -39,5 +39,12 @@ public class TaxaLevelTable extends HashMap<String, HashMap<String, Double>>{
 		return allSampleIDs;
 	}
 	
+	public Double addValue(final String sample, final String taxon, final Double value) {
+		HashMap<String, Double> row = this.keySet().contains( sample ) ? this.get( sample ) : newSampleRow(sample);
+		Double oldValue = row.containsKey( taxon ) ? row.get( taxon ) : new Double(0);
+		row.put( taxon, Double.sum( oldValue, value ) );
+		return row.get( taxon );
+	}
+	
 	private static final long serialVersionUID = 3873959114273802005L;
 }

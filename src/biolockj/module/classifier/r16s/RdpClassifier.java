@@ -12,12 +12,14 @@
 package biolockj.module.classifier.r16s;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import biolockj.*;
 import biolockj.api.ApiModule;
 import biolockj.exception.*;
 import biolockj.module.classifier.ClassifierModuleImpl;
+import biolockj.module.implicit.parser.r16s.RdpHierParser;
 import biolockj.util.*;
 
 /**
@@ -34,6 +36,8 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 		addNewProperty( RDP_DOCKER_JAR, Properties.STRING_TYPE, "File path for RDP java executable JAR in docker.", "/app/classifier.jar" );
 		addNewProperty( RDP_PARAMS, Properties.LIST_TYPE, "parameters to use when running rdp. (must include \"-f fixrank\")" );
 		addNewProperty( JAVA_PARAMS, Properties.LIST_TYPE, "the parameters to java when running rdp." );
+		addNewProperty( HIER_COUNTS, Properties.BOOLEAN_TYPE, "Generate TaxaTables using the RDP " + HIER_PARAM + " option." );
+		addNewProperty( Constants.RDP_THRESHOLD_SCORE, Properties.NUMERTIC_TYPE, "IFF " + HIER_COUNTS + "=Y, RdpClassifier will ignore OTU assignments below this threshold score (0-100)", "80" );
 		addGeneralProperty( Constants.DEFAULT_MOD_SEQ_MERGER );
 	}
 
@@ -51,7 +55,9 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 			final String outputFile = getOutputDir().getAbsolutePath() + File.separator +
 				SeqUtil.getSampleId( file ) + Constants.PROCESSED;
 			final ArrayList<String> lines = new ArrayList<>();
-			lines.add( FUNCTION_RDP + " " + file.getAbsolutePath() + " " + outputFile );
+			String hier = Config.getBoolean( this, HIER_COUNTS ) ?
+				" " + outputFile.replaceFirst( Constants.PROCESSED, HIER_SUFFIX ): "";
+			lines.add( FUNCTION_RDP + " " + file.getAbsolutePath() + " " + outputFile + hier );
 			data.add( lines );
 		}
 
@@ -64,6 +70,10 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 		if ( !DockerUtil.inDockerEnv() ) Config.requireExistingFile( this, RDP_JAR );
 		getRuntimeParams( getClassifierParams(), null );
 		getDbParam();
+		Config.getBoolean( this, HIER_COUNTS );
+		if ( Config.requirePositiveInteger( this, Constants.RDP_THRESHOLD_SCORE ) > 100) {
+			throw new ConfigFormatException( Constants.RDP_THRESHOLD_SCORE, "Value cannot be greater than 100.");
+		};
 	}
 
 	/**
@@ -75,16 +85,27 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	}
 
 	/**
-	 * Do not accept -t to define a database, since that instead requires the specific property: {@value #RDP_DB}
+	 * Do not accept -t to define a database, since that instead requires the specific 
+	 * property: {@value #RDP_DB} <br>
+	 * If {@value #HIER_COUNTS} is true, then skip any parameter for it here, it will added per file.
 	 */
 	@Override
 	public List<String> getClassifierParams() throws ConfigException {
 		final List<String> validParams = new ArrayList<>();
-		for( final String param: Config.getList( this, RDP_PARAMS ) )
-			if( param.startsWith( DB_PARAM ) )
+		boolean skipHier = Config.getBoolean( this, HIER_COUNTS );
+		for( final String param: Config.getList( this, RDP_PARAMS ) ) {
+			if( param.startsWith( DB_PARAM ) || param.startsWith( "--train_propfile" ) ) {
 				Log.warn( getClass(), "Ignoring " + DB_PARAM + " value: [ " + param + " ] set in Config property " +
 					RDP_PARAMS + "since this property must be explictily defined in " + RDP_DB );
-			else validParams.add( param );
+			}else if (skipHier && (param.startsWith(  HIER_PARAM ) || param.startsWith(  HIER_PARAM.substring( 1, 3 ) ) ) ){
+				Log.info( getClass(),
+					"Ignoring " + HIER_PARAM + " value: [ " + param + " ] set in Config property " + RDP_PARAMS +
+						". The property " + HIER_COUNTS + " is set to Y, so the " + HIER_PARAM +
+						" parameter will set with a different file for each call to RDP." );
+			}else {
+				validParams.add( param );
+			}
+		}
 
 		return validParams;
 	}
@@ -115,9 +136,14 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	@Override
 	public List<String> getWorkerScriptFunctions() throws Exception {
 		final List<String> lines = super.getWorkerScriptFunctions();
+		String hierParam = "";
+		if (Config.getBoolean( this, HIER_COUNTS )) {
+			hierParam = " " + HIER_PARAM + " $3 " + CONF_PARAM + " " + getConfThreshold() + " ";
+		}
 		lines.add( "function " + FUNCTION_RDP + "() {" );
 		lines.add( Config.getExe( this, Constants.EXE_JAVA ) + " " + getJavaParams() + Constants.JAR_ARG + " " +
-			getJar() + " " + getRuntimeParams( getClassifierParams(), null ) + getDbParam() + OUTPUT_PARAM + " $2 $1" );
+			getJar() + " " + getRuntimeParams( getClassifierParams(), null ) 
+			+ getDbParam() + hierParam + OUTPUT_PARAM + " $2 $1" );
 		lines.add( "}" + RETURN );
 		return lines;
 	}
@@ -144,6 +170,14 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	@Override
 	public String getDockerImageName() {
 		return "rdp_classifier";
+	}
+	
+	String getConfThreshold() throws ConfigNotFoundException, ConfigFormatException {
+		int val = Config.requirePositiveInteger( this, Constants.RDP_THRESHOLD_SCORE );
+		if ( val > 100) {
+			throw new ConfigFormatException( Constants.RDP_THRESHOLD_SCORE, "Value cannot be greater than 100.");
+		};
+		return (new DecimalFormat("0.00")).format( (float) val / 100 );
 	}
 
 	/**
@@ -172,6 +206,10 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	 */
 	protected static final String RDP_PARAMS = "rdp.params";
 	
+	protected static final String HIER_COUNTS = "rdp.hierCounts";
+	
+	public static final String HIER_SUFFIX = "_hierarchicalCount.tsv";
+	
 	/**
 	 * {@link biolockj.Config} List property: {@value #JAVA_PARAMS}
 	 * The parameters for the call to java when running rdp.
@@ -180,6 +218,9 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 
 	private static final String DB_PARAM = "-t";
 	private static final String OUTPUT_PARAM = "-o";
+	private static final String HIER_PARAM = "--hier_outfile";
+	private static final String CONF_PARAM = "--conf";
+	
 	@Override
 	public String getDescription() {
 		return "Classify 16s samples with [RDP](http://rdp.cme.msu.edu/classifier/classifier.jsp).";
@@ -188,6 +229,16 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	@Override
 	public String getCitationString() {
 		return "Module developed by Mike Sioda" + System.lineSeparator() + "BioLockJ " + BioLockJUtil.getVersion();
+	}
+
+	@Override
+	public List<String> getPostRequisiteModules() throws Exception {
+		List<String> list = new ArrayList<>();
+		if ( Config.getBoolean( this, HIER_COUNTS ) ) {
+			list.add( RdpHierParser.class.getName() );
+		}
+		else list.addAll( super.getPostRequisiteModules() );
+		return list;
 	}
 
 }
