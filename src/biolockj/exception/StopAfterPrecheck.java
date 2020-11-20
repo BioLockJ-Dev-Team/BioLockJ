@@ -7,7 +7,7 @@ package biolockj.exception;
  * 
  * @author Ivory Blakley
  */
-public class StopAfterPrecheck extends BioLockJException {
+public class StopAfterPrecheck extends IntentionalStop {
 
 	public StopAfterPrecheck( String msg ) {
 		super( msg );
