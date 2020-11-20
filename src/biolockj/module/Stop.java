@@ -4,12 +4,19 @@ import biolockj.Constants;
 import biolockj.Log;
 import biolockj.api.ApiModule;
 import biolockj.util.ModuleUtil;
+import biolockj.exception.PipelineFormationException;
 import biolockj.exception.StopModuleException;
-
+/**
+ * Stop a pipeline.
+ * @author Ivory Blakley
+ *
+ */
 public class Stop extends BioModuleImpl implements ApiModule{
 
-	public Stop() {
-		// takes no properties
+	public Stop() throws PipelineFormationException {
+		// Takes no properties.
+		// Always use all-caps alias.
+		setAlias("STOP");
 	}
 
 	@Override
