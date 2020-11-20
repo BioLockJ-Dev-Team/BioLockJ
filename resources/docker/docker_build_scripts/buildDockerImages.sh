@@ -30,3 +30,8 @@ done
 # This cleanup is helpful:
 # docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 
+# If you have containers that have exited but have not been removed,
+# say thank you to: https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
+# and run:
+# docker rm $(docker ps -a -f status=exited -q)
+
