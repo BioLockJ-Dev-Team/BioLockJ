@@ -388,6 +388,7 @@ public class BashScriptBuilder {
 			if( saveWorker( module, ++sampleCount, data.size() ) || !it.hasNext() ) {
 				if( !( module instanceof JavaModule ) )
 					workerLines.add( "touch \"" + workerScriptPath + "_" + Constants.SCRIPT_SUCCESS + "\"" );
+				workerLines.add( "echo 'Created " + Constants.SCRIPT_SUCCESS + " flag.'" );
 				final List<String> workerLinesEasyReading = insertPathVars(module, workerLines);
 				workerScripts.add( createScript( module, workerScriptPath, workerLinesEasyReading ) );
 				sampleCount = 0;
