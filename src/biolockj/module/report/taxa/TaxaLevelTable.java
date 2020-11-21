@@ -46,5 +46,35 @@ public class TaxaLevelTable extends HashMap<String, HashMap<String, Double>>{
 		return row.get( taxon );
 	}
 	
+	/**
+	 * Replace all null values in the maps with 0.
+	 * @return the fraction of all values that were null;
+	 */
+	public float fillEmptyVals() {
+		return fillEmptyVals( new Double(0) );
+	}
+	/**
+	 * Replace all null values in the maps with the given value.
+	 * @param value new value to use in place of null
+	 * @return the fraction of all values that were null
+	 */
+	public float fillEmptyVals(Double value) {
+		long total = 0;
+		long replaced = 0;
+		List<String> allTaxa = listTaxa();
+		List<String> allSamples = listSamples();
+		for (String sample : allSamples ) {
+			HashMap<String, Double> row = this.get( sample );
+			long hadVals = row.size();
+			for (String taxon : allTaxa) {
+				if ( ! row.containsKey( taxon ) ) row.put(taxon, value); 
+			}
+			long numFilled = row.size() - hadVals;
+			total = total + row.size();
+			replaced = replaced + numFilled;
+		}
+		return (float) replaced / total;
+	}
+	
 	private static final long serialVersionUID = 3873959114273802005L;
 }

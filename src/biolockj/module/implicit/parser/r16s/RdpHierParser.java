@@ -65,30 +65,26 @@ public class RdpHierParser extends JavaModuleImpl {
 			System.exit( 1 );
 		}
 		
-//		Config.initBlankProps();
-//		Config.setConfigProperty( Constants.LOG_LEVEL_PROPERTY, "DEBUG" );
-//		Log.initialize( RdpHierParser.class.getSimpleName() + Constants.LOG_EXT, args[2] );
-		
-		Log.info(RdpHierParser.class, "Building taxa tables with levels: " + args[0]);
+		System.err.println("Building taxa tables with levels: " + args[0]);
 		List<String> levels = new ArrayList<>();
 		StringTokenizer levs = new StringTokenizer( args[0], "," );
 		while(levs.hasMoreTokens()) levels.add( levs.nextToken() );
 		
-		Log.info(RdpHierParser.class, "Building taxa tables from input files: " + args[1]);
+		System.err.println("Building taxa tables from input files: " + args[1]);
 		List<File> files = new ArrayList<>();
 		StringTokenizer fls = new StringTokenizer( args[1], "," );
 		while( fls.hasMoreTokens() ) files.add( new File(fls.nextToken()) );
 		
-		Log.info(RdpHierParser.class, "Building taxa tables ... " );
+		System.err.println("Building taxa tables ... " );
 		Map<String, TaxaLevelTable> tt = buildTaxaTable(levels, files);
 		
-		Log.info(RdpHierParser.class, "Saving taxa tables ... " );
+		System.err.println("Saving taxa tables ... " );
 		for (String level : levels) {
 			File outFile = new File(outDir, level + Constants.TSV_EXT);
 			TaxaUtil.writeDataToFile( outFile, tt.get( level ) );
 		}
 		
-		Log.info(RdpHierParser.class, "All done!" );
+		System.err.println("All done!" );
 	}
 	
 	@Override
@@ -155,6 +151,7 @@ public class RdpHierParser extends JavaModuleImpl {
 				throw new BioLockJException( "A problem occurred related to file: " + file.getAbsolutePath());
 			}
 		}
+		for(TaxaLevelTable table : tt.values() ) table.fillEmptyVals();
 		
 		return tt;
 	}
