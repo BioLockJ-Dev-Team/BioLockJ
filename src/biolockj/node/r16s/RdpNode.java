@@ -65,23 +65,27 @@ public class RdpNode extends OtuNodeImpl {
 		setLine( line );
 		setCount( 1 );
 
-		// skip the header, every line has at least 1 token, so next line will never throw Exception
+		// fisrt token is the squence id
 		st.nextToken();
-
+		
 		while( st.hasMoreTokens() ) {
 			String taxa = getTaxaName( st.nextToken() );
-			while( st.hasMoreTokens() && ( taxa.equals( "-" ) || taxa.equals( "" ) ) )
+			//Log.debug(this.getClass(), "Found potential taxa name: " + taxa);
+			while( st.hasMoreTokens() && ( taxa.equals( "-" ) || taxa.equals( "" ) ) ) {
+				//Log.debug(this.getClass(), "Taxa name [" + taxa + "] is stupid, take next token."); 
 				taxa = getTaxaName( st.nextToken() );
+			}	
 
 			final String level = st.hasMoreTokens() ? st.nextToken().trim(): null;
 			final Integer nextScore = st.hasMoreTokens() ? calculateScore( st.nextToken().trim() ): null;
 
 			if( level == null || nextScore == null ||
-				nextScore < Config.requirePositiveInteger( null, Constants.RDP_THRESHOLD_SCORE ) ) return;
-
-			this.score = nextScore;
-			addTaxa( taxa, level );
-
+				nextScore < Config.requirePositiveInteger( null, Constants.RDP_THRESHOLD_SCORE ) ) {
+				return;
+			}else {
+				this.score = nextScore;
+				addTaxa( taxa, level );
+			}
 		}
 	}
 

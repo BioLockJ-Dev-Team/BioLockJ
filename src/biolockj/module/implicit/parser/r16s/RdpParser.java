@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import biolockj.*;
 import biolockj.api.ApiModule;
+import biolockj.exception.BioLockJException;
 import biolockj.module.implicit.parser.ParserModuleImpl;
 import biolockj.node.OtuNode;
 import biolockj.node.r16s.RdpNode;
@@ -51,10 +52,19 @@ public class RdpParser extends ParserModuleImpl implements ApiModule{
 	public void parseSamples() throws Exception {
 		for( final File file: getInputFiles() ) {
 			final BufferedReader reader = BioLockJUtil.getFileReader( file );
+			Log.debug(this.getClass(), "Parsing file: " + file.getName());
+			String sampleId = SeqUtil.getSampleId( file );
+			Log.debug(this.getClass(), "This file is associated with sample: " + sampleId);
+			int i = 0;
 			try {
-				for( String line = reader.readLine(); line != null; line = reader.readLine() )
-					addOtuNode( new RdpNode( SeqUtil.getSampleId( file ), line ) );
-			} finally {
+				for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
+					i++;
+					addOtuNode( new RdpNode( sampleId, line ) );
+				}
+			} catch (Exception e){
+				throw new BioLockJException( "There was a problem while processing line [" + i + "] of file: " +
+					file.getName() + System.lineSeparator() + e.getMessage() );
+			}finally {
 				if( reader != null ) reader.close();
 			}
 		}
