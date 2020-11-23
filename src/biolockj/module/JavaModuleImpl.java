@@ -40,18 +40,19 @@ public abstract class JavaModuleImpl extends ScriptModuleImpl implements JavaMod
 
 	/**
 	 * JavaModules run pure Java code.<br>
-	 * If in Docker mode and not in Direct mode, execute {@link biolockj.module.ScriptModule#executeTask()} to build the
-	 * bash script.<br>
-	 * If not in Docker mode AND on the cluster AND
-	 * {@link biolockj.Config}.{@value biolockj.Constants#DETACH_JAVA_MODULES}={@value biolockj.Constants#TRUE} execute
-	 * {@link biolockj.module.ScriptModule#executeTask()} to build the bash script<br>
-	 * Otherwise, execute {@link #runModule()} to run the Java code to execute module functionality.
+	 * If in Direct mode, execute {@link #runModule()} to run the module functionality; another BioLockJ instance 
+	 * is the manager that has launched this instance to run this module.<br>
+	 * 
+	 * Otherwise, this instance is the manager,<br>
+	 * If {@link biolockj.Config}.{@value biolockj.Constants#DETACH_JAVA_MODULES}={@value biolockj.Constants#TRUE} execute
+	 * {@link biolockj.module.ScriptModule#executeTask()} to build the bash scripts to launch a secondary instance in direct mode to run this module.<br>
+	 * Otherwise (if {@value biolockj.Constants#DETACH_JAVA_MODULES}={@value biolockj.Constants#FALSE}), 
+	 * execute {@link #runModule()} to run the Java code to execute module functionality within the manager instance.
 	 */
 	@Override
 	public void executeTask() throws Exception {
-		final boolean detached = Config.getBoolean( this, Constants.DETACH_JAVA_MODULES );
-		final boolean buildDockerScript = DockerUtil.inDockerEnv() && !BioLockJUtil.isDirectMode();
-		if( detached && ( buildDockerScript || Config.isOnCluster() ) ) super.executeTask();
+		if( BioLockJUtil.isDirectMode() ) runModule();
+		else if( Config.getBoolean( this, Constants.DETACH_JAVA_MODULES ) ) super.executeTask();
 		else runModule();
 	}
 
