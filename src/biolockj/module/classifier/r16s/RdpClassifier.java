@@ -36,7 +36,7 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 		addNewProperty( RDP_DOCKER_JAR, Properties.STRING_TYPE, "File path for RDP java executable JAR in docker.", "/app/classifier.jar" );
 		addNewProperty( RDP_PARAMS, Properties.LIST_TYPE, "parameters to use when running rdp. (must include \"-f fixrank\")" );
 		addNewProperty( JAVA_PARAMS, Properties.LIST_TYPE, "the parameters to java when running rdp." );
-		addNewProperty( HIER_COUNTS, Properties.BOOLEAN_TYPE, "Generate TaxaTables using the RDP " + HIER_PARAM + " option." );
+		addNewProperty( HIER_COUNTS, Properties.BOOLEAN_TYPE, "Generate TaxaTables using the RDP " + HIER_PARAM + " option; uses the RdpHierParser instead of the standard RdpParser module." );
 		addNewProperty( Constants.RDP_THRESHOLD_SCORE, Properties.NUMERTIC_TYPE, "IFF " + HIER_COUNTS + "=Y, RdpClassifier will ignore OTU assignments below this threshold score (0-100)", "80" );
 		addGeneralProperty( Constants.DEFAULT_MOD_SEQ_MERGER );
 	}
@@ -206,7 +206,7 @@ public class RdpClassifier extends ClassifierModuleImpl implements ApiModule {
 	 */
 	protected static final String RDP_PARAMS = "rdp.params";
 	
-	protected static final String HIER_COUNTS = "rdp.hierCounts";
+	public static final String HIER_COUNTS = "rdp.hierCounts";
 	
 	public static final String HIER_SUFFIX = "_hierarchicalCount.tsv";
 	

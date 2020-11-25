@@ -12,11 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import biolockj.BioLockJ;
+import biolockj.Config;
 import biolockj.Constants;
 import biolockj.Log;
 import biolockj.Properties;
+import biolockj.api.ApiModule;
 import biolockj.exception.BioLockJException;
 import biolockj.exception.ConfigFormatException;
+import biolockj.exception.ConfigPathException;
+import biolockj.exception.DockerVolCreationException;
 import biolockj.module.BioModule;
 import biolockj.module.JavaModuleImpl;
 import biolockj.module.classifier.r16s.RdpClassifier;
@@ -27,7 +32,7 @@ import biolockj.util.SeqUtil;
 import biolockj.util.TaxaUtil;
 import biolockj.module.report.taxa.TaxaLevelTable;
 
-public class RdpHierParser extends JavaModuleImpl {
+public class RdpHierParser extends JavaModuleImpl implements ApiModule {
 
 	public RdpHierParser()  {
 		addNewProperty( Constants.RDP_THRESHOLD_SCORE, Properties.NUMERTIC_TYPE, "RdpClassifier will use this property and ignore OTU assignments below this threshold score (0-100)" );
@@ -73,7 +78,11 @@ public class RdpHierParser extends JavaModuleImpl {
 		System.err.println("Building taxa tables from input files: " + args[1]);
 		List<File> files = new ArrayList<>();
 		StringTokenizer fls = new StringTokenizer( args[1], "," );
-		while( fls.hasMoreTokens() ) files.add( new File(fls.nextToken()) );
+		while( fls.hasMoreTokens() ) {
+			File file = new File(fls.nextToken());
+			files.add( file );
+			System.err.println("File [" + file.getName() + "] exists: " + file.exists() );
+		}
 		
 		System.err.println("Building taxa tables ... " );
 		Map<String, TaxaLevelTable> tt = buildTaxaTable(levels, files);
@@ -151,6 +160,7 @@ public class RdpHierParser extends JavaModuleImpl {
 				throw new BioLockJException( "A problem occurred related to file: " + file.getAbsolutePath());
 			}
 		}
+		
 		for(TaxaLevelTable table : tt.values() ) table.fillEmptyVals();
 		
 		return tt;
@@ -213,6 +223,94 @@ public class RdpHierParser extends JavaModuleImpl {
 		return clean;
 	}
 	
+	@Override
+	public List<File> getInputFiles() {
+		ArrayList<File> list = new ArrayList<>(  );
+		BioModule rdp = ModuleUtil.getPreviousModule( this );
+		while( rdp != null & ! isValidInputModule( rdp ) ) {
+			rdp = ModuleUtil.getPreviousModule( rdp );
+		}
+		File inputDir;
+		if (rdp == null) {
+			inputDir = useInputDir();
+		}else {
+			Log.info(this.getClass(), "Input files are coming from RDP module: " + rdp);
+			inputDir = rdp.getOutputDir();
+		}
+		
+		File[] oFiles = inputDir.listFiles(new FilenameFilter() {
+
+			@Override
+			public boolean accept( File dir, String name ) {
+				return name.endsWith( RdpClassifier.HIER_SUFFIX ) && ! name.startsWith( CN_ADJ );
+			}
+		} );
+		list.addAll( Arrays.asList(oFiles) );
+		Log.info(this.getClass(), "Found [" + list.size() + "] input files: " + BioLockJUtil.getCollectionAsString( list ));
+		return list;
+	}
+	
+	private File useInputDir() {
+		File dir;
+		try {
+			dir = Config.getExistingDir( this, Constants.INPUT_DIRS );
+		} catch( ConfigPathException | DockerVolCreationException e ) {
+			e.printStackTrace();
+			Log.error(this.getClass(), "Failed to find input dir.");
+			dir = new File(BioLockJ.getPipelineDir(), "input");
+		}
+		return dir;
+	}
+
+	@Override
+	public boolean isValidInputModule( BioModule module ) {
+		return RdpClassifier.class.isInstance( module );
+	}
+
+	@Override
+	public List<String> getPreRequisiteModules() throws Exception {
+		List<String> list = super.getPreRequisiteModules();
+		List<String> inTypes = Config.getList( this, BioLockJUtil.INTERNAL_PIPELINE_INPUT_TYPES );
+		Log.debug(this.getClass(), "Found input types: " + BioLockJUtil.getCollectionAsString( inTypes ) );
+		if ( inTypes.stream().anyMatch( s -> s.equals( okInputTypes[0] ) ) ) {
+			Log.debug(this.getClass(), "Input types include required input type: " + okInputTypes[0]);
+		}else {
+			Log.debug(this.getClass(), "Input types list does not include required input type: " + okInputTypes[0]);
+			Log.debug(this.getClass(), "Module " + RdpClassifier.class.getName() + " is required." );
+			list.add( RdpClassifier.class.getName() );
+		}
+		return list;
+	}
+
+	@Override
+	public String getDescription() {
+		return "Create taxa tables from the " + RdpClassifier.HIER_SUFFIX + " files output by RDP.";
+	}
+	
+	@Override
+	public String getDetails() {
+		StringBuffer sb = new StringBuffer();
+		sb.append( "This module **requires** that _" + RdpClassifier.HIER_COUNTS + "_=" + Constants.TRUE + " for the " );
+		sb.append( RdpClassifier.class.getSimpleName() + " module to make the required output type.  As long as _" + RdpClassifier.HIER_COUNTS );
+		sb.append( "_ is set, this module will automatically be added to the module run order by the " + RdpClassifier.class.getSimpleName() + " module." );
+		sb.append( "<br>If this module is in the module run order, it adds `" + RdpClassifier.class.getName() );
+		sb.append( "` as a pre-quisite module. <br>To use this module without the RDP module, include " );
+		sb.append( okInputTypes[ 0 ] + " in the list of input types:<br>`" + Constants.INPUT_TYPES + "=" );
+		sb.append( okInputTypes[ 0 ] + "`<br>When using input from a directory, this module takes **exactly** one input directory." );
+		sb.append( "<br><br>This module is an alternative to the default parser, " + RdpParser.class.getSimpleName() + ".  " );
+		sb.append( "The two parsers produce nearly identical output. The " + RdpParser.class.getSimpleName() );
+		sb.append( " module parses the output for each sequence and determines counts for each taxanomic unit. It fills in missing levels so all sequences are counted for all taxanomic levels; this means reads that are unclassified are reported as an OTU with \"unclassified\" in the name."  );
+		sb.append( "By contrast, the " + this.getClass().getSimpleName() + " module relies on RDP to determine these totals." );
+		sb.append( "When using " + RdpParser.class.getSimpleName() + " the confidence threshold is applied by the parser,");
+		sb.append( " when using " + this.getClass().getSimpleName() + " the coinfidence threshold is applied by RDP during classification." );
+		return sb.toString();
+	}
+
+	@Override
+	public String getCitationString() {
+		return "Module created by Ivory Blakley";
+	}
+	
 	private static String TAXID = "taxid";
 	private static String LINEAGE = "lineage";
 	private static String NAME = "name";
@@ -224,30 +322,6 @@ public class RdpHierParser extends JavaModuleImpl {
 	 */
 	private final String CN_ADJ = "cnadjusted_";
 	
-	@Override
-	public List<File> getInputFiles() {
-		ArrayList<File> list = new ArrayList<>(  );
-		BioModule rdp = ModuleUtil.getPreviousModule( this );
-		while( ! isValidInputModule( rdp ) ) {
-			rdp = ModuleUtil.getPreviousModule( rdp );
-		}
-		Log.info(this.getClass(), "Input files are coming from RDP module: " + rdp);
-		File[] oFiles = rdp.getOutputDir().listFiles(new FilenameFilter() {
-
-			@Override
-			public boolean accept( File dir, String name ) {
-				return name.endsWith( RdpClassifier.HIER_SUFFIX ) && ! name.startsWith( CN_ADJ );
-			}
-		} );
-		list.addAll( Arrays.asList(oFiles) );
-		Log.info(this.getClass(), "Found [" + list.size() + "] input files: " + BioLockJUtil.getCollectionAsString( list ));
-		return list;
-	}
-
-	@Override
-	public boolean isValidInputModule( BioModule module ) {
-		return RdpClassifier.class.isInstance( module );
-	}
-	
+	private static final String[] okInputTypes = {"ModuleOutput[RdpClassifier]"};
 
 }
