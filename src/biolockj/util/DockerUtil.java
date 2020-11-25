@@ -124,7 +124,7 @@ public class DockerUtil {
 		throws ConfigPathException, ConfigNotFoundException, DockerVolCreationException, ConfigFormatException {
 		Log.debug( DockerUtil.class, "Assign Docker volumes for module: " + module.getClass().getSimpleName() );
 		final List<String> dockerVolumes = new ArrayList<>();
-		if (Config.getBoolean( module, DOCKER_MOUNT_SOCK )) {
+		if (Config.getBoolean( module, DOCKER_MOUNT_SOCK ) || module instanceof JavaModule) {
 			dockerVolumes.add( " -v " + DOCKER_SOCKET + ":" + DOCKER_SOCKET + WRAP_LINE );
 		}
 		Log.debug( DockerUtil.class, "The docker socket [" + DOCKER_SOCKET + "] will " + (Config.getBoolean( module, DOCKER_MOUNT_SOCK ) ? "be " : "not be ") 
