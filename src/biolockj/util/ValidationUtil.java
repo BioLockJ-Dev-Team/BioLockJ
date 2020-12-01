@@ -214,6 +214,7 @@ public class ValidationUtil {
 				if( getSizePercentAllowed( module ) > 0 )
 					Log.warn( ValidationUtil.class, "Output file sizes can deveate from the expected value by up to " +
 						getSizePercentAllowed( module ) + "% and will still pass validation." );
+				getCompareSet(module);
 			}
 			getReportSet( module );
 			if( !canHaltPipeline( module ) )
