@@ -36,6 +36,7 @@ public class RdpHierParser extends JavaModuleImpl implements ApiModule {
 
 	public RdpHierParser()  {
 		addNewProperty( Constants.RDP_THRESHOLD_SCORE, Properties.NUMERTIC_TYPE, "RdpClassifier will use this property and ignore OTU assignments below this threshold score (0-100)" );
+		addNewProperty( RdpClassifier.HIER_COUNTS, Properties.BOOLEAN_TYPE, "Set this property to \"" + Constants.TRUE + "\" to use this module instead as the follow-up to the " + RdpClassifier.class.getSimpleName() + " module." );
 	}
 
 	@Override
