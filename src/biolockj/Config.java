@@ -234,7 +234,9 @@ public class Config {
 	public static File getLocalConfigFile( final String path ) throws ConfigPathException, DockerVolCreationException {
 		if( path == null || path.trim().isEmpty() ) return null;
 		String filePath = replaceEnvVar( path.trim() );
-		if (DockerUtil.inDockerEnv()) filePath = DockerUtil.containerizePath( filePath );
+		Log.debug(Config.class, "Retrieving properties file: " + path);
+		filePath = convertRelativePath( filePath );
+		filePath = DockerUtil.containerizePath( filePath );
 		final File file = new File( filePath );
 		return file;
 	}
@@ -878,6 +880,9 @@ public class Config {
 			if ( path.equals( ".." ) ) path = CONFIG_DOT_DOT;
 			if ( path.startsWith( "." + File.separator ) ) path = path.replaceFirst( ".", CONFIG_DOT);
 			if ( path.equals( "." ) ) path = CONFIG_DOT;
+			Log.debug(Config.class, "Converted relative path from [" + filePath + "] to [" + path + "].");
+		}else {
+			Log.debug(Config.class, "Path [" + filePath + "] is not a relative file path.");
 		}
 		return path;
 	}
