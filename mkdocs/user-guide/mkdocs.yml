@@ -54,7 +54,7 @@ nav:
         - BioLockJ help menu: GENERATED/biolockj-help.md
     - Environments: Supported-Environments.md
     - Example Pipeline: Example-Pipeline.md
-    - FAQ: FAQ.md
+    - FAQ & Troubleshooting: FAQ.md
     # - more:
     #     - module/classifier/module.classifier.md
     #     - module/classifier/module.classifier.r16s.md

@@ -165,5 +165,15 @@ To kill the BioLockJ program that is run in the foreground (ie, the `-f` arg was
 
 To kill the BioLockJ program on a cluster environment, use `kill` just like the local case to stop a process on the head node, and use `qdel` (or the equivilent on your scheduler) to terminate workers running on compute nodes.
 
+---
+### **Question:** How can I get color-coded syntax for a BioLockJ config file?
+---
+**Answer:** Treat it like a java properties file.
 
+A BioLockJ config file _is_ a java properties file, with added "#BioModule" lines indicating which modules to run.  BioLockJ config files typically use the extension ".config" (preferred) or ".properties". Some editors have configurations to color-code text in a meaningful way based on the type of file.   For example, Sublime text will automatically apply the syntax highlighting for a java properties file to a file that ends in ".properties".                                  
+To extend this Sublime Text functionality to files that in ".config":                         
+ 1. open a file with the ".config" extension,                                   
+ 2. go to View -> Syntax -> Open all with current exension -> Java -> Java Properties
+ 
+ ( Much thanks to this helpful post: [stack over flow](https://stackoverflow.com/questions/8088475/how-to-customise-file-type-to-syntax-associations-in-sublime-text) )
 

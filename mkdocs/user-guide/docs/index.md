@@ -34,7 +34,7 @@
      * BioLockJ [API](BioLockJ-Api)
  * Examples and Templates
      * [Example Pipeline](Example-Pipeline.md)
- * [FAQ](FAQ.md)
+ * [FAQ & Troubleshooting](FAQ.md)
 
 
 
