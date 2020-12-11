@@ -43,12 +43,6 @@ Here is an example referencing a text file:
 
 ``r readLines("photoCredit.txt")``
 
-### html image syntax
-
-When rendering the output to html, you can use standard html to insert images as part of your document.
-
-<img src="sheep_mocha.jpg" alt="a pre-existing plot or image">
-
 \newpage
 ## Rmarkdown and BioLockJ
 
