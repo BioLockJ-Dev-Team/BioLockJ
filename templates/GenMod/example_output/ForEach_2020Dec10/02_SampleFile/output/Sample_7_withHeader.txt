@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_7	grape	4	red

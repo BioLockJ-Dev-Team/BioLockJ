@@ -1,0 +1,64 @@
+Pipeline Name:    GenModDemo_2020Dec10
+Pipeline Config:  /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+Pipeline Metadata:  N/A
+BioLockJ version:  v1.3.15-dev
+Runtime Env:         Localhost
+Pipeline Input:      null
+# Modules:        5
+# Attempts:       1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  00_Hello_World
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  2
+Mean Output File Size:  24 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script/MAIN_00_Hello_World.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  01_Hello_R
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  24 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script/MAIN_01_Hello_R.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  02_Hello_Python
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  328 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script/MAIN_02_Hello_Python.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  03_Use_Param
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  361 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script/MAIN_03_Use_Param.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  04_Use_Resource
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  192 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script/MAIN_04_Use_Resource.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Pipeline Status:     SUCCESS
+Pipeline Runtime:    00 hours : 00 minutes : 07 seconds
+Master Config:       /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/MASTER_GenModDemo_2020Dec10.properties
+Final Metadata:      N/A

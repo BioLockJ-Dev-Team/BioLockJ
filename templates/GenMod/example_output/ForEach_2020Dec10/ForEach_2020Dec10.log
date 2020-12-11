@@ -1,0 +1,712 @@
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO Log: Launching BioLockJ v1.3.15-dev ~ Distributed by UNCC Fodor Lab @2019
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO Log: This code is free software; you can redistribute and/or modify it
+2020-12-10 23:55:55 INFO Log: under the terms of the GNU General Public License as published by
+2020-12-10 23:55:55 INFO Log: the Free Software Foundation; either version 2 of the License, or
+2020-12-10 23:55:55 INFO Log: any later version, provided proper credit is given to the authors.
+2020-12-10 23:55:55 INFO Log: This program is distributed in the hope that it will be useful,
+2020-12-10 23:55:55 INFO Log: but WITHOUT ANY WARRANTY; without even the implied warranty of
+2020-12-10 23:55:55 INFO Log: MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+2020-12-10 23:55:55 INFO Log: GNU General Public License for more details at http://www.gnu.org
+2020-12-10 23:55:55 INFO Log: 
+========================================================================
+2020-12-10 23:55:55 INFO Log: Application runtime args:
+2020-12-10 23:55:55 INFO Log:  ---> arg[0] = -projectDir
+2020-12-10 23:55:55 INFO Log:  ---> arg[1] = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines
+2020-12-10 23:55:55 INFO Log:  ---> arg[2] = -config
+2020-12-10 23:55:55 INFO Log:  ---> arg[3] = /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO Log: Assign NEW pipeline root directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10
+2020-12-10 23:55:55 INFO Log: Initialize Config: /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+2020-12-10 23:55:55 INFO Log: Import All Config Properties for --> Top Level Pipeline Properties File: /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+2020-12-10 23:55:55 INFO Log: --------> Bash Var Converted "${BLJ}/resources/config/default/standard.properties" ======> "/Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties"
+2020-12-10 23:55:55 INFO Log: LOAD CONFIG [ #0 ]: ---> /Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties
+2020-12-10 23:55:55 INFO Log: LOAD CONFIG [ #1 ]: ---> /Users/ieclabau/git/BioLockJ/templates/GenMod/dockerImages.properties
+2020-12-10 23:55:55 INFO Log: LOAD CONFIG [ #2 ]: ---> /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+2020-12-10 23:55:55 INFO Log: Configured BioModule: biolockj.module.diy.ForEachSample
+2020-12-10 23:55:55 INFO Log: Configured BioModule: biolockj.module.diy.ForEachFile AS SampleFile
+2020-12-10 23:55:55 INFO Log: Configured BioModule: biolockj.module.diy.ForEachLevel
+2020-12-10 23:55:55 INFO Log: Configured BioModule: biolockj.module.diy.ForEachFile AS LevelFile
+2020-12-10 23:55:55 INFO Log: Configured BioModule: biolockj.module.diy.ForEachLoop
+2020-12-10 23:55:55 INFO Log: Configured BioModule: biolockj.module.diy.GenMod AS GrabLogs
+2020-12-10 23:55:55 INFO Log: Set config property [ internal.pipelineDir ] = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10
+2020-12-10 23:55:55 INFO Log: Set config property [ internal.pipelineName ] = ForEach
+2020-12-10 23:55:55 INFO Log: Set config property [ internal.pipelineInstanceId ] = ForEach_2020Dec10
+2020-12-10 23:55:55 INFO Log: Total # initial properties: 97
+2020-12-10 23:55:55 INFO Log: Set LOG_FILE = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/ForEach_2020Dec10.log
+2020-12-10 23:55:55 INFO Log: Set pipeline.logLevel = INFO
+2020-12-10 23:55:55 INFO Log: Set LOG_APPEND = true
+2020-12-10 23:55:55 INFO Log: Set LOG_FORMAT = %m%n
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO Log: Pipeline Project Config File: /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+2020-12-10 23:55:55 INFO Log: Pipeline Default Config Files: [/Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties, /Users/ieclabau/git/BioLockJ/templates/GenMod/dockerImages.properties]
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO Log: ===> List All Configured Properties:
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO Log: ForEachLevel.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: ForEachLevel.scriptPath = ./script/echoArgs.sh
+2020-12-10 23:55:55 INFO Log: ForEachLoop.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: ForEachLoop.loopBy = Mars has two moons, Phobos, Deimos
+2020-12-10 23:55:55 INFO Log: ForEachLoop.scriptPath = ./script/echoArgs.sh
+2020-12-10 23:55:55 INFO Log: ForEachSample.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: ForEachSample.scriptPath = ./script/showSampleMeta.sh
+2020-12-10 23:55:55 INFO Log: GrabLogs.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: GrabLogs.scriptPath = ./script/grabLogs.sh
+2020-12-10 23:55:55 INFO Log: Hello_Python.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: Hello_R.imageName = r_module
+2020-12-10 23:55:55 INFO Log: Hello_World.imageName = blj_basic
+2020-12-10 23:55:55 INFO Log: LevelFile.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: LevelFile.scriptPath = ./script/countChars.sh
+2020-12-10 23:55:55 INFO Log: SampleFile.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: SampleFile.scriptPath = ./script/addMetaHeader.sh
+2020-12-10 23:55:55 INFO Log: Use_Param.imageName = biolockj_controller
+2020-12-10 23:55:55 INFO Log: Use_Resource.imageName = blj_basic
+2020-12-10 23:55:55 INFO Log: cluster.returnsBatchIds = Y
+2020-12-10 23:55:55 INFO Log: demultiplexer.barcodeCutoff = 0.05
+2020-12-10 23:55:55 INFO Log: docker.mountSock = N
+2020-12-10 23:55:55 INFO Log: input.allowDuplicateNames = N
+2020-12-10 23:55:55 INFO Log: input.requireCompletePairs = Y
+2020-12-10 23:55:55 INFO Log: input.suffixFw = _R1
+2020-12-10 23:55:55 INFO Log: input.suffixRv = _R2
+2020-12-10 23:55:55 INFO Log: internal.configModules = biolockj.module.diy.ForEachSample, biolockj.module.diy.ForEachFile AS SampleFile, biolockj.module.diy.ForEachLevel, biolockj.module.diy.ForEachFile AS LevelFile, biolockj.module.diy.ForEachLoop, biolockj.module.diy.GenMod AS GrabLogs
+2020-12-10 23:55:55 INFO Log: internal.defaultConfig = /Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties, /Users/ieclabau/git/BioLockJ/templates/GenMod/dockerImages.properties
+2020-12-10 23:55:55 INFO Log: internal.pipelineDir = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10
+2020-12-10 23:55:55 INFO Log: internal.pipelineInstanceId = ForEach_2020Dec10
+2020-12-10 23:55:55 INFO Log: internal.pipelineName = ForEach
+2020-12-10 23:55:55 INFO Log: kraken.krakenParams = --only-classified-output, --preload
+2020-12-10 23:55:55 INFO Log: mail.encryptedPassword = 7GYvu1m+Yv1Gk7Cd9BLaznJ/jq33g0q1
+2020-12-10 23:55:55 INFO Log: mail.from = biolockj@gmail.com
+2020-12-10 23:55:55 INFO Log: mail.smtp.auth = Y
+2020-12-10 23:55:55 INFO Log: mail.smtp.host = smtp.gmail.com
+2020-12-10 23:55:55 INFO Log: mail.smtp.port = 587
+2020-12-10 23:55:55 INFO Log: mail.smtp.starttls.enable = Y
+2020-12-10 23:55:55 INFO Log: mail.to = 
+2020-12-10 23:55:55 INFO Log: metadata.barcodeColumn = BarcodeSequence
+2020-12-10 23:55:55 INFO Log: metadata.columnDelim = \t
+2020-12-10 23:55:55 INFO Log: metadata.filePath = ./metadata.txt
+2020-12-10 23:55:55 INFO Log: metadata.nullValue = NA
+2020-12-10 23:55:55 INFO Log: metadata.required = N
+2020-12-10 23:55:55 INFO Log: multiplexer.gzip = Y
+2020-12-10 23:55:55 INFO Log: pipeline.defaultDemultiplexer = biolockj.module.implicit.Demultiplexer
+2020-12-10 23:55:55 INFO Log: pipeline.defaultFastaConverter = biolockj.module.seq.AwkFastaConverter
+2020-12-10 23:55:55 INFO Log: pipeline.defaultProps = ./dockerImages.properties
+2020-12-10 23:55:55 INFO Log: pipeline.defaultSeqMerger = biolockj.module.seq.PearMergeReads
+2020-12-10 23:55:55 INFO Log: pipeline.defaultStatsModule = biolockj.module.report.r.R_CalculateStats
+2020-12-10 23:55:55 INFO Log: pipeline.detachJavaModules = Y
+2020-12-10 23:55:55 INFO Log: pipeline.downloadDir = $HOME/projects/downloads
+2020-12-10 23:55:55 INFO Log: pipeline.env = local
+2020-12-10 23:55:55 INFO Log: pipeline.envVars = BLJ
+2020-12-10 23:55:55 INFO Log: pipeline.inputTypes = none
+2020-12-10 23:55:55 INFO Log: pipeline.logLevel = INFO
+2020-12-10 23:55:55 INFO Log: pipeline.permissions = 770
+2020-12-10 23:55:55 INFO Log: pipeline.useEnvVars = Y
+2020-12-10 23:55:55 INFO Log: qiime.alphaMetrics = shannon
+2020-12-10 23:55:55 INFO Log: qiime.plotAlphaMetrics = Y
+2020-12-10 23:55:55 INFO Log: qiime.removeChimeras = Y
+2020-12-10 23:55:55 INFO Log: r.colorBase = black
+2020-12-10 23:55:55 INFO Log: r.colorHighlight = red
+2020-12-10 23:55:55 INFO Log: r.colorPoint = black
+2020-12-10 23:55:55 INFO Log: r.debug = Y
+2020-12-10 23:55:55 INFO Log: r.pValFormat = %1.2g
+2020-12-10 23:55:55 INFO Log: r.pch = 21
+2020-12-10 23:55:55 INFO Log: r.pvalCutoff = 0.05
+2020-12-10 23:55:55 INFO Log: r.rareOtuThreshold = 1
+2020-12-10 23:55:55 INFO Log: r.timeout = 0
+2020-12-10 23:55:55 INFO Log: r_CalculateStats.pAdjustMethod = BH
+2020-12-10 23:55:55 INFO Log: r_CalculateStats.pAdjustScope = LOCAL
+2020-12-10 23:55:55 INFO Log: r_PlotEffectSize.disableFoldChange = Y
+2020-12-10 23:55:55 INFO Log: r_PlotEffectSize.excludePvalAbove = 1
+2020-12-10 23:55:55 INFO Log: r_PlotEffectSize.maxNumTaxa = 40
+2020-12-10 23:55:55 INFO Log: r_PlotMds.distance = bray
+2020-12-10 23:55:55 INFO Log: r_PlotMds.numAxis = 3
+2020-12-10 23:55:55 INFO Log: rarefyOtuCounts.iterations = 10
+2020-12-10 23:55:55 INFO Log: rarefyOtuCounts.lowAbundantCutoff = 0.01
+2020-12-10 23:55:55 INFO Log: rarefyOtuCounts.quantile = 0.5
+2020-12-10 23:55:55 INFO Log: rdp.minThresholdScore = 80
+2020-12-10 23:55:55 INFO Log: rdp.params = -f fixrank
+2020-12-10 23:55:55 INFO Log: report.logBase = 10
+2020-12-10 23:55:55 INFO Log: report.minCount = 2
+2020-12-10 23:55:55 INFO Log: report.numHits = Y
+2020-12-10 23:55:55 INFO Log: report.numReads = Y
+2020-12-10 23:55:55 INFO Log: report.scarceCountCutoff = 0.25
+2020-12-10 23:55:55 INFO Log: report.scarceSampleCutoff = 0.25
+2020-12-10 23:55:55 INFO Log: report.taxonomyLevels = class, order, family, genus
+2020-12-10 23:55:55 INFO Log: report.unclassifiedTaxa = Y
+2020-12-10 23:55:55 INFO Log: script.defaultHeader = #!/bin/bash
+2020-12-10 23:55:55 INFO Log: script.fileRefreshDelay = 1
+2020-12-10 23:55:55 INFO Log: script.numThreads = 8
+2020-12-10 23:55:55 INFO Log: script.numWorkers = 1
+2020-12-10 23:55:55 INFO Log: script.permissions = 770
+2020-12-10 23:55:55 INFO Log: seqFileValidator.requireEqualNumPairs = Y
+2020-12-10 23:55:55 INFO Log: trimPrimers.requirePrimer = Y
+2020-12-10 23:55:55 INFO Log: validation.stopPipeline = N
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO Log: Java Logger initialized
+2020-12-10 23:55:55 INFO Log: ========================================================================
+2020-12-10 23:55:55 INFO MetaUtil: Initialize metadata property [ metadata.nullValue ] = NA
+2020-12-10 23:55:55 INFO Config: Set config property [ metadata.commentChar ] = 
+2020-12-10 23:55:55 INFO Config: Overwriting [metadata.filePath=./metadata.txt] to set config property [metadata.filePath=/Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt]
+2020-12-10 23:55:55 INFO Config: Set config property [ input.ignoreFiles ] = metadata.txt
+2020-12-10 23:55:55 INFO MetaUtil: Update metadata cache: /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt
+2020-12-10 23:55:55 INFO MetaUtil: ************************************************************************
+2020-12-10 23:55:55 INFO MetaUtil: ===> New Metadata file: /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt
+2020-12-10 23:55:55 INFO MetaUtil: ===> Sample IDs: [Sample_1, Sample_10, Sample_11, Sample_12, Sample_2, Sample_3, Sample_4, Sample_5, Sample_6, Sample_7, Sample_8, Sample_9]
+2020-12-10 23:55:55 INFO MetaUtil: ===> Metadata fields: [fruit, count, color]
+2020-12-10 23:55:55 INFO MetaUtil: ===> 1st Record: [Sample_1]: [orange, 0, red]
+2020-12-10 23:55:55 INFO MetaUtil: ************************************************************************
+2020-12-10 23:55:55 INFO MetaUtil: Metadata initialized
+2020-12-10 23:55:55 INFO BioLockJ: Copy file: /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt to pipeline root: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachSample
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachFile AS SampleFile
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachLevel
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachFile AS LevelFile
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachLoop
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS GrabLogs
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachSample
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachFile AS SampleFile
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachLevel
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachFile AS LevelFile
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachLoop
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS GrabLogs
+2020-12-10 23:55:55 WARN ForEachSample: Unable to find ID for: biolockj.module.diy.ForEachSample
+2020-12-10 23:55:55 WARN ForEachFile: Unable to find ID for: biolockj.module.diy.ForEachFile
+2020-12-10 23:55:55 WARN ForEachLevel: Unable to find ID for: biolockj.module.diy.ForEachLevel
+2020-12-10 23:55:55 WARN ForEachFile: Unable to find ID for: biolockj.module.diy.ForEachFile
+2020-12-10 23:55:55 WARN ForEachLoop: Unable to find ID for: biolockj.module.diy.ForEachLoop
+2020-12-10 23:55:55 WARN GenMod: Unable to find ID for: biolockj.module.diy.GenMod
+2020-12-10 23:55:55 WARN BioLockJUtil: Typically, a value is required for [input.dirPaths]; presumably the input data will be supplied by modules: biolockj.module.diy.ForEachSample, biolockj.module.diy.ForEachFile, biolockj.module.diy.ForEachLevel, biolockj.module.diy.ForEachFile, biolockj.module.diy.ForEachLoop, biolockj.module.diy.GenMod
+2020-12-10 23:55:55 INFO BioLockJUtil: # Initial input files found: 0
+2020-12-10 23:55:55 INFO BioLockJUtil: # Initial input files after removing empty/ignored files: 0
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachSample
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachFile AS SampleFile
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachLevel
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachFile AS LevelFile
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.ForEachLoop
+2020-12-10 23:55:55 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS GrabLogs
+2020-12-10 23:55:55 INFO BioLockJUtil: The module [ForEachSample] brings filetype(s): 
+2020-12-10 23:55:55 INFO BioLockJUtil: The module [ForEachFile] brings filetype(s): 
+2020-12-10 23:55:55 INFO BioLockJUtil: The module [ForEachLevel] brings filetype(s): 
+2020-12-10 23:55:55 INFO BioLockJUtil: The module [ForEachFile] brings filetype(s): 
+2020-12-10 23:55:55 INFO BioLockJUtil: The module [ForEachLoop] brings filetype(s): 
+2020-12-10 23:55:55 INFO BioLockJUtil: The module [GenMod] brings filetype(s): 
+2020-12-10 23:55:55 WARN BioLockJUtil: The property [pipeline.inputTypes] overrides automatic file type detection.
+2020-12-10 23:55:55 WARN BioLockJUtil: Without property [pipeline.inputTypes], the file types would be to: 
+2020-12-10 23:55:55 WARN BioLockJUtil: Instead, the value of [internal.pipelineInputTypes] will be set to: none
+2020-12-10 23:55:55 INFO Config: Set config property [ internal.pipelineInputTypes ] = none
+2020-12-10 23:55:55 INFO Config: Set config property [ internal.seqType ] = NA
+2020-12-10 23:55:55 INFO Pipeline: Initialize pipeline
+2020-12-10 23:55:55 INFO BioModuleFactory: Pipeline has metadata file. Set 1st module: biolockj.module.implicit.ImportMetadata
+2020-12-10 23:55:55 INFO ImportMetadata: Construct module [ 00 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata
+2020-12-10 23:55:55 INFO ForEachSample: Construct module [ 01 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample
+2020-12-10 23:55:55 INFO ForEachFile: Construct module [ 02 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile
+2020-12-10 23:55:55 INFO ForEachLevel: Construct module [ 03 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel
+2020-12-10 23:55:55 INFO ForEachFile: Construct module [ 04 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile
+2020-12-10 23:55:55 INFO ForEachLoop: Construct module [ 05 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop
+2020-12-10 23:55:55 INFO GenMod: Construct module [ 06 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs
+2020-12-10 23:55:55 INFO BioLockJUtil: Currently running BioLockJ version: v1.3.15-dev
+2020-12-10 23:55:55 INFO Pipeline: Check dependencies for: biolockj.module.implicit.ImportMetadata
+2020-12-10 23:55:55 INFO ValidationUtil: The pipeline will continue even if module outputs from [0_ImportMetadata] do no match the expectation file.
+2020-12-10 23:55:55 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:55:55 INFO Pipeline: Check dependencies for: biolockj.module.diy.ForEachSample
+2020-12-10 23:55:55 INFO Config: Overwriting [ForEachSample.scriptPath=./script/showSampleMeta.sh] to set config property [ForEachSample.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/showSampleMeta.sh]
+2020-12-10 23:55:55 INFO ValidationUtil: The pipeline will continue even if module outputs from [1_ForEachSample] do no match the expectation file.
+2020-12-10 23:55:55 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:55:55 INFO Pipeline: Check dependencies for: biolockj.module.diy.ForEachFile
+2020-12-10 23:55:55 INFO Config: Overwriting [SampleFile.scriptPath=./script/addMetaHeader.sh] to set config property [SampleFile.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/addMetaHeader.sh]
+2020-12-10 23:55:55 INFO ValidationUtil: The pipeline will continue even if module outputs from [2_ForEachFile] do no match the expectation file.
+2020-12-10 23:55:55 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:55:55 INFO Pipeline: Check dependencies for: biolockj.module.diy.ForEachLevel
+2020-12-10 23:55:55 INFO Config: Overwriting [ForEachLevel.scriptPath=./script/echoArgs.sh] to set config property [ForEachLevel.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/echoArgs.sh]
+2020-12-10 23:55:55 INFO ValidationUtil: The pipeline will continue even if module outputs from [3_ForEachLevel] do no match the expectation file.
+2020-12-10 23:55:55 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:55:55 INFO Pipeline: Check dependencies for: biolockj.module.diy.ForEachFile
+2020-12-10 23:55:55 INFO Config: Overwriting [LevelFile.scriptPath=./script/countChars.sh] to set config property [LevelFile.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/countChars.sh]
+2020-12-10 23:55:55 INFO ValidationUtil: The pipeline will continue even if module outputs from [4_ForEachFile] do no match the expectation file.
+2020-12-10 23:55:55 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:55:55 INFO Pipeline: Check dependencies for: biolockj.module.diy.ForEachLoop
+2020-12-10 23:55:55 INFO Config: Overwriting [ForEachLoop.scriptPath=./script/echoArgs.sh] to set config property [ForEachLoop.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/echoArgs.sh]
+2020-12-10 23:55:55 INFO ValidationUtil: The pipeline will continue even if module outputs from [5_ForEachLoop] do no match the expectation file.
+2020-12-10 23:55:55 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:55:55 INFO Pipeline: Check dependencies for: biolockj.module.diy.GenMod
+2020-12-10 23:55:55 INFO Config: Overwriting [GrabLogs.scriptPath=./script/grabLogs.sh] to set config property [GrabLogs.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/grabLogs.sh]
+2020-12-10 23:55:55 INFO ValidationUtil: The pipeline will continue even if module outputs from [6_GenMod] do no match the expectation file.
+2020-12-10 23:55:55 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:55:55 INFO Config: Path to configFile: /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+2020-12-10 23:55:55 INFO ModuleUtil: ========================================================================
+2020-12-10 23:55:55 INFO ModuleUtil: STARTING [ 00_ImportMetadata ] 
+2020-12-10 23:55:55 INFO ModuleUtil: ========================================================================
+2020-12-10 23:55:55 INFO ImportMetadata: Importing metadata (column delim=\t): /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt
+2020-12-10 23:55:55 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/output
+2020-12-10 23:55:56 INFO ImportMetadata: Clean up: biolockj.module.implicit.ImportMetadata
+2020-12-10 23:55:56 INFO MetaUtil: Update metadata cache: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/output/metadata.txt
+2020-12-10 23:55:56 INFO MetaUtil: ************************************************************************
+2020-12-10 23:55:56 INFO MetaUtil: ===> New Metadata file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/output/metadata.txt
+2020-12-10 23:55:56 INFO MetaUtil: ===> Sample IDs: [Sample_1, Sample_10, Sample_11, Sample_12, Sample_2, Sample_3, Sample_4, Sample_5, Sample_6, Sample_7, Sample_8, Sample_9]
+2020-12-10 23:55:56 INFO MetaUtil: ===> Metadata fields: [fruit, count, color]
+2020-12-10 23:55:56 INFO MetaUtil: ===> 1st Record: [Sample_1]: [orange, 0, red]
+2020-12-10 23:55:56 INFO MetaUtil: ************************************************************************
+2020-12-10 23:55:56 INFO ValidationUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/validation
+2020-12-10 23:55:56 INFO Processor: [ Query Host ]: STARTING CMD --> hostname 
+2020-12-10 23:55:56 INFO Processor: [ Query Host ]: CCI0PHJGH5AWS
+2020-12-10 23:55:56 INFO Processor: [ Query Host ]: COMPLETE
+2020-12-10 23:55:56 INFO SummaryUtil: Summary updated
+2020-12-10 23:55:56 INFO SummaryUtil: Update BioModule summary [ 00_ImportMetadata ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/summary.txt
+2020-12-10 23:55:56 INFO SummaryUtil: Building module summary for: 00_ImportMetadata
+2020-12-10 23:55:56 INFO SummaryUtil: Summary updated
+2020-12-10 23:55:56 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/log
+2020-12-10 23:55:56 INFO ModuleUtil: ========================================================================
+2020-12-10 23:55:56 INFO ModuleUtil: FINISHED [ 00_ImportMetadata ] 
+2020-12-10 23:55:56 INFO ModuleUtil: ========================================================================
+2020-12-10 23:55:56 INFO ModuleUtil: ========================================================================
+2020-12-10 23:55:56 INFO ModuleUtil: STARTING [ 01_ForEachSample ] 
+2020-12-10 23:55:56 INFO ModuleUtil: ========================================================================
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources
+2020-12-10 23:55:56 INFO GenMod: Core command: []
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_2 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_2 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_3 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_2 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_3 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_4 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_2 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_3 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_4 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_5 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_2 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_3 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_4 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_5 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_6 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_2 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_3 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_4 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_5 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_6 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_7 ]]
+2020-12-10 23:55:56 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_1 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_10 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_11 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_12 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_2 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_3 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_4 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_5 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_6 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_7 ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/resources/showSampleMeta.sh Sample_8 ]]
+2020-12-10 23:55:56 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/log
+2020-12-10 23:55:56 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/temp
+2020-12-10 23:55:56 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:56 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO ForEachSample: # Input Files: 0
+2020-12-10 23:55:57 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script/01.0_ForEachSample.sh
+2020-12-10 23:55:57 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:55:57 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.ForEachSample
+2020-12-10 23:55:57 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:55:57 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script/MAIN_01_ForEachSample.sh
+2020-12-10 23:55:57 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script 
+2020-12-10 23:55:57 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:55:57 INFO Processor: [ ForEachSample ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script/MAIN_01_ForEachSample.sh 
+2020-12-10 23:55:59 INFO Processor: [ ForEachSample ]: COMPLETE
+2020-12-10 23:55:59 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:55:59 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script
+2020-12-10 23:55:59 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:55:59 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:55:59 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:55:59 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:55:59 INFO Pipeline: ForEachSample Status (Total=1): Success=1; Failed=0; Running=0; Queued=0
+2020-12-10 23:56:00 INFO ForEachSample: Clean up: biolockj.module.diy.ForEachSample
+2020-12-10 23:56:00 INFO SummaryUtil: Update BioModule summary [ 01_ForEachSample ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/summary.txt
+2020-12-10 23:56:00 INFO SummaryUtil: Building module summary for: 01_ForEachSample
+2020-12-10 23:56:00 INFO SummaryUtil: Summary updated
+2020-12-10 23:56:00 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:00 INFO ModuleUtil: FINISHED [ 01_ForEachSample ] 
+2020-12-10 23:56:00 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:00 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:00 INFO ModuleUtil: STARTING [ 02_SampleFile ] 
+2020-12-10 23:56:00 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:00 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt
+2020-12-10 23:56:00 INFO SeqUtil: header: Sample_1 orange 0 red
+2020-12-10 23:56:00 ERROR SeqUtil: Error occurred examining file to determine if it is a sequence file or not
+java.lang.NullPointerException
+	at biolockj.util.SeqUtil.isSeqFile(SeqUtil.java:456)
+	at biolockj.module.BioModuleImpl.cacheInputFiles(BioModuleImpl.java:295)
+	at biolockj.module.BioModuleImpl.getInputFiles(BioModuleImpl.java:155)
+	at biolockj.module.ScriptModuleImpl.executeTask(ScriptModuleImpl.java:88)
+	at biolockj.Pipeline.executeModule(Pipeline.java:46)
+	at biolockj.Pipeline.executeModules(Pipeline.java:196)
+	at biolockj.Pipeline.runPipeline(Pipeline.java:140)
+	at biolockj.BioLockJ.runPipeline(BioLockJ.java:344)
+	at biolockj.BioLockJ.main(BioLockJ.java:102)
+2020-12-10 23:56:00 INFO ForEachFile: # Input Files: 12
+2020-12-10 23:56:00 INFO ForEachFile: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [1]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [2]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [3]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [4]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [5]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_3.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [6]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_4.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [7]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_5.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [8]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_6.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [9]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_7.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [10]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_8.txt
+2020-12-10 23:56:00 INFO ForEachFile: Input File [11]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_9.txt
+2020-12-10 23:56:00 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources
+2020-12-10 23:56:00 INFO GenMod: Core command: []
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_3.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_3.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_4.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_3.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_4.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_5.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_3.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_4.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_5.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_6.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_3.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_4.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_5.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_6.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_7.txt ]]
+2020-12-10 23:56:00 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_1.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_10.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_11.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_12.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_2.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_3.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_4.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_5.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_6.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_7.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/resources/addMetaHeader.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/output/Sample_8.txt ]]
+2020-12-10 23:56:00 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script
+2020-12-10 23:56:00 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/log
+2020-12-10 23:56:00 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/temp
+2020-12-10 23:56:00 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output
+2020-12-10 23:56:00 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script/02.0_ForEachFile.sh
+2020-12-10 23:56:00 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:00 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.ForEachFile
+2020-12-10 23:56:00 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:00 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script/MAIN_02_SampleFile.sh
+2020-12-10 23:56:00 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script 
+2020-12-10 23:56:00 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:56:00 INFO Processor: [ ForEachFile ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script/MAIN_02_SampleFile.sh 
+2020-12-10 23:56:01 INFO Processor: [ ForEachFile ]: COMPLETE
+2020-12-10 23:56:01 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:56:01 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script
+2020-12-10 23:56:01 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:56:01 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:56:01 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:56:01 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:56:01 INFO Pipeline: ForEachFile Status (Total=1): Success=1; Failed=0; Running=0; Queued=0
+2020-12-10 23:56:02 INFO ForEachFile: Clean up: biolockj.module.diy.ForEachFile
+2020-12-10 23:56:02 INFO SummaryUtil: Update BioModule summary [ 02_SampleFile ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/summary.txt
+2020-12-10 23:56:02 INFO SummaryUtil: Building module summary for: 02_SampleFile
+2020-12-10 23:56:02 INFO SummaryUtil: Summary updated
+2020-12-10 23:56:02 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:02 INFO ModuleUtil: FINISHED [ 02_SampleFile ] 
+2020-12-10 23:56:02 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:02 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:02 INFO ModuleUtil: STARTING [ 03_ForEachLevel ] 
+2020-12-10 23:56:02 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:02 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_10_withHeader.txt
+2020-12-10 23:56:02 INFO SeqUtil: header: Sample	fruit	count	color
+2020-12-10 23:56:02 INFO SeqUtil: seq: Sample_10	blueberry	19	blue
+2020-12-10 23:56:02 INFO SeqUtil: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_10_withHeader.txt is not a sequence file! 
+Line 1: [ Sample	fruit	count	color ]
+Line 2= [ Sample_10	blueberry	19	blue ]
+2020-12-10 23:56:02 INFO ForEachLevel: # Input Files: 12
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_10_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [1]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_11_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [2]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_12_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [3]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_1_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [4]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_2_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [5]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_3_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [6]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_4_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [7]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_5_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [8]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_6_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [9]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_7_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [10]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_8_withHeader.txt
+2020-12-10 23:56:02 INFO ForEachLevel: Input File [11]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/output/Sample_9_withHeader.txt
+2020-12-10 23:56:02 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/resources
+2020-12-10 23:56:02 INFO GenMod: Core command: []
+2020-12-10 23:56:02 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/resources/echoArgs.sh class ]]
+2020-12-10 23:56:02 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/resources/echoArgs.sh class ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/resources/echoArgs.sh order ]]
+2020-12-10 23:56:02 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/resources/echoArgs.sh class ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/resources/echoArgs.sh order ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/resources/echoArgs.sh family ]]
+2020-12-10 23:56:02 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script
+2020-12-10 23:56:02 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/log
+2020-12-10 23:56:02 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/temp
+2020-12-10 23:56:02 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output
+2020-12-10 23:56:02 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script/03.0_ForEachLevel.sh
+2020-12-10 23:56:02 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:02 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.ForEachLevel
+2020-12-10 23:56:02 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:02 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script/MAIN_03_ForEachLevel.sh
+2020-12-10 23:56:02 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script 
+2020-12-10 23:56:02 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:56:02 INFO Processor: [ ForEachLevel ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script/MAIN_03_ForEachLevel.sh 
+2020-12-10 23:56:02 INFO Processor: [ ForEachLevel ]: COMPLETE
+2020-12-10 23:56:02 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:56:02 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script
+2020-12-10 23:56:02 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:56:02 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:56:02 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:56:02 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:56:02 INFO Pipeline: ForEachLevel Status (Total=1): Success=1; Failed=0; Running=0; Queued=0
+2020-12-10 23:56:03 INFO ForEachLevel: Clean up: biolockj.module.diy.ForEachLevel
+2020-12-10 23:56:03 INFO SummaryUtil: Update BioModule summary [ 03_ForEachLevel ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/summary.txt
+2020-12-10 23:56:03 INFO SummaryUtil: Building module summary for: 03_ForEachLevel
+2020-12-10 23:56:03 INFO SummaryUtil: Summary updated
+2020-12-10 23:56:03 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:03 INFO ModuleUtil: FINISHED [ 03_ForEachLevel ] 
+2020-12-10 23:56:03 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:03 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:03 INFO ModuleUtil: STARTING [ 04_LevelFile ] 
+2020-12-10 23:56:03 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:03 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/class.txt
+2020-12-10 23:56:03 INFO SeqUtil: header: class
+2020-12-10 23:56:03 ERROR SeqUtil: Error occurred examining file to determine if it is a sequence file or not
+java.lang.NullPointerException
+	at biolockj.util.SeqUtil.isSeqFile(SeqUtil.java:456)
+	at biolockj.module.BioModuleImpl.cacheInputFiles(BioModuleImpl.java:295)
+	at biolockj.module.BioModuleImpl.getInputFiles(BioModuleImpl.java:155)
+	at biolockj.module.ScriptModuleImpl.executeTask(ScriptModuleImpl.java:88)
+	at biolockj.Pipeline.executeModule(Pipeline.java:46)
+	at biolockj.Pipeline.executeModules(Pipeline.java:196)
+	at biolockj.Pipeline.runPipeline(Pipeline.java:140)
+	at biolockj.BioLockJ.runPipeline(BioLockJ.java:344)
+	at biolockj.BioLockJ.main(BioLockJ.java:102)
+2020-12-10 23:56:03 INFO ForEachFile: # Input Files: 4
+2020-12-10 23:56:03 INFO ForEachFile: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/class.txt
+2020-12-10 23:56:03 INFO ForEachFile: Input File [1]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/family.txt
+2020-12-10 23:56:03 INFO ForEachFile: Input File [2]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/genus.txt
+2020-12-10 23:56:03 INFO ForEachFile: Input File [3]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/order.txt
+2020-12-10 23:56:03 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/resources
+2020-12-10 23:56:03 INFO GenMod: Core command: []
+2020-12-10 23:56:03 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/resources/countChars.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/class.txt ]]
+2020-12-10 23:56:03 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/resources/countChars.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/class.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/resources/countChars.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/family.txt ]]
+2020-12-10 23:56:03 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/resources/countChars.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/class.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/resources/countChars.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/family.txt ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/resources/countChars.sh /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/genus.txt ]]
+2020-12-10 23:56:03 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script
+2020-12-10 23:56:03 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/log
+2020-12-10 23:56:03 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/temp
+2020-12-10 23:56:03 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/output
+2020-12-10 23:56:03 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script/04.0_ForEachFile.sh
+2020-12-10 23:56:03 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:03 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.ForEachFile
+2020-12-10 23:56:03 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:03 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script/MAIN_04_LevelFile.sh
+2020-12-10 23:56:03 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script 
+2020-12-10 23:56:03 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:56:03 INFO Processor: [ ForEachFile ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script/MAIN_04_LevelFile.sh 
+2020-12-10 23:56:04 INFO Processor: [ ForEachFile ]: COMPLETE
+2020-12-10 23:56:04 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:56:04 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script
+2020-12-10 23:56:04 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:56:04 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:56:04 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:56:04 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:56:04 INFO Pipeline: ForEachFile Status (Total=1): Success=1; Failed=0; Running=0; Queued=0
+2020-12-10 23:56:05 INFO ForEachFile: Clean up: biolockj.module.diy.ForEachFile
+2020-12-10 23:56:05 INFO SummaryUtil: Update BioModule summary [ 04_LevelFile ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/summary.txt
+2020-12-10 23:56:05 INFO SummaryUtil: Building module summary for: 04_LevelFile
+2020-12-10 23:56:05 INFO SummaryUtil: Summary updated
+2020-12-10 23:56:05 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:05 INFO ModuleUtil: FINISHED [ 04_LevelFile ] 
+2020-12-10 23:56:05 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:05 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:05 INFO ModuleUtil: STARTING [ 05_ForEachLoop ] 
+2020-12-10 23:56:05 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:05 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/output/nChars-class.txt
+2020-12-10 23:56:05 INFO SeqUtil: header: 6 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/output/class.txt
+2020-12-10 23:56:05 ERROR SeqUtil: Error occurred examining file to determine if it is a sequence file or not
+java.lang.NullPointerException
+	at biolockj.util.SeqUtil.isSeqFile(SeqUtil.java:456)
+	at biolockj.module.BioModuleImpl.cacheInputFiles(BioModuleImpl.java:295)
+	at biolockj.module.BioModuleImpl.getInputFiles(BioModuleImpl.java:155)
+	at biolockj.module.ScriptModuleImpl.executeTask(ScriptModuleImpl.java:88)
+	at biolockj.Pipeline.executeModule(Pipeline.java:46)
+	at biolockj.Pipeline.executeModules(Pipeline.java:196)
+	at biolockj.Pipeline.runPipeline(Pipeline.java:140)
+	at biolockj.BioLockJ.runPipeline(BioLockJ.java:344)
+	at biolockj.BioLockJ.main(BioLockJ.java:102)
+2020-12-10 23:56:05 INFO ForEachLoop: # Input Files: 4
+2020-12-10 23:56:05 INFO ForEachLoop: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/output/nChars-class.txt
+2020-12-10 23:56:05 INFO ForEachLoop: Input File [1]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/output/nChars-family.txt
+2020-12-10 23:56:05 INFO ForEachLoop: Input File [2]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/output/nChars-genus.txt
+2020-12-10 23:56:05 INFO ForEachLoop: Input File [3]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/output/nChars-order.txt
+2020-12-10 23:56:05 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/resources
+2020-12-10 23:56:05 INFO GenMod: Core command: []
+2020-12-10 23:56:05 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/resources/echoArgs.sh Mars has two moons ]]
+2020-12-10 23:56:05 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/resources/echoArgs.sh Mars has two moons ], [/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/resources/echoArgs.sh Phobos ]]
+2020-12-10 23:56:05 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script
+2020-12-10 23:56:05 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/log
+2020-12-10 23:56:05 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/temp
+2020-12-10 23:56:05 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/output
+2020-12-10 23:56:05 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script/05.0_ForEachLoop.sh
+2020-12-10 23:56:05 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:05 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.ForEachLoop
+2020-12-10 23:56:05 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:05 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script/MAIN_05_ForEachLoop.sh
+2020-12-10 23:56:05 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script 
+2020-12-10 23:56:05 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:56:05 INFO Processor: [ ForEachLoop ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script/MAIN_05_ForEachLoop.sh 
+2020-12-10 23:56:05 INFO Processor: [ ForEachLoop ]: COMPLETE
+2020-12-10 23:56:05 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:56:05 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script
+2020-12-10 23:56:05 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:56:05 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:56:05 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:56:05 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:56:05 INFO Pipeline: ForEachLoop Status (Total=1): Success=1; Failed=0; Running=0; Queued=0
+2020-12-10 23:56:06 INFO ForEachLoop: Clean up: biolockj.module.diy.ForEachLoop
+2020-12-10 23:56:06 INFO SummaryUtil: Update BioModule summary [ 05_ForEachLoop ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/summary.txt
+2020-12-10 23:56:06 INFO SummaryUtil: Building module summary for: 05_ForEachLoop
+2020-12-10 23:56:06 INFO SummaryUtil: Summary updated
+2020-12-10 23:56:06 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:06 INFO ModuleUtil: FINISHED [ 05_ForEachLoop ] 
+2020-12-10 23:56:06 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:06 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:06 INFO ModuleUtil: STARTING [ 06_GrabLogs ] 
+2020-12-10 23:56:06 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:06 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/output/Deimos.txt
+2020-12-10 23:56:06 INFO SeqUtil: header: Deimos
+2020-12-10 23:56:06 ERROR SeqUtil: Error occurred examining file to determine if it is a sequence file or not
+java.lang.NullPointerException
+	at biolockj.util.SeqUtil.isSeqFile(SeqUtil.java:456)
+	at biolockj.module.BioModuleImpl.cacheInputFiles(BioModuleImpl.java:295)
+	at biolockj.module.BioModuleImpl.getInputFiles(BioModuleImpl.java:155)
+	at biolockj.module.ScriptModuleImpl.executeTask(ScriptModuleImpl.java:88)
+	at biolockj.Pipeline.executeModule(Pipeline.java:46)
+	at biolockj.Pipeline.executeModules(Pipeline.java:196)
+	at biolockj.Pipeline.runPipeline(Pipeline.java:140)
+	at biolockj.BioLockJ.runPipeline(BioLockJ.java:344)
+	at biolockj.BioLockJ.main(BioLockJ.java:102)
+2020-12-10 23:56:06 INFO GenMod: # Input Files: 3
+2020-12-10 23:56:06 INFO GenMod: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/output/Deimos.txt
+2020-12-10 23:56:06 INFO GenMod: Input File [1]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/output/Mars.txt
+2020-12-10 23:56:06 INFO GenMod: Input File [2]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/output/Phobos.txt
+2020-12-10 23:56:06 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/resources
+2020-12-10 23:56:06 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/resources/grabLogs.sh]]
+2020-12-10 23:56:06 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script
+2020-12-10 23:56:06 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/log
+2020-12-10 23:56:06 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/temp
+2020-12-10 23:56:06 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/output
+2020-12-10 23:56:06 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script/06.0_GenMod.sh
+2020-12-10 23:56:06 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:06 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.GenMod
+2020-12-10 23:56:06 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:56:06 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script/MAIN_06_GrabLogs.sh
+2020-12-10 23:56:06 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script 
+2020-12-10 23:56:06 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:56:06 INFO Processor: [ GenMod ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script/MAIN_06_GrabLogs.sh 
+2020-12-10 23:56:07 INFO Processor: [ GenMod ]: COMPLETE
+2020-12-10 23:56:07 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:56:07 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script
+2020-12-10 23:56:07 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:56:07 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:56:07 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:56:07 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:56:07 INFO Pipeline: GenMod Status (Total=1): Success=1; Failed=0; Running=0; Queued=0
+2020-12-10 23:56:08 INFO GenMod: Clean up: biolockj.module.diy.GenMod
+2020-12-10 23:56:08 INFO SummaryUtil: Update BioModule summary [ 06_GrabLogs ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/summary.txt
+2020-12-10 23:56:08 INFO SummaryUtil: Building module summary for: 06_GrabLogs
+2020-12-10 23:56:08 INFO SummaryUtil: Summary updated
+2020-12-10 23:56:08 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:08 INFO ModuleUtil: FINISHED [ 06_GrabLogs ] 
+2020-12-10 23:56:08 INFO ModuleUtil: ========================================================================
+2020-12-10 23:56:08 INFO DownloadUtil: DownloadUtil found there are no downloadable modules
+2020-12-10 23:56:08 INFO SummaryUtil: Summary updated
+2020-12-10 23:56:08 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10 
+2020-12-10 23:56:08 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:56:08 INFO MasterConfigUtil: Distilling the MASTER Config into the FINAL Config file to show only properties accessed during pipeline execution.
+2020-12-10 23:56:08 INFO MasterConfigUtil: To view the list of removed Config properties before MASTER config is sanitized in future runs, enable: pipeline.logLevel=Y
+2020-12-10 23:56:08 INFO MasterConfigUtil: To add DEBUG statements for only this utility class, add the property (this is a list property so multiple class names could be provided - in this example, wee add a single class): pipeline.limitDebugClasses=biolockj.util.MasterConfigUtil
+2020-12-10 23:56:08 INFO MasterConfigUtil: The original version of project Config contained: 97 properties
+2020-12-10 23:56:08 INFO MasterConfigUtil: The final version of MASTER Config contains: 28 properties
+2020-12-10 23:56:08 INFO BioLockJ: Log Pipeline Summary...
+Pipeline Name:    ForEach_2020Dec10
+Pipeline Config:  /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+Pipeline Metadata:  /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt
+BioLockJ version:  v1.3.15-dev
+Runtime Env:         Localhost
+Pipeline Input:      null
+# Modules:        7
+# Attempts:       1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  00_ImportMetadata
+Module class:  biolockj.module.implicit.ImportMetadata
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  307 bytes
+New metadata: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/output/metadata.txt
+Imported file:  /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt
+# Samples: 12
+# Fields:  3
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  01_ForEachSample
+Module class:  biolockj.module.diy.ForEachSample
+Runtime:  00 hours : 00 minutes : 04 seconds
+--------------------------------------------------
+# Files Output:  12
+Mean Output File Size:  23 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script/MAIN_01_ForEachSample.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  02_SampleFile
+Module class:  biolockj.module.diy.ForEachFile
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  12
+Mean Output File Size:  48 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script/MAIN_02_SampleFile.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  03_ForEachLevel
+Module class:  biolockj.module.diy.ForEachLevel
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  4
+Mean Output File Size:  6 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script/MAIN_03_ForEachLevel.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  04_LevelFile
+Module class:  biolockj.module.diy.ForEachFile
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  4
+Mean Output File Size:  122 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script/MAIN_04_LevelFile.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  05_ForEachLoop
+Module class:  biolockj.module.diy.ForEachLoop
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  3
+Mean Output File Size:  11 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script/MAIN_05_ForEachLoop.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  06_GrabLogs
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  6
+Mean Output File Size:  1 KB
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script/MAIN_06_GrabLogs.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Pipeline Status:     SUCCESS
+Pipeline Runtime:    00 hours : 00 minutes : 12 seconds
+Master Config:       /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/MASTER_ForEach_2020Dec10.properties
+Final Metadata:      /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/output/metadata.txt
+  _______      ___      ________      ___           ________      ________      ___ ____            __
+|\   __  \    |\  \    |\   __  \    |\  \         |\   __  \    |\   ____\    |\  \|\  \         |\  \
+\ \  \|\ /_   \ \  \   \ \  \|\  \   \ \  \        \ \  \|\  \   \ \  \___|    \ \  \/  /|_       \ \  \
+ \ \   __  \   \ \  \   \ \  \\\  \   \ \  \        \ \  \\\  \   \ \  \        \ \   ___  \    __ \ \  \
+  \ \  \|\  \   \ \  \   \ \  \\\  \   \ \  \____    \ \  \\\  \   \ \  \____    \ \  \\ \  \  |\  \\_\  \
+   \ \_______\   \ \__\   \ \_______\   \ \_______\   \ \_______\   \ \_______\   \ \__\\ \__\ \ \________\
+    \|_______|    \|__|    \|_______|    \|_______|    \|_______|    \|_______|    \|__| \|__|  \|________|
+
+                C          O          M          P          L          E          T          E          
+
+

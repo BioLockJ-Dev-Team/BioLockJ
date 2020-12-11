@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_10	blueberry	19	blue

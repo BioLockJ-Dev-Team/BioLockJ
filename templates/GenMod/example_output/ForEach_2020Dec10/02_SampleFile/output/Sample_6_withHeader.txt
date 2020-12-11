@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_6	cucumber	3	blue

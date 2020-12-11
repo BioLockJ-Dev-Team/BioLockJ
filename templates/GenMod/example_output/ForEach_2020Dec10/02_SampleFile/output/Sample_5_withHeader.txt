@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_5	cherry	100	red

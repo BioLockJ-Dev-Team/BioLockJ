@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_11	strawberry	1	red

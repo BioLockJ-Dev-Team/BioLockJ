@@ -1,0 +1,504 @@
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO Log: Launching BioLockJ v1.3.15-dev ~ Distributed by UNCC Fodor Lab @2019
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO Log: This code is free software; you can redistribute and/or modify it
+2020-12-10 23:54:12 INFO Log: under the terms of the GNU General Public License as published by
+2020-12-10 23:54:12 INFO Log: the Free Software Foundation; either version 2 of the License, or
+2020-12-10 23:54:12 INFO Log: any later version, provided proper credit is given to the authors.
+2020-12-10 23:54:12 INFO Log: This program is distributed in the hope that it will be useful,
+2020-12-10 23:54:12 INFO Log: but WITHOUT ANY WARRANTY; without even the implied warranty of
+2020-12-10 23:54:12 INFO Log: MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+2020-12-10 23:54:12 INFO Log: GNU General Public License for more details at http://www.gnu.org
+2020-12-10 23:54:12 INFO Log: 
+========================================================================
+2020-12-10 23:54:12 INFO Log: Application runtime args:
+2020-12-10 23:54:12 INFO Log:  ---> arg[0] = -projectDir
+2020-12-10 23:54:12 INFO Log:  ---> arg[1] = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines
+2020-12-10 23:54:12 INFO Log:  ---> arg[2] = -config
+2020-12-10 23:54:12 INFO Log:  ---> arg[3] = /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO Log: Assign NEW pipeline root directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10
+2020-12-10 23:54:12 INFO Log: Initialize Config: /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+2020-12-10 23:54:12 INFO Log: Import All Config Properties for --> Top Level Pipeline Properties File: /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+2020-12-10 23:54:12 INFO Log: --------> Bash Var Converted "${BLJ}/resources/config/default/standard.properties" ======> "/Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties"
+2020-12-10 23:54:12 INFO Log: LOAD CONFIG [ #0 ]: ---> /Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties
+2020-12-10 23:54:12 INFO Log: LOAD CONFIG [ #1 ]: ---> /Users/ieclabau/git/BioLockJ/templates/GenMod/dockerImages.properties
+2020-12-10 23:54:12 INFO Log: LOAD CONFIG [ #2 ]: ---> /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+2020-12-10 23:54:12 INFO Log: Configured BioModule: biolockj.module.diy.GenMod AS Hello_World
+2020-12-10 23:54:12 INFO Log: Configured BioModule: biolockj.module.diy.GenMod AS Hello_R
+2020-12-10 23:54:12 INFO Log: Configured BioModule: biolockj.module.diy.GenMod AS Hello_Python
+2020-12-10 23:54:12 INFO Log: Configured BioModule: biolockj.module.diy.GenMod AS Use_Param
+2020-12-10 23:54:12 INFO Log: Configured BioModule: biolockj.module.diy.GenMod AS Use_Resource
+2020-12-10 23:54:12 INFO Log: Set config property [ internal.pipelineDir ] = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10
+2020-12-10 23:54:12 INFO Log: Set config property [ internal.pipelineName ] = GenModDemo
+2020-12-10 23:54:12 INFO Log: Set config property [ internal.pipelineInstanceId ] = GenModDemo_2020Dec10
+2020-12-10 23:54:12 INFO Log: Total # initial properties: 97
+2020-12-10 23:54:12 INFO Log: Overwriting [report.taxonomyLevels=phylum,class,order,family,genus] to set config property [report.taxonomyLevels=phylum, class, order, family, genus]
+2020-12-10 23:54:12 INFO Log: Set LOG_FILE = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/GenModDemo_2020Dec10.log
+2020-12-10 23:54:12 INFO Log: Set pipeline.logLevel = INFO
+2020-12-10 23:54:12 INFO Log: Set LOG_APPEND = true
+2020-12-10 23:54:12 INFO Log: Set LOG_FORMAT = %m%n
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO Log: Pipeline Project Config File: /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+2020-12-10 23:54:12 INFO Log: Pipeline Default Config Files: [/Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties, /Users/ieclabau/git/BioLockJ/templates/GenMod/dockerImages.properties]
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO Log: ===> List All Configured Properties:
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO Log: ForEachLevel.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: ForEachLoop.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: ForEachSample.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: GrabLogs.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: Hello_Python.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: Hello_Python.scriptPath = ./script/pythonScript.py
+2020-12-10 23:54:12 INFO Log: Hello_R.imageName = r_module
+2020-12-10 23:54:12 INFO Log: Hello_R.launcher = Rscript
+2020-12-10 23:54:12 INFO Log: Hello_R.scriptPath = ./script/hello-world.R
+2020-12-10 23:54:12 INFO Log: Hello_World.imageName = blj_basic
+2020-12-10 23:54:12 INFO Log: Hello_World.scriptPath = ./script/hello-world.sh
+2020-12-10 23:54:12 INFO Log: LevelFile.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: SampleFile.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: Use_Param.imageName = biolockj_controller
+2020-12-10 23:54:12 INFO Log: Use_Param.param = one two three four five
+2020-12-10 23:54:12 INFO Log: Use_Param.scriptPath = ./script/pythonScript.py
+2020-12-10 23:54:12 INFO Log: Use_Resource.imageName = blj_basic
+2020-12-10 23:54:12 INFO Log: Use_Resource.resources = ./script/functions.sh, ./script/functions2.sh
+2020-12-10 23:54:12 INFO Log: Use_Resource.scriptPath = ./script/useResources.sh
+2020-12-10 23:54:12 INFO Log: cluster.returnsBatchIds = Y
+2020-12-10 23:54:12 INFO Log: demultiplexer.barcodeCutoff = 0.05
+2020-12-10 23:54:12 INFO Log: docker.mountSock = N
+2020-12-10 23:54:12 INFO Log: input.allowDuplicateNames = N
+2020-12-10 23:54:12 INFO Log: input.requireCompletePairs = Y
+2020-12-10 23:54:12 INFO Log: input.suffixFw = _R1
+2020-12-10 23:54:12 INFO Log: input.suffixRv = _R2
+2020-12-10 23:54:12 INFO Log: internal.configModules = biolockj.module.diy.GenMod AS Hello_World, biolockj.module.diy.GenMod AS Hello_R, biolockj.module.diy.GenMod AS Hello_Python, biolockj.module.diy.GenMod AS Use_Param, biolockj.module.diy.GenMod AS Use_Resource
+2020-12-10 23:54:12 INFO Log: internal.defaultConfig = /Users/ieclabau/git/BioLockJ/resources/config/default/standard.properties, /Users/ieclabau/git/BioLockJ/templates/GenMod/dockerImages.properties
+2020-12-10 23:54:12 INFO Log: internal.pipelineDir = /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10
+2020-12-10 23:54:12 INFO Log: internal.pipelineInstanceId = GenModDemo_2020Dec10
+2020-12-10 23:54:12 INFO Log: internal.pipelineName = GenModDemo
+2020-12-10 23:54:12 INFO Log: kraken.krakenParams = --only-classified-output, --preload
+2020-12-10 23:54:12 INFO Log: mail.encryptedPassword = 7GYvu1m+Yv1Gk7Cd9BLaznJ/jq33g0q1
+2020-12-10 23:54:12 INFO Log: mail.from = biolockj@gmail.com
+2020-12-10 23:54:12 INFO Log: mail.smtp.auth = Y
+2020-12-10 23:54:12 INFO Log: mail.smtp.host = smtp.gmail.com
+2020-12-10 23:54:12 INFO Log: mail.smtp.port = 587
+2020-12-10 23:54:12 INFO Log: mail.smtp.starttls.enable = Y
+2020-12-10 23:54:12 INFO Log: mail.to = 
+2020-12-10 23:54:12 INFO Log: metadata.barcodeColumn = BarcodeSequence
+2020-12-10 23:54:12 INFO Log: metadata.columnDelim = \t
+2020-12-10 23:54:12 INFO Log: metadata.nullValue = NA
+2020-12-10 23:54:12 INFO Log: metadata.required = N
+2020-12-10 23:54:12 INFO Log: multiplexer.gzip = Y
+2020-12-10 23:54:12 INFO Log: pipeline.defaultDemultiplexer = biolockj.module.implicit.Demultiplexer
+2020-12-10 23:54:12 INFO Log: pipeline.defaultFastaConverter = biolockj.module.seq.AwkFastaConverter
+2020-12-10 23:54:12 INFO Log: pipeline.defaultProps = ./dockerImages.properties
+2020-12-10 23:54:12 INFO Log: pipeline.defaultSeqMerger = biolockj.module.seq.PearMergeReads
+2020-12-10 23:54:12 INFO Log: pipeline.defaultStatsModule = biolockj.module.report.r.R_CalculateStats
+2020-12-10 23:54:12 INFO Log: pipeline.detachJavaModules = Y
+2020-12-10 23:54:12 INFO Log: pipeline.downloadDir = $HOME/projects/downloads
+2020-12-10 23:54:12 INFO Log: pipeline.env = local
+2020-12-10 23:54:12 INFO Log: pipeline.envVars = BLJ
+2020-12-10 23:54:12 INFO Log: pipeline.inputTypes = none
+2020-12-10 23:54:12 INFO Log: pipeline.logLevel = INFO
+2020-12-10 23:54:12 INFO Log: pipeline.permissions = 770
+2020-12-10 23:54:12 INFO Log: pipeline.useEnvVars = Y
+2020-12-10 23:54:12 INFO Log: qiime.alphaMetrics = shannon
+2020-12-10 23:54:12 INFO Log: qiime.plotAlphaMetrics = Y
+2020-12-10 23:54:12 INFO Log: qiime.removeChimeras = Y
+2020-12-10 23:54:12 INFO Log: r.colorBase = black
+2020-12-10 23:54:12 INFO Log: r.colorHighlight = red
+2020-12-10 23:54:12 INFO Log: r.colorPoint = black
+2020-12-10 23:54:12 INFO Log: r.debug = Y
+2020-12-10 23:54:12 INFO Log: r.pValFormat = %1.2g
+2020-12-10 23:54:12 INFO Log: r.pch = 21
+2020-12-10 23:54:12 INFO Log: r.pvalCutoff = 0.05
+2020-12-10 23:54:12 INFO Log: r.rareOtuThreshold = 1
+2020-12-10 23:54:12 INFO Log: r.timeout = 0
+2020-12-10 23:54:12 INFO Log: r_CalculateStats.pAdjustMethod = BH
+2020-12-10 23:54:12 INFO Log: r_CalculateStats.pAdjustScope = LOCAL
+2020-12-10 23:54:12 INFO Log: r_PlotEffectSize.disableFoldChange = Y
+2020-12-10 23:54:12 INFO Log: r_PlotEffectSize.excludePvalAbove = 1
+2020-12-10 23:54:12 INFO Log: r_PlotEffectSize.maxNumTaxa = 40
+2020-12-10 23:54:12 INFO Log: r_PlotMds.distance = bray
+2020-12-10 23:54:12 INFO Log: r_PlotMds.numAxis = 3
+2020-12-10 23:54:12 INFO Log: rarefyOtuCounts.iterations = 10
+2020-12-10 23:54:12 INFO Log: rarefyOtuCounts.lowAbundantCutoff = 0.01
+2020-12-10 23:54:12 INFO Log: rarefyOtuCounts.quantile = 0.5
+2020-12-10 23:54:12 INFO Log: rdp.minThresholdScore = 80
+2020-12-10 23:54:12 INFO Log: rdp.params = -f fixrank
+2020-12-10 23:54:12 INFO Log: report.logBase = 10
+2020-12-10 23:54:12 INFO Log: report.minCount = 2
+2020-12-10 23:54:12 INFO Log: report.numHits = Y
+2020-12-10 23:54:12 INFO Log: report.numReads = Y
+2020-12-10 23:54:12 INFO Log: report.scarceCountCutoff = 0.25
+2020-12-10 23:54:12 INFO Log: report.scarceSampleCutoff = 0.25
+2020-12-10 23:54:12 INFO Log: report.taxonomyLevels = phylum, class, order, family, genus
+2020-12-10 23:54:12 INFO Log: report.unclassifiedTaxa = Y
+2020-12-10 23:54:12 INFO Log: script.defaultHeader = #!/bin/bash
+2020-12-10 23:54:12 INFO Log: script.fileRefreshDelay = 1
+2020-12-10 23:54:12 INFO Log: script.numThreads = 8
+2020-12-10 23:54:12 INFO Log: script.numWorkers = 1
+2020-12-10 23:54:12 INFO Log: script.permissions = 770
+2020-12-10 23:54:12 INFO Log: seqFileValidator.requireEqualNumPairs = Y
+2020-12-10 23:54:12 INFO Log: trimPrimers.requirePrimer = Y
+2020-12-10 23:54:12 INFO Log: validation.stopPipeline = N
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO Log: Java Logger initialized
+2020-12-10 23:54:12 INFO Log: ========================================================================
+2020-12-10 23:54:12 INFO MetaUtil: Initialize metadata property [ metadata.nullValue ] = NA
+2020-12-10 23:54:12 INFO Config: Set config property [ metadata.commentChar ] = 
+2020-12-10 23:54:12 INFO MetaUtil: Metadata initialized
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_World
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_R
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_Python
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Use_Param
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Use_Resource
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_World
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_R
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_Python
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Use_Param
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Use_Resource
+2020-12-10 23:54:12 WARN GenMod: Unable to find ID for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 WARN GenMod: Unable to find ID for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 WARN GenMod: Unable to find ID for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 WARN GenMod: Unable to find ID for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 WARN GenMod: Unable to find ID for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 WARN BioLockJUtil: Typically, a value is required for [input.dirPaths]; presumably the input data will be supplied by modules: biolockj.module.diy.GenMod, biolockj.module.diy.GenMod, biolockj.module.diy.GenMod, biolockj.module.diy.GenMod, biolockj.module.diy.GenMod
+2020-12-10 23:54:12 INFO BioLockJUtil: # Initial input files found: 0
+2020-12-10 23:54:12 INFO BioLockJUtil: # Initial input files after removing empty/ignored files: 0
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_World
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_R
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Hello_Python
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Use_Param
+2020-12-10 23:54:12 INFO Properties: Configured BioModule: biolockj.module.diy.GenMod AS Use_Resource
+2020-12-10 23:54:12 INFO BioLockJUtil: The module [GenMod] brings filetype(s): 
+2020-12-10 23:54:12 INFO BioLockJUtil: The module [GenMod] brings filetype(s): 
+2020-12-10 23:54:12 INFO BioLockJUtil: The module [GenMod] brings filetype(s): 
+2020-12-10 23:54:12 INFO BioLockJUtil: The module [GenMod] brings filetype(s): 
+2020-12-10 23:54:12 INFO BioLockJUtil: The module [GenMod] brings filetype(s): 
+2020-12-10 23:54:12 WARN BioLockJUtil: The property [pipeline.inputTypes] overrides automatic file type detection.
+2020-12-10 23:54:12 WARN BioLockJUtil: Without property [pipeline.inputTypes], the file types would be to: 
+2020-12-10 23:54:12 WARN BioLockJUtil: Instead, the value of [internal.pipelineInputTypes] will be set to: none
+2020-12-10 23:54:12 INFO Config: Set config property [ internal.pipelineInputTypes ] = none
+2020-12-10 23:54:12 INFO Config: Set config property [ internal.seqType ] = NA
+2020-12-10 23:54:12 INFO Pipeline: Initialize pipeline
+2020-12-10 23:54:12 INFO GenMod: Construct module [ 00 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World
+2020-12-10 23:54:12 INFO GenMod: Construct module [ 01 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R
+2020-12-10 23:54:12 INFO GenMod: Construct module [ 02 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python
+2020-12-10 23:54:12 INFO GenMod: Construct module [ 03 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param
+2020-12-10 23:54:12 INFO GenMod: Construct module [ 04 ] for new /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource
+2020-12-10 23:54:12 INFO BioLockJUtil: Currently running BioLockJ version: v1.3.15-dev
+2020-12-10 23:54:12 INFO Pipeline: Check dependencies for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 INFO Config: Overwriting [Hello_World.scriptPath=./script/hello-world.sh] to set config property [Hello_World.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/hello-world.sh]
+2020-12-10 23:54:12 INFO ValidationUtil: The pipeline will continue even if module outputs from [0_GenMod] do no match the expectation file.
+2020-12-10 23:54:12 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:54:12 INFO Pipeline: Check dependencies for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 INFO Config: Overwriting [Hello_R.scriptPath=./script/hello-world.R] to set config property [Hello_R.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/hello-world.R]
+2020-12-10 23:54:12 INFO ValidationUtil: The pipeline will continue even if module outputs from [1_GenMod] do no match the expectation file.
+2020-12-10 23:54:12 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:54:12 INFO Pipeline: Check dependencies for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 INFO Config: Overwriting [Hello_Python.scriptPath=./script/pythonScript.py] to set config property [Hello_Python.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/pythonScript.py]
+2020-12-10 23:54:12 INFO ValidationUtil: The pipeline will continue even if module outputs from [2_GenMod] do no match the expectation file.
+2020-12-10 23:54:12 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:54:12 INFO Pipeline: Check dependencies for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 INFO Config: Overwriting [Use_Param.scriptPath=./script/pythonScript.py] to set config property [Use_Param.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/pythonScript.py]
+2020-12-10 23:54:12 INFO ValidationUtil: The pipeline will continue even if module outputs from [3_GenMod] do no match the expectation file.
+2020-12-10 23:54:12 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:54:12 INFO Pipeline: Check dependencies for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 INFO Config: Overwriting [Use_Resource.scriptPath=./script/useResources.sh] to set config property [Use_Resource.scriptPath=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/useResources.sh]
+2020-12-10 23:54:12 INFO Config: Overwriting [Use_Resource.resources=./script/functions.sh, ./script/functions2.sh] to set config property [Use_Resource.resources=/Users/ieclabau/git/BioLockJ/templates/GenMod/script/functions.sh, /Users/ieclabau/git/BioLockJ/templates/GenMod/script/functions2.sh]
+2020-12-10 23:54:12 INFO ValidationUtil: The pipeline will continue even if module outputs from [4_GenMod] do no match the expectation file.
+2020-12-10 23:54:12 INFO DockerUtil: Not running in Docker.  No need to check Docker dependencies.
+2020-12-10 23:54:12 INFO Config: Path to configFile: /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+2020-12-10 23:54:12 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:12 INFO ModuleUtil: STARTING [ 00_Hello_World ] 
+2020-12-10 23:54:12 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:12 INFO GenMod: # Input Files: 0
+2020-12-10 23:54:12 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/resources
+2020-12-10 23:54:12 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/resources/hello-world.sh]]
+2020-12-10 23:54:12 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script
+2020-12-10 23:54:12 INFO GenMod: # Input Files: 0
+2020-12-10 23:54:12 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/log
+2020-12-10 23:54:12 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/temp
+2020-12-10 23:54:12 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/output
+2020-12-10 23:54:12 INFO GenMod: # Input Files: 0
+2020-12-10 23:54:12 INFO GenMod: # Input Files: 0
+2020-12-10 23:54:12 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script/00.0_GenMod.sh
+2020-12-10 23:54:12 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:12 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.GenMod
+2020-12-10 23:54:12 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:12 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script/MAIN_00_Hello_World.sh
+2020-12-10 23:54:12 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script 
+2020-12-10 23:54:12 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:54:12 INFO Processor: [ GenMod ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script/MAIN_00_Hello_World.sh 
+2020-12-10 23:54:13 INFO Processor: [ GenMod ]: COMPLETE
+2020-12-10 23:54:13 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:54:13 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script
+2020-12-10 23:54:13 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:54:13 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:54:13 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:54:13 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:54:13 INFO Pipeline: GenMod Status (Total=1): Success=1; Failed=0; Running=0; Queued=0
+2020-12-10 23:54:14 INFO GenMod: Clean up: biolockj.module.diy.GenMod
+2020-12-10 23:54:14 INFO ValidationUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/validation
+2020-12-10 23:54:14 INFO Processor: [ Query Host ]: STARTING CMD --> hostname 
+2020-12-10 23:54:14 INFO Processor: [ Query Host ]: CCI0PHJGH5AWS
+2020-12-10 23:54:14 INFO Processor: [ Query Host ]: COMPLETE
+2020-12-10 23:54:14 INFO SummaryUtil: Summary updated
+2020-12-10 23:54:14 INFO SummaryUtil: Update BioModule summary [ 00_Hello_World ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/summary.txt
+2020-12-10 23:54:14 INFO SummaryUtil: Building module summary for: 00_Hello_World
+2020-12-10 23:54:14 INFO SummaryUtil: Summary updated
+2020-12-10 23:54:14 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:14 INFO ModuleUtil: FINISHED [ 00_Hello_World ] 
+2020-12-10 23:54:14 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:14 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:14 INFO ModuleUtil: STARTING [ 01_Hello_R ] 
+2020-12-10 23:54:14 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:14 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/output/hello.txt
+2020-12-10 23:54:14 INFO SeqUtil: header: Hello Output File!
+2020-12-10 23:54:14 ERROR SeqUtil: Error occurred examining file to determine if it is a sequence file or not
+java.lang.NullPointerException
+	at biolockj.util.SeqUtil.isSeqFile(SeqUtil.java:456)
+	at biolockj.module.BioModuleImpl.cacheInputFiles(BioModuleImpl.java:295)
+	at biolockj.module.BioModuleImpl.getInputFiles(BioModuleImpl.java:155)
+	at biolockj.module.ScriptModuleImpl.executeTask(ScriptModuleImpl.java:88)
+	at biolockj.Pipeline.executeModule(Pipeline.java:46)
+	at biolockj.Pipeline.executeModules(Pipeline.java:196)
+	at biolockj.Pipeline.runPipeline(Pipeline.java:140)
+	at biolockj.BioLockJ.runPipeline(BioLockJ.java:344)
+	at biolockj.BioLockJ.main(BioLockJ.java:102)
+2020-12-10 23:54:14 INFO GenMod: # Input Files: 2
+2020-12-10 23:54:14 INFO GenMod: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/output/hello.txt
+2020-12-10 23:54:14 INFO GenMod: Input File [1]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/output/time.txt
+2020-12-10 23:54:14 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/resources
+2020-12-10 23:54:14 INFO GenMod: Core command: [[Rscript /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/resources/hello-world.R]]
+2020-12-10 23:54:14 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script
+2020-12-10 23:54:14 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/log
+2020-12-10 23:54:14 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/temp
+2020-12-10 23:54:14 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/output
+2020-12-10 23:54:14 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script/01.0_GenMod.sh
+2020-12-10 23:54:14 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:14 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.GenMod
+2020-12-10 23:54:14 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:14 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script/MAIN_01_Hello_R.sh
+2020-12-10 23:54:14 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script 
+2020-12-10 23:54:14 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:54:14 INFO Processor: [ GenMod ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script/MAIN_01_Hello_R.sh 
+2020-12-10 23:54:14 INFO Processor: [ GenMod ]: COMPLETE
+2020-12-10 23:54:14 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:54:14 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script
+2020-12-10 23:54:14 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:54:14 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:54:14 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:54:14 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:54:15 INFO GenMod: Clean up: biolockj.module.diy.GenMod
+2020-12-10 23:54:15 INFO SummaryUtil: Update BioModule summary [ 01_Hello_R ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/summary.txt
+2020-12-10 23:54:15 INFO SummaryUtil: Building module summary for: 01_Hello_R
+2020-12-10 23:54:15 INFO SummaryUtil: Summary updated
+2020-12-10 23:54:15 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:15 INFO ModuleUtil: FINISHED [ 01_Hello_R ] 
+2020-12-10 23:54:15 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:15 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:15 INFO ModuleUtil: STARTING [ 02_Hello_Python ] 
+2020-12-10 23:54:15 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:15 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/output/output.txt
+2020-12-10 23:54:15 INFO SeqUtil: header: Hello R module output !
+2020-12-10 23:54:15 ERROR SeqUtil: Error occurred examining file to determine if it is a sequence file or not
+java.lang.NullPointerException
+	at biolockj.util.SeqUtil.isSeqFile(SeqUtil.java:456)
+	at biolockj.module.BioModuleImpl.cacheInputFiles(BioModuleImpl.java:295)
+	at biolockj.module.BioModuleImpl.getInputFiles(BioModuleImpl.java:155)
+	at biolockj.module.ScriptModuleImpl.executeTask(ScriptModuleImpl.java:88)
+	at biolockj.Pipeline.executeModule(Pipeline.java:46)
+	at biolockj.Pipeline.executeModules(Pipeline.java:196)
+	at biolockj.Pipeline.runPipeline(Pipeline.java:140)
+	at biolockj.BioLockJ.runPipeline(BioLockJ.java:344)
+	at biolockj.BioLockJ.main(BioLockJ.java:102)
+2020-12-10 23:54:15 INFO GenMod: # Input Files: 1
+2020-12-10 23:54:15 INFO GenMod: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/output/output.txt
+2020-12-10 23:54:15 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/resources
+2020-12-10 23:54:15 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/resources/pythonScript.py]]
+2020-12-10 23:54:15 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script
+2020-12-10 23:54:15 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/log
+2020-12-10 23:54:15 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/temp
+2020-12-10 23:54:15 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/output
+2020-12-10 23:54:15 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script/02.0_GenMod.sh
+2020-12-10 23:54:15 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:15 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.GenMod
+2020-12-10 23:54:15 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:15 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script/MAIN_02_Hello_Python.sh
+2020-12-10 23:54:15 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script 
+2020-12-10 23:54:15 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:54:15 INFO Processor: [ GenMod ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script/MAIN_02_Hello_Python.sh 
+2020-12-10 23:54:16 INFO Processor: [ GenMod ]: COMPLETE
+2020-12-10 23:54:16 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:54:16 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script
+2020-12-10 23:54:16 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:54:16 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:54:16 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:54:16 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:54:17 INFO GenMod: Clean up: biolockj.module.diy.GenMod
+2020-12-10 23:54:17 INFO SummaryUtil: Update BioModule summary [ 02_Hello_Python ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/summary.txt
+2020-12-10 23:54:17 INFO SummaryUtil: Building module summary for: 02_Hello_Python
+2020-12-10 23:54:17 INFO SummaryUtil: Summary updated
+2020-12-10 23:54:17 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:17 INFO ModuleUtil: FINISHED [ 02_Hello_Python ] 
+2020-12-10 23:54:17 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:17 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:17 INFO ModuleUtil: STARTING [ 03_Use_Param ] 
+2020-12-10 23:54:17 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:17 INFO SeqUtil: Check if input file is a SEQ file: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/output/PythonScriptResults.txt
+2020-12-10 23:54:17 INFO SeqUtil: header: This is the name of the script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/resources/pythonScript.py
+2020-12-10 23:54:17 INFO SeqUtil: seq: Number of arguments: 1
+2020-12-10 23:54:17 INFO SeqUtil: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/output/PythonScriptResults.txt is not a sequence file! 
+Line 1: [ This is the name of the script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/resources/pythonScript.py ]
+Line 2= [ Number of arguments: 1 ]
+2020-12-10 23:54:17 INFO GenMod: # Input Files: 1
+2020-12-10 23:54:17 INFO GenMod: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/output/PythonScriptResults.txt
+2020-12-10 23:54:17 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/resources
+2020-12-10 23:54:17 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/resources/pythonScript.py one two three four five]]
+2020-12-10 23:54:17 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script
+2020-12-10 23:54:17 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/log
+2020-12-10 23:54:17 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/temp
+2020-12-10 23:54:17 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/output
+2020-12-10 23:54:17 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script/03.0_GenMod.sh
+2020-12-10 23:54:17 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:17 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.GenMod
+2020-12-10 23:54:17 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:17 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script/MAIN_03_Use_Param.sh
+2020-12-10 23:54:17 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script 
+2020-12-10 23:54:17 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:54:17 INFO Processor: [ GenMod ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script/MAIN_03_Use_Param.sh 
+2020-12-10 23:54:17 INFO Processor: [ GenMod ]: COMPLETE
+2020-12-10 23:54:17 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:54:17 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script
+2020-12-10 23:54:17 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:54:17 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:54:17 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:54:17 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:54:18 INFO GenMod: Clean up: biolockj.module.diy.GenMod
+2020-12-10 23:54:18 INFO SummaryUtil: Update BioModule summary [ 03_Use_Param ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/summary.txt
+2020-12-10 23:54:18 INFO SummaryUtil: Building module summary for: 03_Use_Param
+2020-12-10 23:54:18 INFO SummaryUtil: Summary updated
+2020-12-10 23:54:18 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:18 INFO ModuleUtil: FINISHED [ 03_Use_Param ] 
+2020-12-10 23:54:18 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:18 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:18 INFO ModuleUtil: STARTING [ 04_Use_Resource ] 
+2020-12-10 23:54:18 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:18 INFO GenMod: # Input Files: 1
+2020-12-10 23:54:18 INFO GenMod: Input File [0]: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/output/PythonScriptResults.txt
+2020-12-10 23:54:18 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/resources
+2020-12-10 23:54:18 INFO GenMod: Copied resource /Users/ieclabau/git/BioLockJ/templates/GenMod/script/functions.sh to module resource folder: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/resources
+2020-12-10 23:54:18 INFO GenMod: Copied resource /Users/ieclabau/git/BioLockJ/templates/GenMod/script/functions2.sh to module resource folder: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/resources
+2020-12-10 23:54:18 INFO GenMod: Core command: [[/Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/resources/useResources.sh]]
+2020-12-10 23:54:18 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script
+2020-12-10 23:54:18 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/log
+2020-12-10 23:54:18 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/temp
+2020-12-10 23:54:18 INFO ModuleUtil: Create directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/output
+2020-12-10 23:54:18 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script/04.0_GenMod.sh
+2020-12-10 23:54:18 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:18 INFO BashScriptBuilder: 1 WORKER scripts created for: biolockj.module.diy.GenMod
+2020-12-10 23:54:18 INFO BashScriptBuilder: ========================================================================
+2020-12-10 23:54:18 INFO BashScriptBuilder: Write new script: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script/MAIN_04_Use_Resource.sh
+2020-12-10 23:54:18 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script 
+2020-12-10 23:54:18 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:54:18 INFO Processor: [ GenMod ]: STARTING CMD --> /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script/MAIN_04_Use_Resource.sh 
+2020-12-10 23:54:18 INFO Processor: [ GenMod ]: COMPLETE
+2020-12-10 23:54:18 INFO Pipeline: ------> Java program wakes every 60 seconds to check execution progress
+2020-12-10 23:54:18 INFO Pipeline: ------> Status determined by existance of indicator files in /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script
+2020-12-10 23:54:18 INFO Pipeline: ------> Indicator files end with: "_Started", "_Success", or "_Failures"
+2020-12-10 23:54:18 INFO Pipeline: ------> If any change to #Success/#Failed/#Running/#Queued changed, new values logged
+2020-12-10 23:54:18 INFO Pipeline: ------> Status message repeats every 10 minutes while scripts are executing (if status remains unchanged).
+2020-12-10 23:54:18 INFO Pipeline: ------> Running scripts will NEVER TIME OUT.
+2020-12-10 23:54:19 INFO GenMod: Clean up: biolockj.module.diy.GenMod
+2020-12-10 23:54:19 INFO SummaryUtil: Update BioModule summary [ 04_Use_Resource ] /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/summary.txt
+2020-12-10 23:54:20 INFO SummaryUtil: Building module summary for: 04_Use_Resource
+2020-12-10 23:54:20 INFO SummaryUtil: Summary updated
+2020-12-10 23:54:20 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:20 INFO ModuleUtil: FINISHED [ 04_Use_Resource ] 
+2020-12-10 23:54:20 INFO ModuleUtil: ========================================================================
+2020-12-10 23:54:20 INFO DownloadUtil: DownloadUtil found there are no downloadable modules
+2020-12-10 23:54:20 INFO SummaryUtil: Summary updated
+2020-12-10 23:54:20 INFO Processor: [ Set File Privs ]: STARTING CMD --> chmod -R 770 /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10 
+2020-12-10 23:54:20 INFO Processor: [ Set File Privs ]: COMPLETE
+2020-12-10 23:54:20 INFO MasterConfigUtil: Distilling the MASTER Config into the FINAL Config file to show only properties accessed during pipeline execution.
+2020-12-10 23:54:20 INFO MasterConfigUtil: To view the list of removed Config properties before MASTER config is sanitized in future runs, enable: pipeline.logLevel=Y
+2020-12-10 23:54:20 INFO MasterConfigUtil: To add DEBUG statements for only this utility class, add the property (this is a list property so multiple class names could be provided - in this example, wee add a single class): pipeline.limitDebugClasses=biolockj.util.MasterConfigUtil
+2020-12-10 23:54:20 INFO MasterConfigUtil: The original version of project Config contained: 97 properties
+2020-12-10 23:54:20 INFO MasterConfigUtil: The final version of MASTER Config contains: 27 properties
+2020-12-10 23:54:20 INFO BioLockJ: Log Pipeline Summary...
+Pipeline Name:    GenModDemo_2020Dec10
+Pipeline Config:  /Users/ieclabau/git/BioLockJ/templates/GenMod/GenModDemo.config
+Pipeline Metadata:  N/A
+BioLockJ version:  v1.3.15-dev
+Runtime Env:         Localhost
+Pipeline Input:      null
+# Modules:        5
+# Attempts:       1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  00_Hello_World
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  2
+Mean Output File Size:  24 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/00_Hello_World/script/MAIN_00_Hello_World.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  01_Hello_R
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  24 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script/MAIN_01_Hello_R.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  02_Hello_Python
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  328 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/02_Hello_Python/script/MAIN_02_Hello_Python.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  03_Use_Param
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  361 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/03_Use_Param/script/MAIN_03_Use_Param.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  04_Use_Resource
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  192 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/04_Use_Resource/script/MAIN_04_Use_Resource.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Pipeline Status:     SUCCESS
+Pipeline Runtime:    00 hours : 00 minutes : 07 seconds
+Master Config:       /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/MASTER_GenModDemo_2020Dec10.properties
+Final Metadata:      N/A
+  _______      ___      ________      ___           ________      ________      ___ ____            __
+|\   __  \    |\  \    |\   __  \    |\  \         |\   __  \    |\   ____\    |\  \|\  \         |\  \
+\ \  \|\ /_   \ \  \   \ \  \|\  \   \ \  \        \ \  \|\  \   \ \  \___|    \ \  \/  /|_       \ \  \
+ \ \   __  \   \ \  \   \ \  \\\  \   \ \  \        \ \  \\\  \   \ \  \        \ \   ___  \    __ \ \  \
+  \ \  \|\  \   \ \  \   \ \  \\\  \   \ \  \____    \ \  \\\  \   \ \  \____    \ \  \\ \  \  |\  \\_\  \
+   \ \_______\   \ \__\   \ \_______\   \ \_______\   \ \_______\   \ \_______\   \ \__\\ \__\ \ \________\
+    \|_______|    \|__|    \|_______|    \|_______|    \|_______|    \|_______|    \|__| \|__|  \|________|
+
+                C          O          M          P          L          E          T          E          
+
+

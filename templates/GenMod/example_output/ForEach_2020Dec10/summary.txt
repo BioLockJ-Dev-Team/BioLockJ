@@ -1,0 +1,85 @@
+Pipeline Name:    ForEach_2020Dec10
+Pipeline Config:  /Users/ieclabau/git/BioLockJ/templates/GenMod/ForEach.config
+Pipeline Metadata:  /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt
+BioLockJ version:  v1.3.15-dev
+Runtime Env:         Localhost
+Pipeline Input:      null
+# Modules:        7
+# Attempts:       1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  00_ImportMetadata
+Module class:  biolockj.module.implicit.ImportMetadata
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  1
+Mean Output File Size:  307 bytes
+New metadata: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/output/metadata.txt
+Imported file:  /Users/ieclabau/git/BioLockJ/templates/GenMod/metadata.txt
+# Samples: 12
+# Fields:  3
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  01_ForEachSample
+Module class:  biolockj.module.diy.ForEachSample
+Runtime:  00 hours : 00 minutes : 04 seconds
+--------------------------------------------------
+# Files Output:  12
+Mean Output File Size:  23 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/01_ForEachSample/script/MAIN_01_ForEachSample.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  02_SampleFile
+Module class:  biolockj.module.diy.ForEachFile
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  12
+Mean Output File Size:  48 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/02_SampleFile/script/MAIN_02_SampleFile.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  03_ForEachLevel
+Module class:  biolockj.module.diy.ForEachLevel
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  4
+Mean Output File Size:  6 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/03_ForEachLevel/script/MAIN_03_ForEachLevel.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  04_LevelFile
+Module class:  biolockj.module.diy.ForEachFile
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  4
+Mean Output File Size:  122 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/04_LevelFile/script/MAIN_04_LevelFile.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  05_ForEachLoop
+Module class:  biolockj.module.diy.ForEachLoop
+Runtime:  00 hours : 00 minutes : 01 seconds
+--------------------------------------------------
+# Files Output:  3
+Mean Output File Size:  11 bytes
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/05_ForEachLoop/script/MAIN_05_ForEachLoop.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Module:  06_GrabLogs
+Module class:  biolockj.module.diy.GenMod
+Runtime:  00 hours : 00 minutes : 02 seconds
+--------------------------------------------------
+# Files Output:  6
+Mean Output File Size:  1 KB
+Main Script:  /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/06_GrabLogs/script/MAIN_06_GrabLogs.sh
+Executed 1/1 worker scripts [1 successful]
+Average worker script runtime: <1 minute
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Pipeline Status:     SUCCESS
+Pipeline Runtime:    00 hours : 00 minutes : 12 seconds
+Master Config:       /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/MASTER_ForEach_2020Dec10.properties
+Final Metadata:      /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/ForEach_2020Dec10/00_ImportMetadata/output/metadata.txt

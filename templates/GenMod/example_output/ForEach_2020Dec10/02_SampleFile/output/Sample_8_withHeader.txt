@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_8	coconut	9	blue

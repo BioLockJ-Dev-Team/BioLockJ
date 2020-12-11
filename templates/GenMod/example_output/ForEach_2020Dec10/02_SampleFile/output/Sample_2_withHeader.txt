@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_2	apple	0	blue

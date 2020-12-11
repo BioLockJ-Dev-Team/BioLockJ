@@ -1,0 +1,12 @@
+Hello R !
+Current working directory: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10/01_Hello_R/script
+This is module: 01_Hello_R
+The pipeline name is: GenModDemo_2020Dec10
+The pipeline root folder path is: /Users/ieclabau/git/sheepdog_testing_suite/MockMain/pipelines/GenModDemo_2020Dec10
+The Hello_World module has folder: 00_Hello_World
+Its output directory has 2 file(s):
+hello.txttime.txt
+
+The hello.txt file reads: 
+Hello Output File!
+Created Success flag.

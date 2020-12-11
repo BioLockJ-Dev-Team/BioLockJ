@@ -1,0 +1,2 @@
+Sample	fruit	count	color
+Sample_1	orange	0	red

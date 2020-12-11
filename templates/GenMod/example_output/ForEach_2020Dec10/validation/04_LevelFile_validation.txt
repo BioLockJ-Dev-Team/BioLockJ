@@ -1,0 +1,5 @@
+name	size	md5	MATCHED_EXPECTATION
+nChars-class.txt	122	30adbdd8bf00934c8ea892123f3f49e3	REPORT
+nChars-family.txt	123	5a796933debb78b2afde2377bb055488	REPORT
+nChars-genus.txt	122	e521d7f0f5a467ccaf297d3719c30de7	REPORT
+nChars-order.txt	122	2991c0be90225865b43201443e00d95a	REPORT
