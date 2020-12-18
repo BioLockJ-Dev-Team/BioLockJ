@@ -32,7 +32,7 @@ nav:
     - Pipeline Componenets:
         - Configuration: Configuration.md
         - General Properties: GENERATED/General-Properties.md
-        - Modules: Built-in-modules.md
+        - Modules: GENERATED/all-modules.md
         - Metadata: GENERATED/Metadata.md
         - Dependencies: Dependencies.md
         - Configuration Details:
