@@ -173,7 +173,41 @@ To kill the BioLockJ program on a cluster environment, use `kill` just like the 
 A BioLockJ config file _is_ a java properties file, with added "#BioModule" lines indicating which modules to run.  BioLockJ config files typically use the extension ".config" (preferred) or ".properties". Some editors have configurations to color-code text in a meaningful way based on the type of file.   For example, Sublime text will automatically apply the syntax highlighting for a java properties file to a file that ends in ".properties".                                  
 To extend this Sublime Text functionality to files that in ".config":                         
  1. open a file with the ".config" extension,                                   
- 2. go to View -> Syntax -> Open all with current exension -> Java -> Java Properties
+ 2. go to View -> Syntax -> Open all with current extension -> Java -> Java Properties
  
  ( Much thanks to this helpful post: [stack over flow](https://stackoverflow.com/questions/8088475/how-to-customise-file-type-to-syntax-associations-in-sublime-text) )
+
+---
+### **Question:** Why doesn't my pipeline run in docker ?
+---
+**Answer:** test docker, test file sharing
+
+First of all, make sure docker is installed in running.
+```bash
+docker run hello-world
+
+# Hello from Docker!
+# This message shows that your installation appears to be working correctly.
+
+```
+If this failed, then you need to troubleshoot docker before you move forward.
+
+When docker is fundamentally working, a common problem is file-sharing.  In most cases, file sharing is enabled and you will see a pop-up window asking for permission to share folders you have not shared previously.  If this is not the case, you may need to enable file sharing.
+
+File sharing, also called volume sharing, is what allows programs inside docker containers to interact with files stored on your computer. Depending on your version of Docker Desktop, this setting may be under `Docker > Preferences > File Sharing`, or `Preferences > Resources > File Sharing` or something similar. Make sure this feature is enabled.  Any file that must be read by any part of the BioLockJ pipeline must be under one of the share-enabled folders.  The BioLockJ Projects directory (BLJ_PROJ) must also be under one of these share-enabled folders.
+
+A quick test of file sharing:
+```bash
+mkdir ~/testFolder
+echo 'hello sharing!' > ~/testFolder/testFile.txt
+docker run --rm -v ~/testFolder:/testFolder ubuntu cat /testFolder/testFile.txt
+
+# hello sharing!
+
+```
+If this fails, then you'll need to troubleshoot docker file sharing before you move forward.
+
+
+The start process may be slow.<br>
+The first time that you run a pipeline, docker downloads the images called for in that pipeline.  For some images, this download may take several minutes.  For pipelines with many modules, each using distinct docker images, there may be many 'several minute' downloads.  As of version 1.3.15, these downloads happen in the background and no messages are printed to the screen from the BioLockJ start command; which can give the appearance of a frozen start-up.  In another tab, run `docker image ls`, wait several minutes, and run the same command again.  If the list is growing, then BioLockJ is not frozen, it is downloading images while (unfortunately) printing nothing.  If you set `docker.verifyImage=N` in your config file, then images will be downloaded when the module is reached, rather than all at once at the start.  
 

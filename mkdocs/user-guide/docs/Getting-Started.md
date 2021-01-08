@@ -73,22 +73,17 @@ docker run hello-world
 
 ```
 
-#### 2. Turn on file sharing
+#### 2. Download and install BioLockj
 
-Depending on your system and docker installation, this may be on by default.
+Follow the download and install steps in the [Basic Installation](../Getting-Started#Basic-Installation) download and install instructions.
 
-File sharing, also called volume sharing, is what allows programs inside docker containers to interact with files stored on your computer. Dependong on your version of Docker Desktop, this setting may be under `Docker > Prefernces > File Sharing`, or `Preferences > Resources > File Sharing` or something similar. Make sure this feature is enabled.  Any file that must be read by any part of the BioLockJ pipeline must be under one of the share-enabled folders.  The BioLockJ Projects directory (BLJ_PROJ) must also be under one of these share-enabled folders.
+#### 3. Run the test pipeline _in docker_
 
-#### 3. Download and install BioLockj
-Follow the download and install steps in the [Basic Installation](../Getting-Started#Basic-Installation) instructions.
+When you run the program, you will see a pop-up window asking for permission to share specific files. Say yes.<br>
+If that does not appear, see [why doesn't my pipeline run in docker](../FAQ/#question-why-doesnt-my-pipeline-run-in-docker).
 
-#### 4. Run the test pipeline _in docker_
 ```bash
 biolockj --docker --blj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
-# 
-# Created "/Users/ieclabau/runDockerClone.sh" 
-# This script will launch another instance of this docker image,
-# with the same env vars + volumes, but in interactive mode.
 # 
 # Docker container id: 336259e7d3b8d9ab2fa71202258b562664be1bf9645d503a790ae5e9da15ce97
 # Initializing BioLockJ..
