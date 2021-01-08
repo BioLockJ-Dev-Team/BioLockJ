@@ -2,10 +2,9 @@
 ## Installation and test
 
 
-
 ### Basic installation
 
-The basic installation assumes you have java 1.8+ and a unix-like environment.  Some features assume a bash shell, see [Notes about environments](#notes-about-environments).
+The basic installation assumes you have java 1.8+ and a unix-like environment.  Some features assume a bash shell, see [Notes about environments](../Supported-Environments).
 
 #### 1. Download the [latest release](https://github.com/BioLockJ-Dev-Team/BioLockJ/releases/latest) & unpack the tarball.
 ```bash
@@ -140,11 +139,11 @@ The pipeline log file `"myFirstPipeline_<DATE>.log"` is an excellent resource fo
 
 The `validation` has tables recording the MD5 sum for each output from each module.  If the pipeline is run again, this folder can be used to determine if the results in the new run are an exact match for this run.
 
-Within each module's folder, we see the "biolockjComplete" flag (the same flags are used in modules and at the top level).  All output-procuing modules have a subfolder called `output`.  Most modules also have folders `script` and `temp`.  The output folder is used as input to down-stream modules.  Modules are the building blocks of pipelines.  For more information about modules, see [Built-in BioModules](Built-in-modules.md).
+Within each module's folder, we see the "biolockjComplete" flag (the same flags are used in modules and at the top level).  All output-producing modules have a subfolder called `output`.  Most modules also have folders `script` and `temp`.  The output folder is used as input to down-stream modules.  Modules are the building blocks of pipelines.  For more information about modules, see [Built-in BioModules](Built-in-modules.md).
 
 
 
-## Making your own pipline
+## Making your own pipeline
 Now that you have a working example, you can make your own pipeline.  
 You may want to modify the example above, or look at others under `/templates`.
 
@@ -156,42 +155,37 @@ Things are seldom perfect the first time.  Its safe to assume you will make iter
 
  * Look through the base set of [modules](Built-in-modules.md) and even [create your own](Building-Modules.md)
 
-A recommended practice is to make a subset of your data, and use that to develope your pipeline. 
+A recommended practice is to make a subset of your data, and use that to develop your pipeline. 
+
+
+##  Installing multiple versions on a single machine
+
+You may want to have multiple versions of BioLockJ on the same machine.
+
+Create a folder to hold all versions, suggested name: `BioLockJ_versions`.
+
+In that folder, download and unpack the latest version of BioLockJ.  This creates a folder called "BioLockJ".  Rename that folder to include the version name (recommended: match the name of the downloaded file), for example: `mv BioLockJ BioLockJ-v1.3.13` .  
+
+Create a symbolic link:
+```
+ln -s /full/path/to/BioLockJ_versions/BioLockJ-v1.3.13 current
+```
+
+cd into the "current" folder, and run the install script.  This will set the `$BLJ` variable in your profile to point to the this link.
+
+Download and unpack another release of BioLockJ in the BioLockJ_versions folder, repeating the process from above.
+
+Now you have two versions of BioLockJ,  a `BLJ` variable in your profile that points to a `current` symbolic link.  On systems with multiple users, an administrator should control the "group default" version by controlling the `current` link, and individual users can change their `BLJ` variable to point to the current group default or to a specific version.  On single-user systems, you can edit a link or the variable, whichever is more convenient.
+
+All new versions of BioLockJ should be installed in the same `BioLockJ_versions` folder, in the same way.  
 
 
 ## Other notes for starting out
 
 **Install any/all software [Dependencies](../Dependencies) required by the modules you wish to include in your pipeline.**
 
-BioLockJ is a pipeline manager, desigend to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed **OR** run through docker using the docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.
+BioLockJ is a pipeline manager, designed to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed **OR** run through docker using the docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.
 
 BioLockJ will shut down appropriately on its own when a pipeline either completes or fails.  _Sometimes_, it is necessary to shut down the program pre-maturely. See the [FAQ page](../FAQ) for more details.
 
-### Notes about environments
-
-The main BioLockJ program can be used in these environments: 
-
-* a local machine with a unix-like system
-* a local machine with a unix-like system running docker *
-* a cluster, running a scheduler such as torque
-* AWS cloud computing *
-* any machine running docker (see [Working in Pure Docker](Pure-Docker.md))
-
-(* The launch scripts will still be run from your local machine.)
-
-The launch process requires a unix-like environment.  This includes linux, macOS, or an ubuntu environment running on Windows.
-
-If using **docker**, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run within the biolockj_controller container.
-
-If using **AWS**, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run on AWS. This is still experimental.
-
-If you are using BioLockJ on a shared system where another user has already installed BioLockJ, **you will need to run the install script** to create the required variables in your own user profile.
-
-There is also the option to run purely in docker, without installing even the launch scripts on your local machine.  However this is considered a nitch case scenario and not well supported.
-
-For more information about the how/why to use each environment, see [Supported Environments](Supported-Environments.md)
-
-The helper commands (such as `cd-blj`) assume a bash shell, though others also work.
-To see what shell you currently using, run `echo $0`.
-**If** you are not in a bash shell, you can change your current session to a bash shell, run `chsh -s /bin/bash`.
 

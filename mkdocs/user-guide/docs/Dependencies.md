@@ -1,4 +1,6 @@
-BioLockJ requires [Java 1.8+](https://www.java.com "Java Homepage") and a [Unix-like](https://en.wikipedia.org/wiki/Unix-like) operating system  such as [Darwin/macOS](https://en.wikipedia.org/wiki/Darwin_(operating_system)).
+BioLockJ requires [Java 1.8+](https://www.java.com "Java Homepage") and a [Unix-like](https://en.wikipedia.org/wiki/Unix-like) operating system  such as [Darwin/macOS](https://en.wikipedia.org/wiki/Darwin_(operating_system)), see [Notes about environments](../Supported-Environments).
+
+BioLockJ is a pipeline manager, designed to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed **OR** run through docker using docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.
 
 * Dependencies are required by modules listed in the **BioModule Function** column.
 * Users **DO NOT NEED TO INSTALL** dependencies if not interested in the listed modules.
