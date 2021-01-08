@@ -3,14 +3,14 @@
 The main BioLockJ program can be used in these environments: 
 
 * a local machine with a unix-like system (ie, linux or Mac, some features require a bash shell)
-* a local machine with a unix-like system running docker * 
+* a local machine with a unix-like system (See [tested environments](#tested-environments)) running docker * 
 * (coming soon) Windows 10 running docker *
 * a cluster, running a supported scheduler such as torque
 * (coming soon) any machine running docker (see [Working in Pure Docker](Pure-Docker.md))
 
 (* The launch scripts will still be run from your local machine, this requires java, but not a bash shell)
 
-The launch process requires a unix-like environment.  This includes linux, macOS, or an ubuntu environment running on Windows. Windows support is still in development.
+The launch process requires a unix-like environment.  This includes linux, macOS, or an ubuntu environment running on Windows. Windows support is still in development, see [BioLockJ on Windows](../Getting-Started-Windows).
 
 If using **docker**, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run within the biolockj_controller container.
 
@@ -24,7 +24,6 @@ The helper commands (such as `cd-blj`) assume a bash shell, though others may al
 To see what shell you currently using, run `echo $0`.
 **If** you are not in a bash shell, you can change your current session to a bash shell, run `chsh -s /bin/bash`.
 
-There is also the option to run purely in docker, without installing even the launch scripts on your local machine.  However this is considered a niche case scenario and not well supported.
 
 ## Choosing an environment
 
@@ -43,7 +42,7 @@ The underlying tools for all modules packaged with the main BioLockJ program are
 
 A computer cluster offers large amounts of compute resources and plenty of storage.  Some clusters also have administrators (or other users) who will install tools for you and mechanisms for you to install tools yourself.  Downsides: cluster systems have their own idiosyncrasies and not everyone has access to one.
 
-AWS provides large amounts of compute resources and interfaces very well with docker and with S3 for convenient and efficient data storage. Downsides: *costs money for each use*; has its own learning curve.
+AWS provides large amounts of compute resources and interfaces very well with docker and uses S3 for convenient and efficient data storage. Downsides: *costs money for each use*; has its own learning curve.
 
 ## Tested environments
 
