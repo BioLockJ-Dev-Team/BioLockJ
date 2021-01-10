@@ -267,6 +267,25 @@ public class DockerUtil {
 
 	private static TreeMap<String, String> volumeMap;
 
+	/**
+	 * This map is a link between file paths inside the container (the containerized path) and paths outside the
+	 * container (the decontainerized path). This program and all scripts are (presumably) running inside the docker
+	 * container, and need to use the containerized path. The user, and thus the logs and the config file(s), are
+	 * outside of the docker container, and need to use the decontainerized path.
+	 * 
+	 * In this map is built using the Mounts map from docker.
+	 * 
+	 * Each value in this map is the containerized path; which is the destination (or "target") in the docker mounts
+	 * map.
+	 * 
+	 * Each key in this map is a representation of the original host file path; however the form of this path varies on
+	 * different host systems (mac vs windows) and different versions of docker. The representation of a unix-like path
+	 * is exactly the format that is produce by unix commands such as pwd. The path begins with "/" and uses "/"
+	 * separators. The representation of windows file paths varies between docker versions. The representation in this
+	 * map is:<br> <lower case drive>/<path using '\' separators>
+	 * 
+	 * @throws DockerVolCreationException
+	 */
 	private static void makeVolMap() throws DockerVolCreationException {
 		StringBuilder sb = new StringBuilder();
 		String s = null;
@@ -290,7 +309,7 @@ public class DockerUtil {
 		volumeMap = new TreeMap<>();
 		for( int i = 0; i < arr.length(); i++ ) {
 			JSONObject mount = arr.getJSONObject( i );
-			String source = convertMacPath(mount.get( "Source" ).toString());
+			String source = formatHostPath(mount.get( "Source" ).toString());
 			String destination = mount.get( "Destination" ).toString();
 			volumeMap.put( source, destination );
 			Log.info( DockerUtil.class, "Host directory: " + source );
@@ -396,6 +415,13 @@ public class DockerUtil {
 	public static File deContainerizePath( final File innerFile ) throws DockerVolCreationException {
 		return new File( deContainerizePath(innerFile.getAbsolutePath()) );
 	}
+	
+	/**
+	 * Even outside of a BioLockJ instance, access the containerize() and decontainerze() methods.
+	 * This is ideal for some support programs, and especially for testing.
+	 * @param args
+	 * @throws DockerVolCreationException
+	 */
 	public static void main(String[] args) throws DockerVolCreationException {
 		if (args.length > 1 && args[1].equals("target") ) System.out.println( containerizePath( args[0] ) );
 		else if (args.length > 1 && args[1].equals("source") ) System.out.println( deContainerizePath( args[0] ) );
@@ -420,9 +446,32 @@ public class DockerUtil {
 						&& FilenameUtils.separatorsToWindows(path).equals(path));
 	}
 	
-	private static String convertMacPath(final String path) {
-		if (path.startsWith( "/host_mnt/" )) return path.replaceFirst( "/host_mnt/", "/" );
-		else return path ;
+	/**
+	 * In the docker json file, the host path is sometimes represented as the exact path that the user might see on
+	 * their host machine, and sometimes it is pre-prended with /host_mnt/, and other other differences. Presumably the
+	 * version of docker is what dictates the difference in path appearance.
+	 * 
+	 * @param path
+	 * @return
+	 */
+	private static String formatHostPath(final String path) {
+		final String HOST_MNT = "/host_mnt/";
+		String hostPath;
+		if (path.startsWith( HOST_MNT )) {
+			if ( path.contains( ":" )) { // windows case
+				hostPath = path.replaceFirst( HOST_MNT, "" );
+			}else { // mac case
+				hostPath = path.replaceFirst( HOST_MNT, "/" );
+			}
+		}
+		else hostPath = path ;
+		if ( path.contains( ":" ) ) {
+			// added conversion for compatibility with older docker map format
+			hostPath = convertWindowsPath(hostPath);
+		}
+		Log.info(DockerUtil.class, "Host path from docker mounts: " + path);
+		Log.info(DockerUtil.class, "Is represented in the form:   " + hostPath);
+		return hostPath;
 	}
 	
 	private static String convertWindowsPath(final String path) {
@@ -665,7 +714,7 @@ public class DockerUtil {
 	 * {@link biolockj.Config} Boolean property: {@value #DOCKER_MOUNT_SOCK} {@value #DOCKER_MOUNT_SOCK_DESC}
 	 */
 	public static final String DOCKER_MOUNT_SOCK = "docker.mountSock";
-	private static final String DOCKER_MOUNT_SOCK_DESC = "should /var/docker/docker.sock be mounted for modules.";
+	private static final String DOCKER_MOUNT_SOCK_DESC = "should /var/run/docker.sock be mounted for modules.";
 
 	/**
 	 * {@link biolockj.Config} Boolean property: {@value #SAVE_CONTAINER_ON_EXIT}<br>
