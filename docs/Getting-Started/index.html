@@ -74,16 +74,13 @@
     <li class="toctree-l2"><a href="#review-your-first-pipeline">Review your first pipeline</a></li>
     
 
-    <li class="toctree-l2"><a href="#making-your-own-pipline">Making your own pipline</a></li>
+    <li class="toctree-l2"><a href="#making-your-own-pipeline">Making your own pipeline</a></li>
+    
+
+    <li class="toctree-l2"><a href="#installing-multiple-versions-on-a-single-machine">Installing multiple versions on a single machine</a></li>
     
 
     <li class="toctree-l2"><a href="#other-notes-for-starting-out">Other notes for starting out</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#notes-about-environments">Notes about environments</a></li>
-        
-        </ul>
     
 
     </ul>
@@ -103,7 +100,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../Built-in-modules/">Modules</a>
+    <a class="" href="../GENERATED/all-modules/">Modules</a>
                 </li>
                 <li class="">
                     
@@ -238,7 +235,7 @@
               
                 <h2 id="installation-and-test">Installation and test<a class="headerlink" href="#installation-and-test" title="Permanent link">#</a></h2>
 <h3 id="basic-installation">Basic installation<a class="headerlink" href="#basic-installation" title="Permanent link">#</a></h3>
-<p>The basic installation assumes you have java 1.8+ and a unix-like environment.  Some features assume a bash shell, see <a href="#notes-about-environments">Notes about environments</a>.</p>
+<p>The basic installation assumes you have java 1.8+ and a unix-like environment.  Some features assume a bash shell, see <a href="../Supported-Environments">Notes about environments</a>.</p>
 <h4 id="1-download-the-latest-release-unpack-the-tarball">1. Download the <a href="https://github.com/BioLockJ-Dev-Team/BioLockJ/releases/latest">latest release</a> &amp; unpack the tarball.<a class="headerlink" href="#1-download-the-latest-release-unpack-the-tarball" title="Permanent link">#</a></h4>
 <pre><code class="bash">tar -zxf BioLockJ-v*.tar.gz
 </code></pre>
@@ -291,17 +288,12 @@ biolockj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
 
 </code></pre>
 
-<h4 id="2-turn-on-file-sharing">2. Turn on file sharing<a class="headerlink" href="#2-turn-on-file-sharing" title="Permanent link">#</a></h4>
-<p>Depending on your system and docker installation, this may be on by default.</p>
-<p>File sharing, also called volume sharing, is what allows programs inside docker containers to interact with files stored on your computer. Dependong on your version of Docker Desktop, this setting may be under <code>Docker &gt; Prefernces &gt; File Sharing</code>, or <code>Preferences &gt; Resources &gt; File Sharing</code> or something similar. Make sure this feature is enabled.  Any file that must be read by any part of the BioLockJ pipeline must be under one of the share-enabled folders.  The BioLockJ Projects directory (BLJ_PROJ) must also be under one of these share-enabled folders.</p>
-<h4 id="3-download-and-install-biolockj">3. Download and install BioLockj<a class="headerlink" href="#3-download-and-install-biolockj" title="Permanent link">#</a></h4>
-<p>Follow the download and install steps in the <a href="../Getting-Started#Basic-Installation">Basic Installation</a> instructions.</p>
-<h4 id="4-run-the-test-pipeline-in-docker">4. Run the test pipeline <em>in docker</em><a class="headerlink" href="#4-run-the-test-pipeline-in-docker" title="Permanent link">#</a></h4>
+<h4 id="2-download-and-install-biolockj">2. Download and install BioLockj<a class="headerlink" href="#2-download-and-install-biolockj" title="Permanent link">#</a></h4>
+<p>Follow the download and install steps in the <a href="../Getting-Started#Basic-Installation">Basic Installation</a> download and install instructions.</p>
+<h4 id="3-run-the-test-pipeline-in-docker">3. Run the test pipeline <em>in docker</em><a class="headerlink" href="#3-run-the-test-pipeline-in-docker" title="Permanent link">#</a></h4>
+<p>When you run the program, you will see a pop-up window asking for permission to share specific files. Say yes.<br>
+If that does not appear, see <a href="../FAQ/#question-why-doesnt-my-pipeline-run-in-docker">why doesn't my pipeline run in docker</a>.</p>
 <pre><code class="bash">biolockj --docker --blj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
-# 
-# Created &quot;/Users/ieclabau/runDockerClone.sh&quot; 
-# This script will launch another instance of this docker image,
-# with the same env vars + volumes, but in interactive mode.
 # 
 # Docker container id: 336259e7d3b8d9ab2fa71202258b562664be1bf9645d503a790ae5e9da15ce97
 # Initializing BioLockJ..
@@ -336,8 +328,8 @@ biolockj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
 <p>If the pipeline was run using docker, a file named <code>dockerInfo.json</code> will show the container information.</p>
 <p>The pipeline log file <code>"myFirstPipeline_&lt;DATE&gt;.log"</code> is an excellent resource for troubleshooting.</p>
 <p>The <code>validation</code> has tables recording the MD5 sum for each output from each module.  If the pipeline is run again, this folder can be used to determine if the results in the new run are an exact match for this run.</p>
-<p>Within each module's folder, we see the "biolockjComplete" flag (the same flags are used in modules and at the top level).  All output-procuing modules have a subfolder called <code>output</code>.  Most modules also have folders <code>script</code> and <code>temp</code>.  The output folder is used as input to down-stream modules.  Modules are the building blocks of pipelines.  For more information about modules, see <a href="../Built-in-modules/">Built-in BioModules</a>.</p>
-<h2 id="making-your-own-pipline">Making your own pipline<a class="headerlink" href="#making-your-own-pipline" title="Permanent link">#</a></h2>
+<p>Within each module's folder, we see the "biolockjComplete" flag (the same flags are used in modules and at the top level).  All output-producing modules have a subfolder called <code>output</code>.  Most modules also have folders <code>script</code> and <code>temp</code>.  The output folder is used as input to down-stream modules.  Modules are the building blocks of pipelines.  For more information about modules, see <a href="../Built-in-modules/">Built-in BioModules</a>.</p>
+<h2 id="making-your-own-pipeline">Making your own pipeline<a class="headerlink" href="#making-your-own-pipeline" title="Permanent link">#</a></h2>
 <p>Now that you have a working example, you can make your own pipeline.<br />
 You may want to modify the example above, or look at others under <code>/templates</code>.</p>
 <p>Things are seldom perfect the first time.  Its safe to assume you will make iterative changes to your pipeline configuration.  BioLockJ offers some tools to facilitate this process.</p>
@@ -352,30 +344,23 @@ You may want to modify the example above, or look at others under <code>/templat
 <p>Look through the base set of <a href="../Built-in-modules/">modules</a> and even <a href="../Building-Modules/">create your own</a></p>
 </li>
 </ul>
-<p>A recommended practice is to make a subset of your data, and use that to develope your pipeline. </p>
+<p>A recommended practice is to make a subset of your data, and use that to develop your pipeline. </p>
+<h2 id="installing-multiple-versions-on-a-single-machine">Installing multiple versions on a single machine<a class="headerlink" href="#installing-multiple-versions-on-a-single-machine" title="Permanent link">#</a></h2>
+<p>You may want to have multiple versions of BioLockJ on the same machine.</p>
+<p>Create a folder to hold all versions, suggested name: <code>BioLockJ_versions</code>.</p>
+<p>In that folder, download and unpack the latest version of BioLockJ.  This creates a folder called "BioLockJ".  Rename that folder to include the version name (recommended: match the name of the downloaded file), for example: <code>mv BioLockJ BioLockJ-v1.3.13</code> .  </p>
+<p>Create a symbolic link:</p>
+<pre><code>ln -s /full/path/to/BioLockJ_versions/BioLockJ-v1.3.13 current
+</code></pre>
+
+<p>cd into the "current" folder, and run the install script.  This will set the <code>$BLJ</code> variable in your profile to point to the this link.</p>
+<p>Download and unpack another release of BioLockJ in the BioLockJ_versions folder, repeating the process from above.</p>
+<p>Now you have two versions of BioLockJ,  a <code>BLJ</code> variable in your profile that points to a <code>current</code> symbolic link.  On systems with multiple users, an administrator should control the "group default" version by controlling the <code>current</code> link, and individual users can change their <code>BLJ</code> variable to point to the current group default or to a specific version.  On single-user systems, you can edit a link or the variable, whichever is more convenient.</p>
+<p>All new versions of BioLockJ should be installed in the same <code>BioLockJ_versions</code> folder, in the same way.  </p>
 <h2 id="other-notes-for-starting-out">Other notes for starting out<a class="headerlink" href="#other-notes-for-starting-out" title="Permanent link">#</a></h2>
 <p><strong>Install any/all software <a href="../Dependencies">Dependencies</a> required by the modules you wish to include in your pipeline.</strong></p>
-<p>BioLockJ is a pipeline manager, desigend to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed <strong>OR</strong> run through docker using the docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.</p>
+<p>BioLockJ is a pipeline manager, designed to integrate and manage external tools.  These external tools are not packaged into the BioLockJ program.  BioLockJ must run in an environment where these other tools have been installed <strong>OR</strong> run through docker using the docker images that have the tools installed.  The core program, and all modules packaged with it, have corresponding docker images.</p>
 <p>BioLockJ will shut down appropriately on its own when a pipeline either completes or fails.  <em>Sometimes</em>, it is necessary to shut down the program pre-maturely. See the <a href="../FAQ">FAQ page</a> for more details.</p>
-<h3 id="notes-about-environments">Notes about environments<a class="headerlink" href="#notes-about-environments" title="Permanent link">#</a></h3>
-<p>The main BioLockJ program can be used in these environments: </p>
-<ul>
-<li>a local machine with a unix-like system</li>
-<li>a local machine with a unix-like system running docker *</li>
-<li>a cluster, running a scheduler such as torque</li>
-<li>AWS cloud computing *</li>
-<li>any machine running docker (see <a href="../Pure-Docker/">Working in Pure Docker</a>)</li>
-</ul>
-<p>(* The launch scripts will still be run from your local machine.)</p>
-<p>The launch process requires a unix-like environment.  This includes linux, macOS, or an ubuntu environment running on Windows.</p>
-<p>If using <strong>docker</strong>, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run within the biolockj_controller container.</p>
-<p>If using <strong>AWS</strong>, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run on AWS. This is still experimental.</p>
-<p>If you are using BioLockJ on a shared system where another user has already installed BioLockJ, <strong>you will need to run the install script</strong> to create the required variables in your own user profile.</p>
-<p>There is also the option to run purely in docker, without installing even the launch scripts on your local machine.  However this is considered a nitch case scenario and not well supported.</p>
-<p>For more information about the how/why to use each environment, see <a href="../Supported-Environments/">Supported Environments</a></p>
-<p>The helper commands (such as <code>cd-blj</code>) assume a bash shell, though others also work.
-To see what shell you currently using, run <code>echo $0</code>.
-<strong>If</strong> you are not in a bash shell, you can change your current session to a bash shell, run <code>chsh -s /bin/bash</code>.</p>
               
             </div>
           </div>

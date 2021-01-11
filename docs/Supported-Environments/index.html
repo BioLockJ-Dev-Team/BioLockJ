@@ -72,7 +72,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../Built-in-modules/">Modules</a>
+    <a class="" href="../GENERATED/all-modules/">Modules</a>
                 </li>
                 <li class="">
                     
@@ -163,10 +163,15 @@
     <a class="current" href="./">Environments</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#what-environements-are-supported">What environements are supported</a></li>
+    <li class="toctree-l2"><a href="#notes-about-environments">Notes about environments</a></li>
     
-
-    <li class="toctree-l2"><a href="#choosing-an-environment">Choosing an environment</a></li>
+        <ul>
+        
+            <li><a class="toctree-l3" href="#choosing-an-environment">Choosing an environment</a></li>
+        
+            <li><a class="toctree-l3" href="#tested-environments">Tested environments</a></li>
+        
+        </ul>
     
 
     </ul>
@@ -214,31 +219,54 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="what-environements-are-supported">What environements are supported<a class="headerlink" href="#what-environements-are-supported" title="Permanent link">#</a></h2>
+                <h1 id="notes-about-environments">Notes about environments<a class="headerlink" href="#notes-about-environments" title="Permanent link">#</a></h1>
 <p>The main BioLockJ program can be used in these environments: </p>
 <ul>
-<li>a local machine with a unix-like system</li>
-<li>any machine running docker *</li>
-<li>a cluster, running a scheduler like torque</li>
-<li>AWS cloud computing *</li>
+<li>a local machine with a unix-like system (ie, linux or Mac, some features require a bash shell)</li>
+<li>a local machine with a unix-like system (See <a href="#tested-environments">tested environments</a>) running docker * </li>
+<li>(coming soon) Windows 10 running docker *</li>
+<li>a cluster, running a supported scheduler such as torque</li>
+<li>(coming soon) any machine running docker (see <a href="../Pure-Docker/">Working in Pure Docker</a>)</li>
 </ul>
-<p>(* The launch scripts will still be run from your local machine.)</p>
-<p>AWS is currently experimental. To ty it, see <a href="../Pure-Docker/">Working in Pure Docker</a></p>
-<p>In all cases, the launch process requires a unix-like environment.  This includes linux, macOS, or an ubuntu environment running on Windows.</p>
-<p>There is also the option to run purely in docker, without installing even the launch scripts on your local machine.  However this is considered a nitch case scenario and not well supported.</p>
+<p>(* The launch scripts will still be run from your local machine, this requires java, but not a bash shell)</p>
+<p>The launch process requires a unix-like environment.  This includes linux, macOS, or an ubuntu environment running on Windows. Windows support is still in development, see <a href="../Getting-Started-Windows">BioLockJ on Windows</a>.</p>
+<p>If using <strong>docker</strong>, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run within the biolockj_controller container.</p>
+<p>If using <strong>AWS</strong>, you will need to run the install script to create the variables used by the launch scripts, even though the main BioLockJ program will run on AWS. This is still experimental.</p>
+<p>If you are using BioLockJ on a shared system where another user has already installed BioLockJ, <strong>you will need to run the install script</strong> to create the required variables in your own user profile.</p>
+<p>There is also the option to run purely in docker, without installing even the launch scripts on your local machine.  However this is considered a niche case scenario and not well supported.</p>
+<p>The helper commands (such as <code>cd-blj</code>) assume a bash shell, though others may also work.
+To see what shell you currently using, run <code>echo $0</code>.
+<strong>If</strong> you are not in a bash shell, you can change your current session to a bash shell, run <code>chsh -s /bin/bash</code>.</p>
 <h2 id="choosing-an-environment">Choosing an environment<a class="headerlink" href="#choosing-an-environment" title="Permanent link">#</a></h2>
 <p>The major resources that come together in a pipeline are:</p>
 <ul>
 <li>data (project data and reference data)</li>
-<li>compute resources (mem, ram, cpu)</li>
+<li>compute resources (memory, ram, cpu)</li>
 <li>key executables</li>
 </ul>
 <p>In theory, you could install all the tools you need on your laptop; put your data on your laptop, and run your whole analysis on your laptop.  This would be a "local" pipeline; a single compute node is handling everything.</p>
 <p>However, in practice, a single machine typically doesn't have enough compute resources to run a modern bioinformatics pipeline in a realistic time frame; and the tools may be difficult to install, or even impossible to install on a given system.  </p>
 <p>Docker provides key executables by packaging them into containers.  After the initial hurdle of installing docker itself, the 'install' of executables that are available in docker images is trivial, and they produce very consistent results; even when different steps in your pipeline have conflicting system requirements.
 The underlying tools for all modules packaged with the main BioLockJ program are available via docker containers.  Docker is the most recommended way to run a pipeline.  However, these executables still have to come together with some compute resources.</p>
-<p>A computer cluster offers large amounts of compute resources and plenty of storage.  Some clusters also have adminstrators (or other users) who will install tools for you and mechanisms for you to install tools yourself.  Downsides: cluster systems have their own idiosyncrasies and not everyone has access to one.</p>
-<p>AWS provides large amounts of compute resources and interfaces very well with docker and with S3 for convenient and efficient data storage. Downsides: <em>costs money for each use</em>; has its own learning curve.</p>
+<p>A computer cluster offers large amounts of compute resources and plenty of storage.  Some clusters also have administrators (or other users) who will install tools for you and mechanisms for you to install tools yourself.  Downsides: cluster systems have their own idiosyncrasies and not everyone has access to one.</p>
+<p>AWS provides large amounts of compute resources and interfaces very well with docker and uses S3 for convenient and efficient data storage. Downsides: <em>costs money for each use</em>; has its own learning curve.</p>
+<h2 id="tested-environments">Tested environments<a class="headerlink" href="#tested-environments" title="Permanent link">#</a></h2>
+<p>We try make our software as system-agnostic as possible; but it is impossible to verify every possible stack of hardware / operating system / software.  We test multiple environments for each release, and we try to represent the resources of our user base.</p>
+<h3 id="release-testing">Release Testing<a class="headerlink" href="#release-testing" title="Permanent link">#</a></h3>
+<p>The most recent release testing was done on:</p>
+<ul>
+<li>locally on <strong>Mac</strong> OS Version 10.15.7 (2.2 GHz 6-Core Intel Core i7, 16 GB 2400 MHz DDR4)</li>
+<li>through <strong>docker on Mac</strong> OS Version 10.15.7 (same as above), using docker desktop Version 2.5.0.0</li>
+<li>locally and as a <strong>cluster</strong> using Red Hat Enterprise Linux Server 7.5 (Maipo)</li>
+<li>through <strong>docker on Windows</strong> Version 1909 using docker desktop version 3.0.0 and Ubuntu 20.04.1 using WSL2</li>
+</ul>
+<h3 id="anecdotal-tests">Anecdotal tests<a class="headerlink" href="#anecdotal-tests" title="Permanent link">#</a></h3>
+<p>BioLockJ has run successfully on:</p>
+<ul>
+<li>locally on Mac OS Version 10.15.5 (1.7 GHz Quad-Core Intel Core i7, 16 GB 2133 MHz LPDDR3)</li>
+<li>through docker on Mac OS Version 11.1 (2.3GHz Quad-Core Intel Core i5, 8 GB 2133MHz LPDDR3) with docker Version 3.0.3 </li>
+<li>through docker on Windows 10 Education version 1909; Intel Core-i7 6700K CPU @ 4.00 GHZ (hand-built box); ubuntu 20.04 and docker 20.10.0</li>
+</ul>
               
             </div>
           </div>
