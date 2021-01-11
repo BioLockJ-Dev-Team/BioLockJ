@@ -3,7 +3,7 @@
 # cd ${BLJ}
 # docker build -t biolockjdevteam/${name} . -f resources/docker/dockerfiles/${name}.Dockerfile 
 
-ARG BUILDER_IMG=biolockjdevteam/build_with_ant:1.9.14
+ARG BUILDER_IMG=biolockjdevteam/build_with_ant:1.10.9
 ARG DOCKER_HUB_USER=biolockjdevteam
 FROM ${BUILDER_IMG} AS builder
 
