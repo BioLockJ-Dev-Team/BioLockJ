@@ -4,7 +4,7 @@ docs_dir: docs
 #repo_url: https://github.com/BioLockJ-Dev-Team/BioLockJ
 repo_name: BioLockJ
 site_author: Ivory Blakley
-copyright: 2019 Fodor Lab
+copyright: Fodor Lab of UNCC
 
 plugins:
     - search
