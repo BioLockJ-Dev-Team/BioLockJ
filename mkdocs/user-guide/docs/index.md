@@ -40,10 +40,9 @@
 
 ## Links for Developers
 
-Javadocs                       
-[https://BioLockJ-Dev-Team.github.io/BioLockJ/javadocs/](https://BioLockJ-Dev-Team.github.io/BioLockJ/javadocs/)
+[BioLockJ Developers Guide](../DevNotes-main)
 
-Developement tests in the sheepdog_testing_suite                  
+Repository of functional tests           
 [https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite](https://github.com/BioLockJ-Dev-Team/sheepdog_testing_suite)
 
 The user guide for our latest stable version                    
