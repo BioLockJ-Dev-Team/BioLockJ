@@ -435,12 +435,37 @@ public class BashScriptBuilder {
 		return lines;
 	}
 
+	/**
+	 * Should the worker be saved. If it is NOT saved, it is left open to have more work lines added.
+	 * @param module - BioModule that owns these workers
+	 * @param sampleCount - the number of samples (the outer list unit) currently in this script
+	 * @param count - the total number of samples (the outer list unit) for this module
+	 * @return true if the worker should not get any more worker lines and thus should be saved
+	 * @throws ConfigNotFoundException
+	 * @throws ConfigFormatException
+	 */
 	private static boolean saveWorker( final BioModule module, final int sampleCount, final int count )
 		throws ConfigNotFoundException, ConfigFormatException {
+		// max Workers - number of workers that have to have the maximum (min + 1) number of samples per worker
 		final int maxWorkers = count - ModuleUtil.getNumWorkers( module );
 		final int minSamplesPerWorker = getMinSamplesPerWorker( module, count );
-		return workerNum() < maxWorkers && sampleCount == minSamplesPerWorker + 1 ||
+		// worker num - number of workers that have already been saved (already added to the list of workers)
+		// we save the max workers before the min workers.  
+		// So, DO save the file (stop adding samples to it)
+		// IF we are still in the make-max-workers phase, only save this if it has the max number (min+1)
+		// OR IF the in the build-min-wokers phase, and this worker has the min number of samples.
+		// otherwise, don't save it yet, add more samples to it.
+		boolean bool = workerNum() < maxWorkers && sampleCount == minSamplesPerWorker + 1 ||
 			workerNum() >= maxWorkers && sampleCount == minSamplesPerWorker;
+		Log.debug( module.getClass(), "module: " + module );
+		Log.debug( module.getClass(), "sampleCount: " + sampleCount );
+		Log.debug( module.getClass(), "count: " + count );
+		Log.debug(module.getClass(), "module num workers: " + ModuleUtil.getNumWorkers( module ) );
+		Log.debug( module.getClass(), "maxWorkers: " + maxWorkers );
+		Log.debug(module.getClass(), "minSamplesPerWorker: " + minSamplesPerWorker );
+		Log.debug(module.getClass(), "workerNum: " + workerNum() );
+		Log.debug(module.getClass(), "THEREFORE, saveWorker:" + bool );
+		return bool;
 	}
 
 	private static int workerNum() {
