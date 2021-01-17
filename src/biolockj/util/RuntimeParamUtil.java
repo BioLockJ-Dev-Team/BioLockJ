@@ -174,6 +174,10 @@ public class RuntimeParamUtil {
 		return params.get( PRECHECK_FLAG ) != null;
 	}
 	
+	public static boolean isVerbose() {
+		return params.get( DEBUG_FLAG ) != null;
+	}
+	
 	public static boolean isPrecheckAllMode() {
 		return params.get( UNUSED_PROPS_FLAG ) != null;
 	}
@@ -370,7 +374,9 @@ public class RuntimeParamUtil {
 	public static final String RESTART_DIR = "-restartDir";
 
 	/**
-	 * Log to System.out instead of Log for debug early runtime errors with switch: {@value #SYSTEM_OUT_FLAG}
+	 * Flag argument; if present, BioLockJ will print to System.out instead of Log for debugging early runtime errors.
+	 * <br>flag: {@value #SYSTEM_OUT_FLAG}
+	 * @see #DEBUG_FLAG
 	 */
 	protected static final String SYSTEM_OUT_FLAG = "-systemOut";
 	
@@ -380,11 +386,18 @@ public class RuntimeParamUtil {
 	public static final String PRECHECK_FLAG = "-precheck";
 	
 	/**
+	 * Flag argument; if present, BioLockJ will set the {@link Conig} property {@value Constants#LOG_LEVEL_PROPERTY} to DEBUG. 
+	 * <br>flag: {@value #DEBUG_FLAG}
+	 * @see #SYSTEM_OUT_FLAG
+	 */
+	public static final String DEBUG_FLAG = "-verbose";
+	
+	/**
 	 * Flag argument; if presetn, BioLockJ will run check dependencies for ALL modules to determine unused properties from the primary config.
 	 */
 	public static final String UNUSED_PROPS_FLAG = "-unusedProps";
 
-	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG, UNUSED_PROPS_FLAG );
+	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG, UNUSED_PROPS_FLAG, DEBUG_FLAG );
 	private static final List<String> DIR_ARGS = Arrays.asList( BLJ_PROJ_DIR, RESTART_DIR );
 	private static final List<String> extraParams = new ArrayList<>();
 	private static final List<String> NAMED_ARGS = Arrays.asList( CONFIG_FILE, DIRECT_MODE, PASSWORD );

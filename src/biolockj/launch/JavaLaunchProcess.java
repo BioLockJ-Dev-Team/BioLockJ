@@ -39,6 +39,7 @@ public class JavaLaunchProcess extends LaunchProcess {
 		if (getFlag( RESTART_ARG ) ) command.append( " " + RuntimeParamUtil.RESTART_DIR + " " + getRestartDir().getAbsolutePath());
 		if (getFlag( PRECHECK_ARG ) || getFlag( UNUSED_PROPS_ARG )) command.append( " -precheck" );
 		if (getFlag( UNUSED_PROPS_ARG ) ) { command.append( " " + RuntimeParamUtil.UNUSED_PROPS_FLAG ); }
+		if (getFlag( DEBUG_ARG ) ) { command.append( " " + RuntimeParamUtil.DEBUG_FLAG ); }
 		if ( getConfigFile() != null ) command.append( " " + RuntimeParamUtil.CONFIG_FILE + " " + getConfigFile().getAbsolutePath() );
 		if ( ! getFlag( FG_ARG )) {
 			command.insert( 0, "nohup " );

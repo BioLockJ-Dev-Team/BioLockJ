@@ -76,7 +76,7 @@ public class Log {
 	 * @return TRUE if DEBUG
 	 */
 	public static boolean doDebug() {
-		return Config.getString( null, Constants.LOG_LEVEL_PROPERTY ).toUpperCase().equals( "DEBUG" );
+		return Config.getString( null, Constants.LOG_LEVEL_PROPERTY ).toUpperCase().equals( DEBUG );
 	}
 
 	/**
@@ -288,10 +288,17 @@ public class Log {
 	 * invalid
 	 */
 	protected static String validateLogLevel() throws Exception {
-		final String logLevel = Config.requireString( null, Constants.LOG_LEVEL_PROPERTY ).toUpperCase();
-		if( !logLevel.equals( "DEBUG" ) && !logLevel.equals( "INFO" ) && !logLevel.equals( "WARN" ) &&
-			!logLevel.equals( "ERROR" ) )
-			throw new ConfigFormatException(Constants.LOG_LEVEL_PROPERTY, "Please configure a valid option: " + "[DEBUG/INFO/WARN/ERROR]" );
+		String logLevel = Config.requireString( null, Constants.LOG_LEVEL_PROPERTY ).toUpperCase();
+		if( !logLevel.equals( DEBUG ) && !logLevel.equals( INFO ) && !logLevel.equals( WARN ) &&
+			!logLevel.equals( ERROR ) ) {
+			throw new ConfigFormatException(Constants.LOG_LEVEL_PROPERTY, "Please configure a valid option: " + "[" + DEBUG + "/" + INFO + "/" + WARN + "/" + ERROR + "]" );
+		}
+		if( RuntimeParamUtil.isVerbose() ) {
+			Log.debug( Log.class, "The configured value [" + Constants.LOG_LEVEL_PROPERTY + " = " + logLevel +
+				"] is overriden by the command line option " + RuntimeParamUtil.DEBUG_FLAG + ", and set to: " + DEBUG );
+			logLevel  = DEBUG ;
+			Config.setConfigProperty( Constants.LOG_LEVEL_PROPERTY, logLevel );
+		}
 		return logLevel;
 	}
 

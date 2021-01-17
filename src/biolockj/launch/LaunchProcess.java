@@ -38,6 +38,7 @@ public class LaunchProcess {
 	protected static final String WAIT_ARG = "wait-for-start";
 	protected static final String PRECHECK_ARG = "precheck-only";
 	protected static final String UNUSED_PROPS_ARG = "unused-props";
+	protected static final String DEBUG_ARG = "verbose";
 	
 	public static final String BIOLOCKJ_TEST_MODE = "BIOLOCKJ_TEST_MODE";
 	protected static String BIOLOCKJ_TEST_MODE_VALUE = null;
@@ -68,7 +69,7 @@ public class LaunchProcess {
 
 	private static final List<String> longArgName =
 		Arrays.asList( new String[] { GUI_ARG, CONFIG_ARG, RESTART_ARG, AWS_ARG, DOCKER_ARG, FG_ARG, ENV_ARG, WAIT_ARG,
-			PRECHECK_ARG, UNUSED_PROPS_ARG, PASSWORD_ARG, PROJ_ARG, EXT_MODS_ARG, BLJ_ARG } );
+			PRECHECK_ARG, UNUSED_PROPS_ARG, PASSWORD_ARG, PROJ_ARG, EXT_MODS_ARG, BLJ_ARG, DEBUG_ARG } );
 	private static final List<String> takeShortArg = Arrays.asList( new String[] { GUI_ARG, CONFIG_ARG, RESTART_ARG,
 		AWS_ARG, DOCKER_ARG, FG_ARG, ENV_ARG, WAIT_ARG, PRECHECK_ARG, UNUSED_PROPS_ARG, "help", "version" } );
 	private static final List<String> takesValue =
@@ -406,6 +407,7 @@ public class LaunchProcess {
 		addSpace( s, EXT_MODS_ARG, "<dir>", "Directory with compiled java code giving additional modules" );
 		addSpace( s, BLJ_ARG, "", "Map $BLJ folder into the docker container;" );
 		continueDescription( s, "this replaces BioLockJ packaged in a docker container with the local copy." );
+		addSpace( s, DEBUG_ARG, "", "Equivalent to adding `" + Constants.LOG_LEVEL_PROPERTY + "=DEBUG` to the config file." );
 		addSpace( s, ENV_ARG, "<var=val>", "Environment variables to be passed to the BioLockJ environment." );
 		continueDescription( s, "Can be a comma-sep list. Values take the form: a=foo,b=bar,c=baz" );
 		addSpace( s, PROJ_ARG, "<dir>", "Directory that contains BioLockJ pipelines. If not supplied, " );
