@@ -383,7 +383,7 @@ public class LaunchProcess {
 	 */
 	public static void printHelp(PrintStream s) {
 		s.println( "" );
-		s.println( "BioLockJ " + BioLockJUtil.getVersion() + " - UNCC Fodor Lab 2021" );
+		s.println( "BioLockJ " + BioLockJUtil.getVersion() + " - " + Constants.YEAR_AND_OWNER );
 		s.println( "Usage:" );
 		s.println( "  biolockj [options] <config|pipeline>" );
 		s.println();

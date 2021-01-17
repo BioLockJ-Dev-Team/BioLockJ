@@ -1068,5 +1068,10 @@ public class Constants {
 	public static final String VALIDATION_ENABLED = "This pipeline has validation enabled.";
 
 	public static final String UNVERIFIED_PROPS_FILE = "unverified.properties";
+	
+	/**
+	 * The year and owner of this program as of most recent development.
+	 */
+	public static final String YEAR_AND_OWNER = "UNCC Fodor Lab 2021";
 
 }

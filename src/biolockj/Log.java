@@ -268,7 +268,7 @@ public class Log {
 	protected static void logWelcomeMsg() {
 		Log.info( Log.class, Constants.LOG_SPACER );
 		Log.info( Log.class,
-			"Launching BioLockJ " + BioLockJUtil.getVersion() + " ~ Distributed by UNCC Fodor Lab @2019" );
+			"Launching BioLockJ " + BioLockJUtil.getVersion() + " ~ Distributed by " + Constants.YEAR_AND_OWNER );
 		Log.info( Log.class, Constants.LOG_SPACER );
 		Log.info( Log.class, "This code is free software; you can redistribute and/or modify it" );
 		Log.info( Log.class, "under the terms of the GNU General Public License as published by" );
