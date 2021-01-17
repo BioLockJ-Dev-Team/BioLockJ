@@ -385,7 +385,11 @@ public class LaunchProcess {
 		s.println( "" );
 		s.println( "BioLockJ " + BioLockJUtil.getVersion() + " - " + Constants.YEAR_AND_OWNER );
 		s.println( "Usage:" );
-		s.println( "  biolockj [options] <config|pipeline>" );
+		s.println( "(bash)");
+		s.println( "biolockj [options] <config|pipeline>" );
+		s.println( "");
+		s.println( "(java)");
+		s.println( "java -jar /path/to/BioLockJ.jar [options] <config|pipeline>");
 		s.println();
 		s.println( "Options:" );
 
