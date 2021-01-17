@@ -60,6 +60,25 @@ public class ForEachLoop extends GenMod {
 		return "BioLockJ " + BioLockJUtil.getVersion( ) + System.lineSeparator() + "Module developed by Ivory Blakley";
 	}
 	
+	/**
+	 * Supply a list with the correct number of files to match the number of inputs.
+	 * These are not files that actually exist; but this list allows for correct worker assignment.
+	 * TODO: revisit this when worker assignment is a little smarter.
+	 */
+	@Override
+	public List<File> getInputFiles() {
+		List<File> list = new ArrayList<>();
+		try {
+			for (String element : getLoopElements() ) {
+				list.add( new File(element) );
+			}
+		} catch( ConfigNotFoundException e ) {
+			// this exception is handled in checkDependecies and/or in buildScript
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	private static String LOOPBY = "genMod.loopBy";
 
 }

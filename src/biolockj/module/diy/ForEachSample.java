@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import biolockj.Log;
 import biolockj.api.API_Exception;
+import biolockj.exception.ConfigNotFoundException;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.MetaUtil;
 
@@ -29,6 +30,18 @@ public class ForEachSample extends GenMod {
 		}
 		
 		return data;
+	}
+	
+	/**
+	 * Supply a list with the correct number of files to match the number of inputs.
+	 * These are not files that actually exist; but this list allows for correct worker assignment.
+	 * TODO: revisit this when worker assignment is a little smarter.
+	 */
+	@Override
+	public List<File> getInputFiles() {
+		List<File> list = new ArrayList<>();
+		for (String element : MetaUtil.getSampleIds() ) list.add( new File(element) );
+		return list;
 	}
 	
 	@Override
