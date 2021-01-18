@@ -50,7 +50,7 @@ else
 	echo 'export BLJ_PROJ=$BLJ/pipelines' >> $user_profile
 fi
 
-echo 'export PATH=$PATH:$BLJ/script' >> $user_profile
+echo 'export PATH=$BLJ/script:$PATH' >> $user_profile
 echo "alias cd-blj='"'cd $(last-pipeline); quick_pipeline_view'"'" >> $user_profile
 # should appear in the profile as:
 # alias cd-blj='cd $(last-pipeline); quick_pipeline_view'
