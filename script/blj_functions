@@ -116,25 +116,6 @@ console_log() {
 	echo "[ $(date "+%Y-%m-%d %H:%M:%S") ] ${1}"
 }
 
-# Check for a default profile in the $USER $HOME dir
-get_default_profile() {
-	if [ ${SHELL} == "/bin/bash" ]; then
-		user_profile="${HOME}"/.bash_profile
-		[ ! -f "${user_profile}" ] && user_profile="${HOME}"/.bashrc
-		[ ! -f "${user_profile}" ] && user_profile="${HOME}"/.profile
-		[ ! -f "${user_profile}" ] && user_profile="${HOME}"/.bash_login
-	elif [ ${SHELL} == "/bin/zsh" ]; then
-		user_profile="${HOME}"/.zshrc
-		[ ! -f "${user_profile}" ] && user_profile="${HOME}"/.zshenv
-		[ ! -f "${user_profile}" ] && user_profile="${HOME}"/.zprofile
-		[ ! -f "${user_profile}" ] && user_profile="${HOME}"/.profile
-		[ ! -f "${user_profile}" ] && user_profile="${HOME}"/.zlogin
-	fi
-	[ -f "${user_profile}" ] && echo "${user_profile}"
-}
-
-
-
 ### Workign with BioLockJ pipelines
 
 # Return absolute path of current pipeline if in a pipeline directory
