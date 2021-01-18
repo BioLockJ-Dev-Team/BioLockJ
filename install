@@ -57,12 +57,11 @@ echo "alias cd-blj='"'cd $(last-pipeline); quick_pipeline_view'"'" >> $user_prof
 
 echo ""
 
-VER=$(. $user_profile; biolockj -v) # this line must run BEFORE exporting $BLJ
 export BLJ
 export BLJ_PROJ=$BLJ/pipelines
-CUR=`$BLJ/script/biolockj -v`
 
-if [ ${#CUR} -gt 0 ] && [ ${#VER} -gt 0 ] && [ $CUR == $VER ]; then
+VER=$(. $user_profile &>/dev/null ; biolockj --version 2>/dev/null )
+if [ $? -eq 0 ] && [ ${#VER} -gt 0 ] ; then
 	echo "Successfully installed BioLockJ version $VER"
 	echo ""
 	echo 'Start a new session and run "biolockj --help" to see options.'
@@ -71,6 +70,7 @@ else
 	echo 'To verify installation, open a new session and type "biolockj --help"'
 fi
 
+echo ""
 echo 'Then run a small pipeline:'
 echo '"biolockj $BLJ/templates/myFirstPipeline/myFirstPipeline.properties" '
 echo ""
