@@ -417,6 +417,9 @@ public class LaunchProcess {
 		addSpace( s, PROJ_ARG, "<dir>", "Directory that contains BioLockJ pipelines. If not supplied, " );
 		continueDescription( s, "biolockj will use the value of environment variable \"BLJ_PROJ\"." );
 		s.println();
+		s.println("Run the test pipeline:");
+		s.println("biolockj $BLJ/templates/myFirstPipeline/myFirstPipeline.properties");
+		s.println();
 	}
 
 	private static void addSpace( PrintStream stream, String name, String value, String desc ) {
