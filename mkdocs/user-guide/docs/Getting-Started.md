@@ -83,7 +83,7 @@ When you run the program, you will see a pop-up window asking for permission to 
 If that does not appear, see [why doesn't my pipeline run in docker](../FAQ/#question-why-doesnt-my-pipeline-run-in-docker).
 
 ```bash
-biolockj --docker --blj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
+biolockj --docker ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
 # 
 # Docker container id: 336259e7d3b8d9ab2fa71202258b562664be1bf9645d503a790ae5e9da15ce97
 # Initializing BioLockJ..
