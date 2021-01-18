@@ -147,8 +147,8 @@ public class MasterConfigUtil {
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter( new FileWriter( getMasterConfig() ) );
-			writeConfigHeaders( writer );
-			if( props != null ) writeCompleteHeader( writer, props );
+			writeModuleRunOrder( writer );
+			writeDefPropsChain( writer );
 			final Set<String> keys = new TreeSet<>( getProps( props ).keySet() );
 			for( final String key: keys )
 				writer.write( key + "=" + getProps( props ).get( key ) + RETURN );
@@ -191,53 +191,15 @@ public class MasterConfigUtil {
 	private static File getTempConfig() {
 		return new File( Config.pipelinePath() + File.separator + TEMP_PREFIX + Config.pipelineName() );
 	}
-
-	private static void writeCompleteHeader( final BufferedWriter writer, final Map<String, String> props )
-		throws IOException {
-
-		final Set<String> configProps = Config.getSet( null, Constants.INTERNAL_BLJ_MODULE );
-		final Set<String> allProps = Config.getSet( null, Constants.INTERNAL_ALL_MODULES );
-
-		if( !configProps.equals( allProps ) ) {
-			writer.write(
-				"####################################################################################" + RETURN );
-			writer.write( "#" + RETURN );
-			writer.write( "#   Based on the above configuration, the following pipeline was run." + RETURN );
-			writer.write( "#   The additional BioModules were added as required pre/postrequisits or as" + RETURN );
-			writer.write( "#   implicit modules that BioLockJ determined were required to meet BioLockJ" + RETURN );
-			writer.write( "#   standard requirements or BioModule input file format requirments." + RETURN );
-			writer.write( "#" + RETURN );
-			for( final String mod: Config.getList( null, Constants.INTERNAL_ALL_MODULES ) )
-				writer.write( "#      " + Constants.BLJ_MODULE_TAG + " " + mod + RETURN );
-			writer.write( "#" + RETURN );
-			writer.write(
-				"####################################################################################" + RETURN );
-		}
-		if( Log.doDebug() ) {
-			writer.write( "###" + RETURN );
-			writer.write( "###   Pipline = DEBUG mode so printing internal properties - FYI only." + RETURN );
-			writer.write( "###   Internal properties are discarded at runtime & refenerated as needed." + RETURN );
-			writer.write( "###" + RETURN );
-			if( !configProps.equals( allProps ) ) {
-				writer.write( "###  Set [ " + Constants.DISABLE_ADD_IMPLICIT_MODULES + "=" + Constants.TRUE +
-					" ] to run this full list because it includes the implicit BioModules" + RETURN );
-				writer.write( "###" + RETURN );
-			}
-			final TreeSet<String> keys = new TreeSet<>( props.keySet() );
-			for( final String key: keys ) {
-				final String val = props.get( key );
-				if( Config.isInternalProperty(key) && val != null && !val.isEmpty() )
-					writer.write( "###     " + key + "=" + props.get( key ) + RETURN );
-			}
-			writer.write( "###" + RETURN );
-			writer.write(
-				"####################################################################################" + RETURN );
-		}
+	
+	private static void writeModuleRunOrder( final BufferedWriter writer ) throws IOException {
+		for( final String module: Config.getList( null, Constants.INTERNAL_BLJ_MODULE ) )
+			writer.write( Constants.BLJ_MODULE_TAG + " " + module + RETURN );
 		writer.write( RETURN );
 	}
-
-	private static void writeConfigHeaders( final BufferedWriter writer ) throws IOException {
-		writer.write( "# The MASTER Config file was generated from the following Config files:" + RETURN );
+	
+	private static void writeDefPropsChain( final BufferedWriter writer ) throws IOException {
+		writer.write( "# This properties file was generated from the following files:" + RETURN );
 		final List<String> initConfig = getInitConfig();
 		if( initConfig == null ) {
 			writer.write( PROJ_CONFIG_FLAG + Config.getConfigFilePath() + RETURN );
@@ -246,10 +208,6 @@ public class MasterConfigUtil {
 				writer.write( DEFAULT_CONFIG_FLAG + defaults.get( i - 1 ) + RETURN );
 		} else for( final String line: initConfig )
 			writer.write( line + RETURN );
-
-		writer.write( RETURN );
-		for( final String module: Config.getList( null, Constants.INTERNAL_BLJ_MODULE ) )
-			writer.write( Constants.BLJ_MODULE_TAG + " " + module + RETURN );
 		writer.write( RETURN );
 	}
 
