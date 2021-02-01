@@ -60,6 +60,7 @@ public class DockerLaunchProcess extends LaunchProcess {
 		if (getFlag( AWS_ARG )) options.append( " " + RuntimeParamUtil.AWS_FLAG );
 		if (getFlag( PRECHECK_ARG ) || getFlag( UNUSED_PROPS_ARG )) options.append( " " + RuntimeParamUtil.PRECHECK_FLAG );
 		if (getFlag( UNUSED_PROPS_ARG )) options.append( " " + RuntimeParamUtil.UNUSED_PROPS_FLAG );
+		if (getFlag( DOCKER_ARG )) options.append( " " + RuntimeParamUtil.DOCKER_FLAG );
 		if (getFlag( DEBUG_ARG )) options.append( " " + RuntimeParamUtil.DEBUG_FLAG );
 		if ( DockerUtil.inDockerEnv() ) {
 			options.append( " " + RuntimeParamUtil.BLJ_PROJ_DIR + " " + DockerUtil.deContainerizePath(BLJ_PROJ_DIR.getAbsolutePath()) );

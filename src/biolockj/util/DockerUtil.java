@@ -262,7 +262,9 @@ public class DockerUtil {
 	 * @return TRUE if Java running in Docker container
 	 */
 	public static boolean inDockerEnv() {
-		return DOCKER_ENV_FLAG_FILE.isFile();
+		if (DOCKER_ENV_FLAG_FILE.isFile()) Log.info(DockerUtil.class, "This instance is in a docker container; found file: " + DOCKER_ENV_FLAG_FILE);
+		else Log.info(DockerUtil.class, "This instance is NOT in a docker container.");
+		return RuntimeParamUtil.isInDocker();
 	}
 
 	private static TreeMap<String, String> volumeMap;

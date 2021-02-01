@@ -178,6 +178,10 @@ public class RuntimeParamUtil {
 		return params.get( DEBUG_FLAG ) != null;
 	}
 	
+	public static boolean isInDocker() {
+		return params.get( DOCKER_FLAG ) != null;
+	}
+	
 	public static boolean isPrecheckAllMode() {
 		return params.get( UNUSED_PROPS_FLAG ) != null;
 	}
@@ -297,8 +301,9 @@ public class RuntimeParamUtil {
 
 	private static String getJavaComputeNodeArgs( final JavaModule module ) throws DockerVolCreationException {
 		Log.info( RuntimeParamUtil.class, "Building java args for compute nodes  -->" );
-		return BLJ_PROJ_DIR + " " + get_BLJ_PROJ(false).getAbsolutePath() + " " 
-			 + DIRECT_MODE + " " + Config.pipelineName() + ":" + module.getModuleDir().getName();
+		return BLJ_PROJ_DIR + " " + get_BLJ_PROJ( false ).getAbsolutePath() + " " 
+						+ DOCKER_FLAG + " " 
+						+ DIRECT_MODE + " " + Config.pipelineName() + ":" + module.getModuleDir().getName();
 	}
 
 	private static void parseParams( final String[] args ) throws RuntimeParamException {
@@ -393,11 +398,16 @@ public class RuntimeParamUtil {
 	public static final String DEBUG_FLAG = "-verbose";
 	
 	/**
+	 * Flag argument; if present, BioLockJ will use a docker volume map. flag: {@value #DOCKER_FLAG}
+	 */
+	public static final String DOCKER_FLAG = "-docker";
+	
+	/**
 	 * Flag argument; if presetn, BioLockJ will run check dependencies for ALL modules to determine unused properties from the primary config.
 	 */
 	public static final String UNUSED_PROPS_FLAG = "-unusedProps";
 
-	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG, UNUSED_PROPS_FLAG, DEBUG_FLAG );
+	private static final List<String> ARG_FLAGS = Arrays.asList( AWS_FLAG, SYSTEM_OUT_FLAG, PRECHECK_FLAG, UNUSED_PROPS_FLAG, DEBUG_FLAG, DOCKER_FLAG );
 	private static final List<String> DIR_ARGS = Arrays.asList( BLJ_PROJ_DIR, RESTART_DIR );
 	private static final List<String> extraParams = new ArrayList<>();
 	private static final List<String> NAMED_ARGS = Arrays.asList( CONFIG_FILE, DIRECT_MODE, PASSWORD );
