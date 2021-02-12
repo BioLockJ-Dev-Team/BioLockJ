@@ -646,7 +646,7 @@ public class MetaUtil {
 		Properties.registerProp( META_BARCODE_COLUMN, Properties.STRING_TYPE, META_BARCODE_COLUMN_DESC );
 		Properties.registerProp( META_COLUMN_DELIM, Properties.STRING_TYPE, META_COLUMN_DELIM_DESC );
 		Properties.registerProp( META_COMMENT_CHAR, Properties.STRING_TYPE, META_COMMENT_CHAR_DESC );
-		Properties.registerProp( META_FILE_PATH, Properties.STRING_TYPE, META_FILE_PATH_DESC );
+		Properties.registerProp( META_FILE_PATH, Properties.FILE_PATH, META_FILE_PATH_DESC );
 		Properties.registerProp( META_FILENAME_COLUMN, Properties.LIST_TYPE, META_FILENAME_COLUMN_DESC );
 		Properties.registerProp( META_NULL_VALUE, Properties.STRING_TYPE, META_NULL_VALUE_DESC );
 		Properties.registerProp( META_REQUIRED, Properties.BOOLEAN_TYPE, META_REQUIRED_DESC );
