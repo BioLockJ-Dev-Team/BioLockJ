@@ -562,20 +562,21 @@ public class BioLockJ_API {
 			}catch(Exception e) {}
 			
 			if (tmp instanceof ApiModule) {
-				modAtts.put("description", ((ApiModule) tmp).getDescription() );
-				modAtts.put("details", ((ApiModule) tmp).getDetails() );
-				modAtts.put("citation", ((ApiModule) tmp).getCitationString() );
-				modAtts.put("title", ((ApiModule) tmp).getTitle() );
-				modAtts.put("menuPlacement", ((ApiModule) tmp).getMenuPlacement() );
+				ApiModule atmp = (ApiModule) tmp;
+				modAtts.put("description", atmp.getDescription() );
+				modAtts.put("details", atmp.getDetails() );
+				modAtts.put("citation", atmp.getCitationString() );
+				modAtts.put("title", atmp.getTitle() );
+				modAtts.put("menuPlacement", atmp.getMenuPlacement() );
 				
 				List<String> props = listModuleProps( mod );
 				JSONArray modProps = new JSONArray();
 				for (String prop : props) {
 					HashMap<String, String> propAtts = new HashMap<>();
 					propAtts.put("property", prop);
-					propAtts.put("type", Properties.getPropertyType( prop ));
-					propAtts.put("description", Properties.getDescription( prop ));
-					propAtts.put("default", propValue(prop));
+					propAtts.put("type", atmp.getPropType( prop ));
+					propAtts.put("description", atmp.getDescription( prop ));
+					propAtts.put("default", atmp.getPropDefault( prop ));
 					modProps.put( propAtts );
 				}
 				modAtts.put( "properties", modProps );
