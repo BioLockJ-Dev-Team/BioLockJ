@@ -653,10 +653,9 @@ public class DockerUtil {
 		ArrayList<String> props = new ArrayList<>();
 		props.add( SAVE_CONTAINER_ON_EXIT );
 		props.add( VERIFY_IMAGE );
-		// Don't include these, these properties are specifically added to the docs in the docker section.
-		// props.add( DOCKER_HUB_USER );
-		// props.add( DOCKER_IMG );
-		// props.add( DOCKER_IMG_VERSION );
+		props.add( DOCKER_HUB_USER );
+		props.add( DOCKER_IMG );
+		props.add( DOCKER_IMG_VERSION );
 		return props;
 	}
 
@@ -710,7 +709,8 @@ public class DockerUtil {
 	 * {@link biolockj.Config} String property: {@value #DOCKER_IMG_VERSION} {@value #DOCKER_IMG_VERSION_DESC}
 	 */
 	public static final String DOCKER_IMG_VERSION = "docker.imageTag";
-	private static final String DOCKER_IMG_VERSION_DESC = "indicate specific version of Docker images";
+	private static final String DOCKER_IMG_VERSION_DESC = 
+					"indicate specific version of Docker images" + Properties.NO_BROAD_USE;
 	
 	/**
 	 * {@link biolockj.Config} Boolean property: {@value #DOCKER_MOUNT_SOCK} {@value #DOCKER_MOUNT_SOCK_DESC}
@@ -735,7 +735,7 @@ public class DockerUtil {
 	 */
 	public static final String DOCKER_IMG = "docker.imageName";
 	private static final String DOCKER_IMG_DESC =
-		"The name of a docker image to override whatever a module says to use.";
+		"The name of a docker image to override whatever a module says to use." + Properties.NO_BROAD_USE;
 
 	/**
 	 * {@link biolockj.Config} String property: {@value #DOCKER_HUB_USER}<br>
@@ -746,7 +746,8 @@ public class DockerUtil {
 	 */
 
 	public static final String DOCKER_HUB_USER = "docker.imageOwner";
-	private static final String DOCKER_HUB_USER_DESC = "name of the Docker Hub user that owns the docker containers";
+	private static final String DOCKER_HUB_USER_DESC =
+		"name of the Docker Hub user that owns the docker containers" + Properties.NO_BROAD_USE;
 
 	/**
 	 * {@link biolockj.Config} Boolean property: {@value #VERIFY_IMAGE} {@value #VERIFY_IMAGE_DESC}

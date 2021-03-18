@@ -478,6 +478,11 @@ public class Properties extends java.util.Properties {
 	 */
 	public static final String REQUIRED = "required ";
 	
+	/**
+	 * Added description for general properties that are not meant to be used in their general form.
+	 */
+	public static final String NO_BROAD_USE = " Only use the module-specific-override form of this property.";
+	
 	//Property Types
 	public static final String STRING_TYPE = "string";
 	public static final String BOOLEAN_TYPE = "boolean";

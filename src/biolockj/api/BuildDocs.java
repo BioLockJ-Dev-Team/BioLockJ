@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -139,6 +140,8 @@ public class BuildDocs {
 				moduleProps.add(prop);
 			}
 		}
+		// These properties are handled specifically in writeDockerInfo()
+		modulesGeneralProps.removeAll( Arrays.asList( DockerUtil.DOCKER_HUB_USER, DockerUtil.DOCKER_IMG, DockerUtil.DOCKER_IMG_VERSION ) );
 		writer.write( "## Properties " + System.lineSeparator() );
 		String configuration = "configuration";
 		if ( (new File(baseDir.getParentFile(), "Configuration.md")).exists() ) {
