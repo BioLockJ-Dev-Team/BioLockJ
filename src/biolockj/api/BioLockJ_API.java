@@ -414,7 +414,7 @@ public class BioLockJ_API {
 	 * @throws Exception 
 	 */
 	public static Boolean isValidProp(String prop, String val, List<String> modules) throws Exception {
-		Config.initBlankProps();
+		initConfig();
 		Config.setConfigProperty( prop, val );
 		
 		Boolean isValid = Properties.isValidProp(prop);

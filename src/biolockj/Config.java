@@ -422,16 +422,6 @@ public class Config {
 		TaxaUtil.initTaxaLevels();
 	}
 	
-	/**
-	 * Allow the system to act with no properties to allow for quick testing of individual props.
-	 * @param prop
-	 * @param val
-	 * @throws Exception
-	 */
-	public static void initBlankProps() throws Exception {
-		props = new Properties();
-	}
-	
 	public static void partiallyInitialize(File tempConfig) throws Exception {
 		configFile = tempConfig;
 		props = Properties.loadProperties( tempConfig );
