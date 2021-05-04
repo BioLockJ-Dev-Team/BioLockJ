@@ -46,16 +46,27 @@ public class ConfigException extends BioLockJException {
 	 * @return Exception message that will be passed to superclass {@link java.lang.Exception} via super()
 	 */
 	protected static String buildMessage( final String property, final String msg ) {
+		String bigMsg = showValue(property) + RETURN + msg;
+		String addedMsg = promptChange();
+		return bigMsg + addedMsg;
+	}
+	
+	protected static String showValue(final String property) {
 		String val = Config.getString( null, property );
 		if( val == null ) val = "{undefined}";
-		String bigMsg = "[ " + property + "=" + val + " ] " + RETURN + msg;
+		String bigMsg = "[ " + property + "=" + val + " ] ";
+		return bigMsg;
+	}
+	
+	protected static String promptChange() {
 		String addedMsg = "";
 		try {
 			String path  = Config.getConfigFilePath();
 			addedMsg = RETURN + "Restart pipeline after updating the property value in: " + path;
 		}catch(Exception e) {
-			addedMsg = RETURN + "Restart pipeline after updating the property value in your config file.";		}
-		return bigMsg + addedMsg;
+			addedMsg = RETURN + "Restart pipeline after updating the property value in your config file.";
+		}
+		return addedMsg;
 	}
 
 	private static final long serialVersionUID = 3479702562753539290L;
