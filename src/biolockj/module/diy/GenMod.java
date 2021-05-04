@@ -12,6 +12,7 @@
 package biolockj.module.diy;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,15 @@ import biolockj.Properties;
 import biolockj.api.API_Exception;
 import biolockj.api.ApiModule;
 import biolockj.api.BuildDocs;
+import biolockj.exception.ConfigConflictException;
+import biolockj.exception.ConfigException;
 import biolockj.exception.ConfigFormatException;
+import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
-import biolockj.exception.DockerVolCreationException;
 import biolockj.module.ScriptModuleImpl;
 import biolockj.module.getData.InputDataModule;
 import biolockj.util.BioLockJUtil;
+import biolockj.util.ModuleUtil;
 
 /**
  * This BioModule allows users to call in their own scripts into BLJ
@@ -45,6 +49,7 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		addNewProperty( PARAM, Properties.STRING_TYPE, PARAM_DESC );
 		addNewProperty( SCRIPT, Properties.FILE_PATH, SCRIPT_DESC );
 		addNewProperty( RESOURCES, Properties.FILE_PATH_LIST, RESOURCES_DESC );
+		addNewProperty( CODE_LINE, Properties.STRING_TYPE, CODE_LINE_DESC );
 	}
 
 	@Override
@@ -63,8 +68,12 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		super.checkDependencies();
 		isValidProp(LAUNCHER);
 		isValidProp(PARAM);
-		isValidProp(SCRIPT);
 		isValidProp(RESOURCES);
+		if (Config.getString( this, CODE_LINE ) == null) isValidProp(SCRIPT);
+		if (Config.getString( this, SCRIPT ) == null) isValidProp(CODE_LINE);
+		if (Config.getString( this, CODE_LINE ) != null && Config.getString( this, SCRIPT ) != null) {
+			throw new ConfigConflictException( new String[] {SCRIPT, CODE_LINE}, "These properties are mutually exclusive." );
+		}
 	}
 	
 	@Override
@@ -87,6 +96,10 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	        	Config.getExistingFileList( this, RESOURCES );
 	            isValid = true;
 	            break;
+	        case CODE_LINE:
+	        	Config.getString( this, CODE_LINE );
+	        	isValid = true;
+	        	break;
 	    }
 	    return isValid;
 	}
@@ -117,9 +130,18 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	}
 
 	protected String transferScript() throws ConfigPathException, IOException, Exception {
-		final File original = Config.requireExistingFile( this, SCRIPT );
-		FileUtils.copyFileToDirectory( original, getResourceDir() );
-		final File copy = new File( getResourceDir() + File.separator + original.getName() );
+		final File copy;
+		if( Config.getString( this, SCRIPT ) != null ) {
+			final File original = Config.requireExistingFile( this, SCRIPT );
+			FileUtils.copyFileToDirectory( original, getResourceDir() );
+			copy = new File( getResourceDir() + File.separator + original.getName() );
+		} else {
+			String code = Config.requireString( this, CODE_LINE );
+			copy = new File( getResourceDir() + File.separator + ModuleUtil.displayName( this ) + "_executable" );
+			FileWriter writer = new FileWriter( copy );
+			try {writer.write( RETURN + code + RETURN );}
+			finally { writer.close(); }
+		}
 		copy.setExecutable( true, false );
 		Log.debug( GenMod.class, "Users script saved to: " + copy.getAbsolutePath() );
 		return copy.getAbsolutePath();
@@ -194,5 +216,11 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 	 */
 	protected static final String RESOURCES = "genMod.resources";
 	private static final String RESOURCES_DESC = "path to one or more files to be copied to the module resource folder.";
+
+	protected static final String CODE_LINE = "genMod.codeLine";
+	private static final String CODE_LINE_DESC =
+		"A line of code to create a one-line script.  This is mutually exclusive with _" + SCRIPT +
+			"_. This is the preferred option for particularly simple scripts.  This code will be executed using whatever system is specified by _" +
+			LAUNCHER + "_.";
 
 }
