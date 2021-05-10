@@ -162,6 +162,7 @@ public class BuildDocs {
 		writer.write( "## Details " + System.lineSeparator() );
 		String details = tmp.getDetails();
 		if ( details == null || details.isEmpty() ) details = NONE;
+		writer.write( "_version: " + tmp.version() + "_ " + System.lineSeparator() );
 		writer.write( details + System.lineSeparator() );
 		writer.write( System.lineSeparator() );
 		

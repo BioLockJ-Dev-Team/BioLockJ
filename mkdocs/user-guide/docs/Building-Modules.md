@@ -63,6 +63,11 @@ Did BioLockJ run the pipeline?
 Did the pipeline complete?
 
 
+#### Create a test case
+Create a minimal test case for your module.  Its often best to establish your test case before you dig into coding your module.  Your test case will help you develop your module, and later demonstrate that it works, and (in the long term) test if the module is still working. Make this the most minimalist example possible to demonstrate that each of the major components of your module are working.
+
+#### Apply a version number
+Once you are ready to use and/or share your module, give it a version number.  By default, your module is version "0.0.0", indicating you are in early development and have not yet applied a version number.  The version is a String, so the format is pretty open, but we recommend following the three-part major.minor.patch semantic versioning system.  Each time to you publish changes to the code, you should increment your version accordingly.
 
 
 ## Set up your development environment

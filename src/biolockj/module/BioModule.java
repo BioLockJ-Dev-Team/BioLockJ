@@ -230,6 +230,15 @@ public interface BioModule {
 	 * @return
 	 */
 	public String getDockerImageTag();
+	
+	/**
+	 * Changes to a module class should be accompanied by a increment in version.
+	 * The is a string and open form, but using the major.minor.patch semantic versioning is recommended.
+	 * @return
+	 */
+	default public String version() {
+		return "0.0.0";
+	}
 
 	/**
 	 * Script prefix appended to start of file name to indicate the main script in the script directory.<br>
