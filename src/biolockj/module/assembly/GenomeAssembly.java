@@ -139,6 +139,11 @@ public class GenomeAssembly extends SeqModuleImpl implements ApiModule {
 	}
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		return "genome_assembly";
 	}

@@ -215,8 +215,18 @@ public abstract class R_Module extends ScriptModuleImpl {
 	protected abstract String getModuleRScriptName();
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		return "r_module";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 	
 	/**

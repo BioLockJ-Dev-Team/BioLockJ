@@ -217,11 +217,21 @@ public class KrakenClassifier extends ClassifierModuleImpl implements ApiModule 
 	private String defaultSwitches = null;
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		if (Config.getString( this, KRAKEN_DATABASE ) != null )
 			return "kraken_classifier_dbfree";
 		else
 			return "kraken_classifier";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 	
 	@Override

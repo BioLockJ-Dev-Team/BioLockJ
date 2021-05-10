@@ -354,6 +354,11 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 	}
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		return Constants.MAIN_DOCKER_IMAGE;
 	}

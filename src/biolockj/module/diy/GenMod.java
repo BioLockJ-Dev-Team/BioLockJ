@@ -166,12 +166,22 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		return new TreeSet<String>();
 	}
 	
+	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
 	/**
 	 * To run the GenMod in docker, the user must supply a docker image name.
 	 */
 	@Override
 	public String getDockerImageName() {
 		return "blj_basic";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 	
 	@Override

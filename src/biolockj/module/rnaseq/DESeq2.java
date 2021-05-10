@@ -21,6 +21,7 @@ import biolockj.module.ScriptModuleImpl;
 import biolockj.module.report.r.R_Module;
 import biolockj.module.report.taxa.BuildTaxaTables;
 import biolockj.util.BioLockJUtil;
+import biolockj.util.DockerUtil;
 import biolockj.util.MasterConfigUtil;
 import biolockj.util.MetaUtil;
 import biolockj.util.TaxaUtil;
@@ -139,10 +140,20 @@ public class DESeq2 extends ScriptModuleImpl implements ApiModule {
 		}
 		return isValid;
 	}
+	
+	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
 
 	@Override
 	public String getDockerImageName() {
 		return "r_deseq2";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 
 	public String copyDEseqScript() throws IOException, ConfigPathException, DockerVolCreationException {

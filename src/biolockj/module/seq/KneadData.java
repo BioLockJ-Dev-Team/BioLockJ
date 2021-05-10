@@ -172,11 +172,21 @@ public class KneadData extends SeqModuleImpl implements DatabaseModule, ApiModul
 	}
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		if (Config.getString( this, KNEAD_DBS ) != null )
 			return "knead_data_dbfree";
 		else
 			return "kraken_classifier";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 
 	/**

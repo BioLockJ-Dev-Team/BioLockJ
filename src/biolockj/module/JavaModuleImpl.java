@@ -143,8 +143,16 @@ public abstract class JavaModuleImpl extends ScriptModuleImpl implements JavaMod
 		return javaString;
 	}
 	
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
 	public String getDockerImageName() {
 		return Constants.MAIN_DOCKER_IMAGE;
+	}
+	
+	public String getDockerImageTag() {
+		return DockerUtil.getVersionImageTag(this, false);
 	}
 
 	/**

@@ -141,8 +141,18 @@ public class EdgeR extends ScriptModuleImpl implements ApiModule {
 	}
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		return "r_edger";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 
 	public String copyEdgeRScript() throws IOException, ConfigPathException, DockerVolCreationException {

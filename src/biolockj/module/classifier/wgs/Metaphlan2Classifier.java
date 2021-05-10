@@ -212,11 +212,21 @@ public class Metaphlan2Classifier extends ClassifierModuleImpl implements ApiMod
 	}
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		if (Config.getString( this, METAPHLAN2_DB ) != null )
 			return "metaphlan2_classifier_dbfree";
 		else
 			return "metaphlan2_classifier";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 	
 	@Override

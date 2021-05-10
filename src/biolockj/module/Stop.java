@@ -18,6 +18,11 @@ public class Stop extends BioModuleImpl implements ApiModule{
 		// Always use all-caps alias.
 		setAlias("STOP");
 	}
+	
+	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
 
 	@Override
 	public String getDockerImageName() {

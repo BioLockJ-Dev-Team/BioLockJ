@@ -147,8 +147,18 @@ public class AwkFastaConverter extends SeqModuleImpl implements ApiModule {
 	}
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		return "blj_basic";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 
 	/**

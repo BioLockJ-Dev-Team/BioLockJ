@@ -442,8 +442,18 @@ public class Humann2Classifier extends ClassifierModuleImpl implements ApiModule
 	}
 	
 	@Override
+	public String getDockerImageOwner() {
+		return Constants.MAIN_DOCKER_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageName() {
 		return "humann2_classifier";
+	}
+	
+	@Override
+	public String getDockerImageTag() {
+		return "v1.3.18";
 	}
 
 	@Override
