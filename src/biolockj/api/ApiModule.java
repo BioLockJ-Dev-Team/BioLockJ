@@ -6,10 +6,21 @@ import biolockj.module.BioModule;
 public interface ApiModule extends BioModule {
 
 	/**
-	 * Tests to see if the value val is valid for property prop.
+	 * Tests to see if the value val is valid for property prop; primarily tests format. This is designed for individual
+	 * properties. To make sure property values are compatible, use
+	 * {@link biolockj.module.BioModule#checkDependencies()}. Using switch/case or a stack of if/else is recommended.
+	 * Within each case, call any/all method that is used by this module to access the value from the config file,
+	 * leveraging the checks in the Config.get* methods.
+	 * 
+	 * This method should never actually return false. If the value is not valid, it should throw an exception that
+	 * includes a helpful message about whats not valid. As part of a throwable, that message is passed along to
+	 * wherever the call started. Any time that "false" is actually the desired form, this method should be wrapped in
+	 * a try/catch.
+	 * 
 	 * @param property
 	 * @param value
-	 * @return true if value is recognized and good, false if it is recognized and invalid, null if prop is not recognized.
+	 * @return true if value is recognized and good, false/Exception if it is recognized and invalid, null if prop is
+	 * not recognized.
 	 * @throws Exception
 	 */
 	public Boolean isValidProp(String property) throws Exception;
