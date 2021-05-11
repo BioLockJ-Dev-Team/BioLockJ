@@ -610,6 +610,8 @@ public class SummaryUtil {
 			final StringBuffer sb = new StringBuffer();
 			sb.append( getLabel( MODULE ) + ModuleUtil.displaySignature( module ) + RETURN );
 			sb.append( getLabel( MODULE_CLASS ) + module.getClass().getName() + RETURN );
+			boolean hasVersion = !module.version().equals( BioModule.NO_VERSION );
+			sb.append( getLabel( MODULE_VERSION ) + (hasVersion ? module.version() : "in development") + RETURN );
 			sb.append( getLabel( RUN_TIME ) + getModuleRunTime( module ) + RETURN );
 
 			final String summary = module.getSummary();
@@ -807,6 +809,7 @@ public class SummaryUtil {
 	private static final String MASTER_CONFIG = "Master Config";
 	private static final String MODULE = "Module";
 	private static final String MODULE_CLASS = "Module class";
+	private static final String MODULE_VERSION = "Module version";
 	private static final String NUM_ATTEMPTS = "# Attempts";
 	private static final String NUM_MODULES = "# Modules";
 	private static final String PIPELINE_CONFIG = "Pipeline Config";

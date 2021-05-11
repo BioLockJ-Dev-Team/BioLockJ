@@ -237,7 +237,7 @@ public interface BioModule {
 	 * @return
 	 */
 	default public String version() {
-		return "0.0.0";
+		return NO_VERSION;
 	}
 
 	/**
@@ -266,4 +266,6 @@ public interface BioModule {
 	 * Name of the temporary sub-directory: {@value #RES_DIR}
 	 */
 	public static final String RES_DIR = "resources";
+	
+	public static final String NO_VERSION = "0.0.0";
 }
