@@ -312,6 +312,7 @@ public class BioLockJ {
 
 		if( isPipelineComplete() ) {
 			MasterConfigUtil.sanitizeMasterConfig();
+			MetaUtil.tapSampleAssignmentMap();
 			if( DockerUtil.inAwsEnv() ) NextflowUtil.saveNextflowSuccessFlag();
 		}
 

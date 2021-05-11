@@ -388,6 +388,7 @@ public class MetaUtil {
 		}
 		
 		getNameToSampleMap();
+		tapSampleAssignmentMap();
 		Config.getBoolean( null, META_REQUIRED );
 		
 		Log.info( MetaUtil.class, "Metadata initialized" );
@@ -396,7 +397,7 @@ public class MetaUtil {
 	/*
 	 * Is this pipeline configured to use one or more columns in the metadata to link files to sample id's.
 	 */
-	public static boolean hasMetaColToSampleIdMap() throws Exception {
+	public static boolean hasMetaColToSampleIdMap() throws ConfigFormatException, ConfigViolationException, MetadataException {
 		final List<String> columns = Config.getList( null, META_FILENAME_COLUMN );
 		boolean useFileNameColumn = columns != null && !columns.isEmpty();
 		
@@ -416,7 +417,7 @@ public class MetaUtil {
 		return useFileNameColumn;
 	}
 	
-	private static HashMap<String, String> getNameToSampleMap() throws Exception{
+	private static HashMap<String, String> getNameToSampleMap() throws ConfigViolationException, ConfigFormatException, MetadataException, IOException {
 		if (nameToSample == null) initNameToSampleMap();
 		return nameToSample;
 	}
@@ -425,29 +426,64 @@ public class MetaUtil {
 	 * Initialize a file-name to sample-name map using the column(s) specified in the config file.
 	 * Future methods may add to this map from other sources, but should always start with this map.
 	 */
-	private static void initNameToSampleMap() throws Exception{
+	private static void initNameToSampleMap() throws IOException, ConfigViolationException, MetadataException, ConfigFormatException{
 		nameToSample = new HashMap<>();
 		if ( hasMetaColToSampleIdMap() ) {
 			final List<String> columns = Config.getList( null, META_FILENAME_COLUMN );
 			for( String metaCol: columns ) {
 				for (String sample : getSampleIds()) {
 					String fileName = getField( sample, metaCol );
-					if (fileName != null) {
-						if (nameToSample.get( fileName ) != null && !nameToSample.get( fileName ).equals( sample )) {
-							throw new ConfigViolationException( META_FILENAME_COLUMN,
-								"The file name \"" + fileName + "\" cannot be assigned to both samples [" +
-									nameToSample.get( fileName ) + "] and [" + sample + "]." );
-						}else {
-							nameToSample.put(fileName, sample);
-							Log.info(MetaUtil.class, "Filename [" + fileName + "] has been associated to sample [" + sample + "].");
-						}
+					addToFileSampleMap(nameToSample, sample, fileName);	
+				}
+			}
+		}
+		if ( sampleAssignmentFile().exists() ) {
+			BufferedReader reader = new BufferedReader( new FileReader( sampleAssignmentFile() ) );
+			String ignoreHeader = reader.readLine();
+			try {
+				for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
+					final StringTokenizer st = new StringTokenizer( line, Constants.TAB_DELIM );
+					String sample = st.nextToken();
+					if( st.countTokens() == 2 && !sample.isEmpty() ) {
+						String fileName = st.nextToken();
+						addToFileSampleMap(nameToSample, sample, fileName);	
+					} else {
+						Log.debug( MetaUtil.class, "Ignoring line with incorrect format: " + line );
 					}
 				}
+			}finally {
+				reader.close();
 			}
 		}
 	}
 	
-	private static String getSampleIdFromFileName(String filename) throws Exception {
+	/**
+	 * Associate a file to a sample.
+	 * Throws an error if there is conflict created by assigning a file name that as already been a assigned to a different sample.
+	 * 
+	 * @param map assumed to be the nameToSample map
+	 * @param sample a String representing a sample id
+	 * @param fileName a String representing a file name
+	 * @return
+	 * @throws ConfigViolationException
+	 */
+	private static boolean addToFileSampleMap(Map<String, String> map, String sample, String fileName) throws ConfigViolationException {
+		if (fileName != null && !fileName.isEmpty() && sample != null && !sample.isEmpty()) {
+			if (map.get( fileName ) == null) {
+				map.put(fileName, sample);
+				Log.info(MetaUtil.class, "Filename [" + fileName + "] has been associated to sample [" + sample + "].");
+			}else if (!map.get( fileName ).equals( sample )) {
+				throw new ConfigViolationException( META_FILENAME_COLUMN,
+					"The file name \"" + fileName + "\" cannot be assigned to both samples [" +
+						nameToSample.get( fileName ) + "] and [" + sample + "]." );
+			}else {
+				Log.debug(MetaUtil.class, "Filename [" + fileName + "] has already been associated to sample [" + sample + "].");
+			}
+		}
+		return true;
+	}
+	
+	private static String getSampleIdFromFileName(String filename) throws ConfigViolationException, ConfigFormatException, MetadataException, IOException {
 		Log.debug(MetaUtil.class, "Checking metadata for file name: " + filename);
 		String id = getNameToSampleMap().get( filename );
 		Log.debug(MetaUtil.class, "Map has keys: " + BioLockJUtil.getCollectionAsString( getNameToSampleMap().keySet() ));
@@ -461,6 +497,34 @@ public class MetaUtil {
 	}
 	public static Set<String> getSampleFileList() throws Exception{
 		return new HashSet<String>(getNameToSampleMap().keySet());
+	}
+	
+	/**
+	 * 
+	 * @param filename
+	 * @param sampleId
+	 * @return true if that filename is associated with that sample when method completes; otherwise false.
+	 * @throws ConfigViolationException
+	 * @throws ConfigFormatException
+	 * @throws MetadataException if methods attempts to assign an existing file name to a different sample
+	 * @throws IOException
+	 */
+	public static boolean setSampleId(String filename, String sampleId) throws ConfigViolationException, ConfigFormatException, MetadataException, IOException {
+		//TODO add mechanism to permit adding samples to metadata.
+		if (!getSampleIds().contains( sampleId )) {
+			Log.debug(MetaUtil.class, "No such sample [" + sampleId + "] in metadata.");
+			return false; 
+		}
+		String assignedId = getSampleIdFromFileName(filename);
+		if (assignedId == null) {
+			addToFileSampleMap( getNameToSampleMap(), sampleId, filename );
+		}else if (!assignedId.equals( sampleId )) {
+			throw new MetadataException("Cannot re-assign a file name to a different sample.");
+		}
+		return true;
+	}
+	public static boolean setSampleId(File file, String sampleId) throws ConfigViolationException, ConfigFormatException, MetadataException, IOException {
+		return setSampleId(file.getName(), sampleId);
 	}
 
 	/**
@@ -604,10 +668,12 @@ public class MetaUtil {
 				if( isUpdated() ) Log.debug( MetaUtil.class, "===> Meta line: " + line );
 				final ArrayList<String> record = new ArrayList<>();
 				final String[] cells = line.split( DEFAULT_COL_DELIM, -1 );
-				for( final String cell: cells )
+				for( final String cell: cells ) {
 					if( cell == null || cell.trim().isEmpty() ) record.add( getNullValue( null ) );
 					else record.add( removeComments( cell.trim() ) );
+				}
 				data.add( record );
+				
 			}
 		} catch( final Exception ex ) {
 			Log.error( MetaUtil.class, "Error occurrred parsing metadata file!", ex );
@@ -641,6 +707,58 @@ public class MetaUtil {
 			Log.error( MetaUtil.class, "Failed to log MetaUtil reprot", ex );
 		}
 	}
+	
+	/**
+	 * A care-free wrapper for saveSampleAssignmentMap().
+	 * Save a table of the filenames that link to a given sample id.
+	 * If any exceptions are thrown, do nothing.
+	 */
+	public static void tapSampleAssignmentMap() {
+		try {
+			saveSampleAssignmentMap();
+		} catch(Exception ex) {
+			Log.debug(MetaUtil.class, "There was a problem while saving the sample assigment map so the task was ignored.");
+		};
+	}
+	/**
+	 * Save a file spelling out the sample assignment map.
+	 * @throws Exception
+	 */
+	private static void saveSampleAssignmentMap() throws Exception {
+		//sort
+		HashMap<String, ArrayList<String>> sampleKeys = new HashMap<>();
+		for ( String key : getNameToSampleMap().keySet() ) {
+			String sample = getNameToSampleMap().get(key);
+			if ( !sampleKeys.containsKey( sample ) ) {
+				sampleKeys.put(sample, new ArrayList<>());
+			}
+			sampleKeys.get( sample ).add( key );
+		}
+		for ( ArrayList<String> list : sampleKeys.values() ) {
+			Collections.sort( list );
+		}
+		List<String> sortedSamples = new ArrayList<>( sampleKeys.keySet() );
+		Collections.sort( sortedSamples );
+		//save
+		File file = sampleAssignmentFile();
+		FileWriter writer = new FileWriter( file );
+		try {
+			writer.write( metaId + Constants.TAB_DELIM + "file_name" + System.lineSeparator() );
+			for( String sample: sortedSamples ) {
+				for( String filename: sampleKeys.get( sample ) ) {
+					writer.write( sample + Constants.TAB_DELIM + filename + System.lineSeparator() );
+				}
+			}
+		} finally {
+			writer.close();
+		}
+	}
+	
+	private static File sampleAssignmentFile() {
+		return new File( BioLockJ.getPipelineDir(), SAMPLE_ASSIGN_FILE );
+	}
+	
+	private static final String SAMPLE_ASSIGN_FILE = "sample_map.txt";
 	
 	public static void registerProps() throws API_Exception {
 		Properties.registerProp( META_BARCODE_COLUMN, Properties.STRING_TYPE, META_BARCODE_COLUMN_DESC );

@@ -275,7 +275,10 @@ public class SeqUtil {
 	public static String getSampleId( final File file ) throws ConfigFormatException, SequnceFormatException, Exception  {
 		Log.debug(SeqUtil.class, "Determining which sample this file belongs to: " + file.getName());
 		String id = MetaUtil.getSampleId( file );
-		if( id == null ) id = getSampleIdFromString( file.getName() );
+		if( id == null ) {
+			id = getSampleIdFromString( file.getName() );
+			if (id != null) MetaUtil.setSampleId( file, id );
+		}
 		Log.debug(SeqUtil.class, "The file [" + file.getName() + "] belongs to sample [" + id + "].");
 		return id;
 	}
@@ -441,41 +444,44 @@ public class SeqUtil {
 	 * @return TRUE if file is a sequence file
 	 */
 	public static boolean isSeqFile( final File file ) {
-		BufferedReader reader = null;
-		try {
-			if( fileSeqMap.keySet().contains( file.getName() ) ) return fileSeqMap.get( file.getName() );
-			info( "Check if input file is a SEQ file: " + file.getAbsolutePath() );
-			boolean isSeq = false;
-			reader = BioLockJUtil.getFileReader( file );
-
-			final String header = SeqUtil.scanFirstLine( reader, file );
-			final String idChar = header.substring( 0, 1 );
-			String seq = reader.readLine();
-			info(
-				"header: " + ( header.length() <= MAX_DISPLAY_LEN ? header: header.substring( 0, MAX_DISPLAY_LEN ) ) );
-			info( "seq: " + ( seq.length() <= MAX_DISPLAY_LEN ? seq: seq.substring( 0, MAX_DISPLAY_LEN ) ) );
-			if( FASTA_HEADER_DELIMS.contains( idChar ) || idChar.equals( FASTQ_HEADER_DELIM ) ) {
-				if( !seq.trim().isEmpty() ) {
-					seq = seq.trim().toLowerCase().replaceAll( "a", "" ).replaceAll( "c", "" ).replaceAll( "g", "" )
-						.replaceAll( "t", "" ).replaceAll( "n", "" );
-					isSeq = seq.trim().isEmpty();
-				}
-			} else info( file.getAbsolutePath() + " is not a sequence file! " + Constants.RETURN + "Line 1: [ " +
-				header + " ]" + Constants.RETURN + "Line 2= [ " + seq + " ]" );
-			fileSeqMap.put( file.getName(), isSeq );
-			return isSeq;
-		} catch( final Exception ex ) {
-			Log.error( SeqUtil.class, "Error occurred examining file to determine if it is a sequence file or not",
-				ex );
-		} finally {
+		info( "Check if input file is a SEQ file: " + file.getAbsolutePath() );
+		boolean isSeq = false;
+		if( fileSeqMap.keySet().contains( file.getName() ) ) {
+			isSeq = fileSeqMap.get( file.getName() );
+		} else {
+			BufferedReader reader = null;
 			try {
-				if( reader != null ) reader.close();
+				reader = BioLockJUtil.getFileReader( file );
+				final String header = SeqUtil.scanFirstLine( reader, file );
+				final String idChar = header.substring( 0, 1 );
+				String seq = reader.readLine();
+				info( "header: " +
+					( header.length() <= MAX_DISPLAY_LEN ? header: header.substring( 0, MAX_DISPLAY_LEN ) ) );
+				info( "seq: " + ( seq.length() <= MAX_DISPLAY_LEN ? seq: seq.substring( 0, MAX_DISPLAY_LEN ) ) );
+				if( FASTA_HEADER_DELIMS.contains( idChar ) || idChar.equals( FASTQ_HEADER_DELIM ) ) {
+					if( !seq.trim().isEmpty() ) {
+						seq = seq.trim().toLowerCase().replaceAll( "a", "" ).replaceAll( "c", "" ).replaceAll( "g", "" )
+							.replaceAll( "t", "" ).replaceAll( "n", "" );
+						isSeq = seq.trim().isEmpty();
+					}
+				} else {
+					info( file.getAbsolutePath() + " is not a sequence file! " + Constants.RETURN + "Line 1: [ " +
+						header + " ]" + Constants.RETURN + "Line 2= [ " + seq + " ]" );
+				}
 			} catch( final Exception ex ) {
-				Log.error( SeqUtil.class, "Failed to close file reader", ex );
+				Log.error( SeqUtil.class, "Error occurred examining file to determine if it is a sequence file or not",
+					ex );
+			} finally {
+				try {
+					if( reader != null ) reader.close();
+				} catch( final Exception ex ) {
+					Log.error( SeqUtil.class, "Failed to close file reader", ex );
+				}
 			}
+			fileSeqMap.put( file.getName(), isSeq );
 		}
-		fileSeqMap.put( file.getName(), false );
-		return false;
+		info( "File [" + file.getName() + "] " + (isSeq ? "is" : "is not") + " a sequence file.");
+		return isSeq;
 	}
 
 	/**
