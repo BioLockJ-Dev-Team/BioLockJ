@@ -116,7 +116,7 @@ public class DockerLaunchProcess extends LaunchProcess {
 	}
 	
 	private String getDockerImg() {
-		return "biolockjdevteam/biolockj_controller:" + DockerUtil.getDefaultImageTag();
+		return DockerUtil.getMainDockerImage();
 	}
 		
 

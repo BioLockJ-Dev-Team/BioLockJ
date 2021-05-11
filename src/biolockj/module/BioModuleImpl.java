@@ -22,7 +22,6 @@ import biolockj.api.API_Exception;
 import biolockj.exception.ConfigFormatException;
 import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.PipelineFormationException;
-import biolockj.exception.SequnceFormatException;
 import biolockj.util.*;
 
 /**
@@ -433,13 +432,15 @@ public abstract class BioModuleImpl implements BioModule, Comparable<BioModule> 
 	public String getDetails() throws API_Exception {
 		return "";
 	}
-	
-	public String getDockerImageOwner() {
-		return Constants.MAIN_DOCKER_OWNER;
-	}
 
+	@Override
+	public String getDockerImageOwner() {
+		return DockerUtil.DEFAULT_IMAGE_OWNER;
+	}
+	
+	@Override
 	public String getDockerImageTag() {
-		return DockerUtil.getDefaultImageTag();
+		return DockerUtil.DEFAULT_IMAGE_TAG;
 	}
 
 	/**

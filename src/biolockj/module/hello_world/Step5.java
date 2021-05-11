@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import biolockj.Config;
-import biolockj.Constants;
 import biolockj.Log;
 import biolockj.exception.ConfigFormatException;
 
@@ -60,7 +59,7 @@ public class Step5 extends Step4 {
 	// temporary value
 	@Override
 	public String getDockerImageName() {
-		return Constants.MAIN_DOCKER_IMAGE;
+		return "ubuntu";
 	}
 
 }

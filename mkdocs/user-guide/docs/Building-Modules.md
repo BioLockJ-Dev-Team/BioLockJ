@@ -66,6 +66,9 @@ Did the pipeline complete?
 #### Create a test case
 Create a minimal test case for your module.  Its often best to establish your test case before you dig into coding your module.  Your test case will help you develop your module, and later demonstrate that it works, and (in the long term) test if the module is still working. Make this the most minimalist example possible to demonstrate that each of the major components of your module are working.
 
+#### Set docker image
+When not running in docker mode, the docker image isn't used and doesn't matter, but a module needs to specify a docker container that it can run in just to be a valid module.  For initially testing that the project could build we used some light-weight default, such as library/ubuntu:latest.  Printing a "Hello World" will work fine in that container, but most modules will need more than that.  You can choose to create and host your own image to that has all the software your module needs (and as little as possible beyond that!) or you can find an existing image already hosted on the docker hub, preferably by a reliable organization.  Your module might use the "latest" in its getDockerImageTag() method and leave it to the user to specify a specific tag in the config file.  The image specified by your module is its default.  The user can always choose to override that through the config file; which is also convenient for the developer when testing images. The auto-generated documentation will state which image is set as your modules default.
+
 #### Apply a version number
 Once you are ready to use and/or share your module, give it a version number.  By default, your module is version "0.0.0", indicating you are in early development and have not yet applied a version number.  The version is a String, so the format is pretty open, but we recommend following the three-part major.minor.patch semantic versioning system.  Each time to you publish changes to the code, you should increment your version accordingly.
 
@@ -92,7 +95,7 @@ The BioLockJ documentation is stored in markdown files and rendered into html us
 
 Override the `getCitationString()` method.  This should include citation information for any tool that your module wraps and a credit to yourself for creating the wrapper.
 
-Override the `getDescription()` method to return a short description of what your module does, this should be one to two sentences.  For a more extensive description, including details about properties, expected inputs, assumptions, etc; override the `getDetails()` method (optional).  If your module has any pre-requisit modules or post-requisit modules, the modules Details should include the names of these modules and information about when and why these modules are added.
+Override the `getDescription()` method to return a short description of what your module does, this should be one to two sentences.  For a more extensive description, including details about properties, expected inputs, assumptions, etc; override the `getDetails()` method (optional).  If your module has any prerequisite modules or post-requisite modules, the modules Details should include the names of these modules and information about when and why these modules are added.
 
 ### Documenting Properties
 
@@ -151,7 +154,7 @@ public Boolean isValidProp( String property ) throws Exception {
 	return isValid;
 }
 ```
-In the example above, the Humann2Parser module uses two properties that are not used by any super class. The call to `super.isValidProp( property )` tests the property if it is used by a super class.  This class only adds checks for its newly defined properties.  Any property that is not tested, but is registered in the modules constructor will return true. This method is called through the API, and should be used to test one property at a time as if that is the only property in the config file. Tests to make sure that multiple properties are compatiable with each other should go in the `checkDependencies()` method.
+In the example above, the Humann2Parser module uses two properties that are not used by any super class. The call to `super.isValidProp( property )` tests the property if it is used by a super class.  This class only adds checks for its newly defined properties.  Any property that is not tested, but is registered in the modules constructor will return true. This method is called through the API, and should be used to test one property at a time as if that is the only property in the config file. Tests to make sure that multiple properties are compatible with each other should go in the `checkDependencies()` method.
 
 ### Generate user guide pages
 For modules in the main BioLockJ project, the user guide pages are generated using the ApiModule methods as part of the deploy process.
@@ -222,7 +225,7 @@ To use a module that you have created yourself or acquired from a third party, y
 1. Use the ` --external-modules <dir>` option  when you call biolockj:<br>
 `biolockj --external-modules /Users/joe/biolockjModules myPipeline.properties`
 
-Any other modules you have made or aquired can also be in the `/Users/joe/biolockjModules` folder.
+Any other modules you have made or acquired can also be in the `/Users/joe/biolockjModules` folder.
 
 ## Finding and Sharing Modules
 

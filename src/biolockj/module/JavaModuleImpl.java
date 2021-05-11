@@ -152,7 +152,7 @@ public abstract class JavaModuleImpl extends ScriptModuleImpl implements JavaMod
 	}
 	
 	public String getDockerImageTag() {
-		return DockerUtil.getVersionImageTag(this, false);
+		return DockerUtil.getVersionAsTag();
 	}
 
 	/**

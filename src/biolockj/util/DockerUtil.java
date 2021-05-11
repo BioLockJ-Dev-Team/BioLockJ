@@ -185,12 +185,13 @@ public class DockerUtil {
 	 * @throws ConfigNotFoundException if Docker image version is undefined
 	 */
 	public static String getDockerImage( final BioModule module ) throws ConfigNotFoundException {
-		if ( module == null ) {
-			return Constants.MAIN_DOCKER_OWNER
-							+ "/" + Constants.MAIN_DOCKER_IMAGE
-							+ ":" + getDefaultImageTag();
-		}
 		return getDockerUser( module ) + "/" + getImageName( module ) + ":" + getImageTag( module );
+	}
+	
+	public static String getMainDockerImage() {
+		return Constants.MAIN_DOCKER_OWNER
+						+ "/" + Constants.MAIN_DOCKER_IMAGE
+						+ ":" + getVersionAsTag();
 	}
 
 	/**
@@ -238,18 +239,20 @@ public class DockerUtil {
 		return tag;
 	}
 	
-	public static String getDefaultImageTag() {
-		String tag;
-		if( Config.getString( null, DOCKER_IMG_VERSION ) != null ) {
-			tag = Config.getString( null, DOCKER_IMG_VERSION );
-		}else if (BioLockJUtil.getVersion().contains( "-" )) {
-			tag = BioLockJUtil.getVersion().substring( 0, BioLockJUtil.getVersion().indexOf( "-" ) );
+	/**
+	 * Get the docker image tag that represents the current BioLockJ version.
+	 * @return
+	 */
+	public static String getVersionAsTag() {
+		String versionAsTag;
+		if (BioLockJUtil.getVersion().contains( "-" )) {
+			versionAsTag = BioLockJUtil.getVersion().substring( 0, BioLockJUtil.getVersion().indexOf( "-" ) );
 		}else {
-			tag = BioLockJUtil.getVersion();
+			versionAsTag = BioLockJUtil.getVersion();
 		}
-		return tag;
+		return versionAsTag;
 	}
-
+	
 	/**
 	 * Return TRUE if running in AWS (based on Config props).
 	 * 
@@ -735,7 +738,16 @@ public class DockerUtil {
 		}
 	}
 	
-	public static String DEFAULT_DOCKER_MAPPER = "biolockj.util.paths.CommonDockerMapper";
+	public static final String DEFAULT_DOCKER_MAPPER = "biolockj.util.paths.CommonDockerMapper";
+	
+	public static final String DEFAULT_IMAGE_OWNER = "library";
+	
+	/**
+	 * A light-weight docker image to use. 
+	 */
+	public static final String DEFAULT_IMAGE_NAME = "ubuntu";
+	
+	public static final String DEFAULT_IMAGE_TAG = "latest";
 	
 	private static DockerMountMapper mapper = null;
 }

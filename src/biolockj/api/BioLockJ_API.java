@@ -625,7 +625,7 @@ public class BioLockJ_API {
 			}
 		}else if (DockerUtil.inDockerEnv() && existsOnHost(configFile) ) {
 			System.err.println("The file " + configFile.getName() + " exists on the host, but not in the container.");
-			String container = DockerUtil.getDockerImage( null );
+			String container = DockerUtil.getMainDockerImage();
 			String query = mountOrUpload.equals( MOUNT_KEY ) ? LIST_MOUNTS : LIST_UPLOADS;
 			String target = "/mnt/tmpConfigDirForApi";
 			if ( (new File(target)).exists() ) throw new API_Exception( "Avoid inf loop: don't launch a new container in the current one already has " + target );
