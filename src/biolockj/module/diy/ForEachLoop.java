@@ -57,7 +57,12 @@ public class ForEachLoop extends GenMod {
 	
 	@Override
 	public String getCitationString() {
-		return "BioLockJ " + BioLockJUtil.getVersion( ) + System.lineSeparator() + "Module developed by Ivory Blakley";
+		return "Module developed by Ivory Blakley";
+	}
+	
+	@Override
+	public String version() {
+		return "1.0.0";
 	}
 	
 	/**

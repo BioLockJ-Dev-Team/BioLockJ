@@ -77,10 +77,13 @@ public class ShannonDiversity extends TransformTaxaTables implements ApiModule
 	@Override
 	public String getCitationString()
 	{	
-		return "Module developed by Anthony Fodor" + System.lineSeparator() 
-			+ "BioLockJ " + BioLockJUtil.getVersion();
+		return "Module developed by Anthony Fodor.";
 	}
-
+	
+	@Override
+	public String version() {
+		return "1.0.0";
+	}
 
 	@Override
 	public boolean isValidInputModule( final BioModule module ) {

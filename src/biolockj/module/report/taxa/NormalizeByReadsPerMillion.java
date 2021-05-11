@@ -102,8 +102,12 @@ public class NormalizeByReadsPerMillion extends TransformTaxaTables implements A
 
 	@Override
 	public String getCitationString() {
-		return "Module developed by Ivory Blakley" + System.lineSeparator() 
-		+ "BioLockj " + BioLockJUtil.getVersion();
+		return "Module developed by Ivory Blakley.";
+	}
+	
+	@Override
+	public String version() {
+		return "1.0.0";
 	}
 
 }

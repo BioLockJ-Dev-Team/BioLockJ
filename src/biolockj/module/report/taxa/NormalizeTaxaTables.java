@@ -132,8 +132,12 @@ public class NormalizeTaxaTables extends TransformTaxaTables implements ApiModul
 	@Override
 	public String getCitationString() {
 		return "[\"Stochastic changes over time and not founder effects drive cage effects in microbial community assembly in a mouse model\"](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3806260/)" 
-						+ System.lineSeparator() + "Module developed by Mike Sioda" + System.lineSeparator()
-						+ "BioLockJ " + BioLockJUtil.getVersion();
+						+ System.lineSeparator() + "Module developed by Mike Sioda.";
+	}
+
+	@Override
+	public String version() {
+		return "1.0.0";
 	}
 
 }

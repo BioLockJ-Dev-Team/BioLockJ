@@ -93,7 +93,12 @@ public class RdpParser extends ParserModuleImpl implements ApiModule{
 
 	@Override
 	public String getCitationString() {
-		return "Module developed by Mike Sioda" + System.lineSeparator() + "BioLockJ " + BioLockJUtil.getVersion();
+		return "Module developed by Mike Sioda.";
+	}
+	
+	@Override
+	public String version() {
+		return "1.0.0";
 	}
 
 	/**

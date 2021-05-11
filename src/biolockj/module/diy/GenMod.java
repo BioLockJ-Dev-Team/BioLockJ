@@ -27,13 +27,9 @@ import biolockj.api.API_Exception;
 import biolockj.api.ApiModule;
 import biolockj.api.BuildDocs;
 import biolockj.exception.ConfigConflictException;
-import biolockj.exception.ConfigException;
-import biolockj.exception.ConfigFormatException;
-import biolockj.exception.ConfigNotFoundException;
 import biolockj.exception.ConfigPathException;
 import biolockj.module.ScriptModuleImpl;
 import biolockj.module.getData.InputDataModule;
-import biolockj.util.BioLockJUtil;
 import biolockj.util.ModuleUtil;
 
 /**
@@ -157,10 +153,6 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 		}
 	}
 	
-//	@Override
-//	public String getDataSource() {
-//		return "Completely open-ended; depends on user-supplied script.";
-//	}
 	@Override
 	public Set<String> getInputDataTypes() {
 		return new TreeSet<String>();
@@ -196,7 +188,12 @@ public class GenMod extends ScriptModuleImpl implements ApiModule, InputDataModu
 
 	@Override
 	public String getCitationString() {
-		return "BioLockJ " + BioLockJUtil.getVersion( );
+		return "Module by Ivory Blakley.";
+	}
+	
+	@Override
+	public String version() {
+		return "1.1.0";
 	}
 
 	/**

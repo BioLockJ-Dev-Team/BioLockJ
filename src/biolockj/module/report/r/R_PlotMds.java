@@ -89,7 +89,12 @@ public class R_PlotMds extends R_Module implements ApiModule {
 
 	@Override
 	public String getCitationString() {
-		return "BioLockJ " + BioLockJUtil.getVersion() + System.lineSeparator() + "Module created by Mike Sioda and developed by Ivory Blakley";
+		return "Module created by Mike Sioda and developed by Ivory Blakley.";
+	}
+	
+	@Override
+	public String version() {
+		return "1.0.0";
 	}
 
 	@Override

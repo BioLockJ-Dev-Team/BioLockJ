@@ -57,7 +57,12 @@ public class Stop extends BioModuleImpl implements ApiModule{
 
 	@Override
 	public String getCitationString() {
-		return "Module created by Ivory Blakley";
+		return "Module created by Ivory Blakley.";
+	}
+	
+	@Override
+	public String version() {
+		return "1.0.0";
 	}
 	
 	private String getMessage(){

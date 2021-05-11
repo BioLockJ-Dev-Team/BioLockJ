@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import biolockj.Log;
 import biolockj.api.API_Exception;
-import biolockj.exception.ConfigNotFoundException;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.MetaUtil;
 
@@ -58,7 +57,12 @@ public class ForEachSample extends GenMod {
 	
 	@Override
 	public String getCitationString() {
-		return "BioLockJ " + BioLockJUtil.getVersion( ) + System.lineSeparator() + "Module developed by Ivory Blakley";
+		return "Module developed by Ivory Blakley";
+	}
+	
+	@Override
+	public String version() {
+		return "1.0.0";
 	}
 
 }

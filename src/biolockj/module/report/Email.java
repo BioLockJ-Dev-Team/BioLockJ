@@ -270,6 +270,11 @@ public class Email extends BioModuleImpl implements ApiModule {
 	public String getCitationString() {
 		return "Module developed by Mike Sioda." + System.lineSeparator() + "BioLockJ " + BioLockJUtil.getVersion();
 	}
+	
+	@Override
+	public String version() {
+		return "1.0.0";
+	}
 		
 	/**
 	 * {@link biolockj.Config} String property: {@value #EMAIL_ENCRYPTED_PASSWORD}<br>
