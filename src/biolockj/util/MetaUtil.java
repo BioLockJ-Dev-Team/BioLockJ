@@ -613,7 +613,9 @@ public class MetaUtil {
 		final Iterator<List<String>> rows = data.iterator();
 		while( rows.hasNext() ) {
 			final List<String> row = rows.next();
-			final String id = row.get( 0 );
+			final String idRaw = row.get( 0 );
+			final String id = BioLockJUtil.removeOuterQuotes( idRaw );
+			if (!id.equals( idRaw )) Log.debug(MetaUtil.class, "Removed outer quotes for id: " + id);
 			if( rowNum == 0 ) {
 				metaId = id;
 				if( isUpdated() ) Log.debug( MetaUtil.class, "Metadata Headers: " + row );
