@@ -61,14 +61,14 @@ public class MetaUtil {
 		setFile( newMeta );
 		final BufferedWriter writer = new BufferedWriter( new FileWriter( getMetadata() ) );
 		try {
-			writer.write( reader.readLine() + DEFAULT_COL_DELIM + colName + Constants.RETURN );
+			writer.write( reader.readLine() + METADATA_COL_DELIM + colName + Constants.RETURN );
 			for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
-				final StringTokenizer st = new StringTokenizer( line, DEFAULT_COL_DELIM );
+				final StringTokenizer st = new StringTokenizer( line, METADATA_COL_DELIM );
 				final String id = st.nextToken();
 				if( sampleIds.contains( id ) )
-					writer.write( line + DEFAULT_COL_DELIM + map.get( id ) + Constants.RETURN );
+					writer.write( line + METADATA_COL_DELIM + map.get( id ) + Constants.RETURN );
 				else if( !removeMissingIds )
-					writer.write( line + DEFAULT_COL_DELIM + getNullValue( null ) + Constants.RETURN );
+					writer.write( line + METADATA_COL_DELIM + getNullValue( null ) + Constants.RETURN );
 				else Log.warn( MetaUtil.class, getRemoveIdMsg( id ) );
 
 			}
@@ -104,6 +104,10 @@ public class MetaUtil {
 	public static boolean fieldValuesAreUnique( final String field, final boolean ignoreNulls )
 		throws MetadataException {
 		return getFieldValues( field, ignoreNulls ).size() != getUniqueFieldValues( field, ignoreNulls ).size();
+	}
+	
+	public static String getColumnDelim() {
+		return METADATA_COL_DELIM;
 	}
 
 	/**
@@ -371,11 +375,7 @@ public class MetaUtil {
 		Log.info( MetaUtil.class,
 			"Initialize metadata property [ " + META_NULL_VALUE + " ] = " + getNullValue( null ) );
 
-		if( Config.getString( null, META_COLUMN_DELIM ) == null )
-			Config.setConfigProperty( META_COLUMN_DELIM, DEFAULT_COL_DELIM );
-
-		if( Config.getString( null, META_COMMENT_CHAR ) == null )
-			Config.setConfigProperty( META_COMMENT_CHAR, DEFAULT_COMMENT_CHAR );
+		Config.getString( null, META_COMMENT_CHAR, DEFAULT_COMMENT_CHAR );
 
 		final String commentChar = Config.getString( null, META_COMMENT_CHAR );
 		if( commentChar != null && commentChar.length() > 1 ) throw new MetadataException(
@@ -577,11 +577,11 @@ public class MetaUtil {
 		try {
 			for( String line = reader.readLine(); line != null; line = reader.readLine() ) {
 				int i = 1;
-				final StringTokenizer st = new StringTokenizer( line, DEFAULT_COL_DELIM );
+				final StringTokenizer st = new StringTokenizer( line, METADATA_COL_DELIM );
 				writer.write( st.nextToken() );
 				while( st.hasMoreTokens() ) {
 					final String token = st.nextToken();
-					if( i++ != index ) writer.write( DEFAULT_COL_DELIM + token );
+					if( i++ != index ) writer.write( METADATA_COL_DELIM + token );
 				}
 				writer.write( Constants.RETURN );
 			}
@@ -667,15 +667,19 @@ public class MetaUtil {
 		try {
 			reader = BioLockJUtil.getFileReader( getMetadata() );
 			for( String line = reader.readLine(); line != null && !line.isEmpty(); line = reader.readLine() ) {
-				if( isUpdated() ) Log.debug( MetaUtil.class, "===> Meta line: " + line );
-				final ArrayList<String> record = new ArrayList<>();
-				final String[] cells = line.split( DEFAULT_COL_DELIM, -1 );
-				for( final String cell: cells ) {
-					if( cell == null || cell.trim().isEmpty() ) record.add( getNullValue( null ) );
-					else record.add( removeComments( cell.trim() ) );
+				String comment = Config.getString( null, META_COMMENT_CHAR );
+				if( comment !=null && line.startsWith( Config.getString( null, META_COMMENT_CHAR ) ) ) {
+					Log.debug( MetaUtil.class, "Ignoring commented line in metadata file: " + line );
+				} else {
+					if( isUpdated() ) Log.debug( MetaUtil.class, "===> Meta line: " + line );
+					final ArrayList<String> record = new ArrayList<>();
+					final String[] cells = line.split( METADATA_COL_DELIM, -1 );
+					for( final String cell: cells ) {
+						if( cell == null || cell.trim().isEmpty() ) record.add( getNullValue( null ) );
+						else record.add( cell.trim() );
+					}
+					data.add( record );
 				}
-				data.add( record );
-				
 			}
 		} catch( final Exception ex ) {
 			Log.error( MetaUtil.class, "Error occurrred parsing metadata file!", ex );
@@ -687,13 +691,6 @@ public class MetaUtil {
 			}
 		}
 		return data;
-	}
-
-	private static String removeComments( final String val ) {
-		final String cChar = Config.getString( null, META_COMMENT_CHAR );
-		if( cChar != null && cChar.length() > 0 && val.indexOf( cChar ) > -1 )
-			return val.substring( 0, val.indexOf( cChar ) );
-		return val;
 	}
 
 	private static void report() {
@@ -837,7 +834,7 @@ public class MetaUtil {
 	/**
 	 * Default column delimiter = tab character
 	 */
-	protected static final String DEFAULT_COL_DELIM = Constants.TAB_DELIM;
+	protected static final String METADATA_COL_DELIM = Constants.TAB_DELIM;
 
 	/**
 	 * Default comment character for any new metadata file created by a BioModule: {@value #DEFAULT_COMMENT_CHAR}

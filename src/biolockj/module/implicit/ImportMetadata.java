@@ -38,7 +38,7 @@ public class ImportMetadata extends BioModuleImpl implements ApiModule {
 	@Override
 	public void checkDependencies() throws Exception {
 		Config.getBoolean( null, MetaUtil.USE_EVERY_ROW );
-		inputDelim = Config.requireString( this, MetaUtil.META_COLUMN_DELIM );
+		inputDelim = Config.getString( this, MetaUtil.META_COLUMN_DELIM, MetaUtil.getColumnDelim() );
 		if( inputDelim.equals( "\\t" ) ) inputDelim = TAB_DELIM;
 		if( SeqUtil.isMultiplexed() && !MetaUtil.exists() )
 			throw new Exception( "Metadata file is required for multiplexed datasets, please set Config property: " +
