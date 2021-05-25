@@ -166,7 +166,7 @@ public class PearMergeReads extends SeqModuleImpl implements ApiModule, ReadCoun
 	
 	@Override
 	public String getDockerImageTag() {
-		return "v1.3.18";
+		return "v1.2.9";
 	}
 
 	private String otuColName = null;
