@@ -24,6 +24,7 @@ import biolockj.exception.StopAfterPrecheck;
 import biolockj.module.*;
 import biolockj.module.report.Email;
 import biolockj.module.report.r.R_Module;
+import biolockj.pipelines.PipelineUtil;
 import biolockj.util.*;
 
 /**

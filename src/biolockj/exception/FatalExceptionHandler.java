@@ -15,6 +15,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import biolockj.*;
+import biolockj.pipelines.PipelineUtil;
 import biolockj.util.*;
 
 /**

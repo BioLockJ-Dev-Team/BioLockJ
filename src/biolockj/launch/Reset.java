@@ -9,9 +9,9 @@ import biolockj.exception.BioLockJException;
 import biolockj.exception.BioLockJStatusException;
 import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.InvalidPipelineException;
+import biolockj.pipelines.PipelineUtil;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.DockerUtil;
-import biolockj.util.PipelineUtil;
 
 public class Reset {
 	

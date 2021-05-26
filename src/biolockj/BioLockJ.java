@@ -22,6 +22,7 @@ import biolockj.exception.FatalExceptionHandler;
 import biolockj.exception.InvalidPipelineException;
 import biolockj.module.BioModule;
 import biolockj.module.report.Email;
+import biolockj.pipelines.PipelineUtil;
 import biolockj.util.*;
 
 /**

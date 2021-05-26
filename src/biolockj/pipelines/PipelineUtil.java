@@ -1,4 +1,4 @@
-package biolockj.util;
+package biolockj.pipelines;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +17,8 @@ import biolockj.Properties;
 import biolockj.exception.BioLockJStatusException;
 import biolockj.exception.InvalidPipelineException;
 import biolockj.module.BioModule;
+import biolockj.util.BioLockJUtil;
+import biolockj.util.RuntimeParamUtil;
 
 public class PipelineUtil {
 	
@@ -93,20 +95,13 @@ public class PipelineUtil {
 	 * @throws InvalidPipelineException 
 	 */
 	public static String getProjectName(final File pipeDir) throws InvalidPipelineException  {
-		return getProjectNameFromPropFile( getMasterConfig(pipeDir) );
+		OtherPipeline pipeline = OtherPipelineFactory.asPipeline(pipeDir);
+		return pipeline.getProjectName();
 	}
 	
 	public static String getPipelineId(final File pipeDir) throws InvalidPipelineException {
-		return getPipelineIdFromMasterProps( getMasterConfig( pipeDir ));
-	}
-	public static String getPipelineIdFromMasterProps(final File masterConfig) {
-		String configName = masterConfig.getName();
-		String name = configName;
-		if( configName.startsWith( Constants.MASTER_PREFIX ) && configName.endsWith( Constants.PROPS_EXT )) {
-			name = configName.replaceFirst( Constants.MASTER_PREFIX, "" );
-			name = name.substring( 0, name.length()-Constants.PROPS_EXT.length() );
-		}
-		return name;
+		OtherPipeline pipeline = OtherPipelineFactory.asPipeline(pipeDir);
+		return pipeline.getPipelineId();
 	}
 	
 	/**
@@ -115,16 +110,14 @@ public class PipelineUtil {
 	 * @return
 	 */
 	public static boolean isModuleDir(final File dir) {
-		if ( ! dir.isDirectory() ) return false;
-		if ( ! PipelineUtil.isPipelineDir(dir.getParentFile() ) ) return false;
-		int index = dir.getName().indexOf( '_' );
-		if (index < 2) return false;
-		if (index == dir.getName().length()) return false;
-		Integer moduleNumber = Integer.valueOf( dir.getName().substring( 0, index ) );
-		int max = dir.getParentFile().listFiles().length;
-		if (moduleNumber.intValue() < 0) return false;
-		if (moduleNumber.intValue() >= max ) return false;
-		return true;
+		boolean bool;
+		try {
+			OtherPipeline pipeline = OtherPipelineFactory.asPipeline( dir.getParentFile() );
+			bool = pipeline.isModuleDir(dir);
+		} catch( InvalidPipelineException e ) {
+			bool = false;
+		}
+		return bool;
 	}
 	
 	/**
@@ -137,7 +130,7 @@ public class PipelineUtil {
 	 */
 	public static boolean isPipelineDir( final File dir ) {
 		try {
-			getMasterConfig( dir );
+			OtherPipelineFactory.asPipeline(dir);
 		} catch( InvalidPipelineException e ) {
 			return false;
 		}
@@ -152,18 +145,8 @@ public class PipelineUtil {
 	 * @throws InvalidPipelineException 
 	 */
 	public static File getMasterConfig( final File pipeDir ) throws InvalidPipelineException {
-		if (pipeDir == null || ! pipeDir.isDirectory() ) throw new InvalidPipelineException( pipeDir );
-		File[] files = pipeDir.listFiles( new FilenameFilter() {
-			@Override
-			public boolean accept( File dir, String name ) {
-				return ( name.startsWith( Constants.MASTER_PREFIX ) && name.endsWith( Constants.PROPS_EXT ) );
-			}
-		} );
-		// root level must have exactly one MASTER_*.properties file
-		if( files == null || files.length != 1 ) {
-			throw new InvalidPipelineException( pipeDir );
-		}
-		return files[ 0 ];
+		OtherPipeline pipeline = OtherPipelineFactory.asPipeline(pipeDir);
+		return pipeline.getMasterConfig();
 	}
 	
 	/**
@@ -172,14 +155,14 @@ public class PipelineUtil {
 	 * @return
 	 */
 	public static boolean isPrecheckPipeline(final File pipelineDir) {
-		File flagFile = PipelineUtil.getPipelineStatusFlag(pipelineDir);
-		if ( flagFile == null ) return false;
-		else if ( flagFile.getName().contentEquals( Constants.PRECHECK_COMPLETE ) 
-						|| flagFile.getName().contentEquals( Constants.PRECHECK_FAILED) ) {
-			return true;
-		}else {
-			return false;	
+		boolean bool;
+		try {
+			OtherPipeline pipeline = OtherPipelineFactory.asPipeline(pipelineDir);
+			bool = pipeline.isPrecheckPipeline();
+		} catch( InvalidPipelineException e ) {
+			bool = false;
 		}
+		return bool;
 	}
 	
 	/**
@@ -196,7 +179,7 @@ public class PipelineUtil {
 		return flagFile;
 	}
 	/**
-	 * Get the status file file of the current pipeline root.
+	 * Get the status flag file of the current pipeline root.
 	 * @return
 	 */
 	public static File getPipelineStatusFlag() {
@@ -261,10 +244,7 @@ public class PipelineUtil {
 		return ( markStatus( module.getModuleDir().getAbsolutePath(), statusFlag ) );
 	}
 	
-	
-	
 	public static final String[] allFlags = { Constants.BLJ_STARTED, Constants.BLJ_FAILED, Constants.BLJ_COMPLETE,
 	Constants.PRECHECK_COMPLETE, Constants.PRECHECK_FAILED, Constants.PRECHECK_STARTED };
-
 	
 }

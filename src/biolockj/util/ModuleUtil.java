@@ -24,6 +24,7 @@ import biolockj.module.BioModule;
 import biolockj.module.JavaModule;
 import biolockj.module.classifier.ClassifierModule;
 import biolockj.module.report.r.R_Module;
+import biolockj.pipelines.PipelineUtil;
 
 /**
  * This utility holds general methods useful for BioModule interaction and management.

@@ -17,9 +17,9 @@ import biolockj.Processor;
 import biolockj.exception.ConfigPathException;
 import biolockj.exception.DockerVolCreationException;
 import biolockj.exception.InvalidPipelineException;
+import biolockj.pipelines.PipelineUtil;
 import biolockj.util.BioLockJUtil;
 import biolockj.util.DockerUtil;
-import biolockj.util.PipelineUtil;
 
 public class LaunchProcess {
 
