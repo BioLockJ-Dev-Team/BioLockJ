@@ -513,7 +513,8 @@ public class LaunchProcess {
 			printActionOptions();
 			printPipelineStatus(600);
 		}else {
-			ProgressUtil.printStatus("Pipeline may have failed to launch - check " + BLJ_PROJ_DIR.getAbsolutePath() + " for new pipeline", true);
+			ProgressUtil.printStatus("Pipeline may have failed to launch - check " + BLJ_PROJ_DIR.getAbsolutePath() + " for new pipeline.", true);
+			throw new EndLaunch( 1 );
 		}
 	}
 
@@ -580,34 +581,38 @@ public class LaunchProcess {
 			
 			File unverified = new File(pipeDir, Constants.UNVERIFIED_PROPS_FILE);
 			if (unverified.exists() && ! getFlag( RESTART_ARG )) {
-				System.err.println();
-				ProgressUtil.showLaunchEndStatus("Warning: see \"unverified.properties\"", unverified, 0);
+				ProgressUtil.printStatus( "Warning: see \"unverified.properties\"", true );
+				ProgressUtil.showFileContents( unverified, 1, 1 );
 			}
 			String flag = "none";
 			File flagFile = PipelineUtil.getPipelineStatusFlag(pipeDir);
 			if (flagFile != null) flag = flagFile.getName();
 			if (flag.equals(Constants.BLJ_FAILED)) {
-				ProgressUtil.showLaunchEndStatus("BioLockJ has stopped.", flagFile);
+				ProgressUtil.printStatus( "BioLockJ has stopped.", true );
+				ProgressUtil.showFileContents( flagFile, 1, 1 );
 				throw new EndLaunch( 1 );
 			}
 			else if (flag.equals(Constants.PRECHECK_FAILED)) {
-				ProgressUtil.showLaunchEndStatus("There is a problem with this pipeline configuration.", flagFile);
+				ProgressUtil.printStatus( "There is a problem with this pipeline configuration.", true );
+				ProgressUtil.showFileContents( flagFile, 1, 1 );
 				throw new EndLaunch( 1 );
 			}
 			else if (flag.equals(Constants.BLJ_COMPLETE)) {
-				ProgressUtil.showLaunchEndStatus( "Pipeline is complete." );
+				ProgressUtil.printStatus( "Pipeline is complete.", true );
 				throw new EndLaunch( 0 );
 			}
 			else if (flag.equals(Constants.PRECHECK_COMPLETE)) {
-				ProgressUtil.showLaunchEndStatus( "Precheck is complete. No problems were found in this pipeline configuration." );
+				ProgressUtil.printStatus( "Precheck is complete. No problems were found in this pipeline configuration.", true );
 				throw new EndLaunch( 0 );
 			}
 			else if (flag.equals(Constants.BLJ_STARTED)) {
-				ProgressUtil.showLaunchEndStatus("Pipeline is running.");
+				ProgressUtil.printStatus( "Pipeline is running.", true );
 				throw new EndLaunch( 0 );
 			}
 			else if (haveWaited == maxtime) {
-				if (getFlag( WAIT_ARG ) || getFlag( PRECHECK_ARG ) || getFlag( UNUSED_PROPS_ARG )) System.err.println("(no timeout)");
+				if (getFlag( WAIT_ARG ) || getFlag( PRECHECK_ARG ) || getFlag( UNUSED_PROPS_ARG )) {
+					ProgressUtil.printStatus("(no timeout)", false);
+				}
 				else {
 					ProgressUtil.printStatus("Reached max wait time: " + maxtime + " seconds. ", true);
 					throw new EndLaunch( 1 );

@@ -46,7 +46,7 @@ public class ProgressUtil {
 	public static void startSpinner(String label){
 		clear();
 		activeIndicator = new LabeledSpinner(label);
-		if (t == null) t = new Timer(); //if you never start a spinner, you never need a timer.
+		t = new Timer(); //if you never start a spinner, you never need a timer.
 		t.schedule( activeIndicator, 0, 100 );
 	}
 	
@@ -60,7 +60,10 @@ public class ProgressUtil {
 	public static void printStatus(String s, boolean endExistingStatus) {
 		pause();
 		System.err.println(s);
-		if (!endExistingStatus && activeIndicator != null) startSpinner(activeIndicator.getLabel());
+		if (endExistingStatus) clear();
+		else {
+			if ( activeIndicator != null) startSpinner(activeIndicator.getLabel());
+		}
 	}
 	
 	/**
@@ -70,6 +73,7 @@ public class ProgressUtil {
 	public static void clear() {
 		pause();
 		activeIndicator = null;
+		if (t != null) t.cancel();
 	}
 	
 	private static void pause() {
@@ -78,26 +82,18 @@ public class ProgressUtil {
 			t.purge();
 		}
 	}
-
-	static void showLaunchEndStatus(String msg, File file, int spacerLines) throws IOException, EndLaunch {
-		clear();
-		for (int i=0; i<spacerLines; i++) System.err.println();
-		System.err.println( msg );
-		if (file != null) {
-			System.err.println();
-			BufferedReader reader = new BufferedReader( new FileReader(file) );
-			while(reader.ready()) System.err.println( reader.readLine() );
-			reader.close();
-		}
-		for (int i=0; i<spacerLines; i++) System.err.println();
+	
+	static void showFileContents( File file ) throws IOException {
+		BufferedReader reader = new BufferedReader( new FileReader( file ) );
+		while( reader.ready() )
+			System.err.println( reader.readLine() );
+		reader.close();
 	}
-
-	static void showLaunchEndStatus(String msg, File file) throws IOException, EndLaunch {
-		showLaunchEndStatus( msg, file, 2);
-	}
-
-	static void showLaunchEndStatus(String msg) throws IOException, EndLaunch {
-		showLaunchEndStatus( msg, null, 2);
+	
+	static void showFileContents( File file, int leading, int trailing ) throws IOException {
+		for (int i=0; i < leading; i++) System.err.println();
+		showFileContents( file );
+		for (int i=0; i < trailing; i++) System.err.println();
 	}
 
 }
@@ -131,5 +127,5 @@ class LabeledSpinner extends TimerTask  {
 		System.err.print( wipeout );
 		return b;
 	}
-
+	
 }
